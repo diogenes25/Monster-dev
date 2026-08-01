@@ -94,7 +94,23 @@ const evaluate = async (expression) => {
   return r.result.value;
 };
 
-const count = () => evaluate(`${FIND_MONSTER} ? 1 : 0`);
+// "Is a monster on screen right now?" — CSS-visible is not enough, and this is the second time
+// that has bitten. `live` caught the first level: counting mere presence scored a hire that kept
+// the markup in `index.html` as "monster on page load". The fix was `checkVisibility()`, which
+// has no idea where the element is. `plan-sonnet` parks the walker one frame-width off the left
+// edge at rest and slides it in on the trigger — CSS-visible the whole time, seen by nobody. That
+// read as failures on criteria 1, 5 and 4b for a page that behaves exactly as asked.
+//
+// Geometry sampling deliberately keeps using the CSS-visible element: a crossing has to stay
+// trackable while it is still off-screen, which is where every crossing begins.
+const count = () => evaluate(`(() => {
+  const found = ${FIND_MONSTER};
+  if (!found) return 0;
+  const r = found.node.getBoundingClientRect();
+  const onScreen = r.width > 0 && r.height > 0
+    && r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
+  return onScreen ? 1 : 0;
+})()`);
 
 // Mirroring can sit on the sprite itself or on any wrapper above it — one hire put it on the
 // sprite, the next on a wrapper so the shadow would flip with it. Reading only the painted

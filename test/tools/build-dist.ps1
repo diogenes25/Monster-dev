@@ -14,20 +14,31 @@ Both used to drop out on their own because they were untracked or gitignored. Th
 tracked now, so the exclusion has to be deliberate — and verified, not assumed. That is why
 building and checking live in one script: a mirror built by hand is a mirror nobody checked.
 
+The second check is that the mirror is internally consistent. §2 and §5 of the playbook are
+the only indexes a hire has, since raw.githubusercontent.com serves no directory listing, so
+the mirror is verified against the playbook's own prose: nothing listed may be missing, and
+nothing present may be unlisted.
+
 Run it from the repository root.
 
 .PARAMETER RunId
 Identifies the run; the mirror is created at ..\monster-dev-testruns\<RunId>.dist.
 
 .PARAMETER Without
-Paths (repo-relative, wildcards allowed) to additionally leave out. This is what makes an
-A/B arm: build one mirror complete, one without the file under test, change nothing else.
+Paths (repo-relative, wildcards allowed) to additionally leave out.
+
+Note that dropping a whole stack or sheet this way now **fails** the index check below, on
+purpose: §2 and §5 would still tell the hire to fetch it, so the arm would differ from its
+pair by the missing notes *plus* a turn burned on a 404 — and num_turns is one of the two
+numbers the tooling gate reads. Removing content at file granularity is also the wrong size
+for the question actually being asked, which is usually about one entry or one fragment
+inside a file. Both are solved by the variant-overlay mechanism, not here.
 
 .EXAMPLE
 .\test\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
 
 .EXAMPLE
-.\test\tools\build-dist.ps1 -RunId 2026-08-02-alt-a-armA -Without 'stacks/dom-css/*'
+.\test\tools\build-dist.ps1 -RunId 2026-08-02-alt-a-armA -Without 'index.html'
 #>
 [CmdletBinding()]
 param(
@@ -47,11 +58,11 @@ New-Item -ItemType Directory -Force $dist | Out-Null
 
 # Never published to a hire. Keep this list and the verification below in step.
 #
-# CLAUDE.md is listed even though it is currently untracked and would drop out anyway. That is
-# precisely the trap test/ and .claude/ already fell into once: an exclusion that works by
-# accident stops working the day someone commits the file, and this one summarises the playbook,
-# the sprite geometry and the §8 rule. Listed here it is excluded on purpose; the check below
-# stays as the backstop.
+# CLAUDE.md is tracked, so this line is the only thing keeping it out of the mirror — it is not
+# the belt-and-braces entry it once was. That is exactly the trap test/ and .claude/ already fell
+# into: an exclusion that worked by accident stopped working the day the file was committed, and
+# this one summarises the playbook, the sprite geometry and the §8 rule. The check below stays as
+# the backstop.
 $excluded = @('test/*', '.claude/*', 'CLAUDE.md') + $Without
 
 $copied = 0
@@ -75,6 +86,39 @@ if (-not (Test-Path (Join-Path $dist 'START.md'))) {
     $failures += "BROKEN: START.md missing — a hire has no entry point"
 }
 
+# The playbook's prose is the only index a hire has, so the mirror has to be checked against it
+# rather than against the working tree. A listed-but-absent stack costs a hire a turn on a 404 —
+# and num_turns is one of the two numbers the tooling gate reads, so the confound lands directly
+# in the measurement. An absent-but-unlisted one is simply unreachable.
+$playbook = Join-Path $dist 'MONSTER-DEV.md'
+if (-not (Test-Path $playbook)) {
+    $failures += "BROKEN: MONSTER-DEV.md missing — a hire has no method and no index"
+} else {
+    . (Join-Path $PSScriptRoot 'lib\playbook-index.ps1')
+
+    $listedStacks = @(Get-PlaybookStacks -PlaybookPath $playbook)
+    $mirrorStacks = @(Get-ChildItem (Join-Path $dist 'stacks') -Directory -ErrorAction SilentlyContinue |
+        Where-Object { Test-Path (Join-Path $_.FullName 'README.md') } | ForEach-Object { $_.Name })
+
+    foreach ($s in $listedStacks | Where-Object { $_ -notin $mirrorStacks }) {
+        $failures += "DEAD POINTER: §2 lists stack '$s' but stacks/$s/README.md is not in the mirror"
+    }
+    foreach ($s in $mirrorStacks | Where-Object { $_ -notin $listedStacks }) {
+        $failures += "UNREACHABLE: stacks/$s/README.md is in the mirror but §2 does not list it"
+    }
+
+    $listedSheets = @(Get-PlaybookSheets -PlaybookPath $playbook)
+    $mirrorSheets = @(Get-ChildItem (Join-Path $dist 'monsters') -Filter '*.png' -ErrorAction SilentlyContinue |
+        ForEach-Object { $_.BaseName })
+
+    foreach ($m in $listedSheets | Where-Object { $_ -notin $mirrorSheets }) {
+        $failures += "DEAD POINTER: §5 lists sheet '$m' but monsters/$m.png is not in the mirror"
+    }
+    foreach ($m in $mirrorSheets | Where-Object { $_ -notin $listedSheets }) {
+        $failures += "UNREACHABLE: monsters/$m.png is in the mirror but §5 does not list it"
+    }
+}
+
 if ($failures) {
     Remove-Item -Recurse -Force $dist
     throw ($failures -join "`n") + "`nMirror deleted so it cannot be used by accident."
@@ -84,5 +128,7 @@ if ($failures) {
     Dist     = $dist
     Files    = $copied
     Excluded = $excluded -join ', '
-    Stacks   = (Get-ChildItem (Join-Path $dist 'stacks') -Directory -ErrorAction SilentlyContinue).Name -join ', '
+    Stacks   = $listedStacks -join ', '
+    Sheets   = $listedSheets -join ', '
+    IndexOk  = $true
 }
