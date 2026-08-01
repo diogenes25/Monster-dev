@@ -5,11 +5,11 @@ contains both the answer script and the acceptance criteria.
 
 ## Target project
 
-A copy of `test/fixtures/static-site/` placed **outside** this repository, at
+A copy of `process/fixtures/static-site/` placed **outside** this repository, at
 `../monster-dev-testruns/<run-id>/`, initialised as a git repo with a single
 commit `Initial site`.
 
-Outside, because a copy inside `test/` would put this repo's `CLAUDE.md` in the
+Outside, because a copy inside `process/` would put this repo's `CLAUDE.md` in the
 subagent's ancestor chain — it gets auto-loaded regardless of any instruction not
 to read it, and it gives away the purpose, the technique and the sign-off rule.
 The git repo is what makes §8 ("no commit unless asked") falsifiable at all, and
@@ -45,11 +45,11 @@ that a human is reachable and how to reach them — not when to speak.
 > von links nach rechts durchs Bild. Deine Einweisung steht hier:
 > `<dist>/START.md`
 
-`<dist>` is a copy of this repo's tracked files (`git ls-files`) minus `test/`,
+`<dist>` is a copy of this repo's tracked files (`git ls-files`) minus `process/`,
 `.claude/` and `CLAUDE.md`, so the agent can list that folder freely and still not
 reach the harness, the skill, or the summary of the playbook. All three are
 **tracked** — they no longer drop out on their own, which is why the mirror is
-only ever built by `test/tools/build-dist.ps1`, which verifies what it built.
+only ever built by `process/tools/build-dist.ps1`, which verifies what it built.
 
 **Known limitation of this run:** the playbook expects to be fetched from a URL
 (§0 derives the base URL from the fetch URL; §5 splits WebFetch for text vs. a

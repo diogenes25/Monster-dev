@@ -6,7 +6,7 @@
 | Gate | `run` / `none` |
 | Attribution | playbook gap / model disposition / implementation error / harness artefact / scenario defect |
 | Criterion | `<n>` or — |
-| Target file | `MONSTER-DEV.md` §`<n>` / `test/scenarios/<slug>.md` / harness / — |
+| Target file | `MONSTER-DEV.md` §`<n>` / `process/scenarios/<slug>.md` / harness / — |
 | Evidence | `<run-id>` (add a run id per sighting, never a second item) |
 | Proof design | run id once assigned, or — |
 

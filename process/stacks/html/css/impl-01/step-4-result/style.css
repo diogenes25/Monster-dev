@@ -1,0 +1,128 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  color: #2b2b2b;
+  background: #fdfaf3;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5ddc8;
+}
+
+.logo {
+  height: 32px;
+}
+
+nav a {
+  margin-left: 1.5rem;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #eef3ea;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+main section {
+  padding: 3rem 2rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+main h2 {
+  margin-bottom: 1rem;
+}
+
+.product-list li {
+  margin-bottom: 0.5rem;
+}
+
+footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: #7a7266;
+  font-size: 0.9rem;
+}
+
+/* walking monster easter egg — Monster-Dev (press Alt+A) */
+:root {
+  --monster-frame-w: 184px;
+  --monster-frame-h: 200px;
+  --monster-sheet-w: calc(184px * 23);
+  --monster-cycle: 0.96s;
+  --monster-stride: 130px;
+  --monster-crossing: 16s;
+  --monster-cycles: 1;
+}
+
+.monster-walker {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: var(--monster-frame-w);
+  height: var(--monster-frame-h);
+  pointer-events: none;
+  z-index: 999;
+  transform: translateX(calc(-1 * var(--monster-frame-w)));
+}
+
+.monster-walker.is-walking {
+  animation: monster-cross var(--monster-crossing) linear 1 forwards;
+}
+
+/* mirrored to face right, so it flips together with .monster-sprite below */
+.monster-shadow {
+  position: absolute;
+  left: 8%;
+  bottom: 0;
+  width: 42%;
+  height: 11px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+.monster-sprite {
+  position: absolute;
+  inset: 0;
+  background-image: url("assets/monster-sprite.png");
+  background-repeat: no-repeat;
+  background-size: var(--monster-sheet-w) var(--monster-frame-h);
+  transform: scaleX(-1); /* sheet faces left; we walk left to right */
+}
+
+.monster-walker.is-walking .monster-sprite {
+  animation: monster-walk-cycle var(--monster-cycle) steps(23) var(--monster-cycles);
+}
+
+@keyframes monster-walk-cycle {
+  from { background-position: 0 0; }
+  to   { background-position: calc(-1 * var(--monster-sheet-w)) 0; }
+}
+
+@keyframes monster-cross {
+  from { transform: translateX(calc(-1 * var(--monster-frame-w))); }
+  to   { transform: translateX(100vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .monster-walker.is-walking { animation: none; transform: translateX(40vw); }
+  .monster-walker.is-walking .monster-sprite { animation: none; }
+}

@@ -30,10 +30,10 @@ Report only failures. Without it, everything checked is listed, which is the poi
 answer is "nothing is wrong" — a silent pass and a script that did nothing look identical.
 
 .EXAMPLE
-.\test\tools\check-index.ps1
+.\process\tools\check-index.ps1
 
 .EXAMPLE
-.\test\tools\check-index.ps1 -Quiet
+.\process\tools\check-index.ps1 -Quiet
 #>
 [CmdletBinding()]
 param([switch]$Quiet)
@@ -159,7 +159,7 @@ foreach ($row in $rows) {
 Add-Type -AssemblyName System.Drawing
 $SHEET_RATIO = 5
 
-foreach ($p in (git ls-files '*.png' | Where-Object { $_ -notlike 'monsters/*' -and $_ -notlike 'test/*' })) {
+foreach ($p in (git ls-files '*.png' | Where-Object { $_ -notlike 'monsters/*' -and $_ -notlike 'process/*' })) {
     $img = [System.Drawing.Image]::FromFile((Resolve-Path $p))
     try   { $ratio = $img.Width / $img.Height; $dims = "$($img.Width)x$($img.Height)" }
     finally { $img.Dispose() }

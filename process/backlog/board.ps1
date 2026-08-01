@@ -33,13 +33,13 @@ Print each item's title line under the table, which is where the actual problem 
 table's own title column is truncated to keep the columns aligned.
 
 .EXAMPLE
-.\test\backlog\board.ps1
+.\process\backlog\board.ps1
 
 .EXAMPLE
-.\test\backlog\board.ps1 -Open -Full
+.\process\backlog\board.ps1 -Open -Full
 
 .EXAMPLE
-.\test\backlog\board.ps1 -State grilled
+.\process\backlog\board.ps1 -State grilled
 #>
 [CmdletBinding()]
 param(

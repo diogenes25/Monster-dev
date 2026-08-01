@@ -17,7 +17,7 @@ Run it after creating the run folder, before hiring. Any hit invalidates the run
 starts, so treat a failure as a stop, not a warning.
 
 .EXAMPLE
-.\test\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a
+.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a
 #>
 [CmdletBinding()]
 param(

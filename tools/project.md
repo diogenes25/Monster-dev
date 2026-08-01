@@ -62,11 +62,11 @@ Code detached from the decision that justified it is the library this repo is ex
 
 ## Not here: developer tooling
 
-The harness — dist mirror, isolation check, the CDP run verifier — lives in `test/tools/`.
+The harness — dist mirror, isolation check, the CDP run verifier — lives in `process/tools/`.
 
 That is not tidiness. The verifier encodes the acceptance criteria, so publishing it under
 `tools/` would put "what is being measured" straight into the mirror a hire receives.
-`test/` is excluded from that mirror already, which makes it the one correct home. Nothing
+`process/` is excluded from that mirror already, which makes it the one correct home. Nothing
 that knows the criteria may sit in `tools/`.
 
 ---

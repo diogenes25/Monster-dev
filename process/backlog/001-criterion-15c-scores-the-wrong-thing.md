@@ -6,7 +6,7 @@
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `15c` |
-| Target file | `test/scenarios/alt-a-left-to-right.md` |
+| Target file | `process/scenarios/alt-a-left-to-right.md` |
 | Evidence | `2026-08-01-alt-a`, `2026-08-01-sonnet-base2`, `2026-08-01-plan-sonnet`, `2026-08-01-plan-opus` |
 | Proof design | — |
 

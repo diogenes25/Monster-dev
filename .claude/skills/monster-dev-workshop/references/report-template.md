@@ -1,8 +1,8 @@
 # Report template
 
-**One file per run**, under `test/runs/`, never inside the target project. Everything a run turns
-up *besides its own result* goes on the board — `test/backlog/`, one file per problem, shaped by
-`test/backlog/TEMPLATE.md`. The report says what this run measured; the board carries what is
+**One file per run**, under `process/runs/`, never inside the target project. Everything a run turns
+up *besides its own result* goes on the board — `process/backlog/`, one file per problem, shaped by
+`process/backlog/TEMPLATE.md`. The report says what this run measured; the board carries what is
 still open. A proposal therefore exists in exactly one place instead of being restated per run
 and going stale in one of them.
 
@@ -11,15 +11,15 @@ the board existed, and everything still open in them is on the board.
 
 ---
 
-## `test/runs/<run-id>.report.md`
+## `process/runs/<run-id>.report.md`
 
 # Run `<run-id>` — `<scenario slug>`
 
 | | |
 |---|---|
 | Date | `<yyyy-mm-dd>` |
-| Scenario | `test/scenarios/<slug>.md` |
-| Fixture | `test/sample-<name>/` |
+| Scenario | `process/scenarios/<slug>.md` |
+| Fixture | `process/fixtures/<name>/` |
 | Run folder | `../monster-dev-testruns/<run-id>/` |
 | Playbook revision | `<git rev-parse --short HEAD>` |
 | Hire | `claude -p` session `<session_id>`, `<n>` turns |

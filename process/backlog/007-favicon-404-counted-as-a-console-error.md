@@ -6,7 +6,7 @@
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | console errors |
-| Target file | `test/tools/verify-run.mjs` |
+| Target file | `process/tools/verify-run.mjs` |
 | Evidence | `2026-08-01-plan-sonnet`, `2026-08-01-index-sonnet` |
 | Proof design | — |
 

@@ -6,7 +6,7 @@
 | Gate | `run` |
 | Attribution | scenario defect |
 | Criterion | — |
-| Target file | `test/fixtures/` (a second fixture), `MONSTER-DEV.md` §2 |
+| Target file | `process/fixtures/` (a second fixture), `MONSTER-DEV.md` §2 |
 | Evidence | `2026-08-01-index-sonnet` |
 | Proof design | — |
 

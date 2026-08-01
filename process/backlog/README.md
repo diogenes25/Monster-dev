@@ -62,7 +62,7 @@ Rejected items stay. They are the only defence against having the same idea agai
 
 ## Why here and not at the repository root
 
-`test/` is excluded from the `<dist>` mirror, and the board is full of acceptance criteria, model
+`process/` is excluded from the `<dist>` mirror, and the board is full of acceptance criteria, model
 dispositions and what the harness measures. A hire that read it would pass by knowing the answers.
 `build-dist.ps1` enforces the exclusion and deletes a mirror rather than hand back a leaking one —
 but the exclusion only covers this path. A board at the repository root would ship to every hire.
@@ -77,7 +77,7 @@ columns — it reads the item files themselves, so there is no index that can dr
 
 ## What this replaced
 
-`test/runs/<run-id>.findings.md` is gone. A run now writes its report and touches item files; the
+`process/runs/<run-id>.findings.md` is gone. A run now writes its report and touches item files; the
 proposal lives in exactly one place instead of being restated per run and going stale in one of them.
 The two findings files already on disk — `alt-a` and `plan-sonnet` — stay as historical records of
 runs scored under the old procedure. Both have been read onto the board: `alt-a`'s withdrawal of

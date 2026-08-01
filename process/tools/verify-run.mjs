@@ -6,7 +6,7 @@
 // differently — `.monster-walk` in one run, `.monster-walker` in the next — and a verifier
 // that keys on a name ends up measuring the naming instead of the behaviour.
 //
-//   node test/tools/verify-run.mjs <out.json> [--url ...] [--key KeyA] [--modifier alt]
+//   node process/tools/verify-run.mjs <out.json> [--url ...] [--key KeyA] [--modifier alt]
 
 import { spawn } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';

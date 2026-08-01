@@ -1,8 +1,18 @@
-# The test sandbox
+# The process side
 
 Monster-Dev is a prompt, not code. The only way to know whether an edit worked is to hire a
 fresh agent and watch what it does — which makes this folder the closest thing the project has
-to a test suite.
+to a test suite, and the reason it used to be called `test/`.
+
+It holds two things now, and they are not the same kind of thing:
+
+- **The measurement.** Fixtures, scenarios, the harness, the runs, the board. Everything with an
+  acceptance criterion behind it, governed by the proof gates in `CLAUDE.md`.
+- **The record** — `stacks/`. One folder per implementation actually carried out, kept as
+  fixture → requirement → process → result. Created once, never re-run, never scored. Its purpose
+  is documentation and raw material; see [`stacks/README.md`](stacks/README.md).
+
+Nothing crosses from the second into anything a hire reads without passing through the first.
 
 Everything here is **published but never fetched**. It ships with the repo so anyone can
 reproduce a run, and it is excluded from the `<dist>` mirror a hire receives, because an agent
@@ -17,16 +27,23 @@ when the two disagree, the skill is what actually gets executed.
 ## Layout
 
 ```
-test/
+process/
   fixtures/<name>/          target-project templates; a run never modifies one
   scenarios/<name>.md       customer brief + answer script + acceptance criteria
   runs/<run-id>.report.md   criterion-by-criterion result, with evidence
   runs/<run-id>.findings.md proposed playbook changes (proposed, not applied)
+  backlog/<nnn>-<slug>.md   one file per open problem, carried across runs
   tools/                    the harness itself — see below
+  stacks/<lang>/<lib>/      the implementation record — see stacks/README.md
 
 ../monster-dev-testruns/<run-id>/        the project the hire actually works in
 ../monster-dev-testruns/<run-id>.dist/   what the hire is allowed to see
 ```
+
+`stacks/` here and `stacks/` at the repository root are different trees answering different
+questions. This one is keyed by language → library and is never fetched; the root one is keyed by
+rendering surface + animation primitive and is the only stack index a hire can see. The `Stack:`
+line at the top of each `impl-NN/knowledge.md` maps one to the other.
 
 Run folders live **outside this repository**, and reports live beside them rather than inside
 them — a report inside the target project would itself violate the §9 cleanup rule it checks.
@@ -42,7 +59,7 @@ them — a report inside the target project would itself violate the §9 cleanup
 A stack has no notes file until a run has produced something worth writing down. That is the
 point: a `stacks/` entry is a record of what was measured, not a collection of advice.
 
-## The harness — `test/tools/`
+## The harness — `process/tools/`
 
 - `build-dist.ps1` — builds the mirror **and** verifies it, deleting it rather than returning
   one that leaked. Also builds A/B arms via `-Without`.
@@ -53,7 +70,7 @@ point: a `stacks/` entry is a record of what was measured, not a collection of a
 
 **`verify-run.mjs` is exactly why the harness lives here and not in `tools/`.** It encodes the
 acceptance criteria. Published under `tools/`, it would put "what is being measured" straight
-into the mirror. `test/` is excluded already, so it is the only correct home — and nothing that
+into the mirror. `process/` is excluded already, so it is the only correct home — and nothing that
 knows the criteria may move out of it.
 
 ## Three constraints, all learned the hard way
@@ -73,10 +90,18 @@ path** to `START.md`, and three things stay untested: §0 (base-URL derivation),
 WebFetch-for-text / shell-download-for-binary split, and stack resolution. Report them as
 *deferred*, never as *passed*.
 
-**3. Exclusion is now deliberate.** `test/` and `.claude/` used to drop out of the mirror
-because git ignored them. They are tracked now, so the filter has to name them — which is why
-building and verifying happen in one script rather than as a documented command someone might
-paste incompletely.
+**3. Exclusion is now deliberate, and it names the folder by hand.** `process/` and `.claude/`
+used to drop out of the mirror because git ignored them. They are tracked now, so the filter has
+to name them — which is why building and verifying happen in one script rather than as a
+documented command someone might paste incompletely.
+
+The rename from `test/` to `process/` on `2026-08-02` is the sharpest form of the same hazard.
+`build-dist.ps1` carried the literal `'test'` **twice**: once in the exclusion and once in the
+backstop that verifies the exclusion. A rename breaks both at the same moment and in the same
+direction — the filter matches nothing, and the check looks for a folder that no longer exists
+and reports clean. Two layers, one string, no alarm. Anything that renames this folder again has
+to change both lines and then *build a mirror and look inside it*; the script passing is not
+evidence.
 
 ## Designing the customer
 

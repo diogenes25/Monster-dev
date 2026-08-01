@@ -1,6 +1,6 @@
 ---
 name: monster-dev-workshop
-description: Develop and test Monster-Dev itself — the hired-AI-developer persona this repo publishes. Use when editing START.md or MONSTER-DEV.md, when changing the reference implementation index.html or the sprite sheet, when setting up / running / scoring a test hire against the sandbox in test/, or when turning findings from a run into playbook wording changes. Dev-side only: a real hire never sees this skill.
+description: Develop and test Monster-Dev itself — the hired-AI-developer persona this repo publishes. Use when editing START.md or MONSTER-DEV.md, when changing the reference implementation index.html or the sprite sheet, when setting up / running / scoring a test hire against the sandbox in process/, or when turning findings from a run into playbook wording changes. Dev-side only: a real hire never sees this skill.
 ---
 
 # Monster-Dev Workshop
@@ -26,11 +26,11 @@ That makes development here unusual in two ways, and this skill exists for both:
    fetched live from `main`". This skill is *about* Monster-Dev; it is not Monster-Dev.
 3. **The scope is closed.** One feature, one monster. Do not generalise the persona into a
    reusable multi-feature framework, however tempting the abstraction looks.
-4. **Never let the measurement leak into a run.** `test/` and `.claude/` are **tracked** — they
+4. **Never let the measurement leak into a run.** `process/` and `.claude/` are **tracked** — they
    no longer drop out of `git ls-files` by themselves, so the exclusion is deliberate and must
-   be verified rather than assumed. Always build the mirror with `test/tools/build-dist.ps1`
+   be verified rather than assumed. Always build the mirror with `process/tools/build-dist.ps1`
    (Half B, step 2), never by hand. Corollary: nothing that encodes acceptance criteria may
-   live under `tools/` — the run verifier belongs in `test/tools/`.
+   live under `tools/` — the run verifier belongs in `process/tools/`.
 
 ## Orientation — four roles, don't blur them
 
@@ -43,7 +43,14 @@ That makes development here unusual in two ways, and this skill exists for both:
 | `index.html` | **a `dom-css` implementation** — no longer the universal reference | only via `stacks/dom-css/` |
 | `tools/hire/` | **hire tooling** — computes, never writes files | yes |
 | `tools/provenance/` | **provenance** — how the sprite sheet was made | never |
-| `test/` | **the harness** — fixtures, scenarios, reports, run tooling | never — tracked, excluded by the mirror script |
+| `process/` | **the harness** — fixtures, scenarios, reports, board, run tooling | never — tracked, excluded by the mirror script |
+| `process/stacks/<lang>/<lib>/` | **the implementation record** — one folder per job actually done, as fixture → requirement → process → result, plus `knowledge.md`. Created once, never re-run, never scored | never |
+
+`process/stacks/` and the published `stacks/` are different trees: language → library versus
+surface + primitive. Each `impl-NN/knowledge.md` opens with a `Stack:` line, which is the whole of
+the mapping. **Nothing in a `knowledge.md` reaches a published stack note without passing the A/B
+gate** — the record has one arm by construction, so it is material for a hypothesis, never the
+evidence for one. See `process/stacks/README.md`.
 
 ---
 
@@ -83,7 +90,7 @@ sections away.
 7. **Technique, not code** (§6) — the reference implementation is studied and translated into
    the target stack's own primitives, never ported verbatim.
 8. **Section numbers referenced elsewhere still exist.** `START.md` points at `MONSTER-DEV.md`
-   §8; `CLAUDE.md` and `test/scenarios/*.md` cite §2.1, §2.4, §2.5, §3, §4, §5, §8, §9.
+   §8; `CLAUDE.md` and `process/scenarios/*.md` cite §2.1, §2.4, §2.5, §3, §4, §5, §8, §9.
    Renumbering means fixing all of them.
 
 ## Numbers that must stay in sync
@@ -97,19 +104,19 @@ finished when both agree.
 `green-fuzz-classic`'s figures are additionally hardcoded where something is built on that one
 sheet rather than describing the technique: `23`, `276×300`, `steps(23)` and the `--stride` /
 viewport-width derivation in `index.html`, the `steps(23)` mention in `stacks/dom-css/README.md`,
-and the sprite dimensions asserted in `test/tools/verify-run.mjs` plus the scenarios that score
+and the sprite dimensions asserted in `process/tools/verify-run.mjs` plus the scenarios that score
 "technique carried over". Changing that sheet means updating all of them.
 
 **Do not change `catalog.json`'s `default`** without meaning to. It decides what a client with
 no preference receives, and it silently breaks comparability with every earlier run in
-`test/runs/`, all of which scored `green-fuzz-classic`.
+`process/runs/`, all of which scored `green-fuzz-classic`.
 
 ## Post-edit self-check
 
 ```powershell
 # 1. the indexes still resolve: §2 ↔ stacks/, §5 ↔ monsters/ ↔ catalog.json,
 #    the orientation cap, and any sheet-shaped PNG outside monsters/
-.\test\tools\check-index.ps1
+.\process\tools\check-index.ps1
 
 # 2. no owner/repo hardcoded into the playbook
 Select-String -Path START.md,MONSTER-DEV.md -Pattern 'diogenes25|monster-dev/|raw\.githubusercontent'
@@ -162,7 +169,7 @@ the playbook degrades is itself a finding.
 ### 0. Take the run's brief from the board
 
 ```powershell
-.\test\backlog\board.ps1 -Open -Full
+.\process\backlog\board.ps1 -Open -Full
 ```
 
 **A run needs an item in `grilled` as its brief. No item, no run.** A `grilled` item has already
@@ -177,7 +184,7 @@ anything. `board.ps1` refuses `in-proof` without one.
 
 ### 1. Pick or write the scenario
 
-Existing scenarios: `test/scenarios/*.md`. A new one follows
+Existing scenarios: `process/scenarios/*.md`. A new one follows
 `references/scenario-template.md`. Two design principles, both easy to violate:
 
 - **Stay vague where a real customer would be.** Anything the answer script spells out is
@@ -190,13 +197,13 @@ Existing scenarios: `test/scenarios/*.md`. A new one follows
 
 ### 2. Build the `<dist>` mirror
 
-**Never by hand.** `test/` and `.claude/` are tracked now, so they no longer drop out of
+**Never by hand.** `process/` and `.claude/` are tracked now, so they no longer drop out of
 `git ls-files` on their own — the exclusion is deliberate, and a mirror assembled from a
 pasted command is a mirror nobody verified. The script builds and checks in one step, and
 deletes the mirror rather than hand back one that leaked.
 
 ```powershell
-.\test\tools\build-dist.ps1 -RunId <run-id>
+.\process\tools\build-dist.ps1 -RunId <run-id>
 ```
 
 Take the date for `<run-id>` from the environment (`Get-Date -Format yyyy-MM-dd`), never from
@@ -206,7 +213,7 @@ For an A/B arm, build a second mirror with the file under test left out and chan
 else:
 
 ```powershell
-.\test\tools\build-dist.ps1 -RunId <run-id>-armA -Without 'index.html'
+.\process\tools\build-dist.ps1 -RunId <run-id>-armA -Without 'index.html'
 ```
 
 The script also checks the mirror against the playbook's own indexes — §2 for stacks, §5 for
@@ -224,11 +231,11 @@ that lands, an A/B below file level cannot be built honestly, and saying so beat
 
 ```powershell
 $target = "..\monster-dev-testruns\$run"
-Copy-Item -Recurse test\fixtures\static-site $target    # or whichever fixture the scenario names
+Copy-Item -Recurse process\fixtures\static-site $target    # or whichever fixture the scenario names
 git -C $target init -q; git -C $target add -A; git -C $target commit -qm 'Initial site'
 ```
 
-Outside, because a copy inside `test/` puts this repo's `CLAUDE.md` in the hire's ancestor
+Outside, because a copy inside `process/` puts this repo's `CLAUDE.md` in the hire's ancestor
 chain. The git repo is what makes §8 ("no commit unless asked") falsifiable at all, and
 `git status` afterwards is the exact diff surface for §9. Fixtures are never modified by a
 run — always work on a copy.
@@ -236,7 +243,7 @@ run — always work on a copy.
 ### 4. Isolation check — before every run, not just the first
 
 ```powershell
-.\test\tools\check-isolation.ps1 -Target $target
+.\process\tools\check-isolation.ps1 -Target $target
 ```
 
 Walks the run folder's whole ancestry for `CLAUDE.md`, checks the user-level one, and confirms
@@ -250,15 +257,15 @@ Any hit invalidates the run before it starts. Treat a failure as a stop, not a w
 the run leaves usable evidence behind:
 
 ```powershell
-.\test\tools\hire.ps1 -RunId <run-id> -Target $target -Dist $dist -Model sonnet `
-  -BriefFile .\test\scenarios\<slug>.brief.txt
+.\process\tools\hire.ps1 -RunId <run-id> -Target $target -Dist $dist -Model sonnet `
+  -BriefFile .\process\scenarios\<slug>.brief.txt
 ```
 
 `claude -p --output-format json` prints `total_cost_usd`, `num_turns`, `session_id`,
 `is_error` and `permission_denials`, and every run before this one threw them away and retyped
 the numbers into a report by hand — while two of the three gates in `CLAUDE.md` are stated in
 exactly those numbers. The wrapper keeps the envelope verbatim in
-`test/runs/<run-id>.hire.json`, re-runs the isolation check per turn, and snapshots
+`process/runs/<run-id>.hire.json`, re-runs the isolation check per turn, and snapshots
 `git status --porcelain -uall` in the target before and after each turn.
 
 That last snapshot is the point. **K7a ("asked before building") is the criterion this project
@@ -279,7 +286,7 @@ Answer strictly from the scenario's answer script — never improvised, so a rer
 No session id to copy: the wrapper reads it back out of the stored envelope.
 
 ```powershell
-.\test\tools\hire.ps1 -RunId <run-id> -Target $target -Answer '<answer from the script>'
+.\process\tools\hire.ps1 -RunId <run-id> -Target $target -Answer '<answer from the script>'
 ```
 
 Anything not in the table gets the fallback answer the scenario defines (typically
@@ -305,10 +312,10 @@ the direct evidence for whether questions came before the build.
 **Read the open board before scoring**, not after:
 
 ```powershell
-.\test\backlog\board.ps1 -Open -Full
+.\process\backlog\board.ps1 -Open -Full
 ```
 
-A run produces exactly one file. `test/runs/<run-id>.report.md` lives in `test/runs/` —
+A run produces exactly one file. `process/runs/<run-id>.report.md` lives in `process/runs/` —
 **beside** the run folder's parent, never inside the target project, because a report inside the
 target would itself violate the §9 cleanup rule it is checking. Criterion by criterion, each with
 its evidence, each gap attributed. Follow `references/report-template.md`.
@@ -326,7 +333,7 @@ Then resolve the run's own brief: `proven` if the criterion flipped and nothing 
 **stays** — it is the only defence against having the same idea again in a year.
 
 There is no `<run-id>.findings.md` any more. A proposal now lives in exactly one place instead of
-being restated per run and going stale in one of them; `test/backlog/README.md` says why, and the
+being restated per run and going stale in one of them; `process/backlog/README.md` says why, and the
 three findings files still on disk are historical records of runs scored under the old procedure.
 
 Then append the run to the scenario file's run-log table.
@@ -335,7 +342,7 @@ Then append the run to the scenario file's run-log table.
 
 # Half C — Closing the loop
 
-The loop runs on `test/backlog/`, one file per problem, carried across runs. It exists because a
+The loop runs on `process/backlog/`, one file per problem, carried across runs. It exists because a
 finding written into a run file dies there: criterion `15c` was withdrawn as mis-specified by
 `alt-a`, never rewritten, and re-litigated by four runs since — each spending report space on the
 same conclusion. Nobody forgot it; there was nowhere for it to be pending.
@@ -347,8 +354,8 @@ intake ──▶ formulated ──▶ grilled ──▶ in-proof ──▶ prove
 
 Two rules make it a queue rather than a fifth place to leave things, and both are already in
 Half B: **the open board is read before a run is scored** (step 8), and **a run needs an item in
-`grilled` as its brief** (step 0). `test/backlog/README.md` carries the states, the two lanes and
-why the board lives under `test/` — where the `<dist>` exclusion covers it, since a board full of
+`grilled` as its brief** (step 0). `process/backlog/README.md` carries the states, the two lanes and
+why the board lives under `process/` — where the `<dist>` exclusion covers it, since a board full of
 acceptance criteria at the repository root would ship to every hire.
 
 Nothing advances past `intake` without an attribution:
@@ -434,6 +441,18 @@ fragment, A/B plus the cost drop for a tool. `stacks/dom-css/README.md` currentl
 of orientation and nothing below the rule. That is the honest state of the measurement, not a
 gap waiting to be filled.
 
+### `process/stacks/` is where candidates come from, not where they come out
+
+The implementation record collects freely: whatever an implementation turned up goes into its
+`knowledge.md`, observed once, unproven, and clearly labelled as such. That is safe **because it
+is never fetched**.
+
+Promoting one of those lines below a `---` rule is the same act as writing it from scratch, and
+it takes the same gate: an arm with the line against an arm without it. A `knowledge.md` entry is
+material for a hypothesis; it is never the evidence for one, because it has exactly one arm by
+construction. The tell that a promotion is premature is the entry saying *"observed in impl-01"*
+and nothing else — one implementation is not a signal, the same way one run is not.
+
 ## The shape of an entry: decision, not solution
 
 A cookbook entry is *problem → solution*. A Monster-Dev entry is **decision → what settles
@@ -463,7 +482,7 @@ dialogue rather than replace it.
 
 An entry ends with the bare run id in parentheses. No path, no "see", no link.
 
-`test/` is **tracked**. Once this repo is pushed, `test/runs/<run-id>.report.md` is a live URL,
+`process/` is **tracked**. Once this repo is pushed, `process/runs/<run-id>.report.md` is a live URL,
 and a path in a published note is an invitation to fetch it. In a test run that is a 404 and a
 burnt turn landing straight in `num_turns` — one of the two numbers the tooling gate reads. In
 production it is a pointer out of the notes and into the acceptance criteria. The bare id costs

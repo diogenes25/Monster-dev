@@ -6,8 +6,9 @@ Builds the <dist> mirror a test hire is allowed to see, and refuses to hand it o
 <dist> is meant to be exactly the surface a push to GitHub would make public, minus the
 two things that would invalidate the run:
 
-  test/     the scenarios, answer scripts and acceptance criteria — an agent that reads
-            them passes by knowing the answers, and every future run is worthless
+  process/  the scenarios, answer scripts and acceptance criteria, the board, and the
+            implementation records — an agent that reads them passes by knowing the answers,
+            and every future run is worthless
   .claude/  the monster-dev-workshop skill, which describes the harness and what is measured
 
 Both used to drop out on their own because they were untracked or gitignored. They are
@@ -35,10 +36,10 @@ for the question actually being asked, which is usually about one entry or one f
 inside a file. Both are solved by the variant-overlay mechanism, not here.
 
 .EXAMPLE
-.\test\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
+.\process\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
 
 .EXAMPLE
-.\test\tools\build-dist.ps1 -RunId 2026-08-02-alt-a-armA -Without 'index.html'
+.\process\tools\build-dist.ps1 -RunId 2026-08-02-alt-a-armA -Without 'index.html'
 #>
 [CmdletBinding()]
 param(
@@ -59,11 +60,17 @@ New-Item -ItemType Directory -Force $dist | Out-Null
 # Never published to a hire. Keep this list and the verification below in step.
 #
 # CLAUDE.md is tracked, so this line is the only thing keeping it out of the mirror — it is not
-# the belt-and-braces entry it once was. That is exactly the trap test/ and .claude/ already fell
-# into: an exclusion that worked by accident stopped working the day the file was committed, and
-# this one summarises the playbook, the sprite geometry and the §8 rule. The check below stays as
-# the backstop.
-$excluded = @('test/*', '.claude/*', 'CLAUDE.md') + $Without
+# the belt-and-braces entry it once was. That is exactly the trap test/ (now process/) and .claude/
+# already fell into: an exclusion that worked by accident stopped working the day the file was
+# committed. CLAUDE.md summarises the playbook, the sprite geometry and the §8 rule, so the check
+# below stays as the backstop.
+#
+# The backstop only helps if it is kept in step. It hard-codes the same folder name as the line
+# below, which means a rename breaks *both* at once and in the same direction — the filter stops
+# matching, and the check hunts a folder that is no longer there and reports clean. That happened
+# on 2026-08-02 (test/ -> process/). Change one, change the other, then build a mirror and look
+# inside it: this script passing is not on its own evidence that anything was excluded.
+$excluded = @('process/*', '.claude/*', 'CLAUDE.md') + $Without
 
 $copied = 0
 foreach ($file in (git ls-files)) {
@@ -76,7 +83,7 @@ foreach ($file in (git ls-files)) {
 
 # --- verification: a mirror that fails here must not be used ---
 $failures = @()
-foreach ($forbidden in 'test', '.claude') {
+foreach ($forbidden in 'process', '.claude') {
     if (Test-Path (Join-Path $dist $forbidden)) { $failures += "LEAK: $forbidden reached the mirror" }
 }
 foreach ($stray in (Get-ChildItem -Recurse -File -Filter 'CLAUDE.md' $dist)) {

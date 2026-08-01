@@ -13,7 +13,7 @@ Target publish location: `https://github.com/diogenes25/monster-dev` (not yet pu
 ## Two features, not one
 
 1. **Monster-Dev** — the contractor. Fetches the playbook, plus the accumulated notes and tooling for *its* rendering surface if any exist.
-2. **The Monster-Dev developer** — the loop that produces those notes and that tooling and *proves* they help: test run → board item → fold in → rerun. Lives in the `monster-dev-workshop` skill and in `test/`.
+2. **The Monster-Dev developer** — the loop that produces those notes and that tooling and *proves* they help: test run → board item → fold in → rerun. Lives in the `monster-dev-workshop` skill and in `process/`.
 
 Three layers grow with every run — the playbook (general), stack notes (per surface), tooling (spares a hire derivation and measuring). None of them grows on a hunch; see "The proof gates" below.
 
@@ -31,16 +31,32 @@ Three layers grow with every run — the playbook (general), stack notes (per su
 | `index.html` | A working `dom-css` implementation. **No longer the universal reference** — reachable via `stacks/dom-css/` | via that stack |
 | `tools/provenance/` | Offline sprite-sheet pipelines | never |
 | `sources/` | The footage the sheets were cut from, kept so they stay regenerable | tracked, so technically yes — but nothing points a hire at it |
-| `test/backlog/` | One file per open problem, carried across runs — a run's brief comes from here and its findings go back here | **never** — it is full of acceptance criteria and model dispositions |
-| `test/`, `.claude/` | Measurement and procedure of feature 2 | **never** |
+| `process/backlog/` | One file per open problem, carried across runs — a run's brief comes from here and its findings go back here | **never** — it is full of acceptance criteria and model dispositions |
+| `process/stacks/<lang>/<lib>/` | The implementation record: one folder per job actually carried out, as fixture → requirement → process → result, plus `knowledge.md`. Documentation and raw material, created once | **never** |
+| `process/`, `.claude/` | Measurement and procedure of feature 2 | **never** |
 
 Stacks are keyed by **rendering surface + animation primitive**, not by language: a TypeScript React app and a plain HTML page can be the same job, while two Python projects can be entirely different ones. `MONSTER-DEV.md` §2 lists **only stacks that actually exist** — `raw.githubusercontent.com` serves no directory index, so an unlisted stack is unreachable, and a listed-but-absent one is a dead pointer.
 
+### Two trees called `stacks/`, and the one-way street between them
+
+`stacks/` at the root is **published** and keyed by surface + primitive. `process/stacks/` is **never fetched** and keyed by language → library, because that is how an implementation record is actually looked up. Both keys are workable only because every `impl-NN/knowledge.md` opens with a `Stack: <name>` line naming the published stack it belongs to; without it, nobody can say where an observation goes.
+
+Material flows one way and through a gate:
+
+```
+process/stacks/**/knowledge.md  →  A/B run  →  stacks/<name>/README.md  →  a hire
+     raw, created once            the gate        published, measured
+```
+
+**Nothing in a `knowledge.md` reaches a published stack note without passing its gate.** The record is created once, so it has no second arm by definition — which is exactly why it may be collected freely and may not be published from directly. This tree makes writing untested advice *easier*, not harder, so the rule is stated rather than assumed. Full reasoning in `process/stacks/README.md`.
+
 ### The one invariant that silently invalidates everything
 
-`test/` and `.claude/` are **tracked**. They used to drop out of the `<dist>` mirror because git ignored them; now the exclusion has to be deliberate. Miss it and every hire reads its own acceptance criteria, and every future run is worthless.
+`process/` and `.claude/` are **tracked**. They used to drop out of the `<dist>` mirror because git ignored them; now the exclusion has to be deliberate. Miss it and every hire reads its own acceptance criteria, and every future run is worthless.
 
-Never hand-roll the mirror. `test/tools/build-dist.ps1` builds and verifies it in one step and deletes the mirror rather than return a leaking one. For the same reason, **nothing that encodes the acceptance criteria may live under `tools/`** — the run verifier belongs in `test/tools/`, which is excluded already.
+The folder name is written by hand in **two** places in `build-dist.ps1` — the exclusion glob and the backstop that verifies it. Renaming the folder breaks both in the same moment and in the same direction: the filter matches nothing, and the check hunts a folder that no longer exists and reports clean. That is what the `test/` → `process/` rename on 2026-08-02 walked into. Rename it again and you must change both lines *and* build a mirror and look inside it; a green script is not evidence.
+
+Never hand-roll the mirror. `process/tools/build-dist.ps1` builds and verifies it in one step and deletes the mirror rather than return a leaking one. For the same reason, **nothing that encodes the acceptance criteria may live under `tools/`** — the run verifier belongs in `process/tools/`, which is excluded already.
 
 ### The proof gates
 
@@ -57,7 +73,7 @@ The bar is a **Sonnet**-class hire. Opus solves the known pitfalls unaided, whic
 Full rules and the entry template are in the `monster-dev-workshop` skill, Half D. The four that decide whether something may be written at all:
 
 - **Decision-shaped, not solution-shaped.** An entry names a fork and what settles it; the resolution stays with the hire, who is the only party looking at the actual project.
-- **Citation is an identifier, never a locator** — the bare run id in parentheses. `test/` is tracked, so a path becomes a live URL after the push: a 404 and a burnt turn in a test run, a pointer into the acceptance criteria in production. No YAML frontmatter on anything a hire fetches.
+- **Citation is an identifier, never a locator** — the bare run id in parentheses. `process/` is tracked, so a path becomes a live URL after the push: a 404 and a burnt turn in a test run, a pointer into the acceptance criteria in production. No YAML frontmatter on anything a hire fetches.
 - **Fragments live inside a prose entry**, shorter than the prose, and deleting one must leave the entry true — that last test is what gives a fragment its own A/B arm. Never a `snippets/` directory.
 - **A tool starts inline**, and output that is identical for every hire is not a tool but a table cell in §5.
 
@@ -75,15 +91,15 @@ There is no build/lint/test tooling for this repo (static HTML/CSS/JS + Markdown
 
 **Build the `<dist>` mirror for a test hire** (never by hand — it builds *and* verifies, and deletes a leaking mirror instead of returning it):
 ```powershell
-.\test\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
-.\test\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a
+.\process\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
+.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a
 ```
 
 **Check the indexes against the working tree** — the same question one step earlier, so a
 disagreement is caught while it is still an edit. Run it after touching §2, §5, a stack note or
 the catalog; it exits non-zero, so it can gate a commit:
 ```powershell
-.\test\tools\check-index.ps1
+.\process\tools\check-index.ps1
 ```
 It goes further than the mirror check in three ways the mirror check cannot: §5's figures are
 compared against `catalog.json` row by row (the catalog is the authority, §5 the only published
@@ -97,21 +113,21 @@ and refuses one where they disagree. `-Without` on a whole stack therefore fails
 §2 would still send the hire after a file that is gone, costing a turn on a 404 in the metric
 the tooling gate reads.
 
-**Read the board before a run and before scoring one** — `test/backlog/` is one file per problem,
+**Read the board before a run and before scoring one** — `process/backlog/` is one file per problem,
 carried across runs. A run's brief is an item in `grilled`; no item, no run. The script reads the
 item files themselves, so there is no index to drift, and it enforces the state rules — exits
 non-zero, so it can gate a commit:
 ```powershell
-.\test\backlog\board.ps1 -Open -Full
+.\process\backlog\board.ps1 -Open -Full
 ```
 
 **Hire through the wrapper, never `claude -p` directly** — it keeps the cost/turn envelope and
 snapshots the target's worktree between turns, which is what makes "asked before building"
 a measurement rather than a recollection:
 ```powershell
-.\test\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a `
-  -Dist ..\monster-dev-testruns\2026-08-02-alt-a.dist -Model sonnet -BriefFile .\test\scenarios\alt-a.brief.txt
-.\test\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a -Answer 'keine Präferenz'
+.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a `
+  -Dist ..\monster-dev-testruns\2026-08-02-alt-a.dist -Model sonnet -BriefFile .\process\scenarios\alt-a.brief.txt
+.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a -Answer 'keine Präferenz'
 ```
 
 **Add or regenerate a sprite sheet from a video** (requires `ffmpeg` on PATH, Windows PowerShell with `System.Drawing`) — full recipe and the checks that follow it are in `monsters/README.md`:

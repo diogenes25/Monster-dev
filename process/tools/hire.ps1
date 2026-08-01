@@ -14,14 +14,14 @@ this project has misattributed three times, and its evidence has always been a h
 sentence. An empty worktree after turn 1 is the same claim as a machine fact.
 
 Turn 1 needs -Brief (or -BriefFile) and -Dist. Every later turn needs only -Answer; the
-session id is read back out of the stored envelope. Everything is written under test/runs/ —
+session id is read back out of the stored envelope. Everything is written under process/runs/ —
 never into the target, because an artefact inside the target would violate the §9 cleanup
 rule the run is there to measure.
 
 Run it from the repository root.
 
 .PARAMETER RunId
-Identifies the run. Evidence is appended to test/runs/<RunId>.hire.json.
+Identifies the run. Evidence is appended to process/runs/<RunId>.hire.json.
 
 .PARAMETER Target
 The run folder the hire works in. Must be outside this repository.
@@ -47,10 +47,10 @@ Passed to claude --allowedTools. A fence that is too tight shows up as a product
 it was really the harness, so it is recorded rather than assumed.
 
 .EXAMPLE
-.\test\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet -Dist ..\monster-dev-testruns\2026-08-02-plan-sonnet.dist -Model sonnet -BriefFile .\test\scenarios\alt-a-left-to-right.brief.txt
+.\process\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet -Dist ..\monster-dev-testruns\2026-08-02-plan-sonnet.dist -Model sonnet -BriefFile .\process\scenarios\alt-a-left-to-right.brief.txt
 
 .EXAMPLE
-.\test\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet -Answer 'keine Präferenz, nimm deinen Standard'
+.\process\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet -Answer 'keine Präferenz, nimm deinen Standard'
 #>
 [CmdletBinding()]
 param(
@@ -72,7 +72,7 @@ if (-not (Test-Path 'START.md')) {
 
 $repoRoot   = (Resolve-Path '.').Path
 $targetPath = (Resolve-Path $Target).Path
-$recordPath = Join-Path $repoRoot "test\runs\$RunId.hire.json"
+$recordPath = Join-Path $repoRoot "process\runs\$RunId.hire.json"
 
 # The whole isolation story depends on the run folder not sitting under this repo, where
 # CLAUDE.md would reach the hire through the ancestor chain.
@@ -82,7 +82,7 @@ if ($targetPath.StartsWith($repoRoot, [StringComparison]::OrdinalIgnoreCase)) {
 
 # Step 4 of Half B, re-run per turn rather than once per run. It is cheap, and a turn-2 hire
 # is exactly as sensitive to a stray CLAUDE.md as a turn-1 hire.
-& (Join-Path $repoRoot 'test\tools\check-isolation.ps1') -Target $targetPath | Out-Null
+& (Join-Path $repoRoot 'process\tools\check-isolation.ps1') -Target $targetPath | Out-Null
 
 function Get-Worktree($path) {
     # -uall so an untracked *directory* is listed by its files; a collapsed "assets/" entry

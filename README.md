@@ -34,13 +34,13 @@ If your project has no visible surface for it to walk on (a pure backend, a CLI,
 - `monsters/` — the sprite sheets a client can choose from, plus `catalog.json` recording each one's frame count, cell size, cycle length and where it came from. `index.html` is a working implementation of one of them for the plain-CSS case.
 - `sources/` — the footage the sprite sheets were cut from, kept so they stay regenerable.
 - `tools/` — sorted by who runs it: `provenance/` produced the sprite sheets offline, `hire/` is fetched by a hire. See `tools/project.md`.
-- `test/` — how Monster-Dev is tested against sample projects, and what those runs found. Nothing here is ever fetched by a hire.
+- `process/` — how Monster-Dev is tested against sample projects and what those runs found, plus `process/stacks/`: a record of the jobs actually carried out, kept as fixture → requirement → process → result. Nothing here is ever fetched by a hire.
 
 ## Monster-Dev gets better by being tested
 
 Every improvement here has to earn its place. A test run hires a fresh agent against a sample project, scores it criterion by criterion, and the gaps it finds become proposed wording changes — which are then only kept if a rerun shows a hire actually behaving differently. Notes and tooling face the same bar: if an A/B can't tell the difference, they come back out.
 
-`test/runs/` holds the reports and the evidence behind them. The procedure is in `.claude/skills/monster-dev-workshop/`.
+`process/runs/` holds the reports and the evidence behind them. `process/stacks/` holds the other half — what a job actually looked like from the brief to the handover, kept as documentation rather than as a measurement. The procedure is in `.claude/skills/monster-dev-workshop/`.
 
 ## License
 

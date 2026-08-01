@@ -1,11 +1,11 @@
 # Scenario template
 
-Copy to `test/scenarios/<slug>.md` and fill in. It holds both the answer script and the answer
+Copy to `process/scenarios/<slug>.md` and fill in. It holds both the answer script and the answer
 key, and the hired agent must never see it.
 
-`test/` is **tracked**, so nothing keeps it away from a hire by itself — the mirror script
+`process/` is **tracked**, so nothing keeps it away from a hire by itself — the mirror script
 excludes it deliberately and verifies that it did. That is also why a scenario never cites a
-`test/` path as somewhere to look: once this repo is pushed, such a path is fetchable.
+`process/` path as somewhere to look: once this repo is pushed, such a path is fetchable.
 
 Delete the guidance in *italics* as you fill each section in.
 
@@ -18,7 +18,7 @@ both the answer script and the acceptance criteria.*
 
 ## Target project
 
-A copy of `test/fixtures/<fixture>/` placed **outside** this repository, at
+A copy of `process/fixtures/<fixture>/` placed **outside** this repository, at
 `../monster-dev-testruns/<run-id>/`, initialised as a git repo with a single commit
 `Initial site`.
 
@@ -30,7 +30,7 @@ A copy of `test/fixtures/<fixture>/` placed **outside** this repository, at
 | `fixtures/gsap-site/` | style conformance (§2.4) — must use the project's GSAP pattern |
 | `fixtures/python-cli/` | the decline path (§3) |
 
-Outside the repo, because a copy inside `test/` puts this repo's `CLAUDE.md` in the hire's
+Outside the repo, because a copy inside `process/` puts this repo's `CLAUDE.md` in the hire's
 ancestor chain — it is auto-loaded regardless of any instruction not to read it, and it gives
 away the purpose, the technique and the sign-off rule.
 
@@ -63,7 +63,7 @@ fidelity (section C).*
 > <brief>
 
 `<dist>` is a copy of this repo's tracked files minus `.claude/`, so the agent can list that
-folder freely and still not reach `CLAUDE.md`, `test/`, `.claude/` or `.git/`.
+folder freely and still not reach `CLAUDE.md`, `process/`, `.claude/` or `.git/`.
 
 **Known limitation of this run:** WebFetch cannot reach a local server, so the agent gets a
 filesystem path instead of a raw URL. §0 (base-URL derivation) and §5's WebFetch/curl split
