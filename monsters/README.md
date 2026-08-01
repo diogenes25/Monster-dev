@@ -29,12 +29,18 @@ generator records is a path that still resolves for whoever regenerates the shee
 
 Then, in order:
 
-1. **Read the loop closure in the report.** It is stated as a multiple of the agreement between
-   two genuinely consecutive frames, which is the bar an invisible seam has to clear. Below
-   about `1.0x` the walk hitches on every repeat and the period is wrong — establish it
-   yourself and pin `-Period` / `-StartFrame`. Do not trust a filename that says "loop":
-   `green-fuzz-strolling` came from a clip advertised as a seamless infinity loop whose last
-   frame does not hand over to its first at all.
+1. **Check the loop on the finished sheet.** This is the gate, not the generator's own figure:
+
+   ```powershell
+   .\tools\provenance\Test-SheetLoop.ps1
+   ```
+
+   It measures the seam a viewer actually sees — last cell handing over to the first — against
+   the sheet's own mean adjacent-cell step, and exits non-zero if any sheet hitches. A wrong gait
+   period is the usual cause; establish the period independently and pin `-Period` /
+   `-StartFrame`. Do not trust a filename that says "loop": `green-fuzz-strolling` came from a
+   clip advertised as a seamless infinity loop whose last frame does not hand over to its first
+   at all.
 2. **Look at the sheet.** The cut-out is heuristic. Check the tail, the feet, and that no scene
    element got welded to the head.
 3. **Add the row to `MONSTER-DEV.md` §5** — frames, cell, cycle, faces. Until then the sheet is
@@ -42,17 +48,25 @@ Then, in order:
 4. **Leave `default` alone** unless you mean to change what every client gets who has no
    preference. Changing it also breaks comparability with every earlier test run in `test/runs/`.
 
-## Verifying a loop on the finished sheet
+## Why the sheet, and not the footage, decides
 
-The generator judges candidate cycles in the *anchored* frame — sampled relative to each
-frame's own body axis and ground line, which is how the cells are later composed. That
-distinction is easy to get wrong and expensive when you do: judging a cycle on raw video frames
-instead counts the character's travel across the shot as mismatch, and travel is exactly what
-composition removes. Measured that way the wrong period looks best by a wide margin.
+`Test-SheetLoop.ps1` reports `green-fuzz-classic` at `1.03x` and `green-fuzz-strolling` at
+`0.85x` — both seamless. Run it rather than trusting these numbers; that is the point of it
+existing.
 
-To check the artifact itself rather than the candidate, compare the last cell against the first
-— the seam a viewer actually sees — against the sheet's own mean adjacent-cell step. Both
-current sheets pass: `green-fuzz-classic` at `1.03x`, `green-fuzz-strolling` at `0.85x`.
+Two ways of measuring a candidate cycle disagree, and the disagreement is worth knowing about
+because both wrong turns are easy to take:
+
+- **On raw video frames** the character's travel across the shot counts as mismatch — and travel
+  is exactly what aligning cells on a shared body axis and ground line removes. Measured this
+  way the *wrong* period wins by a wide margin. The generator avoids this by comparing in the
+  anchored frame, which is why its ranking can be trusted.
+- **On the generator's closure figure** the ranking is right but the absolute value is not a
+  verdict. It is measured on sampled footage, not on cells: a 16-frame cycle it rated an
+  acceptable `1.06x` produced a sheet that hitches at `1.39x`.
+
+Hence the split. The generator picks the period; `Test-SheetLoop.ps1` decides whether the result
+ships, because it measures the seam the viewer will actually see on the artifact that ships.
 
 ## Current entries
 

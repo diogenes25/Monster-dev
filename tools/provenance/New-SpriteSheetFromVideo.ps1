@@ -25,11 +25,14 @@
 
     Requires ffmpeg on PATH.
 
-    Source footage advertised as a seamless loop frequently is not one. The report
-    states the loop closure as a multiple of the agreement between two genuinely
-    consecutive frames, which is the bar an invisible seam has to clear: below
-    about 1.0x the walk hitches on every repeat and the period is wrong. Pin it
-    with -Period / -StartFrame once you have established it independently.
+    Source footage advertised as a seamless loop frequently is not one, so the
+    period is worth confirming rather than assuming. The report states the loop
+    closure as a multiple of the agreement between two genuinely consecutive
+    frames. Treat that figure as a way to rank candidates, not as a verdict: it
+    is measured on sampled footage, and a period that scores an acceptable 1.06x
+    here has still produced a sheet that hitches at 1.39x. Confirm on the
+    finished artifact with Test-SheetLoop.ps1, which is the authority, and pin
+    -Period / -StartFrame if it disagrees.
 
 .PARAMETER VideoPath
     Source video.
