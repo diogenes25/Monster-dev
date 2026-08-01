@@ -1,0 +1,64 @@
+{
+  "url": "http://127.0.0.1:8080/index.html",
+  "trigger": "alt+KeyA",
+  "onLoad": 0,
+  "afterIdle": 0,
+  "afterBareKey": 0,
+  "afterTrigger": 1,
+  "keyPath": "real browser key event (ladder step 1)",
+  "spriteHttpStatus": 200,
+  "spriteNaturalSize": "6348x300",
+  "samples": [
+    {
+      "t": 0,
+      "x": -78,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-3496px 0px"
+    },
+    {
+      "t": 2,
+      "x": 181,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-3864px 0px"
+    },
+    {
+      "t": 4,
+      "x": 469,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-920px 0px"
+    },
+    {
+      "t": 6,
+      "x": 728,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-1288px 0px"
+    },
+    {
+      "t": 8,
+      "x": 990,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-1840px 0px"
+    }
+  ],
+  "afterCrossing": 0,
+  "afterSecondTrigger": 1,
+  "secondTriggerGeometry": {
+    "x": -78,
+    "y": 505,
+    "mirrored": true,
+    "bg": "-3496px 0px"
+  },
+  "navLinks": 3,
+  "scroll": {
+    "before": 0,
+    "after": 199
+  },
+  "consoleErrors": [
+    "error: Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+}

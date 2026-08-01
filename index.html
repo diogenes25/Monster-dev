@@ -12,10 +12,14 @@
     }
 
     :root {
-      /* Sprite sheet monster-walk.png: 23 frames of 276 × 300 px, transparent.
-         Source: one gait cycle from the 24 fps video, cut out and aligned to a
-         shared ground line and body axis. The vertical bob lives in the frames
-         themselves – no artificial bounce needed in CSS. */
+      /* Sprite sheet monsters/green-fuzz-classic.png: 23 frames of 276 × 300 px,
+         transparent. Source: one gait cycle from the 24 fps video, cut out and
+         aligned to a shared ground line and body axis. The vertical bob lives in
+         the frames themselves – no artificial bounce needed in CSS.
+
+         Every number below belongs to that one sheet. Another monster means
+         another frame count, cell size and cycle time – the roster with those
+         figures is the table in MONSTER-DEV.md §5. */
       --frame-w: 184px;                        /* display width of a single frame */
       --frame-h: 200px;                        /* 300/276 × 184 → keeps the aspect ratio */
       --sheet-w: calc(var(--frame-w) * 23);    /* 4232px – must match steps(23) */
@@ -70,7 +74,7 @@
     .monster {
       position: absolute;
       inset: 0;
-      background-image: url("monster-walk.png");
+      background-image: url("monsters/green-fuzz-classic.png");
       background-repeat: no-repeat;
       background-size: var(--sheet-w) var(--frame-h);
       /*transform: scaleX(-1);*/               /* mirror the sprite: monster faces left */

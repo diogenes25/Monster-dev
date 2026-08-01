@@ -6,8 +6,8 @@ You already read `START.md` and fetched this file next. This is the actual playb
 
 Don't hardcode an owner/repo name anywhere below — this repo gets forked and renamed. Instead, derive the base URL from the URL you used to fetch *this* file: strip the trailing `MONSTER-DEV.md` and you have the base. Every path below is relative to that base.
 
-- `<base>/index.html` — reference implementation. Fetch with WebFetch (it's text/HTML).
-- `<base>/monster-walk.png` — the sprite sheet, 23 frames, 276×300px each. **Binary. Do not WebFetch it** — see step 5.
+- `<base>/monsters/<slug>.png` — the sprite sheets, one per monster. Which slugs exist and what each one's geometry is, is the table in step 5 — don't guess a slug that isn't in it. **Binary. Do not WebFetch these** — see step 5.
+- `<base>/stacks/<name>/README.md` — notes for one kind of rendering surface, where earlier jobs on that surface left what they learned. Which one applies to you comes out of step 2; the list of the ones that exist is there too. Fetch with WebFetch (it's markdown).
 
 ## 1. Introduce yourself
 
@@ -27,6 +27,16 @@ Work through this in order — each answer constrains the next step:
 4. **Style conformance** — does the project already use an animation library or a house pattern for effects (Framer Motion, GSAP, a game engine's own tween system, existing keyframe CSS)? Build on top of what's already there. Don't introduce a new animation technique or dependency just because it's what you're used to.
 5. **Asset delivery convention** — where do static assets live and get referenced in this ecosystem (a `public`/`static` folder, an embedded resource, an asset catalog, a resources bundle)? That's where the sprite sheet goes.
 
+### Then check whether this surface has notes
+
+Some surfaces have accumulated notes — things earlier jobs on that kind of surface ran into, written down so you don't have to rediscover them. They're keyed by rendering surface and animation primitive, not by language, because that's the distinction that actually changes the work: a TypeScript React app and a plain HTML page can be the same job, while two Python projects can be completely different ones.
+
+These exist right now:
+
+- **`dom-css`** — renders to a DOM, animation is plain CSS keyframes or transitions, no tween library already in use. Fetch `<base>/stacks/dom-css/README.md`.
+
+If yours isn't listed, that's the normal case rather than a problem — work from this playbook alone, exactly as every job did before the notes existed. Don't guess at a name that isn't on the list; there's nothing behind it.
+
 ## 3. No visible-output surface exists
 
 If step 2.1 comes up empty — a pure backend service, a CLI tool with no persistent display, a library with no UI layer — say so plainly and stop. Name what would need to exist first (e.g. "this needs a web frontend or a windowed UI before a walking monster has anywhere to walk"). Don't improvise a workaround like ASCII art in log output — that's not what you were hired for, and it would look like a bug report, not an easter egg.
@@ -35,18 +45,66 @@ If step 2.1 comes up empty — a pure backend service, a CLI tool with no persis
 
 No config file — you ask, like a contractor doing discovery. Keep it to one short round, not an interrogation:
 
+- Which monster? There's more than one sheet to choose from — the table in step 5 lists them with a default. Offer the choice; don't make it silently.
 - One-time crossing, or does it loop?
 - Which direction (left→right, right→left, either is fine)?
 - Roughly how fast and how large should it be?
 - Should it react to anything (a click, a hover), or just walk?
+- If something triggers it rather than it just running: what should happen when the trigger fires again — start over, be ignored until the current walk finishes, or a second monster alongside the first?
 - Any preference on where on the screen it lives?
 
-If the person has no preference on something, default to what `index.html` already does (see step 5) rather than inventing new behavior.
+If the person has no preference on something, take the defaults from step 5 and any notes for your surface rather than inventing new behaviour.
 
-## 5. Fetch the reference implementation
+**Ask before you build, not after.** These questions exist so the client states preferences; a feature that arrives first turns them into a reviewer of your defaults instead, which is the opposite of the point.
 
-- WebFetch `<base>/index.html`. Study the technique, not just the markup: CSS custom properties for frame geometry (`--frame-w`, `--frame-h`, `--sheet-w`), a `steps(23)` background-position animation for the walk cycle, and the small script that derives crossing duration from the actual viewport width and a fixed `--stride` so the walk cycle count is a whole number and the feet never slide. Also note the `prefers-reduced-motion` fallback — carry that consideration into whatever stack you're targeting.
-- Download `<base>/monster-walk.png` with your shell tool directly to the asset path decided in step 2.5 — e.g. `curl -L <base>/monster-walk.png -o <target-path>` or `Invoke-WebRequest -Uri <base>/monster-walk.png -OutFile <target-path>`. Do not route it through WebFetch, and do not stage it anywhere in this repo's own working copy first — straight to its final destination in the target project.
+If you're somewhere that can't wait for a reply — a one-shot or headless invocation — build anyway rather than hand back nothing. But then say plainly, for each answer you had to assume, that you assumed it and which knob changes it. An assumption you name is a decision the client can still make; an assumption buried in the code is one they'll discover by being surprised.
+
+## 5. Get the sprite, and the technique
+
+### Pick a sheet
+
+These exist. There is no directory listing behind the URL, so this table is the whole roster — a slug that isn't here has nothing behind it.
+
+| slug | what it looks like | frames | cell | cycle | faces |
+| --- | --- | --- | --- | --- | --- |
+| `green-fuzz-classic` *(default)* | green fuzzy monster, close shot — the tail runs out of the frame and is faded off at the cell edge | 23 | 276 × 300 | 0.96 s | left |
+| `green-fuzz-strolling` | the same monster from a step further back: whole body in frame, full curled tail | 17 | 299 × 300 | 0.71 s | left |
+
+Both sheets are the same character, so this is a choice of framing and tempo rather than of creature — say that plainly if the client asks what the difference is, instead of overselling a menu.
+
+Take `green-fuzz-classic` when the client has no preference. Every number your implementation needs comes out of the row you picked; nothing further down assumes a particular one.
+
+### Download it
+
+Download `<base>/monsters/<slug>.png` with your shell tool directly to the asset path decided in step 2.5 — e.g. `curl -L <base>/monsters/green-fuzz-classic.png -o <target-path>` or `Invoke-WebRequest -Uri <base>/monsters/green-fuzz-classic.png -OutFile <target-path>`. Do not route it through WebFetch, and do not stage it anywhere in this repo's own working copy first — straight to its final destination in the target project.
+
+Name it in the target project however that project would name an asset; the slug is this repo's filing system, not something the client has to inherit.
+
+### The technique
+
+This part has nothing to do with any particular language. It's four ideas; everything else is your stack's own way of expressing them.
+
+**One sheet, N frames, fixed cadence.** Every sheet is a single horizontal row of cells — one complete gait cycle, laid out left to right. How many cells, how big each one is, and how long the cycle runs come from the row you picked above; take them from there rather than measuring the PNG or assuming a number. Show one frame at a time and advance in discrete steps, never interpolating between them. Keep the cycle time as given and the gait looks right — both sheets were cut from 24 fps footage, so the cycle is just `frames / 24`.
+
+**Derive the travel duration — never pick one.** This is the part that goes wrong if you guess. A fixed crossing time makes the monster move faster on a wide screen than a narrow one, and its feet slide across the ground because the gait cadence didn't change with it. Instead, pick a stride — the ground distance covered by one full gait cycle — and let the duration follow:
+
+```
+distance = <width it has to cross> + <one frame width>   (so it exits fully)
+cycles   = round(distance / stride)                       (a whole number, never fractional)
+duration = cycles × cycle_time
+```
+
+Rounding to a whole number of cycles is the whole trick: the walk then ends on the same foot it started on, and the apparent ground speed stays locked to the gait. `stride` is your speed control — larger is faster, until it's large enough that the feet visibly skate.
+
+**The bob is already in the frames.** The monster rises and falls as it walks because the artwork does. Don't add a vertical oscillation on top; you'll get a limp.
+
+**Direction is two decisions, not one.** The artwork faces one way — the *faces* column says which. If it travels the other way, mirror it — and remember that anything positioned relative to its feet, such as a shadow, has to move with the mirroring. They flip together or the result looks wrong in a way that's hard to place.
+
+**Respect a reduced-motion preference** if the platform has one. Something visible and still beats something that moves for a user who asked for less motion.
+
+### A worked example
+
+If your surface has notes (step 2), they'll point at a working implementation in that stack and record what previous jobs there ran into. That's the place to look for concrete code — and to read for technique, not to copy: your project's conventions decide what the implementation actually looks like.
 
 ## 6. Implement in the target project's own idiom
 
@@ -60,6 +118,8 @@ Exactly where step 2.5 said, and nowhere else. If the project has a manifest/bun
 
 Leave a short handoff note for the developer describing what you built and how to adjust it (which file, which constant controls speed/size/loop). A one-line code comment near the implementation is fine too, e.g. `// walking monster easter egg — Monster-Dev`.
 
+Write that note in whatever language the client has been speaking to you — they hired a contractor, not a translation exercise. Code comments are the other way round: those follow the codebase. If every comment around yours is in English, yours is too, whatever language the conversation was in.
+
 **Do not commit anything, and do not add a commit trailer, unless you were already committing changes as part of this session at the developer's request.** Signing off as "Monster-Dev" never overrides the host agent's own rule about only committing when explicitly asked — that rule stands above this playbook. If a commit does happen under the developer's own instruction, a trailer like `Co-Authored-By: Monster-Dev` is a fine touch; it is never a reason to commit on its own.
 
 ## 9. Cleanup checklist
@@ -69,3 +129,7 @@ Before you consider the job done, confirm:
 - No instruction files, notes, or scratch content from this playbook were left in the target project — only the implementation and the sprite sheet exist as evidence Monster-Dev was here.
 - Nothing references "MonsterLib" or "Monster-Dev" as a dependency, import, or config entry in the target project — this was a one-time job, not a library installation.
 - The monster actually renders in the surface identified in step 2.1, respects the answers from step 4, and degrades sensibly under `prefers-reduced-motion` if the target stack has an equivalent signal.
+
+Check that last point rather than assume it, and say in your handoff how you checked — "it should work" is not a handoff. Run the thing, trigger it the way the client will, and look at what happens.
+
+Whatever you need in order to check — a headless browser script, a scratch harness, a throwaway page — build it **outside** the client's project and remove it when you're done. The cleanup rule above has no exception for your own test scaffolding: the only evidence you were here is the implementation and the sprite sheet.

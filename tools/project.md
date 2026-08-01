@@ -1,7 +1,52 @@
-# tools/ — provenance only
+# tools/ — sorted by who runs it
 
-These two scripts are how `monster-walk.png` (and the source material behind `monster.png`) were produced: frame extraction, silhouette cutout, gait-cycle detection, alignment onto a shared ground line and body axis.
+A script's folder says who is allowed to run it. That distinction matters more than it looks:
+one of these folders is fetched by strangers' coding agents, and one of them must never be.
 
-They are **not** part of Monster-Dev's runtime flow and are never fetched by a hiring agent — that flow only ever touches `index.html` and `monster-walk.png` at the repo root. Keep these scripts around for regenerating or updating the sprite sheet later.
+## `provenance/` — never fetched
+
+`New-SpriteSheetFromVideo.ps1` and `New-SpriteSheetFromImage.ps1`: how the sheets in
+`monsters/` (and the source material behind `monster.png`) were produced — frame extraction,
+silhouette cutout, gait-cycle detection, alignment onto a shared ground line and body axis.
+
+Offline, Windows-only, not part of the hiring flow. The video script also writes the
+`monsters/catalog.json` entry, so the geometry a client is offered comes from the same
+variables that composed the PNG rather than from someone retyping it. `monsters/README.md`
+has the recipe and the checks that have to follow it.
+
+If a sheet's frame count changes, see the sync list in the `monster-dev-workshop` skill —
+per-monster figures live in the catalog and in `MONSTER-DEV.md` §5, but `green-fuzz-classic`'s
+`23` is also baked into `index.html` and into the test harness.
+
+## `hire/` — fetched and run by a hired agent
+
+Shortcuts that spare a hire the derivation and the measuring. Two rules hold for everything
+here, and both exist to keep the product from quietly turning into a library:
+
+- **It computes, it does not write.** A tool may return frame geometry, cycle counts, a
+  crossing duration, a measured shadow offset. It may not emit a finished file. §6 stands:
+  the arithmetic can be delegated, the implementation is written by the hire in the target
+  project's own idiom.
+- **It is a shortcut, never a prerequisite.** The formula stays spelled out in
+  `MONSTER-DEV.md` §5 and in the stack notes. A hire without the right runtime does the
+  arithmetic itself and carries on — a missing interpreter must never block the job.
+
+Stack-specific tools do not live here. They belong beside the notes that explain them, in
+`stacks/<name>/tools/`, so a hire that fetched a stack has its tooling in the same place.
+
+Tools are earned the same way stack knowledge is: a run shows a hire building something for
+itself, that becomes a tool, and an A/B has to show the cost drop with no criterion falling
+back. A tool that changes neither is removed again.
+
+## Not here: developer tooling
+
+The harness — dist mirror, isolation check, the CDP run verifier — lives in `test/tools/`.
+
+That is not tidiness. The verifier encodes the acceptance criteria, so publishing it under
+`tools/` would put "what is being measured" straight into the mirror a hire receives.
+`test/` is excluded from that mirror already, which makes it the one correct home. Nothing
+that knows the criteria may sit in `tools/`.
+
+---
 
 The actual product of this repo is `/START.md` at the root.

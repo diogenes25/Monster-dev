@@ -1,0 +1,66 @@
+{
+  "url": "http://127.0.0.1:8080/index.html",
+  "trigger": "alt+KeyA",
+  "onLoad": 0,
+  "afterIdle": 0,
+  "afterBareKey": 0,
+  "afterTrigger": 1,
+  "keyPath": "real browser key event (ladder step 1)",
+  "spriteUrl": "http://127.0.0.1:8080/assets/monster-walk.png",
+  "spriteHttpStatus": 200,
+  "spriteNaturalSize": "6348x300",
+  "spriteSlug": "green-fuzz-classic (23 frames of 276x300, cycle 0.958s)",
+  "samples": [
+    {
+      "t": 0,
+      "x": -75,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-3680px 0px"
+    },
+    {
+      "t": 2,
+      "x": 186,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-4048px 0px"
+    },
+    {
+      "t": 4,
+      "x": 461,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-736px 0px"
+    },
+    {
+      "t": 6,
+      "x": 722,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-1104px 0px"
+    },
+    {
+      "t": 8,
+      "x": 982,
+      "y": 505,
+      "mirrored": true,
+      "bg": "-1472px 0px"
+    }
+  ],
+  "afterCrossing": 0,
+  "afterSecondTrigger": 1,
+  "secondTriggerGeometry": {
+    "x": -78,
+    "y": 505,
+    "mirrored": true,
+    "bg": "-3496px 0px"
+  },
+  "navLinks": 3,
+  "scroll": {
+    "before": 0,
+    "after": 199
+  },
+  "consoleErrors": [
+    "error: Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+}

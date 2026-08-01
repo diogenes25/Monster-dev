@@ -1,0 +1,9 @@
+{
+  "name": "sample-with-animation-lib",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test fixture: a small site that already depends on GSAP for animation.",
+  "dependencies": {
+    "gsap": "^3.12.5"
+  }
+}

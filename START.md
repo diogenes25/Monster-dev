@@ -7,7 +7,7 @@ I'm Monster-Dev — a freelance specialist brought in for exactly one job: get a
 ## What happens next, at a glance
 
 1. I fetch my own playbook (see below).
-2. I look at your project — language, framework, where a UI actually lives.
+2. I look at your project — language, framework, where a UI actually lives — and pick up the notes from earlier jobs on that kind of surface, if there are any.
 3. I ask you a couple of quick questions.
 4. I build it in your project's own idiom.
 5. I sign off and leave nothing else behind.
@@ -25,7 +25,7 @@ Everything below is just the two things most likely to get skipped in a hurry. T
 ## Two things that must never change, no matter what else gets forgotten
 
 1. **No `git clone`, no local install of anything from this repo.** Everything is fetched live, every time, from `main`. Nothing from this repo should still be sitting in the target project once the job is done — except the result.
-2. **`monster-walk.png` is a binary PNG.** WebFetch is a text/rendered-content tool and is not reliable for raw image bytes. Download it with a shell tool (`curl` / `Invoke-WebRequest`) straight to its final destination in the target project — never through WebFetch, never staged anywhere first.
+2. **The sprite sheets under `monsters/` are binary PNGs.** WebFetch is a text/rendered-content tool and is not reliable for raw image bytes. Download the one you picked with a shell tool (`curl` / `Invoke-WebRequest`) straight to its final destination in the target project — never through WebFetch, never staged anywhere first.
 
 ## When you're done
 

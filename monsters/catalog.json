@@ -1,0 +1,56 @@
+{
+  "default": "green-fuzz-classic",
+  "monsters": [
+    {
+      "slug": "green-fuzz-classic",
+      "file": "monsters/green-fuzz-classic.png",
+      "character": "green fuzzy monster",
+      "look": "close shot, tail runs out of frame and is alpha-faded at the cell edge",
+      "frames": 23,
+      "cell": {
+        "width": 276,
+        "height": 300
+      },
+      "sheet": {
+        "width": 6348,
+        "height": 300
+      },
+      "layout": "single horizontal row, left to right, one complete gait cycle",
+      "sourceFps": 24.0,
+      "cycleSeconds": 0.958,
+      "faces": "left",
+      "provenance": {
+        "sourceVideo": null,
+        "cycleFrames": null,
+        "seamRatio": null,
+        "tool": "tools/provenance/New-SpriteSheetFromVideo.ps1",
+        "note": "Predates this catalog. The source video was not retained, so the fields the tool would have filled are unknown rather than reconstructed; the geometry above was read back from the sheet itself."
+      }
+    },
+    {
+      "slug": "green-fuzz-strolling",
+      "file": "monsters/green-fuzz-strolling.png",
+      "character": "green fuzzy monster",
+      "look": "full curled tail, whole body in frame",
+      "frames": 17,
+      "cell": {
+        "width": 299,
+        "height": 300
+      },
+      "sheet": {
+        "width": 5083,
+        "height": 300
+      },
+      "layout": "single horizontal row, left to right, one complete gait cycle",
+      "sourceFps": 24.0,
+      "cycleSeconds": 0.708,
+      "faces": "left",
+      "provenance": {
+        "sourceVideo": "sources/Monster_walking_infinity_loop_202608011658.mp4",
+        "cycleFrames": "7..23 of 28",
+        "seamRatio": 1.166,
+        "tool": "tools/provenance/New-SpriteSheetFromVideo.ps1"
+      }
+    }
+  ]
+}

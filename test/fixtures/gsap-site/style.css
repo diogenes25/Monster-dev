@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #0f1115;
+  color: #f2f2f2;
+}
+
+.hero {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 3rem;
+  opacity: 0;
+}
+
+.hero-subtitle {
+  margin-top: 0.5rem;
+  color: #9aa0aa;
+  opacity: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.card {
+  background: #1b1e25;
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-size: 0.95rem;
+}

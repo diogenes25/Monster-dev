@@ -3,7 +3,7 @@
     Builds a transparent sprite sheet from a video of a walking character.
 
 .DESCRIPTION
-    This is the pipeline that produced monster-walk.png. It works for cartoon
+    This is the pipeline that produced the sheets in monsters/. It works for cartoon
     footage where the character carries a closed, clearly dark outline — no green
     screen required, the outline itself is the cut-out boundary.
 
@@ -17,10 +17,19 @@
          which is too close to the outline colour to be caught by step 2.
       4. Measure the gait period by comparing the leg region across every
          possible frame offset, then pick the offset that loops most cleanly.
+         Both comparisons are made in the anchored frame — relative to each
+         frame's own body axis and ground line, the way the cells are composed —
+         so the character's travel across the shot does not count as mismatch.
       5. Align each frame on a shared ground line and body axis, scale, and
          compose the sheet.
 
     Requires ffmpeg on PATH.
+
+    Source footage advertised as a seamless loop frequently is not one. The report
+    states the loop closure as a multiple of the agreement between two genuinely
+    consecutive frames, which is the bar an invisible seam has to clear: below
+    about 1.0x the walk hitches on every repeat and the period is wrong. Pin it
+    with -Period / -StartFrame once you have established it independently.
 
 .PARAMETER VideoPath
     Source video.
@@ -52,8 +61,43 @@
     thin scene elements — an overhanging branch, a wire — that touch the head
     and would otherwise be welded to the character.
 
+.PARAMETER Period
+    Overrides the measured gait period, in source frames. Use it when you have
+    established the period independently and the automatic pick disagrees.
+
+.PARAMETER StartFrame
+    Overrides the first frame of the cycle (1-based, as numbered in the report).
+    Only the period search is skipped when -Period is given; the cut point is
+    still searched unless you pin it here too.
+
+.PARAMETER Slug
+    Catalog key for this sheet, e.g. green-fuzz-strolling. Required with
+    -CatalogPath.
+
+.PARAMETER CatalogPath
+    A monsters catalog JSON to add or replace this sheet's entry in. The entry
+    records the measured geometry so no number has to be retyped by hand.
+
+.PARAMETER Faces
+    Which way the artwork faces, 'left' or 'right'. Not measurable — state it.
+    Required with -CatalogPath.
+
+.PARAMETER Look
+    One-line description of this sheet for the catalog, e.g. "full curled tail".
+
+.PARAMETER Character
+    Which creature this sheet shows. Two sheets of the same creature share it.
+
 .EXAMPLE
-    .\New-SpriteSheetFromVideo.ps1 -VideoPath walk.mp4 -OutputPath ..\monster-walk.png
+    .\New-SpriteSheetFromVideo.ps1 -VideoPath walk.mp4 -OutputPath ..\..\monsters\green-fuzz-strolling.png
+
+.EXAMPLE
+    # Period established independently; record the result in the catalog.
+    .\New-SpriteSheetFromVideo.ps1 -VideoPath walk.mp4 `
+        -OutputPath ..\..\monsters\green-fuzz-strolling.png `
+        -Period 16 -StartFrame 7 `
+        -CatalogPath ..\..\monsters\catalog.json -Slug green-fuzz-strolling `
+        -Faces left -Character 'green fuzzy monster' -Look 'full curled tail'
 #>
 [CmdletBinding()]
 param(
@@ -66,6 +110,13 @@ param(
     [int]$TopTrimMinWidth = 30,
     [int]$MinPeriod      = 6,
     [int]$MaxPeriod      = 40,
+    [int]$Period         = 0,
+    [int]$StartFrame     = 0,
+    [string]$Slug,
+    [string]$CatalogPath,
+    [ValidateSet('left','right')][string]$Faces,
+    [string]$Look,
+    [string]$Character,
     [string]$WorkDir,
     [switch]$KeepWork
 )
@@ -75,6 +126,10 @@ Add-Type -AssemblyName System.Drawing
 
 if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
     throw "ffmpeg not found on PATH."
+}
+if ($CatalogPath) {
+    if (-not $Slug)  { throw "-CatalogPath needs -Slug: the entry has to be keyed by something." }
+    if (-not $Faces) { throw "-CatalogPath needs -Faces ('left' or 'right'): it cannot be measured from the footage." }
 }
 $VideoPath  = (Resolve-Path $VideoPath).Path
 $OutputPath = [System.IO.Path]::GetFullPath($OutputPath)
@@ -335,7 +390,22 @@ Write-Host "Extracting frames..." -ForegroundColor Cyan
 & ffmpeg -v error -y -i $VideoPath (Join-Path $WorkDir "raw\f_%04d.png")
 if ($LASTEXITCODE -ne 0) { throw "ffmpeg failed with exit code $LASTEXITCODE" }
 $rawFiles = Get-ChildItem (Join-Path $WorkDir "raw\f_*.png") | Sort-Object Name
-if ($rawFiles.Count -lt ($MaxPeriod + 2)) { throw "Only $($rawFiles.Count) frames — too few to find a gait cycle." }
+if ($Period -gt 0) {
+    # Period pinned: one cycle plus the frame that closes it is all that is needed.
+    $needed = [math]::Max($StartFrame, 1) + $Period
+    if ($rawFiles.Count -lt $needed) {
+        throw "Only $($rawFiles.Count) frames — a cycle of $Period starting at $StartFrame needs $needed."
+    }
+} else {
+    if ($rawFiles.Count -lt ($MinPeriod + 2)) {
+        throw "Only $($rawFiles.Count) frames — too few to find a gait cycle."
+    }
+    # A short clip is the normal case, not an error: search as far as it allows.
+    if ($MaxPeriod -gt ($rawFiles.Count - 2)) {
+        $MaxPeriod = $rawFiles.Count - 2
+        Write-Host "  clip is short — capping the period search at $MaxPeriod frames"
+    }
+}
 
 $probe = New-Object System.Drawing.Bitmap($rawFiles[0].FullName)
 $srcW = $probe.Width; $srcH = $probe.Height; $probe.Dispose()
@@ -399,23 +469,53 @@ function Get-IoU($a, $b) {
     if ($u -eq 0) { 0 } else { $i/$u }
 }
 $total = $rawFiles.Count
-$bestPeriod = 0; $bestScore = -1
-foreach ($lag in $MinPeriod..([math]::Min($MaxPeriod, $total-2))) {
-    $sum = 0.0; $n = 0
-    for ($f = 1; $f -le ($total - $lag); $f++) { $sum += Get-IoU $maps[$f] $maps[($f+$lag)]; $n++ }
-    $v = $sum / $n
-    if ($v -gt $bestScore) { $bestScore = $v; $bestPeriod = $lag }
+
+# The bar the loop closure is judged against. Two consecutive frames are as alike
+# as any pair in the clip ever gets, so a cut whose two ends match this well is a
+# cut nobody sees. Reporting closure as a multiple of it makes the figure mean the
+# same thing across clips of different resolution and tempo.
+$adjSum = 0.0
+for ($f = 1; $f -lt $total; $f++) { $adjSum += Get-IoU $maps[$f] $maps[($f+1)] }
+$adjacent = $adjSum / ($total - 1)
+Write-Host ("  adjacent-frame agreement {0:F3} — the bar a seam has to clear" -f $adjacent)
+
+if ($Period -gt 0) {
+    $bestPeriod = $Period
+    Write-Host "  period pinned to $bestPeriod frames by -Period"
+} else {
+    $bestPeriod = 0; $bestScore = -1
+    foreach ($lag in $MinPeriod..$MaxPeriod) {
+        $sum = 0.0; $n = 0
+        for ($f = 1; $f -le ($total - $lag); $f++) { $sum += Get-IoU $maps[$f] $maps[($f+$lag)]; $n++ }
+        $v = $sum / $n
+        if ($v -gt $bestScore) { $bestScore = $v; $bestPeriod = $lag }
+    }
+    Write-Host ("  period = {0} frames ({1:F2} s at {2} fps), agreement {3:F3}" -f $bestPeriod, ($bestPeriod/$fps), $fps, $bestScore)
 }
-Write-Host ("  period = {0} frames ({1:F2} s at {2} fps), agreement {3:F3}" -f $bestPeriod, ($bestPeriod/$fps), $fps, $bestScore)
 
 # Among all possible starts, take the one whose first and last frame match best —
-# that is the seam the viewer will see on every repeat.
-$bestStart = 1; $bestLoop = -1
-for ($s = 1; $s -le ($total - $bestPeriod); $s++) {
-    $v = Get-IoU $maps[$s] $maps[($s + $bestPeriod)]
-    if ($v -gt $bestLoop) { $bestLoop = $v; $bestStart = $s }
+# that is the seam the viewer will see on every repeat. Note this comparison, like
+# the maps above, happens in the anchored frame: sampling is relative to each
+# frame's own body axis and ground line, which is exactly how the cells are later
+# composed. Judging a candidate cycle on raw video frames instead would score the
+# character's travel across the shot as mismatch, and that travel is precisely
+# what composition removes.
+if ($StartFrame -gt 0) {
+    $bestStart = $StartFrame
+    $bestLoop  = Get-IoU $maps[$bestStart] $maps[($bestStart + $bestPeriod)]
+} else {
+    $bestStart = 1; $bestLoop = -1
+    for ($s = 1; $s -le ($total - $bestPeriod); $s++) {
+        $v = Get-IoU $maps[$s] $maps[($s + $bestPeriod)]
+        if ($v -gt $bestLoop) { $bestLoop = $v; $bestStart = $s }
+    }
 }
-Write-Host ("  cycle = frames {0}..{1}, loop closure {2:F3}" -f $bestStart, ($bestStart+$bestPeriod-1), $bestLoop)
+$ratio = $bestLoop / $adjacent
+Write-Host ("  cycle = frames {0}..{1}, loop closure {2:F3} ({3:F2}x adjacent)" -f $bestStart, ($bestStart+$bestPeriod-1), $bestLoop, $ratio)
+if ($ratio -lt 0.95) {
+    Write-Warning ("Loop closure is {0:F2}x the adjacent-frame agreement — the walk will hitch on every " -f $ratio +
+                   "repeat. Footage advertised as a seamless loop often is not one; try pinning -Period.")
+}
 $cycle = $bestStart..($bestStart + $bestPeriod - 1)
 
 # --- 4. common cell geometry ----------------------------------------------------
@@ -489,3 +589,52 @@ Write-Host ""
 Write-Host "Head-top row per cell — this is the vertical bob. If it barely moves,"
 Write-Host "the source has no bob and the walk will look like floating:"
 Write-Host $bobLog
+
+# --- 7. catalog entry -----------------------------------------------------------
+# Written from the same variables the sheet was composed from, so the numbers a
+# hire is offered cannot drift from the numbers in the PNG. Retyping them by hand
+# is how a roster starts lying about its own assets.
+if ($CatalogPath) {
+    $CatalogPath = [System.IO.Path]::GetFullPath($CatalogPath)
+    $catalog = if (Test-Path $CatalogPath) {
+        Get-Content -Raw $CatalogPath | ConvertFrom-Json
+    } else {
+        [pscustomobject]@{ default = $Slug; monsters = @() }
+    }
+
+    $entry = [ordered]@{
+        slug         = $Slug
+        file         = "monsters/$Slug.png"
+        character    = $Character
+        look         = $Look
+        frames       = $nf
+        cell         = [ordered]@{ width = $cellW; height = $cellH }
+        sheet        = [ordered]@{ width = ($cellW*$nf); height = $cellH }
+        layout       = "single horizontal row, left to right, one complete gait cycle"
+        sourceFps    = [math]::Round($fps, 3)
+        cycleSeconds = [math]::Round($bestPeriod/$fps, 3)
+        faces        = $Faces
+        provenance   = [ordered]@{
+            # Recorded relative to the working directory so the reference resolves for the next
+            # person, not just names a file they have to go looking for. Footage outside the repo
+            # would give a path that means nothing there, so that degrades to the bare filename.
+            sourceVideo = $(
+                $rel = (Resolve-Path -Relative $VideoPath) -replace '^\.[\\/]', '' -replace '\\', '/'
+                if ($rel -like '../*') { [System.IO.Path]::GetFileName($VideoPath) } else { $rel }
+            )
+            cycleFrames = "$bestStart..$($bestStart+$bestPeriod-1) of $total"
+            seamRatio   = [math]::Round($ratio, 3)
+            tool        = "tools/provenance/New-SpriteSheetFromVideo.ps1"
+        }
+    }
+
+    $keep = @($catalog.monsters | Where-Object { $_.slug -ne $Slug })
+    $catalog.monsters = @($keep + [pscustomobject]$entry | Sort-Object slug)
+    if (-not $catalog.default) { $catalog.default = $Slug }
+
+    New-Item -ItemType Directory -Force (Split-Path $CatalogPath) | Out-Null
+    $catalog | ConvertTo-Json -Depth 6 | Set-Content -Path $CatalogPath -Encoding utf8
+    Write-Host ""
+    Write-Host "Catalog entry '$Slug' written to $CatalogPath" -ForegroundColor Green
+    Write-Host "Now copy the row into MONSTER-DEV.md §5 — that table is what a hire actually reads."
+}
