@@ -54,9 +54,17 @@ const FIND_MONSTER = `(() => {
   const urlOf = (el) => el.tagName === 'IMG'
     ? (el.currentSrc || el.src || '')
     : getComputedStyle(el).backgroundImage;
+  // Visible, not merely present. Hires differ on where the element comes from: most create it
+  // on the trigger, but one placed the markup in index.html and toggled the hidden attribute.
+  // Counting
+  // presence scores that second shape as "monster on page load" — a failure the page does not
+  // actually have. So the element only counts if it would really be seen.
+  const shown = (el) => typeof el.checkVisibility === 'function'
+    ? el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })
+    : !!(el.offsetParent || el.getClientRects().length);
   const painted = [...document.querySelectorAll('body *')].find((el) => {
     const u = urlOf(el);
-    return u && u !== 'none' && hints.some((h) => u.toLowerCase().includes(h));
+    return u && u !== 'none' && hints.some((h) => u.toLowerCase().includes(h)) && shown(el);
   });
   if (!painted) return null;
   let node = painted;

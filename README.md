@@ -9,7 +9,7 @@ Hire an AI developer named **Monster-Dev** to drop a walking-monster easter egg 
 Give your own coding agent this raw URL and ask it to follow it:
 
 ```
-https://raw.githubusercontent.com/diogenes25/monster-dev/main/START.md
+https://raw.githubusercontent.com/diogenes25/Monster-dev/main/START.md
 ```
 
 Your agent will fetch the instructions live, ask you a couple of quick questions about how the monster should behave, and build it directly into your project.
