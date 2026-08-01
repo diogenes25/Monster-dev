@@ -4,12 +4,12 @@
 
 Hire an AI developer named **Monster-Dev** to drop a walking-monster easter egg into your project — built in your own project's language, framework, and coding style. Not a library, not a dependency, nothing to install.
 
-## How to hire him
+## How to hire Monster-Dev
 
 Give your own coding agent this raw URL and ask it to follow it:
 
 ```
-https://raw.githubusercontent.com/<owner>/<repo>/main/START.md
+https://raw.githubusercontent.com/diogenes25/monster-dev/main/START.md
 ```
 
 Your agent will fetch the instructions live, ask you a couple of quick questions about how the monster should behave, and build it directly into your project.
