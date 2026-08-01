@@ -31,17 +31,41 @@ Work through this in order — each answer constrains the next step:
 
 Some surfaces have accumulated notes — things earlier jobs on that kind of surface ran into, written down so you don't have to rediscover them. They're keyed by rendering surface and animation primitive, not by language, because that's the distinction that actually changes the work: a TypeScript React app and a plain HTML page can be the same job, while two Python projects can be completely different ones.
 
-These exist right now:
+These exist right now. **Take the first row that matches, and fetch that one only.** The rows are ordered most specific first, because a project can genuinely match more than one — a React app already using GSAP is both a tween-library project and a DOM project. Two sets of notes give you two answers to the same question and nothing that says which wins.
 
-- **`dom-css`** — renders to a DOM, animation is plain CSS keyframes or transitions, no tween library already in use. Fetch `<base>/stacks/dom-css/README.md`.
+| stack | you're here if | fetch |
+| --- | --- | --- |
+| `dom-css` | it renders to a DOM and its existing effects are CSS transitions or `@keyframes`, or it has no animation at all yet — and no tween library is already in use | `<base>/stacks/dom-css/README.md` |
 
-If yours isn't listed, that's the normal case rather than a problem — work from this playbook alone, exactly as every job did before the notes existed. Don't guess at a name that isn't on the list; there's nothing behind it.
+If no row matches, that's the normal case rather than a problem — work from this playbook alone, exactly as every job did before the notes existed. Don't guess at a name that isn't in the table; there's nothing behind it.
 
 ## 3. No visible-output surface exists
 
 If step 2.1 comes up empty — a pure backend service, a CLI tool with no persistent display, a library with no UI layer — say so plainly and stop. Name what would need to exist first (e.g. "this needs a web frontend or a windowed UI before a walking monster has anywhere to walk"). Don't improvise a workaround like ASCII art in log output — that's not what you were hired for, and it would look like a bug report, not an easter egg.
 
-## 4. Ask the onboarding questions
+## 4. Say what you found, then ask what you can't know
+
+Step 2 told you things about this project the client never has to explain to you, and step 5 has numbers they have never seen. Both belong in the same message as your questions, and the line between the two halves is simply who is able to know the answer: **what you found out by looking, you state. What only they can decide, you ask.**
+
+### State what you found
+
+Five things, a line or two each — this is a contractor talking through the job on the doorstep, not a document:
+
+- **Where it goes.** The file in *this* project you will put it in, and why that one.
+- **What it gets built with.** The animation primitive this project already uses — or that it has none yet, and what that makes the idiom here.
+- **What changes.** Which existing files you will touch, what will be new, and where the sprite lands.
+- **Which sheet**, with the frame count and cycle time from its row in step 5.
+- That the crossing duration is **derived, not chosen** — so a missing speed setting doesn't read as an oversight.
+
+Something like:
+
+> Vite + React app, and every effect in here is already Framer Motion — so I'll animate it that way rather than putting CSS keyframes next to a tween library. It goes in `src/App.tsx`, the one component that renders on every route, so the monster isn't tied to a single page. New: `src/components/Monster.tsx`, plus the sprite sheet in `public/` where `vite.svg` already sits. I'd take `green-fuzz-classic` — 23 frames, 0.96 s per gait cycle. The crossing time I work out from the real window width instead of picking one, otherwise the monster moves faster on a wide monitor and its feet skate.
+
+The example is deliberately not a plain HTML page: the point is the shape of the answer, and the primitive named there is that project's, not a default.
+
+If your surface has notes (step 2), say what in them **changed what you were going to build** — not that notes exist, and not a summary of them. If they changed nothing, or there are none, say nothing about them: which files you read is your business, not the client's.
+
+### Then ask
 
 No config file — you ask, like a contractor doing discovery. Keep it to one short round, not an interrogation:
 
@@ -55,9 +79,11 @@ No config file — you ask, like a contractor doing discovery. Keep it to one sh
 
 If the person has no preference on something, take the defaults from step 5 and any notes for your surface rather than inventing new behaviour.
 
+**One round, not two.** What you found and what you're asking go in the *same* message — not "here is my analysis", then a reply, then "and here are my questions". That is two rounds doing one round's work, and it makes the client wait a second time to be asked something you already knew you needed. What you're stating is a plan, not a proposal waiting to be signed off: say it, ask what is still open, and carry on when the answers come.
+
 **Ask before you build, not after.** These questions exist so the client states preferences; a feature that arrives first turns them into a reviewer of your defaults instead, which is the opposite of the point.
 
-If you're somewhere that can't wait for a reply — a one-shot or headless invocation — build anyway rather than hand back nothing. But then say plainly, for each answer you had to assume, that you assumed it and which knob changes it. An assumption you name is a decision the client can still make; an assumption buried in the code is one they'll discover by being surprised.
+If you're somewhere that can't wait for a reply — a one-shot or headless invocation — build anyway rather than hand back nothing. But then say plainly, for each answer you had to assume, that you assumed it and which knob changes it. An assumption you name is a decision the client can still make; an assumption buried in the code is one they'll discover by being surprised. State what you found there too — an assumption is easiest to catch when it sits next to the analysis that produced it.
 
 ## 5. Get the sprite, and the technique
 
@@ -108,7 +134,7 @@ If your surface has notes (step 2), they'll point at a working implementation in
 
 ## 6. Implement in the target project's own idiom
 
-Translate the technique from step 5 into the primitives identified in step 2 — don't port the literal HTML/CSS/JS if the target stack has its own idiomatic way to do a frame-based sprite animation (e.g. a tween timeline, a shader-driven UV offset, a native `Animatable`). Apply the answers from step 4. Match the surrounding code's naming, formatting, and structure conventions — this should look like it was written by whoever else works on this codebase, not bolted on.
+Translate the technique from step 5 into the primitives identified in step 2 — don't port the literal HTML/CSS/JS if the target stack has its own idiomatic way to do a frame-based sprite animation (e.g. a tween timeline, a shader-driven UV offset, a native `Animatable`). Apply the answers from step 4. If an answer overturns part of what you said in step 4, build the changed thing and name the change in one line — you told the client what you were going to do, and a silent substitution takes away their chance to notice. Match the surrounding code's naming, formatting, and structure conventions — this should look like it was written by whoever else works on this codebase, not bolted on.
 
 ## 7. Place the asset per convention
 

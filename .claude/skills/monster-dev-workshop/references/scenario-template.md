@@ -1,8 +1,11 @@
 # Scenario template
 
-Copy to `test/scenarios/<slug>.md` and fill in. This file is gitignored along with the rest of
-`test/` — it holds both the answer script and the answer key, and the hired agent must never
-see it.
+Copy to `test/scenarios/<slug>.md` and fill in. It holds both the answer script and the answer
+key, and the hired agent must never see it.
+
+`test/` is **tracked**, so nothing keeps it away from a hire by itself — the mirror script
+excludes it deliberately and verifies that it did. That is also why a scenario never cites a
+`test/` path as somewhere to look: once this repo is pushed, such a path is fetchable.
 
 Delete the guidance in *italics* as you fill each section in.
 
@@ -15,7 +18,7 @@ both the answer script and the acceptance criteria.*
 
 ## Target project
 
-A copy of `test/sample-<fixture>/` placed **outside** this repository, at
+A copy of `test/fixtures/<fixture>/` placed **outside** this repository, at
 `../monster-dev-testruns/<run-id>/`, initialised as a git repo with a single commit
 `Initial site`.
 
@@ -23,9 +26,9 @@ A copy of `test/sample-<fixture>/` placed **outside** this repository, at
 
 | Fixture | Exercises |
 |---|---|
-| `sample-static-site/` | baseline DOM path, no existing animation convention |
-| `sample-with-animation-lib/` | style conformance (§2.4) — must use the project's GSAP pattern |
-| `sample-no-ui-backend/` | the decline path (§3) |
+| `fixtures/static-site/` | baseline DOM path, no existing animation convention |
+| `fixtures/gsap-site/` | style conformance (§2.4) — must use the project's GSAP pattern |
+| `fixtures/python-cli/` | the decline path (§3) |
 
 Outside the repo, because a copy inside `test/` puts this repo's `CLAUDE.md` in the hire's
 ancestor chain — it is auto-loaded regardless of any instruction not to read it, and it gives
@@ -33,13 +36,23 @@ away the purpose, the technique and the sign-off rule.
 
 ## What the hired agent is given
 
-Working directory is the run folder. The entire prompt is the customer brief below plus one
-sentence of dialogue protocol:
+Working directory is the run folder. The entire prompt is the customer brief below plus a
+dialogue protocol that describes the *channel* and says nothing about *timing*:
 
-> Wenn du Input vom Kunden brauchst, stell deine Fragen in der Abschlussnachricht und stoppe.
+> Der Kunde liest mit und antwortet. Beende deinen Zug, wenn du etwas von ihm brauchst — du
+> bekommst eine Antwort und kannst danach weiterarbeiten.
 
 Nothing else. No explanation of what Monster-Dev is, no substitution rules, no hint about what
 is being measured.
+
+**Keep any rewording free of ordering cues.** This sentence used to read „stell deine Fragen in
+der **Abschlussnachricht** und stoppe", and run `2026-08-01-phase2` showed what that cost: the
+hire built first and then explained itself with *„Du wolltest Fragen am Ende"*. The harness was
+quietly instructing the opposite of §4's "ask before you build", so the criterion was measuring
+the harness rather than the playbook — and because the two models resolved the ambiguity
+differently, they appeared to disagree about §4 when they never did. It took three attributions
+to find that. The sentence exists to tell a hire that a human is reachable and how to reach
+them — never when to speak.
 
 ### Customer brief
 

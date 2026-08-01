@@ -1,0 +1,3 @@
+Auf meiner Seite soll ein Easter-Egg: wenn man Alt+A drückt, läuft ein Monster von links nach rechts durchs Bild. Deine Einweisung steht hier: C:\Users\TjarkOnnen\source\repos\priv\monster-dev-testruns\2026-08-01-sonnet-base2.dist\START.md
+
+Der Kunde liest mit und antwortet. Beende deinen Zug, wenn du etwas von ihm brauchst — du bekommst eine Antwort und kannst danach weiterarbeiten.

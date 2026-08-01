@@ -5,7 +5,7 @@ contains both the answer script and the acceptance criteria.
 
 ## Target project
 
-A copy of `test/sample-static-site/` placed **outside** this repository, at
+A copy of `test/fixtures/static-site/` placed **outside** this repository, at
 `../monster-dev-testruns/<run-id>/`, initialised as a git repo with a single
 commit `Initial site`.
 
@@ -45,9 +45,11 @@ that a human is reachable and how to reach them — not when to speak.
 > von links nach rechts durchs Bild. Deine Einweisung steht hier:
 > `<dist>/START.md`
 
-`<dist>` is a copy of this repo's tracked files only (`git ls-files`), so the
-agent can list that folder freely and still not reach `CLAUDE.md`, `test/` or
-`.git/`. It is the same surface a push to GitHub would make public.
+`<dist>` is a copy of this repo's tracked files (`git ls-files`) minus `test/`,
+`.claude/` and `CLAUDE.md`, so the agent can list that folder freely and still not
+reach the harness, the skill, or the summary of the playbook. All three are
+**tracked** — they no longer drop out on their own, which is why the mirror is
+only ever built by `test/tools/build-dist.ps1`, which verifies what it built.
 
 **Known limitation of this run:** the playbook expects to be fetched from a URL
 (§0 derives the base URL from the fetch URL; §5 splits WebFetch for text vs. a
@@ -136,6 +138,50 @@ wording, so only the untouched criteria compare directly across the boundary.
 as "handler verified, key path not measurable in this browser" rather than a
 clean pass. ③ neither → fail.
 
+### E — The plan step (§4)
+
+**Appended on 2026-08-01, not inserted.** 1–17 keep their numbers so they still
+compare against the six archived runs. E is scored from `<run-id>.hire.json` plus
+the cli-turn-1 text, and did not exist for any run before `sonnet-base2`.
+
+18. **Before anything in the target changes**, Monster-Dev states what it found.
+    Four independent marks. Each is scored from the cli-turn-1 text *and* requires
+    `turns[0].worktreeAfter` to be empty — content stated after the build is a
+    changelog and scores nothing, however complete.
+    - **18a — Injection point.** A file *in this project*, named, with the reason
+      it is that one and not another.
+    - **18b — Animation primitive.** What the project already animates with, or
+      that it animates with nothing yet, named as what the work will build on.
+    - **18c — Change set.** Which existing files get edited, what is new, and
+      where the sprite goes.
+    - **18d — Sheet.** The sheet it will use with that row's frame count and
+      cycle time from §5.
+
+    Four marks rather than one because the archive shows hires omitting
+    *different* halves: `phase2b` scored 4/4 and `live` 1/4 on the same model and
+    the same brief. A binary criterion records both as PASS and destroys the
+    measurement — see [`2026-08-01-plan-retro.md`](../runs/2026-08-01-plan-retro.md).
+
+19. **One round, not two.** The plan and the questions arrive in the same message.
+    Evidence: `totals.firstEditAfterCliTurn` > 1, and the plan text sits in
+    cli-turn 1. Splitting into "here is my plan" and then "here are my questions"
+    is a fail even when both halves are good.
+
+20. **20a** Built as announced. **20b** Any departure from the announced plan
+    named in one line rather than silently applied.
+    Fail 20a *without* 18 = playbook gap. Fail 20a *with* 18 = implementation
+    error. Never blur the two.
+
+21. **No bookkeeping about notes.** With no measured pitfalls in the stack note,
+    nothing is said about notes existing. "There are notes for this stack, I read
+    them" is a fact from our side of the fence and tells the client nothing.
+    `phase2b` failed this; it is the one criterion in E with a before-fail on
+    record.
+
+**Risk criteria — must hold, not improve.** 4a, 7a, 10 and 19. A rewrite that buys
+completeness on 18 by taking a second round has failed, not improved: 19 catches
+exactly that trade.
+
 ## Run log
 
 | Run | Date | Model | Result |
@@ -145,4 +191,8 @@ clean pass. ③ neither → fail.
 | `2026-08-01-sonnet-base` | 2026-08-01 | Sonnet | bar baseline. Asked before building where Opus never did → K7 was model disposition, not a playbook gap. Also solved both `dom-css` pitfalls unaided, leaving the planned A/B with no arms — [report](../runs/2026-08-01-sonnet-base.report.md) |
 | `2026-08-01-phase2` | 2026-08-01 | Opus | F2 proven: K4a flipped after four runs failing it. K7a turned out to be biased by the harness's own dialogue-protocol sentence, so it is unmeasurable rather than failing. Cost $4.04 — [report](../runs/2026-08-01-phase2.report.md) |
 | `2026-08-01-phase2b` | 2026-08-01 | Opus | Prompt fix + roster. K7a flipped on the model that failed it three times — it was the harness, not the playbook and not the model. Roster works (14a/14b), K10 held. Cost $1.84, **−54 %**: asking first means building once — [report](../runs/2026-08-01-phase2b.report.md) |
+| `2026-08-01-sonnet-base2` | 2026-08-01 | Sonnet | Before-arm for the §4 plan step, and the first Sonnet run under the corrected dialogue protocol. Every criterion 1–17 passed; section E scored **18: 1/4** — primitive named, injection point / change set / sheet numbers not. 31 model turns, $1.66 — [report](../runs/2026-08-01-plan-sonnet.report.md) |
+| `2026-08-01-plan-sonnet` | 2026-08-01 | Sonnet | **Proof run for the §4 plan step.** 18 went 1/4 → **4/4** on the bar model, nothing regressed, 21 held. Turn 1 got shorter and 39 % cheaper; total turns rose 32 %, over the soft ceiling, entirely in the build turn. Also exposed a second-level verifier bug: CSS-visible ≠ visible — [report](../runs/2026-08-01-plan-sonnet.report.md), [findings](../runs/2026-08-01-plan-sonnet.findings.md) |
+| `2026-08-01-plan-opus` | 2026-08-01 | Opus | Control for the same change. 18: 4/4, and `phase2b`'s criterion-21 failure did not recur. Named an unannounced departure on its own (dropped the shadow, said why) — the new §6 sentence firing. 41 turns, $2.72 — [report](../runs/2026-08-01-plan-sonnet.report.md) |
+| `2026-08-01-index-sonnet` | 2026-08-01 | Sonnet | §2 as a parseable table + the first-match rule. **Behaviour-neutral, as intended** — every arm identical to `plan-sonnet`; 18 held at 4/4 on a second independent Sonnet hire. First failure on **20a**: announced a container in `index.html`, built without one, never flagged the substitution. The turn overrun reproduced (42), which corrects Phase 2's hedge — [report](../runs/2026-08-01-index-sonnet.report.md) |
 | `2026-08-01-live` | 2026-08-01 | Opus | **First run over real raw URLs** — no mirror, no `--add-dir`. §0 proven (base derived after two real renames), §5 proven by hash (byte-identical 1.9 MB sheet cannot come through WebFetch). §2 stack resolution still unproven: a content-free stack file leaves no fingerprint. Cost $1.61 — [report](../runs/2026-08-01-live.report.md) |
