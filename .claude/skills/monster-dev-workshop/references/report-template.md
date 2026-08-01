@@ -1,6 +1,13 @@
-# Report + findings templates
+# Report template
 
-Two files per run, both under `test/runs/`, never inside the target project.
+**One file per run**, under `test/runs/`, never inside the target project. Everything a run turns
+up *besides its own result* goes on the board — `test/backlog/`, one file per problem, shaped by
+`test/backlog/TEMPLATE.md`. The report says what this run measured; the board carries what is
+still open. A proposal therefore exists in exactly one place instead of being restated per run
+and going stale in one of them.
+
+There is no `<run-id>.findings.md`. The two on disk are historical records of runs scored before
+the board existed, and everything still open in them is on the board.
 
 ---
 
@@ -49,34 +56,9 @@ findings.*
 *Standing entry until the repo is pushed: §0 base-URL derivation, §5 WebFetch/curl split.
 Plus anything else this scenario could not reach.*
 
----
+## Board
 
-## `test/runs/<run-id>.findings.md`
+*Which items were touched, and how. One line each — the reasoning belongs in the item file, not
+here, or it goes stale in whichever copy is read second.*
 
-# Findings from run `<run-id>` — proposed, not applied
-
-*Applying a finding in the same pass that produced it destroys the ability to tell whether the
-next run improved because of the change or because of run-to-run variance. Propose here, apply
-deliberately, then rerun the same scenario unchanged.*
-
-## F1 — <one-line summary>
-
-| | |
-|---|---|
-| Criterion | `<n>` |
-| Attribution | playbook gap / implementation error / harness artefact |
-| Target file | `START.md` / `MONSTER-DEV.md` §`<n>` / harness |
-| Confidence | one run / reproduced across `<n>` runs |
-
-**What the agent did.** *Behaviour, with evidence.*
-
-**Why the playbook allowed it.** *The specific sentence — quoted — that was ambiguous, missing,
-or too easy to skip. If no sentence is at fault, this is probably not a playbook gap.*
-
-**Proposed change.**
-
-> *Exact replacement wording, ready to paste. Not a description of a change.*
-
-**Cost.** *What this addition costs: length in `START.md` (expensive — it must stay short), an
-extra onboarding question (§4 is meant to be one short round), or a new rule that could
-conflict with an existing one. A finding with no stated cost has not been thought through.*
+- `#<nnn>` — new at `intake` / another evidence line / `proven` / `rejected`, and in one clause why.

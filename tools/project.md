@@ -9,6 +9,13 @@ one of these folders is fetched by strangers' coding agents, and one of them mus
 `monsters/` (and the source material behind `monster.png`) were produced — frame extraction,
 silhouette cutout, gait-cycle detection, alignment onto a shared ground line and body axis.
 
+`Test-SheetLoop.ps1` decides whether a finished sheet may ship: it measures the seam a viewer
+sees, the last cell handing over to the first, against the sheet's own mean adjacent-cell step.
+It exists because the generator's own closure figure is measured on footage and does not predict
+that seam — a period it rated an acceptable `1.06x` produced a sheet hitching at `1.39x`. The
+figures quoted in `monsters/README.md` come from this script, so they can be reproduced rather
+than taken on trust.
+
 Offline, Windows-only, not part of the hiring flow. The video script also writes the
 `monsters/catalog.json` entry, so the geometry a client is offered comes from the same
 variables that composed the PNG rather than from someone retyping it. `monsters/README.md`
@@ -37,6 +44,21 @@ Stack-specific tools do not live here. They belong beside the notes that explain
 Tools are earned the same way stack knowledge is: a run shows a hire building something for
 itself, that becomes a tool, and an A/B has to show the cost drop with no criterion falling
 back. A tool that changes neither is removed again.
+
+Two more rules decide whether a tool may be a *file* at all — both of them about the same
+failure, which is a folder slowly filling with code nobody measured:
+
+- **A tool starts inline in the note that explains it.** Its own file is one more thing to
+  fetch and one more thing to run, so it has to save more than it costs before it earns the
+  separation. Promote it when the A/B says so, not when it looks tidier.
+- **Output that is identical for every hire is not a tool, it is a table cell.** If a script
+  would print the same number whatever project it runs in, that number belongs in the
+  `MONSTER-DEV.md` §5 roster row, where every hire already reads it without running anything.
+  What is left over is the real job: whatever depends on *this* project — viewport, stride,
+  the timing already in use.
+
+There is no `snippets/` directory here or anywhere else, and there is not going to be one.
+Code detached from the decision that justified it is the library this repo is explicitly not.
 
 ## Not here: developer tooling
 
