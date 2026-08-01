@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monster Walk</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Sprite sheet monster-walk.png: 23 frames of 276 × 300 px, transparent.
+         Source: one gait cycle from the 24 fps video, cut out and aligned to a
+         shared ground line and body axis. The vertical bob lives in the frames
+         themselves – no artificial bounce needed in CSS. */
+      --frame-w: 184px;                        /* display width of a single frame */
+      --frame-h: 200px;                        /* 300/276 × 184 → keeps the aspect ratio */
+      --sheet-w: calc(var(--frame-w) * 23);    /* 4232px – must match steps(23) */
+      --ground: 90px;                          /* height of the ground strip */
+      --cycle: 0.96s;                          /* 23 frames at 24 fps = original tempo */
+      /* Stride: the distance covered by one full gait cycle. This is what sets the
+         walking speed – too large and the feet slide across the ground. Smaller =
+         slower and more mincing, larger = faster and more slippery. */
+      --stride: 130px;
+      --crossing: 16s;                         /* fallback; the script below derives it from --stride */
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(#dff0f7, #eef8fb 70%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ground {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: var(--ground);
+      background: #cfe6c9;
+      border-top: 3px solid #a9cfa0;
+    }
+
+    /* The wrapper handles the travel across the screen … */
+    .walker {
+      position: absolute;
+      left: 0;
+      bottom: calc(var(--ground) - 3px);      /* feet rest on the edge of the ground */
+      width: var(--frame-w);
+      height: var(--frame-h);
+      animation: move-across var(--crossing) linear 1 forwards;
+    }
+
+    /* The shadow sits under the leading foot, not under the tail.
+       The monster walks right → left, so it belongs on the right-hand side. */
+    .shadow {
+      position: absolute;
+      right: 8%;
+      width: 42%;
+      bottom: 0;
+      height: 11px;
+      background: rgba(60, 80, 60, 0.22);
+      border-radius: 50%;
+      filter: blur(3px);
+    }
+
+    /* … the sprite only flips through the frames. */
+    .monster {
+      position: absolute;
+      inset: 0;
+      background-image: url("monster-walk.png");
+      background-repeat: no-repeat;
+      background-size: var(--sheet-w) var(--frame-h);
+      /*transform: scaleX(-1);*/               /* mirror the sprite: monster faces left */
+      animation: walk-cycle var(--cycle) steps(23) infinite;
+    }
+
+    /* Flips through all 23 frames */
+    @keyframes walk-cycle {
+      from { background-position: 0 0; }
+      to   { background-position: calc(-1 * var(--sheet-w)) 0; }
+    }
+
+    /* Walks once from the right edge all the way out of frame */
+    @keyframes move-across {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(calc(-1 * var(--frame-w))); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .walker { animation: none; transform: translateX(40vw); }
+      .monster { animation: none; }
+    }
+  </style>
+  <script>
+    /* The distance to walk depends on the window width, the gait tempo does not.
+       With a fixed duration the monster would move faster on wide monitors and its
+       feet would slide. So the duration is derived from the stride instead: a whole
+       number of gait cycles, each one --cycle long and --stride wide. */
+    (() => {
+      const root = document.documentElement;
+      const px = (name) => parseFloat(getComputedStyle(root).getPropertyValue(name));
+
+      const distance = window.innerWidth + px('--frame-w');
+      const cycles = Math.max(1, Math.round(distance / px('--stride')));
+      root.style.setProperty('--crossing', (cycles * px('--cycle')).toFixed(2) + 's');
+    })();
+  </script>
+</head>
+<body>
+  <div class="ground"></div>
+  <div class="walker">
+    <div class="shadow"></div>
+    <div class="monster"></div>
+  </div>
+</body>
+</html>
