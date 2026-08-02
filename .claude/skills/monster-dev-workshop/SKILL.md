@@ -156,6 +156,12 @@ summarises the playbook: the technique by name, the sprite dimensions, the WebFe
 split, the §8 rule. So: **never hire via the Agent tool.** Always a separate `claude -p`
 session whose cwd is the run folder.
 
+That rule is about the **hire**. Dev-side check roles under `.claude/agents/` are a different
+thing and may hold the criteria: the `leak-auditor` (step 4b) has to, since its job is to look for
+them in the setup. The one exception is the `run-scorer` (step 8), which also runs as a separate
+session — not to keep the criteria out, but to keep the run's *brief* out. Independence is the
+whole value of a second scoring, so it is enforced rather than requested.
+
 **`WebFetch` cannot reach a local server.** It rejects `localhost` outright and force-upgrades
 `http://127.0.0.1` to HTTPS, so a plain local HTTP server answers a TLS handshake with
 `WRONG_VERSION_NUMBER`. Until this repo is pushed, a run therefore hands the agent a
@@ -266,7 +272,30 @@ Walks the run folder's whole ancestry for `CLAUDE.md`, checks the user-level one
 the folder is a git repo with exactly one commit. The mirror side was already checked in step 2.
 Any hit invalidates the run before it starts — treat a failure as a stop, not a warning.
 
-Any hit invalidates the run before it starts. Treat a failure as a stop, not a warning.
+`-AncestryOnly` skips the single-commit test, for a folder that must be free of this repo's
+context but is not a run folder — the scoring bundle in step 8 is one.
+
+### 4b. Audit the setup before spending the run on it
+
+Everything checked so far is a **path** question: did a named folder arrive, is a named file in the
+ancestry. The question none of it asks is whether the setup **answers what the run is trying to
+measure**. It went unasked for ten runs, and three separate leaks were sitting in plain sight the
+whole time — see `#015`, `#018`, `#019`.
+
+Hand the `leak-auditor` subagent the run folder, the `<dist>` path and the scenario. It reports
+`file:line`, the criterion short-circuited, and the quote.
+
+It **reports, it does not gate.** A judgement step that blocks runs would be worse than none; you
+read its findings and decide. Two things it must not do, both in its definition: it must not
+re-derive what `new-run.ps1` already refuses deterministically — a failed setup recipe, a folder
+that fails isolation, a dirty worktree after the first commit — and it must not read
+`process/backlog/`, which would turn it into a restatement of leaks already known.
+
+**Product names are still its job**, until `#015` lands. Its definition originally told it a
+`new-run.ps1` scan for `Monster-Dev` / `MonsterLib` already covered them. No such scan exists yet,
+so the deterministic check had been traded away before it was built — the exact risk `#017` books
+as a cost, arriving from the other direction. Until the scan is there, the auditor reports product
+names last, below everything else. When it lands, that paragraph comes out of both files.
 
 ### 5. Hire Monster-Dev
 
@@ -324,7 +353,36 @@ the direct evidence for whether questions came before the build.
 - Trigger paths: prefer a real key/click event; a synthetic event is a qualified pass
   ("handler verified, key path not measurable"), not a clean one; neither is a fail.
 
-### 8. Write the report, then touch the board
+### 8. Score it twice, the second time blind
+
+You designed the run, wrote the item it came from, and know which criterion was supposed to flip.
+Four defects on the board were found afterwards and none was a hard bug — `#009` (a proxy for
+visibility, wrong twice, in two disguises), `#010` (the before-arm measured and reported
+confidently), `#007` (a fixture-inherent console error charged to the hire), `#015` (six hires
+holding the answer, missed by ten scoring passes). Each was a verdict that looked right to a reader
+who expected it.
+
+Score it yourself first. Then:
+
+```powershell
+.\process\tools\score-bundle.ps1 -RunId <run-id> -Scenario process\scenarios\<slug>.md
+```
+
+The bundle holds the criteria — **with the run-log table cut out** — plus the transcript, the
+envelope, the measurements, the git surface and the worktree. It holds neither the board item that
+was this run's brief, nor any earlier report, nor `CLAUDE.md`, nor this skill. The script deletes
+the bundle rather than hand back one where the cut failed.
+
+Run the `run-scorer` against it as a **separate `claude -p` session with the bundle as its working
+directory**, the same way a hire is run and for the same reason: an in-process subagent can read
+this whole repository, so asking it to be blind is not a control.
+
+Then set the two columns side by side. **Every disagreement is either resolved in the report with a
+stated reason, or filed as a board item.** Quietly keeping your own verdict is the one outcome that
+must not happen — it is what the second pass exists to prevent. Its `UNCERTAIN` list is worth more
+than its verdicts: that is where the two of you differ for a reason.
+
+### 8b. Write the report, then touch the board
 
 **Read the open board before scoring**, not after:
 

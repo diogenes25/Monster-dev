@@ -33,7 +33,7 @@ Three layers grow with every run — the playbook (general), stack notes (per su
 | `sources/` | The footage the sheets were cut from, kept so they stay regenerable | tracked, so technically yes — but nothing points a hire at it |
 | `process/backlog/` | One file per open problem, carried across runs — a run's brief comes from here and its findings go back here | **never** — it is full of acceptance criteria and model dispositions |
 | `process/stacks/<lang>/<lib>/` | The implementation record: one folder per job actually carried out, as fixture → requirement → process → result, plus `knowledge.md`. Documentation and raw material, created once | **never** |
-| `process/`, `.claude/` | Measurement and procedure of feature 2 | **never** |
+| `process/`, `.claude/` | Measurement and procedure of feature 2 — the workshop skill, and the two check roles in `.claude/agents/` that sit either side of a hire | **never** |
 
 Stacks are keyed by **rendering surface + animation primitive**, not by language: a TypeScript React app and a plain HTML page can be the same job, while two Python projects can be entirely different ones. `MONSTER-DEV.md` §2 lists **only stacks that actually exist** — `raw.githubusercontent.com` serves no directory index, so an unlisted stack is unreachable, and a listed-but-absent one is a dead pointer.
 
@@ -139,6 +139,26 @@ a measurement rather than a recollection:
   -Dist ..\monster-dev-testruns\2026-08-02-alt-a.dist -Model sonnet -BriefFile .\process\scenarios\alt-a.brief.txt
 .\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a -Answer 'keine Präferenz'
 ```
+
+**Two check roles sit around the hire**, in `.claude/agents/`, because every failure this project
+has found late was a single unopposed reader — three verifier defects, three misattributions, and a
+leak that survived ten runs.
+
+Before the hire, the **`leak-auditor`** reads the run folder, the mirror and the scenario and asks
+the one question no path check asks: *does this setup already answer what the run is trying to
+measure?* It reports and does not gate. It is told not to read `process/backlog/` — a reader that
+knows the leaks already filed produces a restatement instead of a finding.
+
+After the hire, the **`run-scorer`** scores the run a second time, blind. `score-bundle.ps1` builds
+what it sees, and what it cannot see is the point: not the board item that was the run's brief, not
+an earlier report, not `CLAUDE.md`. Like a hire, it runs as a separate `claude -p` session with the
+bundle as its working directory — an in-process subagent can read this repository, so asking it to
+be blind is not a control:
+```powershell
+.\process\tools\score-bundle.ps1 -RunId 2026-08-02-alt-a -Scenario process\scenarios\alt-a-left-to-right.md
+```
+Every disagreement with the first scoring is resolved in the report with a reason, or filed on the
+board. Keeping your own verdict quietly is the outcome the second pass exists to prevent.
 
 **Add or regenerate a sprite sheet from a video** (requires `ffmpeg` on PATH, Windows PowerShell with `System.Drawing`) — full recipe and the checks that follow it are in `monsters/README.md`:
 ```powershell

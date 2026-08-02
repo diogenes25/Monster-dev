@@ -67,7 +67,12 @@ point: a `stacks/` entry is a record of what was measured, not a collection of a
   dirty. Recipes live in `tools/setup/<fixture>.ps1` and are never copied into the target, where
   they would land in the §9 diff surface.
 - `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md` and confirms the
-  folder is a git repo with exactly one commit.
+  folder is a git repo with exactly one commit. `-AncestryOnly` drops the commit half, for a
+  folder that must be free of this repo's context but is not a run folder.
+- `score-bundle.ps1` — assembles the blind evidence bundle a run is scored against a second time:
+  the criteria minus their run-log table, the transcript, the envelope, the measurements, the git
+  surface and the worktree. Not the brief, not an earlier report, not `CLAUDE.md`. Deletes the
+  bundle rather than return one where the cut failed.
 - `verify-run.mjs` — drives headless Chrome over CDP to measure what the implementation
   actually does.
 
