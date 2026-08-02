@@ -5,8 +5,8 @@ that is the quality bar, so Phase 2 has a "before" on the same model as its "aft
 
 It answered a second question nobody asked, and that answer is the important part of this run.
 
-Scenario: [`../scenarios/alt-a-left-to-right.md`](../scenarios/alt-a-left-to-right.md), unchanged
-Product: identical to [`2026-08-01-phase1`](2026-08-01-phase1.report.md) — no edits between the two
+Scenario: [`../../scenarios/alt-a-left-to-right.md`](../../scenarios/alt-a-left-to-right.md), unchanged
+Product: identical to [`2026-08-01-phase1`](../2026-08-01-phase1/report.md) — no edits between the two
 Hire: separate `claude` CLI session, `--model sonnet`, 2 turns, 48 model turns, ~7.5 min, **$1.57**
 
 **Result: 15 of 16 criteria pass. The only failure is 4a — and it is the same failure Opus had.**

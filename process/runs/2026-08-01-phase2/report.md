@@ -6,8 +6,8 @@ F2 (ask what a repeat trigger does), F6 (language), F7 (verify your own work).
 Run on **Opus**, deliberately — the Sonnet baseline already passes K7, so it has no headroom to
 show a fix. Sonnet stays the bar; Opus is the diagnostic model for this particular fault.
 
-Scenario: [`../scenarios/alt-a-left-to-right.md`](../scenarios/alt-a-left-to-right.md), unchanged
-Baseline: [`2026-08-01-phase1.report.md`](2026-08-01-phase1.report.md) (Opus, same scenario)
+Scenario: [`../../scenarios/alt-a-left-to-right.md`](../../scenarios/alt-a-left-to-right.md), unchanged
+Baseline: [`2026-08-01-phase1/report.md`](../2026-08-01-phase1/report.md) (Opus, same scenario)
 Hire: 2 turns, 52 model turns, ~15 min, **$4.04**
 
 **Result: F2 proven. F1 half-proven. K7a's failure turned out to be my prompt, not the product.**

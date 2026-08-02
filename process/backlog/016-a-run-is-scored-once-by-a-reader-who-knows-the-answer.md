@@ -159,6 +159,9 @@ backfill has the archive in a uniform shape.
   the flat one this item's Cost section proposed: **D4** moved `#023` into the first wave, no run is
   scheduled before it, and the flat path would have been written and moved within days. The two
   existing `score-b.md` come in with `#023`.
+- `2026-08-02` — `#023` landed, and with it the deliverable this item shipped without: both
+  `score-b.md` are now at `process/runs/<id>/score-b.md`, versioned, beside the run they scored.
+  The Cost section's flat fallback was never needed.
 - `2026-08-02` — **C1**: `#013` split three ways, and the part this item waits on is now `#023`.
   Both citations above are re-pointed. Two of the three things forcing `#023` are this item's: a
   second scoring per run, and a run that has no report to hang a filename prefix on.

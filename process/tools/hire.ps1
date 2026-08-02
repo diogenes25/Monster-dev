@@ -72,7 +72,9 @@ if (-not (Test-Path 'START.md')) {
 
 $repoRoot   = (Resolve-Path '.').Path
 $targetPath = (Resolve-Path $Target).Path
-$recordPath = Join-Path $repoRoot "process\runs\$RunId.hire.json"
+$runDir     = Join-Path $repoRoot "process\runs\$RunId"
+$recordPath = Join-Path $runDir 'hire.json'
+New-Item -ItemType Directory -Force $runDir | Out-Null
 
 # The whole isolation story depends on the run folder not sitting under this repo, where
 # CLAUDE.md would reach the hire through the ancestor chain.

@@ -103,7 +103,7 @@ columns — it reads the item files themselves, so there is no index that can dr
 
 ## What this replaced
 
-`process/runs/<run-id>.findings.md` is gone. A run now writes its report and touches item files; the
+`process/runs/<run-id>/findings.md` is gone. A run now writes its report and touches item files; the
 proposal lives in exactly one place instead of being restated per run and going stale in one of them.
 The two findings files already on disk — `alt-a` and `plan-sonnet` — stay as historical records of
 runs scored under the old procedure. Both have been read onto the board: `alt-a`'s withdrawal of

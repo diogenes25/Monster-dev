@@ -30,7 +30,8 @@ when the two disagree, the skill is what actually gets executed.
 process/
   fixtures/<name>/          target-project templates; a run never modifies one
   scenarios/<name>.md       customer brief + answer script + acceptance criteria
-  runs/<run-id>.report.md   criterion-by-criterion result, with evidence
+  runs/<run-id>/            everything one run produced — see below
+  runs/plan-retro.md        a retrospective across arms; not a run, so not a folder
   backlog/<nnn>-<slug>.md   one file per open problem, carried across runs
   tools/                    the harness itself — see below
   stacks/<lang>/<lib>/      the implementation record — see stacks/README.md
@@ -46,6 +47,39 @@ line at the top of each `impl-NN/knowledge.md` maps one to the other.
 
 Run folders live **outside this repository**, and reports live beside them rather than inside
 them — a report inside the target project would itself violate the §9 cleanup rule it checks.
+
+### `runs/<run-id>/` — one folder per run
+
+Two different things are called a run folder and they must not be confused: the one
+**outside** the repo is where a run *executes*, the one here is where a run is *recorded*.
+Nothing executes in here.
+
+```
+runs/<run-id>/
+  report.md           criterion-by-criterion result, with evidence
+  score-b.md          the blind second scoring, copied out of the bundle before it is deleted
+  findings.md         only where a run produced findings worth their own file
+  measurements.json   verify-run.mjs output
+  midwalk.png         the screenshot it takes mid-crossing
+  hire.json           the wrapper's envelope: cost, turns, session id, per-turn worktrees
+  brief.txt           the customer brief the hire was given
+  verify.mjs          only where a run needed a one-off verifier
+```
+
+It holds **whatever that run produced, whatever its outcome** — including a §3 decline and a
+smoke test, neither of which has an implementation or a `stacks/<language>/<library>/` folder it
+could honestly live in. `impl-NN/` under `stacks/` is the other thing entirely: deliberate,
+hand-written, created once, and it names its run.
+
+**A folder is allowed to be missing a file.** The set is ragged and the gaps are real:
+`2026-08-01-alt-a` predates the wrapper and has no `hire.json` and no `brief.txt`, and
+`2026-08-01-plan-opus` and `2026-08-01-sonnet-base2` have **no report at all** — both were written
+up inside `plan-sonnet`'s report as arms rather than on their own. That is a gap in the archive,
+not a naming convention, and nothing here invents a file to cover it.
+
+It was flat until 2026-08-02, keyed by the prefix of each filename. That worked while a run
+produced three files; it stopped working when a run started producing a transcript, a worktree
+and a second scoring, because a directory has no filename prefix.
 
 ## Fixtures, and the stack each one exercises
 

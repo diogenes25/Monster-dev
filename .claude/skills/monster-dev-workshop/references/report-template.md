@@ -1,17 +1,18 @@
 # Report template
 
-**One file per run**, under `process/runs/`, never inside the target project. Everything a run turns
+**One folder per run**, `process/runs/<run-id>/`, never inside the target project. The report is
+`report.md` inside it, beside the measurements, the envelope and the blind second scoring. Everything a run turns
 up *besides its own result* goes on the board — `process/backlog/`, one file per problem, shaped by
 `process/backlog/TEMPLATE.md`. The report says what this run measured; the board carries what is
 still open. A proposal therefore exists in exactly one place instead of being restated per run
 and going stale in one of them.
 
-There is no `<run-id>.findings.md`. The two on disk are historical records of runs scored before
+There is no `findings.md` any more. The two on disk are historical records of runs scored before
 the board existed, and everything still open in them is on the board.
 
 ---
 
-## `process/runs/<run-id>.report.md`
+## `process/runs/<run-id>/report.md`
 
 # Run `<run-id>` — `<scenario slug>`
 

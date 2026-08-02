@@ -311,7 +311,7 @@ the run leaves usable evidence behind:
 `is_error` and `permission_denials`, and every run before this one threw them away and retyped
 the numbers into a report by hand — while two of the three gates in `CLAUDE.md` are stated in
 exactly those numbers. The wrapper keeps the envelope verbatim in
-`process/runs/<run-id>.hire.json`, re-runs the isolation check per turn, and snapshots
+`process/runs/<run-id>/hire.json`, re-runs the isolation check per turn, and snapshots
 `git status --porcelain -uall` in the target before and after each turn.
 
 That last snapshot is the point. **K7a ("asked before building") is the criterion this project
@@ -413,8 +413,8 @@ than its verdicts: that is where the two of you differ for a reason.
 .\process\backlog\board.ps1 -Open -Full
 ```
 
-A run produces exactly one file. `process/runs/<run-id>.report.md` lives in `process/runs/` —
-**beside** the run folder's parent, never inside the target project, because a report inside the
+A run produces one folder, `process/runs/<run-id>/`, and its report is `report.md` inside it.
+It lives here — **beside** the run folder's parent, never inside the target project, because a report inside the
 target would itself violate the §9 cleanup rule it is checking. Criterion by criterion, each with
 its evidence, each gap attributed. Follow `references/report-template.md`.
 
@@ -430,7 +430,7 @@ Then resolve the run's own brief: `proven` if the criterion flipped and nothing 
 `rejected` if there was no measurable difference or the fault did not reproduce. A rejected item
 **stays** — it is the only defence against having the same idea again in a year.
 
-There is no `<run-id>.findings.md` any more. A proposal now lives in exactly one place instead of
+There is no `findings.md` any more. A proposal now lives in exactly one place instead of
 being restated per run and going stale in one of them; `process/backlog/README.md` says why, and the
 three findings files still on disk are historical records of runs scored under the old procedure.
 
@@ -580,7 +580,7 @@ dialogue rather than replace it.
 
 An entry ends with the bare run id in parentheses. No path, no "see", no link.
 
-`process/` is **tracked**. Once this repo is pushed, `process/runs/<run-id>.report.md` is a live URL,
+`process/` is **tracked**. Once this repo is pushed, `process/runs/<run-id>/report.md` is a live URL,
 and a path in a published note is an invitation to fetch it. In a test run that is a 404 and a
 burnt turn landing straight in `num_turns` — one of the two numbers the tooling gate reads. In
 production it is a pointer out of the notes and into the acceptance criteria. The bare id costs

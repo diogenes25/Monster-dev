@@ -106,7 +106,7 @@ $residue = @($kept | Select-String -Pattern '\b20\d\d-\d\d-\d\d-[a-z0-9-]+' -All
 
 # --- the envelope, the measurements, the git surface ------------------------------------------
 
-$hireJson = Join-Path $runsDir "$RunId.hire.json"
+$hireJson = Join-Path $runsDir "$RunId\hire.json"
 $sessionId = $null
 if (Test-Path $hireJson) {
     Copy-Item $hireJson (Join-Path $bundle 'hire.json')
@@ -115,10 +115,10 @@ if (Test-Path $hireJson) {
     if (-not $Target) { $Target = $record.target }
 }
 
-$measurements = Join-Path $runsDir "$RunId-measurements.json"
+$measurements = Join-Path $runsDir "$RunId\measurements.json"
 if (Test-Path $measurements) { Copy-Item $measurements (Join-Path $bundle 'measurements.json') }
 
-$shot = Join-Path $runsDir "$RunId-measurements-midwalk.png"
+$shot = Join-Path $runsDir "$RunId\midwalk.png"
 if (Test-Path $shot) { Copy-Item $shot (Join-Path $bundle 'midwalk.png') }
 
 if (-not $Target) {

@@ -8,7 +8,7 @@
 | Criterion | — |
 | Target file | `process/runs/**/knowledge.md`, `process/tools/check-index.ps1`, `process/tools/build-dist.ps1`, `process/stacks/README.md`, `process/backlog/README.md`, `CLAUDE.md` |
 | Evidence | owner decision `2026-08-02`; split out of `#013` the same day (answer **C1**) |
-| Blocked on | `#023` for the folder, `#013` for the `knowledge.md` the frontmatter goes on |
+| Blocked on | `#013` for the `knowledge.md` the frontmatter goes on — `#023` landed `2026-08-02` |
 | Proof design | — |
 
 **Split out of `#013` (answer C1).** This is the metadata convention, and it is separated because it

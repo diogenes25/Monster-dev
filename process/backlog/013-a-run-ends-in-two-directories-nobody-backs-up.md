@@ -8,7 +8,7 @@
 | Criterion | — |
 | Target file | `process/tools/hire.ps1`, `process/tools/scrub-transcript.ps1` (new), `process/tools/check-index.ps1`, `process/README.md` |
 | Evidence | inventory `2026-08-02` over all ten runs on record; owner decision `2026-08-02`, refined by the grilling of the same date |
-| Blocked on | `#023` — the capture writes into `process/runs/<id>/`, which that item creates |
+| Blocked on | nothing — `#023` landed `2026-08-02` and `process/runs/<id>/` exists |
 | Proof design | — |
 
 **Narrowed by answer C1.** This item was eleven deliverables. The layout refactor is now `#023` and

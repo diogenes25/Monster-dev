@@ -4,7 +4,7 @@ Proposed wording changes to the playbook. Each finding names what was observed, 
 
 > ## Status after the later runs — read this first
 >
-> Two later runs ([`phase1`](2026-08-01-phase1.report.md), [`sonnet-base`](2026-08-01-sonnet-base.report.md)) changed what several of these findings mean. Corrections belong next to the claim they correct, not buried in a newer file.
+> Two later runs ([`phase1`](../2026-08-01-phase1/report.md), [`sonnet-base`](../2026-08-01-sonnet-base/report.md)) changed what several of these findings mean. Corrections belong next to the claim they correct, not buried in a newer file.
 >
 > | | Status |
 > |---|---|

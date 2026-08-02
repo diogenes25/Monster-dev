@@ -1,6 +1,6 @@
 # Run report — `2026-08-01-alt-a`
 
-Scenario: [`../scenarios/alt-a-left-to-right.md`](../scenarios/alt-a-left-to-right.md)
+Scenario: [`../../scenarios/alt-a-left-to-right.md`](../../scenarios/alt-a-left-to-right.md)
 Target project: `../../../monster-dev-testruns/2026-08-01-alt-a/` (copy of `sample-static-site`)
 Hire: separate `claude` CLI session, 2 turns, 33 model turns total, ~6.3 min, $1.88
 
@@ -16,7 +16,7 @@ The hire therefore ran as a separate `claude` CLI session with the run folder as
 
 ## Evidence sources
 
-- `2026-08-01-alt-a-measurements.json` — raw output of the acceptance test
+- `measurements.json` — raw output of the acceptance test
 - `2026-08-01-alt-a-verify.mjs` — the test itself: headless Chrome over CDP, no dependencies
 - `2026-08-01-alt-a-midwalk.png` — screenshot taken 2 s into the walk
 

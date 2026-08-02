@@ -4,8 +4,8 @@
 anything — Phase 1 moved files and rewrote documentation, and the point of running it is that
 the result should be indistinguishable from the run before it.
 
-Scenario: [`../scenarios/alt-a-left-to-right.md`](../scenarios/alt-a-left-to-right.md), unchanged
-Baseline: [`2026-08-01-alt-a.report.md`](2026-08-01-alt-a.report.md)
+Scenario: [`../../scenarios/alt-a-left-to-right.md`](../../scenarios/alt-a-left-to-right.md), unchanged
+Baseline: [`2026-08-01-alt-a/report.md`](../2026-08-01-alt-a/report.md)
 Hire: separate `claude` CLI session, 2 turns, 33 model turns, ~9.7 min, **$2.56**
 
 **Result: every criterion held. One moved up, unattributably. Cost rose 36 %.**

@@ -5,8 +5,8 @@ needed, and the **monster roster** that landed between the two runs. They target
 criteria — K7a for the prompt, K14 for the roster — so the attribution stays readable, and K10
 was the one place they could have collided.
 
-Scenario: [`../scenarios/alt-a-left-to-right.md`](../scenarios/alt-a-left-to-right.md)
-Baseline: [`2026-08-01-phase2.report.md`](2026-08-01-phase2.report.md), same model
+Scenario: [`../../scenarios/alt-a-left-to-right.md`](../../scenarios/alt-a-left-to-right.md)
+Baseline: [`2026-08-01-phase2/report.md`](../2026-08-01-phase2/report.md), same model
 Hire: Opus, 2 turns, 32 model turns, ~7 min, **$1.84**
 
 **Result: K7a flipped, the roster works, no criterion regressed — and the run got 54 % cheaper.**

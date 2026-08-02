@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
@@ -100,6 +100,28 @@ moved report opens with its links intact. `git status` shows renames, not delete
   verifier work, which touches no file this one does. It is not urgent in itself — it is a refactor
   and it blocks `#013`, which is the only item on the board where waiting costs data that cannot be
   recovered. It still lands in one sitting with `#019`, which moves the other directory.
+- `2026-08-02` `proven` — applied. Ten folders, `plan-retro.md` left at the root as a file, and
+  the move driven off `Get-ChildItem` with a suffix table rather than off the pattern: the script
+  throws on any filename it cannot map instead of skipping it, so an incomplete mapping fails
+  loudly rather than leaving a file behind. `git status` shows renames. The ragged set came
+  through as described — `alt-a` has no `hire.json` and no `brief.txt`, `plan-opus` and
+  `sonnet-base2` have no `report.md`, and nothing was invented to fill those in.
+- `2026-08-02` — **the two `score-b.md` are in the repository**, at
+  `process/runs/2026-08-01-plan-opus/score-b.md` and `.../2026-08-01-plan-sonnet/score-b.md`. They
+  are the evidence behind `#020`, `#021` and `#028` and had been sitting unversioned in
+  `..\monster-dev-scoring\` since the day they were written.
+- `2026-08-02` — three things fixed that the item did not list. `score-bundle.ps1` read all three
+  of its inputs by the flat name and would have produced an empty bundle silently — it copies with
+  `Test-Path` guards, so a missing `hire.json` is not an error, it is a bundle with no envelope.
+  The scenario's run-log rows for `sonnet-base2` and `plan-opus` linked to **`plan-sonnet`'s**
+  report, which is a different run; they now say *no report of its own* and name where their
+  numbers actually are. And `plan-retro.md` was cited under its old dated name in the scenario.
+- `2026-08-02` — **`#019` did not land with this one**, against the Cost section above. **D4** put
+  it in the paths wave and this item in Wave 1, and the two are mechanically disjoint: this moves
+  where a run is *recorded*, inside the repo; `#019` moves where a run *executes*, outside it. The
+  Cost section's argument was about a reader confusing the two, so the mitigation it asked for is
+  taken here instead — `process/README.md` now opens the `runs/<run-id>/` section by drawing that
+  distinction, and `#019` will find it already drawn.
 - `2026-08-02` — **E3**: two more files come in with this move, and they are not in
   `process/runs/` to be renamed. Both `score-b.md` on record are in `..\monster-dev-scoring\`; they
   are the evidence behind `#020` and `#021` and are currently unversioned. They land at
