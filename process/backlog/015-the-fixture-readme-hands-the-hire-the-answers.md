@@ -159,6 +159,11 @@ reports belong to whoever settles what `process/runs/` is supposed to contain pe
   (`#017`). `gsap-site` and `python-cli` cite `MONSTER-DEV.md` section numbers and prescribe the
   answer outright. Neither has been hired against, which makes this a blocker on the next run rather
   than a repair of the archive: `#005` and `#011` both need one of those two fixtures.
+- `2026-08-02` — **B6**: the scan's two product names stay its own list rather than being merged
+  with `build-dist.ps1`'s harness vocabulary or `score-bundle.ps1`'s criteria terms. Three readers,
+  three leaks; a shared list would be the union of all three and would make every check noisier.
+  What the answer adds is a comment on the list saying which reader it protects — here, the hire's
+  own working copy — and why it is not the other two.
 - `2026-08-02` — three corrections during the PM pass over the board. The blocker claim above was
   overstated: `#011` says in so many words that `gsap-site` does not close it, and `#005` waits on a
   second published stack note as well as on a fixture. `plan-opus` has no report file, so the

@@ -452,3 +452,48 @@ refuse both. The lane says what proves an item, not whether it may be argued wit
 visible in. `in-proof` stays forbidden, because that state assigns a run and this lane has none.
 
 Files changed: `README.md`, `TEMPLATE.md`, `board.ps1`, and items `#003`, `#005`, `#006`, `#011`.
+
+### Block B — settled `2026-08-02`, all seven as recommended
+
+**B1 — `#018` lands before `#014`,** written into both as a precondition rather than a note. Until
+`README.md` leaves the mirror, `#014`'s *See it running* section is a list of ten scored run ids in
+front of every hire.
+
+**B2 — a content check, not a path name.** `#018`'s `.md` vocabulary grep gains a sibling keyed on
+the artifact: any mirror file referencing a `monsters/` sheet, other than §5 and the sheets
+themselves, is a finished implementation — fail, delete, name the file. The reasoning that made
+this necessary is that a finished implementation is `.html`/`.css`/`.js` and contains none of the
+harness words, so the worst possible leak is exactly the one a prose grep misses.
+
+**B3 — the demos go on a `gh-pages` branch and leave `main`.** Mirror exclusion is not containment:
+a run over real `raw.githubusercontent.com` URLs never reads a mirror, and once Pages is on, a
+`docs/` inside `main` is world-readable at a guessable URL regardless. The base URL a hire derives
+in §0 points at `main`; keep the demos off it and both run classes close at once. This deleted four
+sub-deliverables from `#014` — the exclusion glob, the backstop entry, a `check-index.ps1` filter
+and a mirror inspection.
+
+*Interaction worth recording:* B3 removed B2's original motivation. The sprite check is kept
+anyway, because its value was never `docs/` specifically — it is `#018`'s own principle that a new
+published file must not be able to slip past, and a path list cannot deliver that.
+
+**B4 — `#012` is right, `#013`'s sentence is withdrawn.** A fingerprint proves *which note was
+read*; ten captures of one surface cannot produce one. What the capture gives `#006` is an
+instrument for later, not evidence now, and all three items say so the same way.
+
+**B5 — the next run is `python-cli`, the §3 decline path.** Filed as `#022`. It is the only second
+fixture that `#015` alone unblocks, and §3 is the only section of the playbook with no evidence at
+all behind it — eleven sessions on record, every one against a page with an obvious surface. It
+needs a scenario, and then `grilled`, before a run.
+
+**B6 — three lists stay three lists,** each gaining a comment naming the reader it protects and why
+it is not the other two: `new-run.ps1` guards the hire's working copy, `build-dist.ps1` the mirror,
+`score-bundle.ps1` the blind scorer. A shared source would be the union of all three and would make
+every check noisier.
+
+**B7 — `process/runs/<id>/` is the source for *what a run was for*.** `#012`'s column and `#014`'s
+README line are rendered from it, not typed — the same argument `#013` used to make the tag
+overview rendered rather than a `TAGS.md` that could drift.
+
+Files changed: items `#006`, `#012`, `#013`, `#014`, `#015`, `#018`, new `#022`; `README.md` and
+`TEMPLATE.md` again, because `Blocked on` was defined too narrowly to say "another item" and was
+being used that way within the hour.

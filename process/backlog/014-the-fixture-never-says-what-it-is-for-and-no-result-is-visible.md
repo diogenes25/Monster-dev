@@ -6,8 +6,9 @@
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
-| Target file | `README.md` (root), `process/fixtures/<name>/`, `process/tools/build-dist.ps1`, a new `docs/` |
+| Target file | `README.md` (root), `process/fixtures/<name>/`, a new `gh-pages` branch |
 | Evidence | owner request `2026-08-02`; ten results on record, none of them reachable from this repository |
+| Blocked on | `#018` — see B1 below; and `#013` Part 1, which produces the demos |
 | Proof design | — |
 
 **What happened.** Two absences that one change closes, and they are not equally cheap.
@@ -42,16 +43,23 @@ reports — verdicts, not artifacts.
 
 *Half 1 — publish the results. No fork here.*
 
-> `docs/demos/<run-id>/` holds a copy of each result that is a static site, taken from the run
-> capture `#013` Part 1 produces. The root `README.md` gains a **See it running** section listing
-> them, each line naming the run id, the model and one sentence on what that run was for.
+> `demos/<run-id>/` holds a copy of each result that is a static site, taken from the run capture
+> `#013` Part 1 produces. The root `README.md` gains a **See it running** section listing them, each
+> line naming the run id, the model and one sentence on what that run was for — rendered from
+> `process/runs/<id>/`, never hand-written (**B7**).
 >
-> **`docs/` is excluded from the `<dist>` mirror, on exactly the grounds `process/` is.** Ten
-> finished implementations of the precise job, in front of a hire, are not a leak of acceptance
-> criteria — they are the answer sheet, and a hire could copy one wholesale. `build-dist.ps1`
-> hand-writes the excluded folder name in two places, the exclusion glob and the backstop that
-> verifies it; `docs/` goes into both. Then a mirror is built and **looked inside**, because a green
-> script is not evidence.
+> **The demos live on a `gh-pages` branch and are absent from `main` (answer B3).** Ten finished
+> implementations of the precise job are the answer sheet; a hire could copy one wholesale. The
+> first draft of this item contained them with a mirror exclusion, and that does not hold: a run
+> over real `raw.githubusercontent.com` URLs — `2026-08-01-live` was one — never reads a mirror at
+> all, and once Pages is on, `docs/demos/<run-id>/` is world-readable at a guessable URL no matter
+> what `build-dist.ps1` says. The base URL a hire derives in §0 points at `main`. Keep the demos off
+> `main` and the exposure closes structurally, for both run classes at once.
+>
+> **What that deletes from this item:** the `docs/` exclusion glob, the matching backstop entry, the
+> `docs/*` filter in `check-index.ps1`'s stray-sheet scan, and the mirror inspection that would have
+> had to follow. Four hand-written strings that are not written. The publish step becomes a
+> branch push instead of a copy into the working tree.
 
 *Half 2 — the description. This is a fork, and it is the owner's.*
 
@@ -89,26 +97,28 @@ fixture and its own run before any number out of it is compared with anything.
 
 **Cost.**
 
-- **Each demo duplicates a 1.9 MB sprite.** All ten are byte-identical to the already-tracked
-  `monsters/green-fuzz-classic.png`, so git stores one blob and only the checkout grows.
-- **`check-index.ps1` goes red on the first published demo, and this is not the load test `#012`
-  books.** `check-index.ps1:162` filters only `monsters/*` and `process/*`. `docs/demos/**/*.png`
-  matches neither, so every demo sprite trips `STRAY SHEET` at ratio 21.2 and the script throws —
-  and the message it prints, *"reaches the mirror"*, is untrue under this item, which excludes
-  `docs/` from the mirror. `#012`'s files land under `process/` and are filtered before geometry is
-  measured, so that item load-tests nothing; this one breaks the check outright. **Sub-deliverable:**
-  `docs/*` joins the filter at `:162`, or the failure message stops asserting mirror reachability —
-  and whichever is chosen has to say why a sheet-shaped PNG outside `monsters/` is now acceptable,
-  because that scan exists to catch exactly this shape.
-- **A setting outside the repository.** Pages has to be switched on and pointed at `docs/`. Nothing
-  in the tree can enforce that, and a remembered step is the failure mode this project has already
-  had twice. The mitigation is that the README link is visibly broken until it is done.
-- **The mirror gains a second hand-written folder name**, in the two places `CLAUDE.md` calls *the
-  one invariant that silently invalidates everything*. Two names in two places is four hand-written
-  strings that all break in the same direction and none of which shouts.
+- **A second branch is a second thing that goes stale.** `gh-pages` has no CI behind it, so a demo
+  is published by whoever remembers to push it. Against that: it is the *only* mitigation that
+  survives a real-URL run, and a stale demo is wrong about an old run rather than dangerous to a
+  new one.
+- **A setting outside the repository.** Pages has to be switched on and pointed at `gh-pages`.
+  Nothing in the tree can enforce that, and a remembered step is the failure mode this project has
+  already had twice. The mitigation is that the README link is visibly broken until it is done.
+- **Each demo duplicates a 1.9 MB sprite** — on `gh-pages`, so `main`'s checkout does not grow at
+  all. Cheaper than the first draft of this item, which put ten copies in every clone.
+- **`index.html` at the repository root is already a live implementation.** If Pages is ever pointed
+  at `main` instead of `gh-pages`, it serves at `https://diogenes25.github.io/Monster-dev/` — and
+  more to the point, it is on `main` today and reachable by any hire that goes looking. That is not
+  this item's to fix, but switching Pages on is the moment someone notices it.
 - **A published demo makes `process/` look publishable.** That is `#013`'s sharpest cost arriving by
-  a second road. `docs/demos/` holding *copies*, rather than the root README linking straight into
-  `process/stacks/`, is the mitigation — and it is the entire reason for the duplication.
+  a second road. The demos being *copies* on another branch, rather than the root README linking
+  straight into `process/stacks/`, is the mitigation.
+
+*Withdrawn by answer B3, recorded because they were booked:* the `docs/` exclusion glob and its
+backstop entry, the resulting four hand-written strings in `build-dist.ps1`, and a `docs/*` filter
+in `check-index.ps1:162` — that scan would have gone red on the first published demo, printing
+*"reaches the mirror"* about a folder this item excluded from the mirror. None of it is needed once
+the demos are off `main`.
 
 **Log.**
 
@@ -126,3 +136,11 @@ fixture and its own run before any number out of it is compared with anything.
   this item adds the hand-written path name that `#018` exists to abolish, and `#018`'s grep is
   `.md`-only so the demos would slip past it anyway (**B2**); and mirror exclusion is not
   containment for a real-URL run or for a published Pages site (**B3**).
+- `2026-08-02` — all three answered, and **B3 reshaped Half 1**. The demos move to a `gh-pages`
+  branch and leave `main` entirely, which closes the exposure for the real-URL run class as well as
+  the mirror one, and deletes four hand-written strings, a `check-index.ps1` change and a mirror
+  inspection from this item. **B1**: `#018` is now a recorded precondition, in both items — until
+  `README.md` leaves the mirror, the *See it running* list is ten scored run ids in front of every
+  hire. **B2**: the general guard against a published implementation lives in `#018`, keyed on the
+  sprite rather than on a path. **B7**: the README lines are rendered from `process/runs/<id>/`,
+  not hand-written, so they cannot drift from `#012`'s column.

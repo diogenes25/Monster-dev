@@ -76,10 +76,11 @@ Rejected items stay. They are the only defence against having the same idea agai
 
 ## `Blocked on`
 
-An optional header field naming a precondition that is not another item and not a decision — a
-fixture that has to be built, a second published stack note, a pitfall that has to turn up. Three
-`Gate: run` items sit behind one (`#005`, `#006`, `#011`), and each says in its own words that it
-has no before-fail and cannot have one until the precondition exists.
+An optional header field naming what has to happen before this item can move: another item, a
+decision, or something that has to exist — a fixture that has to be built, a second published stack
+note, a pitfall that has to turn up. Four `Gate: run` items sit behind one (`#005`, `#006`, `#011`,
+`#022`), and the first three each say in their own words that they have no before-fail and cannot
+have one until the precondition exists.
 
 The lane stays `run`, because a run is still what will prove them. What the field adds is the thing
 that tells you when to look again — without it those three read as neglected rather than waiting,

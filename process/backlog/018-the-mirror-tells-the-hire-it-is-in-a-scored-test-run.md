@@ -75,10 +75,33 @@ test hires is a good README; it is simply not one a test hire may read.
 > `comparability` — and fails the build, deleting the mirror, naming file and line. No path is
 > named, so a new published file cannot slip past it. This is `#013` Part 5's shape applied to a
 > second leak class.
+>
+> The list carries a comment saying which reader it protects and why it is not one of the other two
+> — `new-run.ps1`'s product names guard the *hire's own working copy*, `score-bundle.ps1`'s criteria
+> terms guard the *blind scorer*. Three readers, three leaks, three lists on purpose (**B6**).
 
 The vocabulary has to be validated against a mirror built from the *fixed* files, not the current
 ones — the current ones trip it, which is the point. A term that fires on legitimate playbook prose
 comes out of the list rather than the file being reworded around it.
+
+**A second check, for the leak class prose cannot catch (answer B2).** A vocabulary grep reads
+`.md`. A finished implementation of the brief is `.html`, `.css`, `.js` and a sprite, and contains
+none of those words — so the *worst* thing that could reach a mirror is precisely what this check
+would miss. The rule that catches it is keyed on the artifact rather than the words:
+
+> Any file in the assembled mirror that references a sprite sheet under `monsters/` — other than
+> `MONSTER-DEV.md` §5 and the sheet files themselves — is a finished implementation of the job the
+> hire was given. Fail the build, delete the mirror, name the file.
+
+No path list, so it holds for whatever gets published next. It also covers `#012`'s
+`step-4-result/` copies by the same sentence, should `process/`'s exclusion ever be the only thing
+standing between them and a mirror.
+
+**This item must land before `#014` (answer B1).** `#014` adds a *See it running* section to the
+root `README.md` listing ten run ids, their models and what each was for. That is compatible with
+this item and only in this order: until `README.md` leaves the mirror, `#014`'s section puts a
+list of scored runs in front of every hire — a strictly worse leak than the single sentence
+documented above. Recorded as a precondition in both items, not as a note.
 
 **Proof design.** *`Gate: none`.* Half C: fix the harness, rerun, record nothing against the
 product.
@@ -109,3 +132,11 @@ boundary in the eight reports and in the scenario, not a re-scoring and not a de
 - `2026-08-02` `formulated` — verified by hand before being written down: the three quotes read out
   of a freshly built mirror, and the transcript hits confirmed as Read tool results in eight of ten
   runs, including all four Sonnet runs.
+- `2026-08-02` — three answers from the PM pass folded in. **B1**: this item is a precondition of
+  `#014`, written into both. **B2**: the `.md` vocabulary grep gains a sibling keyed on the sprite,
+  because the worst thing that could reach a mirror is an implementation, and an implementation
+  contains none of the words. **B6**: the list says which reader it protects. Also noted from
+  **B3**: excluding a file from the mirror does nothing for a run over real
+  `raw.githubusercontent.com` URLs, which never reads a mirror — `README.md` stays public and
+  `2026-08-01-live` would still have read it. That class is contained by what is *on `main`*, not
+  by the mirror, and `#014`'s demos move off `main` for the same reason.

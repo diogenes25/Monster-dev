@@ -81,8 +81,13 @@ the wrapper and left nothing behind.
 > The result is not byte-faithful, which is the correct trade for an archive that people read.
 
 Distilling to the `assistant` records alone was considered and rejected. They are 14.5 % of the
-bytes and hold the prose, but *what the hire read, and in what order* sits in the tool results —
-which is the exact trace `#006` is short of.
+bytes and hold the prose, but *what the hire read, and in what order* sits in the tool results.
+
+This item used to add *"which is the exact trace `#006` is short of."* It is not, and `#012:110`
+said so first: `#006` needs a **second surface**, and ten captures of one job cannot produce one.
+Answer **B4** settles it in `#012`'s favour. What the capture gives `#006` is an *instrument* —
+once a second published stack note exists, the trace will show which one a hire fetched, which is
+today unrecorded. It gives it no evidence, and this item claims none.
 
 *Part 3 — a run and an implementation are different units, and both get a home.*
 
@@ -330,3 +335,9 @@ is not evidence, and this repository has the scar to prove it.
   that: the lane says what *proves* an item, not whether it may be argued with first, and this item
   was the case that made the argument. `in-proof` stays closed to the lane, and the "no item in
   `grilled`, no run" rule now names `Gate: run` explicitly so this does not read as a run brief.
+- `2026-08-02` — **B4**: the claim that the capture is *"the exact trace `#006` is short of"* is
+  withdrawn; `#012` was right that ten captures of one surface cannot make a fingerprint. Replaced
+  with what the capture honestly gives `#006`, which is an instrument and not evidence.
+  **B7**: `process/runs/<id>/` is the single source for *what a run was for*. `#012`'s column in
+  the record tree and `#014`'s line in the root README are rendered from it, by the same argument
+  this item used to make the tag overview rendered rather than a `TAGS.md` that could drift.

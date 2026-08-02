@@ -56,3 +56,7 @@ resolved the stack when nothing in the evidence distinguishes that from a hire t
   was wrong with the product and proposed no change. `Blocked on` added, so `Gate: run` +
   `harness artefact` is now coherent — the lane says a run will prove it, the attribution says the
   instrument is what is at fault, and the new field says why neither can happen yet.
+- `2026-08-02` — **B4**: `#013` had claimed its run capture would supply *"the exact trace this item
+  is short of"*, and `#012` had said the opposite. `#012` wins and `#013`'s sentence is withdrawn.
+  What the capture gives this item is an instrument — once a second published note exists, the
+  transcript will show which one was fetched — and nothing before then. `Blocked on` is unchanged.

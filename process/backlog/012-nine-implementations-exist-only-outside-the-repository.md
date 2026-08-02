@@ -126,6 +126,11 @@ The three divergences above are **candidate observations, not findings**. They g
   scrubbing, the `runs/` restructure and the boundary. Grew by one case: `ph0-smoke`, an eleventh
   session with no run folder and no report, which is a run record without an implementation. Phase 0
   of `#013` secured all of the material the same day.
+- `2026-08-02` — two answers from the PM pass. **B4** upholds this item against `#013`: ten
+  captures of one surface are not the fingerprint `#006` needs, and `#013`'s contrary sentence is
+  withdrawn. **B7** makes `process/runs/<id>/` the source for *what a run was for*; the column
+  proposed here is rendered from it rather than typed, so it cannot disagree with `#014`'s README
+  line or with the run folder itself.
 - `2026-08-02` — one cost withdrawn during the PM pass over the board. The stray-sheet load test
   this item booked cannot happen: `check-index.ps1:162` filters `process/*` before any PNG is
   opened. `#008`'s exclusion fix is therefore still untested, and `#014` is where that scan gets

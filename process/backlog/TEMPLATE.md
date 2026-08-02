@@ -8,7 +8,7 @@
 | Criterion | `<n>` or — |
 | Target file | `MONSTER-DEV.md` §`<n>` / `process/scenarios/<slug>.md` / harness / — |
 | Evidence | `<run-id>` (add a run id per sighting, never a second item), or a dated owner decision |
-| Blocked on | a precondition that is neither an item nor a decision, or omit the row entirely |
+| Blocked on | what has to happen first — another item, a decision, or something that has to exist. Omit the row when nothing does |
 | Proof design | run id once assigned, or — |
 
 **What happened.** *Behaviour with evidence: a measured value, a command output, a quote from the
