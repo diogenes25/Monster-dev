@@ -18,10 +18,15 @@ session id is read back out of the stored envelope. Everything is written under 
 never into the target, because an artefact inside the target would violate the §9 cleanup
 rule the run is there to measure.
 
+After every turn it also brings the run home: the scrubbed transcript, the worktree without
+.git, and a base.txt saying what the run started from. That rides on the per-turn write rather
+than being a closing step, because a closing step is a step to forget — and this repository has
+already lost one run that way, along with its only copy of the folder it ran in.
+
 Run it from the repository root.
 
 .PARAMETER RunId
-Identifies the run. Evidence is appended to process/runs/<RunId>.hire.json.
+Identifies the run. Everything it produces goes in process/runs/<RunId>/.
 
 .PARAMETER Target
 The run folder the hire works in. Must be outside this repository.
@@ -42,6 +47,11 @@ A customer answer, taken verbatim from the scenario's answer script. Turn 2 onwa
 Passed to claude --model. Recorded as hire.modelFlag, which is authoritative: what the
 envelope reports has changed across CLI versions.
 
+.PARAMETER Fixture
+Which fixture the run folder was made from. Turn 1 only, and recorded rather than used —
+nothing else in a captured run says it, and the base commit alone does not distinguish two
+fixtures that both start with one commit called "Initial site".
+
 .PARAMETER AllowedTools
 Passed to claude --allowedTools. A fence that is too tight shows up as a product failure when
 it was really the harness, so it is recorded rather than assumed.
@@ -61,6 +71,7 @@ param(
     [string]$BriefFile,
     [string]$Answer,
     [string]$Model,
+    [string]$Fixture,
     [string]$AllowedTools = 'Read,Write,Edit,Glob,Grep,Bash,WebFetch'
 )
 
@@ -123,6 +134,7 @@ if (Test-Path $recordPath) {
         runId        = $RunId
         target       = $targetPath
         dist         = $distPath
+        fixture      = $Fixture
         modelFlag    = $Model
         allowedTools = $AllowedTools
         cliVersion   = (claude --version)
@@ -192,6 +204,79 @@ $record.totals = [pscustomobject]@{
 New-Item -ItemType Directory -Force (Split-Path $recordPath) | Out-Null
 $record | ConvertTo-Json -Depth 20 | Set-Content $recordPath -Encoding utf8
 
+# --- bring the run home, every turn ----------------------------------------------------------
+#
+# The transcript is the only record of *how* a hire worked and the only artefact here that
+# cannot be recreated; the worktree is the only record of what it built. Both used to live
+# outside the repository, and `new-run.ps1 -Force` deletes a run folder before recreating it —
+# which has already destroyed one set, `ph0-smoke`, of which nothing survives but a transcript.
+#
+# This rides on the per-turn write above rather than being a closing step in the procedure.
+# A remembered step has been lost twice here: the `test/` → `process/` mirror exclusion, and
+# `ph0-smoke` itself, which was run outside this wrapper and left nothing behind. There is no
+# end of the run to miss, and a run abandoned after turn 1 still leaves an honest record.
+#
+# It runs *after* the envelope is on disk and it never throws: a bug in the capture must not
+# cost a turn that has already been paid for. It fails loudly instead — CAPTURE-FAILED.txt in
+# the run folder, and a line in the object this script returns.
+$captureError = $null
+try {
+    Remove-Item -LiteralPath (Join-Path $runDir 'CAPTURE-FAILED.txt') -ErrorAction SilentlyContinue
+
+    # Glob the CLI's own project folders. The slug rule is the CLI's, not ours, and deriving it
+    # from the target path is how that breaks silently on the next CLI version.
+    $hits = @(Get-ChildItem (Join-Path $HOME '.claude\projects') -Recurse -Filter "$($record.sessionId).jsonl" -ErrorAction SilentlyContinue)
+    if ($hits.Count -ne 1) { throw "expected exactly 1 transcript for session $($record.sessionId), found $($hits.Count)" }
+
+    # Scrubbed on the way in, because process/ is tracked and this repository is pushed. The
+    # scrubber deletes nothing on failure and writes nothing on failure, so a transcript that
+    # cannot be anonymised simply does not arrive — which is what CAPTURE-FAILED.txt then says.
+    & (Join-Path $repoRoot 'process\tools\scrub-transcript.ps1') `
+        -In $hits[0].FullName -Out (Join-Path $runDir 'transcript.jsonl') `
+        -Run $targetPath -Dist $record.dist -RepoRoot $repoRoot | Out-Null
+
+    $work = Join-Path $runDir 'worktree'
+    if (Test-Path $work) { Remove-Item -Recurse -Force $work }
+    Copy-Item -Recurse $targetPath $work
+    if (Test-Path (Join-Path $work '.git')) { Remove-Item -Recurse -Force (Join-Path $work '.git') }
+
+    @(
+        "run:      $RunId"
+        "fixture:  $(if ($record.fixture) { $record.fixture } else { '(not recorded — hire.ps1 was called without -Fixture)' })"
+        "base:     $(git -C $targetPath log --format='%H %s' --max-parents=0 -1)"
+        "captured: $((Get-Date).ToUniversalTime().ToString('o')) after cli turn $($turn.index)"
+        ''
+        'git status --porcelain -uall at capture time:'
+    ) + @(if ($after) { $after } else { '(clean)' }) |
+        Set-Content (Join-Path $runDir 'base.txt') -Encoding utf8
+
+    # Created once and then left alone: it is the one file here a person writes, and a turn-2
+    # capture must not overwrite a sentence somebody typed after turn 1. Its shape is #024's
+    # decision; until that lands it holds the two facts nothing else records, so no later
+    # convention has to guess which runs predate it.
+    $knowledge = Join-Path $runDir 'knowledge.md'
+    if (-not (Test-Path $knowledge)) {
+        @(
+            "# Run ``$RunId``"
+            ''
+            "resource: $RunId"
+            "captured: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd'))"
+            ''
+            '*What this run was for, and what it turned up. Written by hand after it is scored —'
+            'the capture never fills this in, because an automatically written half-record reads'
+            'exactly like a real one.*'
+        ) | Set-Content $knowledge -Encoding utf8
+    }
+} catch {
+    $captureError = $_.Exception.Message
+    @(
+        "The capture failed after cli turn $($turn.index). The envelope in hire.json is intact and",
+        'the turn is not lost, but the transcript and/or the worktree are not in this folder.',
+        '',
+        $captureError
+    ) | Set-Content (Join-Path $runDir 'CAPTURE-FAILED.txt') -Encoding utf8
+}
+
 # --- the harness must leave no trace in the target -------------------------------------------
 
 $strays = @($after | Where-Object { $_ -match '\.(hire|run|judgement)\.json|\.log$' })
@@ -208,6 +293,7 @@ if ($strays) {
     CliTurns    = $record.totals.cliTurns
     Worktree    = if ($after) { $after -join '; ' } else { '(clean)' }
     Record      = $recordPath
+    Capture     = if ($captureError) { "FAILED — $captureError" } else { $runDir }
 }
 
 "`n--- hire said ---`n"

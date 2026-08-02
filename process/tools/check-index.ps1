@@ -171,6 +171,48 @@ foreach ($p in (git ls-files '*.png' | Where-Object { $_ -notlike 'monsters/*' -
     }
 }
 
+# --- a run that is cited but has no folder ---------------------------------------------------------
+#
+# hire.ps1 captures every run into process/runs/<id>/ per turn, so under normal operation this can
+# only fail if the capture failed silently. It is the second line, not the first.
+#
+# Keyed *inside* the repository on purpose. The first draft read the neighbouring
+# ../monster-dev-testruns/ tree, which would have made the same commit pass on one machine and
+# fail on another — and #019 is about to reshape that tree anyway, after which the pattern would
+# have matched nothing and reported clean.
+#
+# What it cannot catch is stated rather than hidden: a run executed and then cited nowhere leaves
+# no trace in here at all. The per-turn capture is what covers that case, by construction.
+
+# A run id is date-prefixed and is not followed by a file extension. The negative lookahead is
+# load-bearing and was added after the first run of this check reported six orphans, all of them
+# old *filenames* quoted in prose — `2026-08-01-alt-a-midwalk.png` matched as a run called
+# `2026-08-01-alt-a-midwalk`. A run id that is not date-prefixed escapes this scan entirely;
+# `ph0-smoke` is the one such id on record and it predates the convention.
+# The atomic group is load-bearing too: without it the engine backtracks the id shorter and
+# shorter until the lookahead is satisfied, so `…-alt-a-midwalk.png` came back as a run called
+# `2026-08-01-alt-a-` with a trailing dash. Atomic means the id is matched whole or not at all.
+$RUN_ID = '\b(?>(20\d\d-\d\d-\d\d-[a-z0-9-]*[a-z0-9]))(?!\.[a-z0-9]{2,5}\b)'
+$cited = @{}
+foreach ($f in (git ls-files 'process/runs/*.md' 'process/scenarios/*.md' 'process/backlog/*.md')) {
+    # ls-files lists the index, not the working tree. Without this guard, deleting a run folder
+    # made this block throw "cannot find report.md" instead of reporting the orphan — the check
+    # failing for the wrong reason, which is indistinguishable from the check being broken.
+    if (-not (Test-Path -LiteralPath $f -PathType Leaf)) { continue }
+    foreach ($m in [regex]::Matches((Get-Content $f -Raw), $RUN_ID)) {
+        $id = $m.Groups[1].Value
+        if (-not $cited.ContainsKey($id)) { $cited[$id] = @() }
+        if ($cited[$id] -notcontains $f) { $cited[$id] += $f }
+    }
+}
+
+$orphans = @($cited.Keys | Where-Object { -not (Test-Path (Join-Path 'process/runs' $_) -PathType Container) } | Sort-Object)
+foreach ($id in $orphans) {
+    $where = ($cited[$id] | Select-Object -First 3) -join ', '
+    $failures += "NO RUN FOLDER: '$id' is cited in $where but process/runs/$id/ does not exist"
+}
+if (-not $orphans) { $notes += "$($cited.Count) cited run id(s), every one with a folder in process/runs/" }
+
 # --- report ---------------------------------------------------------------------------------------
 
 if (-not $Quiet) { $notes | ForEach-Object { "  ok  $_" } }

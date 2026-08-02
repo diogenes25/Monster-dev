@@ -56,15 +56,34 @@ Nothing executes in here.
 
 ```
 runs/<run-id>/
+  transcript.jsonl    the hire's session, scrubbed          ← written by hire.ps1, every turn
+  worktree/           the target as handed back, minus .git ← written by hire.ps1, every turn
+  base.txt            what the run started from             ← written by hire.ps1, every turn
+  hire.json           the envelope: cost, turns, session id, per-turn worktrees
+  knowledge.md        what this run was for — created empty, filled in by hand
   report.md           criterion-by-criterion result, with evidence
   score-b.md          the blind second scoring, copied out of the bundle before it is deleted
   findings.md         only where a run produced findings worth their own file
   measurements.json   verify-run.mjs output
   midwalk.png         the screenshot it takes mid-crossing
-  hire.json           the wrapper's envelope: cost, turns, session id, per-turn worktrees
   brief.txt           the customer brief the hire was given
   verify.mjs          only where a run needed a one-off verifier
 ```
+
+**The first four arrive on their own, after every turn, not at the end of the run.** That is
+deliberate and it is the second design here chosen against a remembered step: this repository has
+lost the `test/` → `process/` mirror exclusion once, and lost a whole run — `ph0-smoke`, of which
+nothing survives but a transcript — because the run was made outside the wrapper and nothing
+brought it home. There is no end of the run to miss, and a run abandoned after turn 1 still leaves
+an honest record. The capture runs *after* the envelope is on disk and never throws: a bug in it
+must not cost a turn that has already been paid for. It writes `CAPTURE-FAILED.txt` instead.
+
+**The transcript is scrubbed on the way in** by `tools/scrub-transcript.ps1`, because `process/`
+is tracked and this repository is pushed. Raw, the eleven transcripts on record hold the machine
+owner's name 2,864 times — in `cwd`, in briefs, in `ls -la` output as the file owner, and once in
+a *hire* transcript as `Shell cwd was reset to …`. Paths become `<run>`, `<dist>`, `<repo>` and
+`<home>`; the CLI's own bookkeeping records are dropped. The scrubber refuses to write a file it
+could not fully anonymise, because nothing downstream will look again.
 
 It holds **whatever that run produced, whatever its outcome** — including a §3 decline and a
 smoke test, neither of which has an implementation or a `stacks/<language>/<library>/` folder it
@@ -103,12 +122,27 @@ point: a `stacks/` entry is a record of what was measured, not a collection of a
 - `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md` and confirms the
   folder is a git repo with exactly one commit. `-AncestryOnly` drops the commit half, for a
   folder that must be free of this repo's context but is not a run folder.
+- `check-index.ps1` — the indexes against the working tree: §2 ↔ `stacks/`, §5 ↔ `catalog.json`,
+  the 40-line orientation cap, any sheet-shaped PNG outside `monsters/`, and every run id cited
+  by a report, a scenario or a board item having a `process/runs/<id>/`. That last one is keyed
+  *inside* the repository on purpose: a check that reads a sibling directory makes the same commit
+  pass on one machine and fail on another. What it cannot catch is a run that was executed and
+  then cited nowhere — the per-turn capture covers that case by construction, and this is the
+  second line against a capture that failed quietly.
 - `score-bundle.ps1` — assembles the blind evidence bundle a run is scored against a second time:
   the criteria minus their run-log table, the transcript, the envelope, the measurements, the git
   surface and the worktree. Not the brief, not an earlier report, not `CLAUDE.md`. Deletes the
   bundle rather than return one where the cut failed.
+- `scrub-transcript.ps1` — rewrites a session transcript so it can be committed to a public
+  repository. Called by `hire.ps1` on every turn; standalone for an archived run. It fails rather
+  than half-anonymises, and the check it fails on is *"is any home directory still named"*, not
+  *"did the account name survive"* — the second question is one the rewrite always answers no to,
+  so asking it would be a check that cannot fail.
 - `verify-run.mjs` — drives headless Chrome over CDP to measure what the implementation
-  actually does.
+  actually does. Besides positions it records the implementation's own numbers against the sheet
+  it really downloaded, the crossing duration at two window widths, and a reduced-motion pass with
+  the media feature emulated — the three criteria that used to be scored off whatever the harness
+  happened to emit.
 
 **`verify-run.mjs` is exactly why the harness lives here and not in `tools/`.** It encodes the
 acceptance criteria. Published under `tools/`, it would put "what is being measured" straight

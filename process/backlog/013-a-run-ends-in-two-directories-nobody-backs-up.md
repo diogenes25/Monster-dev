@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
@@ -245,3 +245,46 @@ and the `monster-dev-workshop` skill's run procedure.
   reason is not that this item is large but that it is the only one where the cost of waiting is
   paid in data: every run executed before it lands keeps its transcript and its worktree in one
   place, outside the repository, where `new-run.ps1 -Force` has already destroyed one set.
+- `2026-08-02` `proven` — all four phases applied. Phase 1 `scrub-transcript.ps1`, Phase 2 the
+  capture in `hire.ps1` (which also gained an optional `-Fixture`, because nothing else in a
+  captured run says which fixture it came from and two fixtures both open with a commit called
+  *"Initial site"*), Phase 3 the `check-index.ps1` backstop, Phase 4 `process/README.md` and
+  Half B step 5.
+- `2026-08-02` — **Phase 1, measured over all eleven rescued transcripts.** 1,186 records kept —
+  exactly `user` 388, `attachment` 96, `assistant` 674, `file-history-snapshot` 10,
+  `file-history-delta` 18 — and 11.53 MB out of 11.76 MB in. `grep -ric tjarkonnen` over the
+  outputs returns nothing. It took **three** rounds to get there and each failure was the check
+  doing its job:
+  - the JSON-escaped path form emitted four backslashes instead of two, because .NET does not
+    treat backslash as an escape on the *replacement* side of `-replace`. Nothing matched at all.
+  - the account name appears as a file **owner**, `AzureAD+<name>`, in `ls -la` output in nine of
+    eleven transcripts. No path rule can reach that, so it is a rule of its own — and because that
+    rule always fires, the final check had to stop asking *"did the name survive"* and start
+    asking *"is any home directory still named"*, which is a question it can still answer yes to.
+  - `C:\Users\TJARKO~1`, the 8.3 short form, is what the CLI writes its own scratchpad, temp files
+    and bundled-skill paths as. Eight of eleven. Nothing derives it from the long form.
+- `2026-08-02` — **Phase 3's own check found the over-match the plan predicted.** First run
+  reported six orphans, all of them old *filenames* quoted in prose: `2026-08-01-alt-a-midwalk.png`
+  scanned as a run called `…-alt-a-midwalk`. Adding a negative lookahead for a file
+  extension was not enough — the engine backtracked the id shorter until the lookahead passed and
+  reported `2026-08-01-alt-a-` with a trailing dash. It needs an **atomic** group: matched whole
+  or not at all. A run id that is not date-prefixed still escapes the scan entirely; `ph0-smoke`
+  is the one such id on record.
+  The negative test then behaved worse than a failure: removing a run folder made the block throw
+  *"cannot find report.md"* instead of naming the orphan, because `git ls-files` lists the index
+  and not the working tree. A check that fails for the wrong reason is indistinguishable from a
+  broken check, so it now skips paths that are tracked but absent. Re-tested: it fails, names
+  `2026-08-01-phase2b`, and names the three files that cite it.
+  It then caught the log entry above: writing the bogus id out in full made *this file* cite a run
+  that does not exist, and the check failed on the sentence describing it. Elided to `…-alt-a-…`.
+  A citation scan cannot tell a citation from a quotation, and that is the price of not keying it
+  to a directory outside the repository.
+- `2026-08-02` — the capture was **dry-run end to end against `2026-08-01-plan-sonnet`** before
+  this line was written: the session glob found exactly one transcript, the scrubber wrote it, the
+  worktree copied without `.git`, and `base.txt` came out with the base commit
+  `9679b8fc Initial site` and the four-line porcelain. 3.4 MB for that run, in line with the Cost
+  section's estimate.
+- `2026-08-02` — **the ten archived runs are not backfilled here.** That is `#012`, which runs
+  last, and the material is in the Phase 0 rescue copy. What changed for it is that the two hard
+  parts now exist: the scrubber is proven over all eleven transcripts, and the folders are there
+  to put them in.

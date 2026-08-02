@@ -304,7 +304,7 @@ the run leaves usable evidence behind:
 
 ```powershell
 .\process\tools\hire.ps1 -RunId <run-id> -Target $target -Dist $dist -Model sonnet `
-  -BriefFile .\process\scenarios\<slug>.brief.txt
+  -Fixture static-site -BriefFile .\process\scenarios\<slug>.brief.txt
 ```
 
 `claude -p --output-format json` prints `total_cost_usd`, `num_turns`, `session_id`,
@@ -317,6 +317,16 @@ exactly those numbers. The wrapper keeps the envelope verbatim in
 That last snapshot is the point. **K7a ("asked before building") is the criterion this project
 has misattributed three times**, and its evidence was always a hand-typed sentence. An empty
 `worktreeAfter` on turn 1 is the same claim as a machine fact.
+
+**After every turn the wrapper also brings the run home** — the scrubbed transcript, the worktree
+without `.git`, and a `base.txt` saying what the run started from, all into
+`process/runs/<run-id>/`. There is nothing to remember and nothing to do at the end, which is the
+whole design: this project has lost a remembered step twice, and one of those losses was a run
+whose folder no longer exists. If the capture fails it writes `CAPTURE-FAILED.txt` and says so in
+the line it prints — it never throws, because a turn that has been paid for must not be lost to a
+bug in the bookkeeping. **Read that line.** A missing capture is recoverable the same day and
+irrecoverable the week after, and `check-index.ps1` will only notice once the run is cited
+somewhere.
 
 The prompt is the customer brief **plus one sentence of dialogue protocol** and nothing else:
 no explanation of what Monster-Dev is, no substitution rules, no hint about what is measured.
