@@ -31,7 +31,6 @@ process/
   fixtures/<name>/          target-project templates; a run never modifies one
   scenarios/<name>.md       customer brief + answer script + acceptance criteria
   runs/<run-id>.report.md   criterion-by-criterion result, with evidence
-  runs/<run-id>.findings.md proposed playbook changes (proposed, not applied)
   backlog/<nnn>-<slug>.md   one file per open problem, carried across runs
   tools/                    the harness itself — see below
   stacks/<lang>/<lib>/      the implementation record — see stacks/README.md
@@ -63,6 +62,10 @@ point: a `stacks/` entry is a record of what was measured, not a collection of a
 
 - `build-dist.ps1` — builds the mirror **and** verifies it, deleting it rather than returning
   one that leaked. Also builds A/B arms via `-Without`.
+- `new-run.ps1` — creates the run folder from a fixture, runs its setup recipe if it has one,
+  commits once, and deletes the folder rather than return one that fails isolation or starts
+  dirty. Recipes live in `tools/setup/<fixture>.ps1` and are never copied into the target, where
+  they would land in the §9 diff surface.
 - `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md` and confirms the
   folder is a git repo with exactly one commit.
 - `verify-run.mjs` — drives headless Chrome over CDP to measure what the implementation

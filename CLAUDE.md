@@ -92,7 +92,17 @@ There is no build/lint/test tooling for this repo (static HTML/CSS/JS + Markdown
 **Build the `<dist>` mirror for a test hire** (never by hand — it builds *and* verifies, and deletes a leaking mirror instead of returning it):
 ```powershell
 .\process\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
-.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a
+```
+
+**Create the run folder** — also never by hand. It copies the fixture, runs the fixture's setup
+recipe if one exists (`process/tools/setup/<fixture>.ps1`, kept out of the fixture so it cannot be
+copied into the target and pollute the §9 diff surface), commits exactly once, and deletes the
+folder rather than hand back one that fails isolation or starts dirty. Dependencies are installed
+here rather than by the hire: inside the session they would land in `num_turns` and
+`total_cost_usd`, two of the three numbers the gates are stated in:
+```powershell
+.\process\tools\new-run.ps1 -RunId 2026-08-02-alt-a -Fixture static-site
+.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a   # standalone; new-run already ran it
 ```
 
 **Check the indexes against the working tree** — the same question one step earlier, so a

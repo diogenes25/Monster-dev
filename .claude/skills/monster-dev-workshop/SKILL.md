@@ -229,18 +229,34 @@ that lands, an A/B below file level cannot be built honestly, and saying so beat
 
 ### 3. Create the run folder outside the repo
 
+**Never by hand**, for the same reason as the mirror: the three commands this replaces were
+pasted per run, and nothing verified the result.
+
 ```powershell
-$target = "..\monster-dev-testruns\$run"
-Copy-Item -Recurse process\fixtures\static-site $target    # or whichever fixture the scenario names
-git -C $target init -q; git -C $target add -A; git -C $target commit -qm 'Initial site'
+.\process\tools\new-run.ps1 -RunId <run-id> -Fixture <name>    # whichever fixture the scenario names
 ```
 
-Outside, because a copy inside `process/` puts this repo's `CLAUDE.md` in the hire's ancestor
-chain. The git repo is what makes §8 ("no commit unless asked") falsifiable at all, and
-`git status` afterwards is the exact diff surface for §9. Fixtures are never modified by a
-run — always work on a copy.
+Copies the fixture, runs its setup recipe if it has one, commits exactly once, and then checks
+both isolation and cleanliness — deleting the folder rather than handing back one that only
+looks ready.
+
+Outside the repository, because a copy inside `process/` puts this repo's `CLAUDE.md` in the
+hire's ancestor chain. The git repo is what makes §8 ("no commit unless asked") falsifiable at
+all, and `git status` afterwards is the exact diff surface for §9. Fixtures are never modified by
+a run — always work on a copy.
+
+**Setup recipes live in `process/tools/setup/<fixture>.ps1`, never inside the fixture.** A fixture
+with a build cannot ship its dependencies, so something has to run `npm ci` or `dotnet restore` —
+and it must not be the hire: installing inside the session lands in `num_turns` and
+`total_cost_usd`, two of the three numbers the gates are stated in, and a run that dies on an npm
+error dies for a reason that has nothing to do with the playbook. A recipe kept beside the fixture
+would be copied into the target and would then appear in `git status`, which is the §9 diff
+surface. Most fixtures need no recipe; that is the normal case.
 
 ### 4. Isolation check — before every run, not just the first
+
+Step 3 already ran it, and `hire.ps1` re-runs it per turn. Standalone, for a folder that was
+created some other way or has been sitting around:
 
 ```powershell
 .\process\tools\check-isolation.ps1 -Target $target
@@ -248,6 +264,7 @@ run — always work on a copy.
 
 Walks the run folder's whole ancestry for `CLAUDE.md`, checks the user-level one, and confirms
 the folder is a git repo with exactly one commit. The mirror side was already checked in step 2.
+Any hit invalidates the run before it starts — treat a failure as a stop, not a warning.
 
 Any hit invalidates the run before it starts. Treat a failure as a stop, not a warning.
 
