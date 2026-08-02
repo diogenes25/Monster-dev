@@ -35,5 +35,5 @@ figures for whichever sheet the client picked in §5.
 
 ---
 
-*No measured pitfalls recorded for this stack yet. Entries appear here only once a test run
-has demonstrated one, each with the run it came from.*
+*No measured pitfalls recorded for this stack yet. An entry appears here only once a job has
+actually hit one, and names the job it came from.*

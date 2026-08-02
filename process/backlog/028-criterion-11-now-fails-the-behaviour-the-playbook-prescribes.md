@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `11` |
@@ -101,3 +101,22 @@ reference implementation, not an archived run.
 - `2026-08-02` `formulated` — checked against the playbook before being written down:
   `MONSTER-DEV.md` §5 asks for *visible and still* and asks for nothing else. The seven reports
   were re-read and they split five to two, which is what a permissive playbook produces.
+- `2026-08-02` `proven` — **owner chose (c)**, against the recommendation of (b), and the reason
+  the recommendation was wrong is worth keeping: (b) would have spent a run to make the product
+  agree with an opinion nobody had tested, while the question of what an easter egg should do at
+  the far edge is exactly the kind this project has no evidence on yet. (c) keeps the measurement
+  and refuses the verdict.
+  `11a` is scored, `11b` is `INFO` — measured on every run, quoted in every report, counted in no
+  total. The scenario now states what `INFO` means, because a third verdict beside `PASS` and
+  `NOT SCORABLE` is exactly the kind of thing that gets quietly read as a soft failure.
+- `2026-08-02` — a second data point arrived while applying this, and it strengthens (c) rather
+  than (b). `process/stacks/html/css/impl-01` reached the same reading independently — *"park it,
+  don't hide it"*, recorded at the time with the note that it had never been asked about — so the
+  reference implementation and the only backfilled implementation that faced the question both
+  chose to leave the monster standing. Two readings agreeing is not evidence the reading is right;
+  both were made against the same short §5 sentence. It is enough to place the disagreement with
+  the playbook rather than with either implementation. Recorded in `impl-01/knowledge.md`.
+- `2026-08-02` — what stays open, stated so it is not mistaken for closed: §5 still says nothing
+  about the far edge, and `11b` is the standing reminder. If §5 ever gains the sentence, `11b`
+  becomes a real criterion with a before-fail already on record — `index.html`, measured — and
+  this item's option (b) is the design for that change.

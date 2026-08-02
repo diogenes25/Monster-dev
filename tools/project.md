@@ -23,7 +23,7 @@ has the recipe and the checks that have to follow it.
 
 If a sheet's frame count changes, see the sync list in the `monster-dev-workshop` skill —
 per-monster figures live in the catalog and in `MONSTER-DEV.md` §5, but `green-fuzz-classic`'s
-`23` is also baked into `index.html` and into the test harness.
+`23` is also baked into `index.html` and into two dev-side scripts the skill names.
 
 ## `hire/` — fetched and run by a hired agent
 
@@ -41,16 +41,15 @@ here, and both exist to keep the product from quietly turning into a library:
 Stack-specific tools do not live here. They belong beside the notes that explain them, in
 `stacks/<name>/tools/`, so a hire that fetched a stack has its tooling in the same place.
 
-Tools are earned the same way stack knowledge is: a run shows a hire building something for
-itself, that becomes a tool, and an A/B has to show the cost drop with no criterion falling
-back. A tool that changes neither is removed again.
+Nothing lands here on a hunch. A tool is earned the same way stack knowledge is, against a bar
+recorded dev-side, and a tool that stops clearing it is removed again.
 
 Two more rules decide whether a tool may be a *file* at all — both of them about the same
 failure, which is a folder slowly filling with code nobody measured:
 
 - **A tool starts inline in the note that explains it.** Its own file is one more thing to
   fetch and one more thing to run, so it has to save more than it costs before it earns the
-  separation. Promote it when the A/B says so, not when it looks tidier.
+  separation. Promote it when it has been shown to pay, not when it looks tidier.
 - **Output that is identical for every hire is not a tool, it is a table cell.** If a script
   would print the same number whatever project it runs in, that number belongs in the
   `MONSTER-DEV.md` §5 roster row, where every hire already reads it without running anything.
@@ -62,12 +61,9 @@ Code detached from the decision that justified it is the library this repo is ex
 
 ## Not here: developer tooling
 
-The harness — dist mirror, isolation check, the CDP run verifier — lives in `process/tools/`.
-
-That is not tidiness. The verifier encodes the acceptance criteria, so publishing it under
-`tools/` would put "what is being measured" straight into the mirror a hire receives.
-`process/` is excluded from that mirror already, which makes it the one correct home. Nothing
-that knows the criteria may sit in `tools/`.
+Anything used to *develop* this repository rather than to do a job with it lives elsewhere in the
+tree, and the reason it may not live here is recorded next to it rather than in this file. The
+split is not tidiness, and it is not negotiable in the direction of moving something in.
 
 ---
 

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | `8`, `9`; `13` by luck; `18a` / `18c` indirectly. On the unused fixtures: §2.4 and the whole of §3 |
@@ -183,3 +183,29 @@ reports belong to whoever settles what `process/runs/` is supposed to contain pe
   note now records that criteria `8` and `9` are contaminated in six runs, names all six, and says
   that `plan-opus` has no report to carry its caveat — so the one run whose contamination would
   otherwise be written down nowhere is written down here.
+- `2026-08-02` `proven` — the other half applied, in one sitting with `#018` and `#019`. All three
+  fixture READMEs rewritten in character (Acme Kite Co.'s site, Nimbus Studio's house rule on
+  motion, a cron-driven CSV report tool), the notes moved to `process/fixtures/<name>.md`, and the
+  scan in `new-run.ps1`. Five report caveats written, in `alt-a`, `phase1`, `phase2`, `phase2b` and
+  `live`.
+- `2026-08-02` — the scan was **tested by making it fail**, not by reading it: the pre-fix
+  `gsap-site` README was dropped into `static-site` and a run created against it. It threw, quoted
+  the offending line with its number, pointed at `process\fixtures\static-site.md` as the place the
+  note belongs, and the run folder was gone afterwards. One line matched both `Monster-Dev` and
+  `MONSTER-DEV.md`, which is why the scan is case-insensitive and why it is these two names.
+- `2026-08-02` — **it runs before the setup recipe, and that boundary is stated rather than
+  claimed.** What a recipe installs is upstream package content: walking `node_modules` would be
+  slow, and a match inside somebody else's dependency is not this project's leak. What the recipe
+  itself writes into the target is in scope and is *not* covered. No fixture has a recipe today, so
+  nothing is currently exposed by it.
+- `2026-08-02` — one leak the rewrite found that the item had not listed: `gsap-site/package.json`
+  described itself as *"Test fixture: a small site that already depends on GSAP for animation."*
+  and was named `sample-with-animation-lib`. No product name, so the scan would never have caught
+  it — a project's own manifest calling itself a test fixture is the same leak class as the README
+  and is caught only by reading. Now `nimbus-studio`.
+- `2026-08-02` — **the line the rewrite had to hold**, recorded because the first draft crossed it.
+  `gsap-site`'s new README said *"Please do not add bare CSS `@keyframes`"*, which is the §2.4
+  answer stated as an instruction — it would have measured instruction-following instead of whether
+  the hire reads the project's convention. A fixture may **be** whatever it is and may not **say**
+  what should be done about it. The README now states that motion goes through `animations.js` and
+  that two animation systems once fought each other, and stops there.

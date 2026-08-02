@@ -52,11 +52,17 @@ process/stacks/**/knowledge.md  →  A/B run  →  stacks/<name>/README.md  → 
 
 ### The one invariant that silently invalidates everything
 
-`process/` and `.claude/` are **tracked**. They used to drop out of the `<dist>` mirror because git ignored them; now the exclusion has to be deliberate. Miss it and every hire reads its own acceptance criteria, and every future run is worthless.
+`process/`, `.claude/`, `CLAUDE.md` and the root `README.md` are all **tracked**, and all four are kept out of the `<dist>` mirror by hand. The first two used to drop out because git ignored them; now every exclusion is deliberate. Miss one and every hire reads its own acceptance criteria — or, in `README.md`'s case, reads that it is a fresh agent in a scored test run, which is what eight of the first ten hires did.
 
-The folder name is written by hand in **two** places in `build-dist.ps1` — the exclusion glob and the backstop that verifies it. Renaming the folder breaks both in the same moment and in the same direction: the filter matches nothing, and the check hunts a folder that no longer exists and reports clean. That is what the `test/` → `process/` rename on 2026-08-02 walked into. Rename it again and you must change both lines *and* build a mirror and look inside it; a green script is not evidence.
+Each name is written by hand in **two** places in `build-dist.ps1` — the exclusion glob and the backstop that verifies it. Renaming one breaks both in the same moment and in the same direction: the filter matches nothing, and the check hunts a file that no longer exists and reports clean. That is what the `test/` → `process/` rename on 2026-08-02 walked into. Rename one again and you must change both lines *and* build a mirror and look inside it; a green script is not evidence.
+
+**Two further mirror checks name no path at all**, because a path list only ever excludes the leaks somebody already found. Every `.md` in the assembled mirror is grepped for a short harness vocabulary (`acceptance criteria`, `test run`, `A/B`, …), and every file in it is checked for a reference to a sprite sheet under `monsters/` — the first catches prose that describes the experiment, the second catches a finished solution to the brief, which contains none of those words. A vocabulary term that fires on legitimate playbook prose is **removed from the list**, never accommodated by rewording the playbook; `harness` is out for exactly that reason, since §7 tells a hire to build a scratch one.
 
 Never hand-roll the mirror. `process/tools/build-dist.ps1` builds and verifies it in one step and deletes the mirror rather than return a leaking one. For the same reason, **nothing that encodes the acceptance criteria may live under `tools/`** — the run verifier belongs in `process/tools/`, which is excluded already.
+
+### One run, one parent
+
+A run folder and its mirror are `../monster-dev-testruns/<run-id>/target/` and `.../<run-id>/dist/`. They used to be direct children of `../monster-dev-testruns/`, which put every previous run one `ls ..` away from the hire — dated folders in `<name>`/`<name>.dist` pairs with the model in the name, holding ten finished, already-scored implementations of the identical brief. One hire ran that listing. `check-isolation.ps1` now looks sideways as well as up: any directory beside the run folder that is not its own mirror fails the check.
 
 ### The proof gates
 
@@ -73,7 +79,7 @@ The bar is a **Sonnet**-class hire. Opus solves the known pitfalls unaided, whic
 Full rules and the entry template are in the `monster-dev-workshop` skill, Half D. The four that decide whether something may be written at all:
 
 - **Decision-shaped, not solution-shaped.** An entry names a fork and what settles it; the resolution stays with the hire, who is the only party looking at the actual project.
-- **Citation is an identifier, never a locator** — the bare run id in parentheses. `process/` is tracked, so a path becomes a live URL after the push: a 404 and a burnt turn in a test run, a pointer into the acceptance criteria in production. No YAML frontmatter on anything a hire fetches.
+- **Citation is an identifier, never a locator** — the bare run id in parentheses. `process/` is tracked, so a path becomes a live URL after the push: a 404 and a burnt turn in a test run, a pointer into the acceptance criteria in production. **No YAML frontmatter and no `[[wikilinks]]` on anything a hire fetches** — the rule is about fetched files, not about Markdown, and inside `process/` both are used. `build-dist.ps1` enforces it against the finished mirror rather than by path, because the road in is a paragraph promoted through the gate out of a tree that has them.
 - **Fragments live inside a prose entry**, shorter than the prose, and deleting one must leave the entry true — that last test is what gives a fragment its own A/B arm. Never a `snippets/` directory.
 - **A tool starts inline**, and output that is identical for every hire is not a tool but a table cell in §5.
 
@@ -94,16 +100,21 @@ There is no build/lint/test tooling for this repo (static HTML/CSS/JS + Markdown
 .\process\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
 ```
 
-**Create the run folder** — also never by hand. It copies the fixture, runs the fixture's setup
-recipe if one exists (`process/tools/setup/<fixture>.ps1`, kept out of the fixture so it cannot be
-copied into the target and pollute the §9 diff surface), commits exactly once, and deletes the
-folder rather than hand back one that fails isolation or starts dirty. Dependencies are installed
-here rather than by the hire: inside the session they would land in `num_turns` and
-`total_cost_usd`, two of the three numbers the gates are stated in:
+**Create the run folder** — also never by hand. It copies the fixture, refuses one that names the
+product anywhere in the target, runs the fixture's setup recipe if one exists
+(`process/tools/setup/<fixture>.ps1`, kept out of the fixture so it cannot be copied into the
+target and pollute the §9 diff surface), commits exactly once, and deletes the folder rather than
+hand back one that fails isolation or starts dirty. Dependencies are installed here rather than by
+the hire: inside the session they would land in `num_turns` and `total_cost_usd`, two of the three
+numbers the gates are stated in:
 ```powershell
 .\process\tools\new-run.ps1 -RunId 2026-08-02-alt-a -Fixture static-site
-.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a   # standalone; new-run already ran it
+.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a\target   # standalone; new-run already ran it
 ```
+A fixture folder holds **only what the target project would hold**. What a fixture is *for* — the
+marks it exists to turn on, and what a correct run looks like — goes in `process/fixtures/<name>.md`,
+a sibling of the folder, for the same reason the setup recipe does. Every fixture README said the
+opposite until 2026-08-02, and the string reached six of the first ten transcripts.
 
 **Check the indexes against the working tree** — the same question one step earlier, so a
 disagreement is caught while it is still an edit. Run it after touching §2, §5, a stack note or
@@ -135,9 +146,9 @@ non-zero, so it can gate a commit:
 snapshots the target's worktree between turns, which is what makes "asked before building"
 a measurement rather than a recollection:
 ```powershell
-.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a `
-  -Dist ..\monster-dev-testruns\2026-08-02-alt-a.dist -Model sonnet -BriefFile .\process\scenarios\alt-a.brief.txt
-.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a -Answer 'keine Präferenz'
+.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a\target `
+  -Dist ..\monster-dev-testruns\2026-08-02-alt-a\dist -Model sonnet -BriefFile .\process\scenarios\alt-a.brief.txt
+.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a\target -Answer 'keine Präferenz'
 ```
 
 **Two check roles sit around the hire**, in `.claude/agents/`, because every failure this project
@@ -159,6 +170,17 @@ be blind is not a control:
 ```
 Every disagreement with the first scoring is resolved in the report with a reason, or filed on the
 board. Keeping your own verdict quietly is the outcome the second pass exists to prevent.
+
+**Publish the results as runnable demos** — every `impl-NN/step-4-result/` onto an orphan
+`gh-pages` branch, with a banner stating what the customer asked for. They are kept **off `main`**
+deliberately: ten finished implementations of the exact job are the answer sheet, and a mirror
+exclusion does not contain them, because a run over real URLs never reads a mirror and §0's base
+URL points at `main`. The script prints the README's *See it running* table instead of writing it,
+and it neither pushes nor switches Pages on — both are outward-facing and stay deliberate:
+```powershell
+.\process\tools\publish-demos.ps1 -WhatIf   # render and report, touch no branch
+.\process\tools\publish-demos.ps1
+```
 
 **Add or regenerate a sprite sheet from a video** (requires `ffmpeg` on PATH, Windows PowerShell with `System.Drawing`) — full recipe and the checks that follow it are in `monsters/README.md`:
 ```powershell

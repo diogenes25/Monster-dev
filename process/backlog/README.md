@@ -93,8 +93,14 @@ dispositions and what the harness measures. A hire that read it would pass by kn
 `build-dist.ps1` enforces the exclusion and deletes a mirror rather than hand back a leaking one —
 but the exclusion only covers this path. A board at the repository root would ship to every hire.
 
-For the same reason as everything else on this side: no YAML frontmatter. The header table greps
-just as well and matches the rest of the repo.
+No YAML frontmatter here — but **not** for the same reason as everything else on this side, and
+that sentence used to say otherwise. The published rule is about billing a hire for metadata only
+we read, and nothing on this side is ever fetched, so it does not apply. The board's actual reason
+is narrower and worth stating plainly: `board.ps1` parses the header table, converting it would
+break the parser, and there is no question the board cannot already answer. Since `2026-08-02`
+`process/runs/*/knowledge.md` *does* carry frontmatter, so this is now two conventions inside
+`process/` rather than one — an accepted cost, recorded as a decision rather than left to be
+discovered by whoever notices the inconsistency.
 
 ## Files
 

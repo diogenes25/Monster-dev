@@ -23,6 +23,12 @@ edit rather than a build failure — and it goes further in three ways build-dis
   * The orientation cap on stack notes (40 lines above the first `---`) is enforced. That cap is
     the entire price of orientation being exempt from the A/B gate; unchecked, it is a back door.
 
+It also checks the record tree, which no other script looks at: OKF frontmatter under
+`process/runs/`, the `Stack:` line under `process/stacks/`, tag *form* but never tag vocabulary,
+and every `[[wikilink]]` resolving to a record that exists. The tag overview it prints is
+rendered from the files each time rather than stored, for the reason board.ps1 gives: the index
+*is* the folder, and there is no second place for it to drift.
+
 Exits non-zero if anything disagrees, so it can gate a commit. Run it from the repository root.
 
 .PARAMETER Quiet
@@ -212,6 +218,128 @@ foreach ($id in $orphans) {
     $failures += "NO RUN FOLDER: '$id' is cited in $where but process/runs/$id/ does not exist"
 }
 if (-not $orphans) { $notes += "$($cited.Count) cited run id(s), every one with a folder in process/runs/" }
+
+# --- the record tree: frontmatter, tags, wikilinks -------------------------------------------------
+#
+# Two conventions live under process/, and the boundary between them is a directory name — which is
+# at least the kind of boundary a script can check, and this is the script that checks it:
+#
+#   process/runs/*/knowledge.md    Open Knowledge Format. YAML frontmatter, required `type`.
+#   process/stacks/**/knowledge.md plain Markdown, first line `Stack: <published stack name>`.
+#
+# The second is not an oversight. CLAUDE.md and process/stacks/README.md both require that
+# `Stack:` line and call it "the whole of the mapping" between the two trees — OKF makes the first
+# line `---` and has no field for a published stack, since `resource` is spent on the run id. A
+# metadata convention is not a good enough reason to move a line the two-tree design rests on.
+
+$OKF_TYPES = 'run', 'implementation', 'surface', 'observation'
+$TAG_FORM  = '^[a-z0-9]+(-[a-z0-9]+)*$'
+$tagUse    = @{}
+$linkTargets = @{}
+$recordFiles = @()
+
+# `process/runs/**/*.md` misses `process/runs/plan-retro.md`, and `process/stacks/**/*.md` misses
+# `process/stacks/README.md` — git's `**` wants at least one directory level. Those two are the
+# overview documents, which is where a cross-reference is most likely to be written, so the glob
+# is a directory and the extension is filtered here.
+foreach ($f in (git ls-files 'process/runs/*' 'process/stacks/*' | Where-Object { $_ -like '*.md' })) {
+    if (-not (Test-Path -LiteralPath $f -PathType Leaf)) { continue }
+    # Nothing writes into a frozen copy. step-1-fixture/ and step-4-result/ are byte copies of what
+    # a job started from and handed back, and a copy that has been edited is not a copy — #014 needs
+    # step-4-result/ byte-identical for a published demo to be the thing that was really delivered.
+    # They are skipped rather than exempted: an exemption invites the next convention to argue.
+    if ($f -match '/step-[14]-') { continue }
+    $recordFiles += $f
+
+    # A link target is the *name* of a record: a folder holding a knowledge.md, or the stem of any
+    # .md in the tree. [[name|label]] is supported and only the name half is resolved.
+    $leaf = [System.IO.Path]::GetFileNameWithoutExtension($f)
+    $dir  = Split-Path $f -Parent | Split-Path -Leaf
+    foreach ($k in @($leaf, $dir)) { if ($k) { $linkTargets[$k.ToLower()] = $true } }
+}
+
+foreach ($f in $recordFiles) {
+    $lines = @(Get-Content -LiteralPath $f)
+    $isRun = $f -match '^process/runs/[^/]+/knowledge\.md$'
+
+    if ($isRun) {
+        if ($lines[0] -ne '---') {
+            $failures += "NO FRONTMATTER: $f is a run record and must open with an OKF '---' block"
+        } else {
+            $end = 0
+            for ($i = 1; $i -lt $lines.Count; $i++) { if ($lines[$i] -eq '---') { $end = $i; break } }
+            if (-not $end) {
+                $failures += "UNCLOSED FRONTMATTER: $f opens with '---' and never closes it"
+            } else {
+                $fm = $lines[1..($end - 1)]
+                $type = ($fm | Where-Object { $_ -match '^type:\s*(\S+)' } | Select-Object -First 1)
+                if (-not $type) {
+                    $failures += "NO TYPE: $f has frontmatter but no required 'type:' field"
+                } elseif (($type -replace '^type:\s*', '').Trim() -notin $OKF_TYPES) {
+                    $failures += "BAD TYPE: $f has type '$(($type -replace '^type:\s*','').Trim())'; OKF types here are $($OKF_TYPES -join ', ')"
+                }
+                # Tags are free-form on purpose — a controlled vocabulary is a second index that can
+                # drift, and the board has already reasoned that out once. Only the *form* is
+                # enforced, so `stride` and `schrittlaenge` end up side by side in the overview
+                # below and somebody merges them. Made visible, not prevented.
+                $tagLine = ($fm | Where-Object { $_ -match '^tags:\s*\[' } | Select-Object -First 1)
+                if ($tagLine) {
+                    foreach ($t in ($tagLine -replace '^tags:\s*\[', '' -replace '\]\s*$', '') -split ',') {
+                        $t = $t.Trim().Trim("'", '"')
+                        if (-not $t) { continue }
+                        # -cnotmatch, not -notmatch. PowerShell's comparison operators are
+                        # case-insensitive by default, so a lowercase-only rule written with
+                        # -notmatch accepts `Stride` — which is the one thing it exists to reject.
+                        # Found by the negative test; the check had reported clean.
+                        if ($t -cnotmatch $TAG_FORM) { $failures += "BAD TAG: $f has tag '$t'; tags are lowercase-kebab" }
+                        else {
+                            if (-not $tagUse.ContainsKey($t)) { $tagUse[$t] = @() }
+                            $tagUse[$t] += $f
+                        }
+                    }
+                }
+            }
+        }
+    } elseif ($f -match '^process/stacks/.*knowledge\.md$') {
+        # The other half of the boundary, and the load-bearing one.
+        if (-not (($lines | Select-Object -First 6) -match '^Stack:\s*`?[a-z0-9-]+`?\s*$')) {
+            $failures += "NO STACK LINE: $f must name its published stack in a 'Stack: <name>' line near the top"
+        }
+    }
+
+    # Wikilinks, in both trees, because they are body syntax and need no frontmatter.
+    #
+    # Code is stripped first, and that is load-bearing rather than fussy. Wave 1 hit the same shape
+    # from the other side — a citation scan reported an orphan because a board item *quoted* a run
+    # id — and there the only fix was to elide the quotation, since prose carries no marker saying
+    # "this is an example". Here it does: `[[name|label]]` inside backticks is documentation of the
+    # syntax, and process/stacks/README.md is full of it. A check that cannot be written about is a
+    # check people route around.
+    $inFence = $false
+    $n = 0
+    foreach ($line in $lines) {
+        $n++
+        if ($line -match '^\s*```') { $inFence = -not $inFence; continue }
+        if ($inFence) { continue }
+
+        foreach ($m in [regex]::Matches(($line -replace '`[^`]*`', ''), '\[\[([^\]\|]+)(\|[^\]]*)?\]\]')) {
+            $target = $m.Groups[1].Value.Trim().ToLower()
+            if (-not $linkTargets.ContainsKey($target)) {
+                $failures += "DEAD WIKILINK: ${f}:${n} points at [[$($m.Groups[1].Value.Trim())]], which is not a record in this tree"
+            }
+        }
+    }
+}
+
+if ($recordFiles) { $notes += "record tree: $($recordFiles.Count) file(s), $($linkTargets.Count) link target(s)" }
+
+# Rendered, never written. board.ps1's doctrine applied unchanged: the index *is* the folder, and
+# there is no second place for it to drift.
+if ($tagUse.Count) {
+    $notes += "tags in use: " + (($tagUse.Keys | Sort-Object | ForEach-Object { "$_ ($($tagUse[$_].Count))" }) -join ', ')
+} elseif ($recordFiles) {
+    $notes += "tags in use: none yet"
+}
 
 # --- report ---------------------------------------------------------------------------------------
 

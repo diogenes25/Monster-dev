@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  color: #2b2b2b;
+  background: #fdfaf3;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5ddc8;
+}
+
+.logo {
+  height: 32px;
+}
+
+nav a {
+  margin-left: 1.5rem;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #eef3ea;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+main section {
+  padding: 3rem 2rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+main h2 {
+  margin-bottom: 1rem;
+}
+
+.product-list li {
+  margin-bottom: 0.5rem;
+}
+
+footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: #7a7266;
+  font-size: 0.9rem;
+}
+
+/* Walking monster easter egg (Alt+A) — see script.js.
+   Sprite sheet assets/monster-walk.png is 23 frames of 276 × 300 px, one full
+   gait cycle at 24 fps. The vertical bob is painted into the frames, so there is
+   deliberately no bounce animation here — adding one gives the monster a limp. */
+:root {
+  --monster-frame-w: 184px;                             /* display width of one frame */
+  --monster-frame-h: 200px;                             /* 300/276 × 184 keeps the aspect ratio */
+  --monster-sheet-w: calc(var(--monster-frame-w) * 23); /* must stay in step with steps(23) */
+  --monster-cycle: 0.96s;                               /* 23 frames at 24 fps = original tempo */
+  --monster-stride: 130px;                              /* ground covered per cycle — the speed knob:
+                                                           larger is faster, until the feet skate */
+  --monster-crossing: 16s;                              /* fallback; script.js derives the real one */
+}
+
+/* The wrapper carries the travel across the window … */
+.monster {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: var(--monster-frame-w);
+  height: var(--monster-frame-h);
+  pointer-events: none;
+  z-index: 10;
+  animation: monster-crossing var(--monster-crossing) linear forwards;
+}
+
+/* … and the sprite only steps through the frames. It is mirrored because the artwork
+   faces left while this monster walks left → right; flip this and the direction of
+   monster-crossing below together, or it walks backwards.
+   No contact shadow on purpose: the page has no ground plane for one to fall on, so at
+   the window's bottom edge it only smudged whatever text happened to be behind it. */
+.monster-sprite {
+  position: absolute;
+  inset: 0;
+  background: url("assets/monster-walk.png") no-repeat;
+  background-size: var(--monster-sheet-w) var(--monster-frame-h);
+  transform: scaleX(-1);
+  animation: monster-gait var(--monster-cycle) steps(23) infinite;
+}
+
+/* Steps through all 23 frames of the sheet */
+@keyframes monster-gait {
+  from { background-position: 0 0; }
+  to   { background-position: calc(-1 * var(--monster-sheet-w)) 0; }
+}
+
+/* Walks once from fully off the left edge to fully off the right edge */
+@keyframes monster-crossing {
+  from { transform: translateX(calc(-1 * var(--monster-frame-w))); }
+  to   { transform: translateX(100vw); }
+}
+
+/* Someone who asked for less motion still gets the monster — it just stands there. */
+@media (prefers-reduced-motion: reduce) {
+  .monster {
+    animation: none;
+    transform: translateX(40vw);
+  }
+
+  .monster-sprite {
+    animation: none;
+  }
+}

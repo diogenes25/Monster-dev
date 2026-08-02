@@ -186,3 +186,27 @@ push** — the repo is pushed, and `2026-08-01-live` proved both over real `raw.
 URLs. These three arms used the `<dist>` mirror on purpose, so that the comparison against
 `phase2b` and `sonnet-base2` varies only the playbook. `CLAUDE.md` and the workshop skill still
 describe both as deferred pending a push; that wording is stale.
+
+## Boundaries recorded after this run was scored
+
+*Added `2026-08-02`. Neither was known when the verdicts above were written, and neither
+is repairable by re-reading the evidence — a leak changes what the hire knew, not what it
+did. They are recorded here so nothing above is read as cleaner than it is.*
+
+### The mirror told this hire it was being measured
+
+The `<dist>` mirror carried this repository's own `README.md`, including the section headed
+*"Monster-Dev gets better by being tested"*: *"A test run hires a fresh agent against a sample
+project, scores it criterion by criterion."* It appears in this transcript as a Read tool result
+with the file's own line numbers attached.
+
+**No individual criterion is named, because what this compromises is the premise beneath all of
+them** — that the hire does not know it is being measured. Eight of the ten runs on record are
+affected, `sonnet-base`, `sonnet-base2`, `plan-sonnet` and `index-sonnet` among them, so unlike
+the fixture leak this one has no clean arm at the Sonnet bar. There is no way to quantify what a
+hire does differently knowing it is scored, so nothing is re-scored and nothing is deleted.
+
+Closed on `2026-08-02`: `README.md` joined the mirror's exclusion list, two dev-side paragraphs
+left `tools/project.md` and `monsters/README.md`, and `build-dist.ps1` gained two checks that name
+no path — a harness-vocabulary grep over every `.md` in the mirror, and a sprite-reference check
+that catches a finished implementation, which contains none of those words.

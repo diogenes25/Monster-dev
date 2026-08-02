@@ -1,8 +1,8 @@
 {
-  "name": "sample-with-animation-lib",
+  "name": "nimbus-studio",
   "version": "1.0.0",
   "private": true,
-  "description": "Test fixture: a small site that already depends on GSAP for animation.",
+  "description": "Nimbus Studio — one-page site. GSAP owns every animation on it.",
   "dependencies": {
     "gsap": "^3.12.5"
   }

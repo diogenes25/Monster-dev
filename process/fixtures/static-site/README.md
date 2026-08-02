@@ -1,5 +1,20 @@
-# sample-static-site
+# Acme Kite Co.
 
-A minimal, plain HTML/CSS/JS marketing page. No framework, no build step, no existing animation of any kind.
+The company website. One page, hand-written HTML and CSS, no build step and no framework —
+edit the files and upload them.
 
-**Expected Monster-Dev behavior:** find the DOM as the runtime surface, notice there's no existing animation library or pattern to conform to, pick `assets/` as the natural place for the sprite sheet (it's the only assets folder here), and decide for itself where the monster should live (there's only one page) and how to animate it (plain CSS is the obvious idiomatic choice here, mirroring `index.html`'s own reference technique closely).
+## Layout
+
+```
+index.html      the whole site: header, hero, products, about, contact
+style.css       all of it; no preprocessor
+script.js       smooth-scroll for the nav links, and nothing else
+assets/         logo.svg lives here, and anything else static would too
+```
+
+## Working on it
+
+Open `index.html` in a browser. There is nothing to install and nothing to run.
+
+Keep it that way if you can — the site has survived three redesigns by not depending on
+anything, and the next person to touch it may well not be a developer.

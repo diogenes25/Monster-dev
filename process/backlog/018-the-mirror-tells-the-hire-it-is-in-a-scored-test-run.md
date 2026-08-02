@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | the premise under every criterion — that the hire does not know it is being measured |
@@ -154,6 +154,40 @@ boundary in the eight reports and in the scenario, not a re-scoring and not a de
   list. The pairing with `#019` survives on a different argument: it moves where the mirror is
   written, and the checks added here run against it. `#024`'s check comes later, behind `#023` and
   `#013`.
+- `2026-08-02` `proven` — applied, in one sitting with `#019` and `#015`, and a mirror was built
+  and read by eye afterwards as **D1** requires: 18 files, no `process/`, no `.claude/`, no
+  `CLAUDE.md`, no root `README.md`, and a grep of every text file in it for eight harness terms
+  returning only `MONSTER-DEV.md:161` — *"a scratch harness"*, which is playbook prose addressed to
+  the hire and is the reason `harness` is not in the vocabulary.
+- `2026-08-02` — **the check found a fourth leak on its first run, and it was in a file a hire is
+  told to fetch.** `stacks/dom-css/README.md:38` closed with *"Entries appear here only once a test
+  run has demonstrated one"* — a published stack note, reachable from §2, explaining the experiment
+  to its subject. Three leaks were found by reading and the fourth by the instrument built to
+  replace reading, which is the whole argument for the instrument. Rewritten to say the same thing
+  in the product's own terms: *"once a job has actually hit one, and names the job it came from."*
+- `2026-08-02` — **two terms were added to the list while validating it, and one was refused.**
+  `test harness` and `A/B` both fired on `tools/project.md`, which carried the tool gate — *"an A/B
+  has to show the cost drop with no criterion falling back"* — in a published file; the governance
+  prose left, since `CLAUDE.md`'s proof gates already state all of it and the published copy was a
+  duplicate. `harness` on its own was **refused**, because §7 tells a hire to build a scratch one:
+  the rule in this item says a term that fires on legitimate playbook prose comes out rather than
+  the playbook being reworded around it, and this is the first time it has had to be applied.
+- `2026-08-02` — three things learned while applying that the item did not anticipate.
+  **A relocated sentence must not leave a pointer.** The first rewrite of `monsters/README.md:49`
+  read *"`process/README.md` says what else that costs"* — a live 404 for any hire that follows it,
+  in `num_turns`, which is the metric the tooling gate reads. It names nothing now. The same
+  correction was needed twice more in `tools/project.md`, where the replacement text pointed at
+  `process/tools/` and then at `CLAUDE.md`, both absent from the mirror.
+  **The exemption list for the sprite check is named rather than pattern-matched.**
+  `MONSTER-DEV.md`, `index.html` and `monsters/` are the four exceptions, and an exception with a
+  name is auditable in a way a pattern is not.
+  **`monster.png` is now orphaned in the mirror** — 615 kb referenced by nothing, since the only
+  file that referenced it was `README.md`. It stays: it is genuinely public, and the mirror is
+  still meant to be the public surface minus the leaks rather than a minimal one.
+- `2026-08-02` — the archive's caveat landed in **eight** reports, not the number implied above:
+  the six contaminated runs that have one, plus `plan-sonnet` and `index-sonnet`. `plan-opus` and
+  `sonnet-base2` have no report, so their boundary is in the scenario note only — the same gap
+  `#015` hit from the other side.
 - `2026-08-02` — **E1**, second harm recorded against `monsters/README.md:49` rather than filed as
   an item. The `leak-auditor` reported that the sentence *"gives a hire a reason to pick the default
   that has nothing to do with the client"* — a leak of the expected answer, `#015`'s class, not the

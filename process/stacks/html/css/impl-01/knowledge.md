@@ -6,7 +6,7 @@ Raw material. Nothing here is published, and nothing here reaches
 `stacks/dom-css/README.md` without passing its gate — for a stack note that means an A/B against
 an arm without the lines. Written down because it was observed, not because it is known to help.
 
-Source: run `2026-08-01-plan-sonnet`, Sonnet, 2 rounds, 41 model turns, $1.84.
+Source: run [[2026-08-01-plan-sonnet]], Sonnet, proof arm — 2 rounds, 41 model turns, $1.84.
 
 ---
 
@@ -54,6 +54,13 @@ monster appears, still, at `translateX(40vw)`. The easter egg still fires; it ju
 animate. Hiding it entirely would make Alt+A do nothing at all, which is a different feature.
 
 Whether that is the right reading is genuinely open. It was not asked about and not flagged.
+
+**Second opinion, `2026-08-02`:** `index.html` was measured with the media feature emulated for
+the first time and does exactly the same thing — parks at `translateX(40vw)` and stays. Two
+independent readings agreeing is not evidence that the reading is right; both were made against
+the same §5 sentence, which asks for *"something visible and still"* and stops there. It is
+enough, though, to say the disagreement is with the playbook and not with this implementation,
+which is why the criterion that would have marked it down is now `INFO` rather than scored.
 
 ## 5. Three of five questions came back "no preference" — and the answers were still worth having
 

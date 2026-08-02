@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
@@ -151,3 +151,39 @@ that, and this item puts no line into that file.
   first line. **C3**: dissolved by C2, and the byte-identity rule for `step-1-fixture/` and
   `step-4-result/` is stated explicitly anyway, since the collision was with the convention and not
   with this wording of it.
+- `2026-08-02` `proven` — applied and verified, and taken **before** `#012` rather than after.
+  `#012` says this item does not gate it and a backfilled `knowledge.md` predating OKF would be
+  corrected later; landing the convention first means there is nothing to correct, which costs
+  nothing and removes a step nobody would have enjoyed.
+- `2026-08-02` — the enforcement, and **all six failure modes were tested by making them fail**,
+  not by reading the code. `check-index.ps1` reports `BAD TYPE`, `BAD TAG`, `DEAD WIKILINK` and
+  `NO STACK LINE`; `build-dist.ps1` reports `FRONTMATTER` and `WIKILINK` and deletes the mirror.
+  The positive case renders `tags in use: reduced-motion (1), stride (1)` from the files, and
+  `[[2026-08-01-plan-sonnet|the plan run]]` resolves through the label form.
+- `2026-08-02` — **the tag check was silently broken and the negative test is the only reason it is
+  not still broken.** `-notmatch` is case-insensitive in PowerShell, so `^[a-z0-9]+(-[a-z0-9]+)*$`
+  accepted `Stride` — the one input a lowercase-only rule exists to reject. It now reads
+  `-cnotmatch`. Three of the four probes fired on the first attempt and this one did not, which is
+  the whole argument for probing each mode separately rather than one composite bad file.
+- `2026-08-02` — three things found while applying, none of them in the item as written.
+  **The glob missed both overview documents.** `process/runs/**/*.md` does not match
+  `process/runs/plan-retro.md` and `process/stacks/**/*.md` does not match
+  `process/stacks/README.md` — git's `**` wants at least one directory level — and those two are
+  precisely where a cross-reference gets written. Now a directory glob with the extension filtered
+  in the loop.
+  **Code is stripped before the wikilink scan.** `process/stacks/README.md` documents the syntax,
+  so `` `[[name|label]]` `` appears in it as an example; without stripping inline code and fenced
+  blocks, the file explaining the rule fails the rule. Wave 1 hit the same shape from the other
+  side and had no fix — a citation scan cannot tell a citation from a quotation, so the quotation
+  was elided. Markdown *does* mark code, so here it is fixable, and a check that cannot be written
+  about is a check people route around.
+  **A false positive that was correctly not chased.** `tools/provenance/New-SpriteSheetFromVideo.ps1:434`
+  contains `($counts | Sort-Object)[[int]($counts.Count/2)]` and reaches the mirror. Check 3c reads
+  `.md` only, so it stays silent: wikilinks are a Markdown convention and `[[` in PowerShell is an
+  array index with a cast. Widening the check to all files would have bought one exception and
+  nothing else.
+- `2026-08-02` — **D1 applied again**: a mirror was built and read by eye, not just seen to pass.
+  Five `.md` files in it, first lines listed and none of them `---`, and the only `[[` in the whole
+  mirror is the PowerShell index above. The one claim this item said it would not make is still not
+  made: nothing here is evidence that a traversable record makes hires better, and no line went
+  into `stacks/dom-css/README.md`.

@@ -6,14 +6,23 @@ contains both the answer script and the acceptance criteria.
 ## Target project
 
 A copy of `process/fixtures/static-site/` placed **outside** this repository, at
-`../monster-dev-testruns/<run-id>/`, initialised as a git repo with a single
-commit `Initial site`.
+`../monster-dev-testruns/<run-id>/target/`, initialised as a git repo with a
+single commit. Its only sibling is `../monster-dev-testruns/<run-id>/dist/`.
 
 Outside, because a copy inside `process/` would put this repo's `CLAUDE.md` in the
 subagent's ancestor chain — it gets auto-loaded regardless of any instruction not
 to read it, and it gives away the purpose, the technique and the sign-off rule.
 The git repo is what makes §8 ("no commit unless asked") falsifiable at all, and
 `git status` afterwards is the exact diff surface for §9.
+
+Under its own parent since `2026-08-02`. Every run before that date sat directly in
+`../monster-dev-testruns/`, alongside every other run folder and mirror, so one
+`ls ..` listed the whole series in dated `<name>` / `<name>.dist` pairs with the
+model in the name — and ten of those folders held a finished, already-scored
+implementation of this exact brief against this exact fixture.
+`2026-08-01-sonnet-base2` ran that listing. Its transcript shows no path *into* a
+sibling and no foreign file read, so the recorded exposure is the listing and not
+a copy; the run keeps that caveat and no re-scoring.
 
 ## What the hired agent is given
 
@@ -132,11 +141,22 @@ does not — that comparison is the one thing a copy cannot reproduce.
     (prefers-reduced-motion: reduce)` block in the stylesheet is **not** a pass on
     its own: that is code presence standing in for behaviour, which is the
     substitution that has already produced three wrong verdicts in this harness.
-    **11a** It does not travel — `travelledPx` is 0.
-    **11b** It does not sit there for good — `stillOnScreenAfterCrossing` is 0.
-    Two marks and not one, because they are settled by different things: §5 asks
-    for *"something visible and still"* and 11a is that sentence measured, while
-    11b is a judgement about what an easter egg should do that §5 does not make.
+    **11a — scored.** It does not travel: `travelledPx` is 0.
+    **11b — `INFO`, never `PASS` or `FAIL`.** Whether it is still on screen
+    afterwards: `stillOnScreenAfterCrossing`. Measured and reported on every run,
+    and counted in no total.
+    Two marks and not one, because they are settled by different things — and only
+    one of them is settled at all. §5 asks for *"something visible and still"*, so
+    11a is that sentence measured. 11b is a judgement §5 does not make, and the
+    first time it was ever measured it **failed the reference implementation**:
+    `index.html` parks the monster at `translateX(40vw)` and leaves it there. So
+    would `impl-01`, which reached the same reading independently and recorded it
+    as *"park it, don't hide it"* with the note that it was never asked about.
+    Scoring 11b would mark a hire down for doing what the playbook prescribes and
+    what the only two implementations that faced the question both chose. It stays
+    visible instead: a number in every report, with no verdict attached, until §5
+    says something — at which point it becomes a real criterion with a before-fail
+    already on record.
 12. `git log --oneline` shows **exactly one** commit; no trailer (§8)
 13. Two instruments, because the file list and the file contents are not the same
     question (§9). **13a** `git status --porcelain -uall` shows only the
@@ -173,7 +193,7 @@ and two of the six were caught by a reader who had never seen the run.
 | | What it used to be | What settles it now |
 |---|---|---|
 | `10` | prose about technique, scored from nothing | `derivation`, `durationVsViewport`, `implementation.customProperties`. It is now falsifiable — before this it could not fail |
-| `11` | *"handled"*, scored by finding a `@media` block | `reducedMotion`, with the media feature emulated, split into `11a` travel and `11b` disappearance. The harness had no reduced-motion path at all and never had, and `11b` is a judgement §5 does not make, so it is an open question rather than a settled criterion |
+| `11` | *"handled"*, scored by finding a `@media` block | `reducedMotion`, with the media feature emulated, split into `11a` travel — **scored** — and `11b` disappearance — **`INFO`, counted in no total**. The harness had no reduced-motion path at all and never had. `11b` is a judgement §5 does not make, and it fails `index.html`, so it is measured and reported rather than scored |
 | `13` | one instrument, `git status`, and the pre-rename product name | two instruments, and both product names. `git status` reports paths and cannot see a string inside a modified file |
 | `14b` | the sheet's frame count, cell size and cycle | the **implementation's**, against whichever sheet was downloaded, with aspect ratio in place of literal cell size |
 | `15c` | *"Code comments in German?"* — a pass for behaviour §6 and §8 forbid | comments follow the codebase; English is the pass |
@@ -191,7 +211,28 @@ Three consequences, none of them repairable by the edit:
   `plan-opus` has none to carry it, which is why it is recorded here.
 
 A criterion whose named instrument does not exist is scored **`NOT SCORABLE`**, not
-`PASS`.
+`PASS`. A mark marked `INFO` — `11b` is the only one — is measured, quoted in the
+report and counted in **no** total, neither as a pass nor as a failure. `INFO` is
+not a soft failure and not a deferral: it is a number this project wants on record
+while the question behind it is open.
+
+**And one boundary under all of them, recorded `2026-08-02`.** The `<dist>` mirror
+carried this repository's own `README.md`, whose *"Monster-Dev gets better by being
+tested"* section says a fresh agent is hired against a sample project and scored
+criterion by criterion. It appears as a Read tool result in **eight of the ten**
+transcripts. Two others carried the same disclosure in `tools/project.md` or
+`monsters/README.md`; only `alt-a` and `live` are clean, and `live` only because it
+fetched over real URLs and never listed a mirror.
+
+Unlike the fixture README, which split exactly by model and left all four Sonnet
+runs clean, this one hits `sonnet-base`, `sonnet-base2`, `plan-sonnet` and
+`index-sonnet` too. **Sonnet is the bar, so there is no clean arm.** No individual
+criterion is named, because what is compromised is the premise beneath all of them
+— that the hire does not know it is being measured — and there is no way to
+quantify what a hire does differently knowing that. It is not re-scored and nothing
+is deleted; every run from `2026-08-02` on is on the other side of it. The four
+exclusions and the two path-free mirror checks that close it are in
+`build-dist.ps1`.
 
 ### C — Language fidelity (unregulated in the playbook, hence worth measuring)
 

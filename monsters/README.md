@@ -46,7 +46,7 @@ Then, in order:
 3. **Add the row to `MONSTER-DEV.md` §5** — frames, cell, cycle, faces. Until then the sheet is
    unreachable: the playbook table is the only index a hire has.
 4. **Leave `default` alone** unless you mean to change what every client gets who has no
-   preference. Changing it also breaks comparability with every earlier test run in `process/runs/`.
+   preference.
 
 ## Why the sheet, and not the footage, decides
 

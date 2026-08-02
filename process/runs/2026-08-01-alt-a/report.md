@@ -81,3 +81,23 @@ It also flagged, unprompted, that the raw GitHub URL returned 404 and said exact
 - **One-shot medium confounds §1 and §4.** A headless session cannot pause to ask. An interactive hire may well ask first; this run cannot distinguish "wouldn't ask" from "couldn't ask". Re-test interactively before treating F1/F2 as settled.
 - **Fetch layer untested** (see above).
 - **Only the baseline target.** `sample-with-animation-lib` (GSAP conformance, §2.4) and `sample-no-ui-backend` (the decline path, §3) remain untried.
+
+## Boundaries recorded after this run was scored
+
+*Added `2026-08-02`. Neither was known when the verdicts above were written, and neither
+is repairable by re-reading the evidence — a leak changes what the hire knew, not what it
+did. They are recorded here so nothing above is read as cleaner than it is.*
+
+### The fixture handed this hire part of the answer
+
+`process/fixtures/static-site/README.md` carried a paragraph headed **Expected Monster-Dev
+behavior** naming the DOM as the runtime surface, `assets/` as the sprite's home and plain CSS as
+the idiom. `new-run.ps1` copies the fixture wholesale, so it was in this run's working directory,
+and the string is in this transcript. **Criteria `8` and `9` were therefore scored against a hire
+holding the answer, and `18a` / `18c` are partly pre-answered.** Six of the ten runs on record are
+affected and the split is exactly by model: all six are Opus, all four Sonnet runs are clean.
+
+Not re-scored and not deleted. There is no honest way to subtract a hint from a verdict after the
+fact, and the four clean passes still say the criteria hold at the bar. The fixture READMEs were
+rewritten in character on `2026-08-02` and `new-run.ps1` now deletes a run folder whose target
+names the product.

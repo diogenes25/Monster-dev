@@ -1,5 +1,22 @@
-# sample-no-ui-backend
+# salesreport
 
-A plain Python CLI report tool. No web framework, no GUI toolkit, no templates, no persistent display of any kind — it reads a CSV and prints a summary to stdout, then exits.
+Reads a sales CSV and prints a per-region summary. Standard library only.
 
-**Expected Monster-Dev behavior:** find no visible-output surface in step 2.1 of `MONSTER-DEV.md` and follow §3 — decline gracefully and say what would need to exist first (e.g. "this needs a web frontend or a windowed UI"). It should **not** improvise something like printing ASCII art to stdout as a workaround.
+```
+python report.py sales.csv
+```
+
+```
+Region             Orders          Total
+East                    1         210.00
+North                   2         165.75
+South                   2         149.10
+```
+
+The CSV needs `region` and `amount` columns; anything else in it is ignored.
+
+## Notes
+
+It is run from cron on the reporting box and the output is piped into the nightly mail. That is
+the only caller, so the output format is load-bearing — if you change the columns, change the
+mail template with it.

@@ -29,10 +29,12 @@ Run it from the repository root.
 Identifies the run. Everything it produces goes in process/runs/<RunId>/.
 
 .PARAMETER Target
-The run folder the hire works in. Must be outside this repository.
+The run folder the hire works in — ..\monster-dev-testruns\<RunId>\target. Must be outside this
+repository, and its parent must hold nothing but this run; check-isolation.ps1 enforces both.
 
 .PARAMETER Dist
-The mirror from build-dist.ps1, handed over with --add-dir. Turn 1 only.
+The mirror from build-dist.ps1 — ..\monster-dev-testruns\<RunId>\dist, the one directory beside
+the run folder a hire is meant to reach. Handed over with --add-dir. Turn 1 only.
 
 .PARAMETER Brief
 The customer brief from the scenario. Turn 1 only; mutually exclusive with -BriefFile.
@@ -57,10 +59,10 @@ Passed to claude --allowedTools. A fence that is too tight shows up as a product
 it was really the harness, so it is recorded rather than assumed.
 
 .EXAMPLE
-.\process\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet -Dist ..\monster-dev-testruns\2026-08-02-plan-sonnet.dist -Model sonnet -BriefFile .\process\scenarios\alt-a-left-to-right.brief.txt
+.\process\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet\target -Dist ..\monster-dev-testruns\2026-08-02-plan-sonnet\dist -Model sonnet -BriefFile .\process\scenarios\alt-a-left-to-right.brief.txt
 
 .EXAMPLE
-.\process\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet -Answer 'keine Präferenz, nimm deinen Standard'
+.\process\tools\hire.ps1 -RunId 2026-08-02-plan-sonnet -Target ..\monster-dev-testruns\2026-08-02-plan-sonnet\target -Answer 'keine Präferenz, nimm deinen Standard'
 #>
 [CmdletBinding()]
 param(
@@ -251,20 +253,34 @@ try {
         Set-Content (Join-Path $runDir 'base.txt') -Encoding utf8
 
     # Created once and then left alone: it is the one file here a person writes, and a turn-2
-    # capture must not overwrite a sentence somebody typed after turn 1. Its shape is #024's
-    # decision; until that lands it holds the two facts nothing else records, so no later
-    # convention has to guess which runs predate it.
+    # capture must not overwrite a sentence somebody typed after turn 1.
+    #
+    # Open Knowledge Format (v0.1), which #024 settled for process/runs/ and only for
+    # process/runs/ — process/stacks/ keeps its `Stack:` first line, because OKF has no field for a
+    # published stack and that line is the whole mapping between the two trees. `type` is the one
+    # required field; the four values allowed here are run / implementation / surface / observation.
+    #
+    # `tags` is written empty rather than guessed. Tags are free-form and check-index.ps1 enforces
+    # only their form, so an automatically invented one would be a real tag nobody chose — and it
+    # would show up in the rendered overview as though somebody had.
     $knowledge = Join-Path $runDir 'knowledge.md'
     if (-not (Test-Path $knowledge)) {
         @(
-            "# Run ``$RunId``"
-            ''
+            '---'
+            'type: run'
+            "title: Run $RunId"
+            'description:'
             "resource: $RunId"
-            "captured: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd'))"
+            'tags: []'
+            "timestamp: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd'))"
+            '---'
+            ''
+            "# Run ``$RunId``"
             ''
             '*What this run was for, and what it turned up. Written by hand after it is scored —'
             'the capture never fills this in, because an automatically written half-record reads'
-            'exactly like a real one.*'
+            'exactly like a real one. Cross-reference other records with `[[wikilinks]]`;'
+            '`check-index.ps1` fails on one with no target.*'
         ) | Set-Content $knowledge -Encoding utf8
     }
 } catch {

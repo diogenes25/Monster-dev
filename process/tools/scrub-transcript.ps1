@@ -45,7 +45,7 @@ Defaults to $HOME. Rewritten to <home>, and its leaf is the name the final check
 
 .EXAMPLE
 .\process\tools\scrub-transcript.ps1 -In $t -Out process\runs\2026-08-02-x\transcript.jsonl `
-  -Run ..\monster-dev-testruns\2026-08-02-x -Dist ..\monster-dev-testruns\2026-08-02-x.dist
+  -Run ..\monster-dev-testruns\2026-08-02-x\target -Dist ..\monster-dev-testruns\2026-08-02-x\dist
 #>
 [CmdletBinding()]
 param(

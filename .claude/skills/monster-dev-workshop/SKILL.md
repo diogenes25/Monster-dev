@@ -203,10 +203,12 @@ Existing scenarios: `process/scenarios/*.md`. A new one follows
 
 ### 2. Build the `<dist>` mirror
 
-**Never by hand.** `process/` and `.claude/` are tracked now, so they no longer drop out of
-`git ls-files` on their own — the exclusion is deliberate, and a mirror assembled from a
-pasted command is a mirror nobody verified. The script builds and checks in one step, and
-deletes the mirror rather than hand back one that leaked.
+**Never by hand.** `process/`, `.claude/`, `CLAUDE.md` and the root `README.md` are all tracked,
+so none of them drops out of `git ls-files` on its own — every exclusion is deliberate, and a
+mirror assembled from a pasted command is a mirror nobody verified. The script builds and checks
+in one step, and deletes the mirror rather than hand back one that leaked. It goes to
+`../monster-dev-testruns/<run-id>/dist/`, beside the run folder and inside a parent reserved for
+this run.
 
 ```powershell
 .\process\tools\build-dist.ps1 -RunId <run-id>
@@ -233,6 +235,13 @@ File granularity is also the wrong size for the question usually being asked, wh
 one entry or one fragment *inside* a file. Both are the variant-overlay mechanism's job; until
 that lands, an A/B below file level cannot be built honestly, and saying so beats faking it.
 
+**Two of the three checks name no path**, and they are the ones that will stop a leak nobody has
+found yet. Every `.md` in the assembled mirror is grepped for a harness vocabulary, and every file
+in it for a reference to a sprite sheet under `monsters/` — the first catches prose describing the
+experiment, the second catches a finished solution, which contains none of those words. If a term
+fires on legitimate playbook prose, **take the term out of the list**; do not reword
+`MONSTER-DEV.md` to satisfy it. `-AllowHarnessProse` exists only for validating the list itself.
+
 ### 3. Create the run folder outside the repo
 
 **Never by hand**, for the same reason as the mirror: the three commands this replaces were
@@ -240,16 +249,31 @@ pasted per run, and nothing verified the result.
 
 ```powershell
 .\process\tools\new-run.ps1 -RunId <run-id> -Fixture <name>    # whichever fixture the scenario names
+
+# the two paths every later step takes; set them once rather than retyping them per turn
+$target = "..\monster-dev-testruns\<run-id>\target"
+$dist   = "..\monster-dev-testruns\<run-id>\dist"
 ```
 
-Copies the fixture, runs its setup recipe if it has one, commits exactly once, and then checks
-both isolation and cleanliness — deleting the folder rather than handing back one that only
-looks ready.
+Copies the fixture to `../monster-dev-testruns/<run-id>/target/`, scans it for the product names,
+runs its setup recipe if it has one, commits exactly once, and then checks both isolation and
+cleanliness — deleting the folder rather than handing back one that only looks ready.
 
 Outside the repository, because a copy inside `process/` puts this repo's `CLAUDE.md` in the
 hire's ancestor chain. The git repo is what makes §8 ("no commit unless asked") falsifiable at
 all, and `git status` afterwards is the exact diff surface for §9. Fixtures are never modified by
 a run — always work on a copy.
+
+**One run, one parent.** The target and the mirror are the only two directories under
+`<run-id>/`, so `ls ..` from the hire's working directory shows its own mirror and nothing else.
+They used to be siblings of every other run, and one hire listed all of them.
+
+**A fixture holds only what the target project would hold.** Its `README.md`, if it has one, is
+in character — the client's own README, not ours. What the fixture is *for* goes in
+`process/fixtures/<name>.md`, a sibling of the folder, never copied. Read that file when writing
+a scenario against a fixture; it names the marks the fixture exists to turn on. `new-run.ps1`
+deletes the run folder if `Monster-Dev` or `MonsterLib` appears anywhere inside the target, which
+is what the three fixture READMEs did for the first ten runs.
 
 **Setup recipes live in `process/tools/setup/<fixture>.ps1`, never inside the fixture.** A fixture
 with a build cannot ship its dependencies, so something has to run `npm ci` or `dotnet restore` —
@@ -268,34 +292,41 @@ created some other way or has been sitting around:
 .\process\tools\check-isolation.ps1 -Target $target
 ```
 
-Walks the run folder's whole ancestry for `CLAUDE.md`, checks the user-level one, and confirms
-the folder is a git repo with exactly one commit. The mirror side was already checked in step 2.
-Any hit invalidates the run before it starts — treat a failure as a stop, not a warning.
+Walks the run folder's whole ancestry for `CLAUDE.md`, checks the user-level one, looks sideways
+for any directory beside the run folder that is not its own mirror, and confirms the folder is a
+git repo with exactly one commit. The mirror side was already checked in step 2. Any hit
+invalidates the run before it starts — treat a failure as a stop, not a warning.
 
-`-AncestryOnly` skips the single-commit test, for a folder that must be free of this repo's
-context but is not a run folder — the scoring bundle in step 8 is one.
+The sideways look is the newer half and answers a different question from the ancestry walk:
+`CLAUDE.md` arrives in context *automatically*, which is why it was checked from the first run,
+while a sibling arrives only if the hire looks — which is why nobody checked for ten, and why one
+hire's `ls ..` returned every previous run and mirror by name.
+
+`-AncestryOnly` skips the single-commit test **and the sideways look**, for a folder that must be
+free of this repo's context but is not a run folder — the scoring bundle in step 8 is one, and
+its parent is not reserved for it.
 
 ### 4b. Audit the setup before spending the run on it
 
-Everything checked so far is a **path** question: did a named folder arrive, is a named file in the
-ancestry. The question none of it asks is whether the setup **answers what the run is trying to
-measure**. It went unasked for ten runs, and three separate leaks were sitting in plain sight the
-whole time — see `#015`, `#018`, `#019`.
+Most of what is checked so far is a **string** question: did a named folder arrive, is a named
+file in the ancestry, does any file say one of these eight words. The question none of it asks is
+whether the setup **answers what the run is trying to measure**. It went unasked for ten runs, and
+three separate leaks were sitting in plain sight the whole time — see `#015`, `#018`, `#019`.
 
-Hand the `leak-auditor` subagent the run folder, the `<dist>` path and the scenario. It reports
-`file:line`, the criterion short-circuited, and the quote.
+Hand the `leak-auditor` subagent the run folder, the `<dist>` path, the scenario and the fixture
+note. It reports `file:line`, the criterion short-circuited, and the quote.
 
 It **reports, it does not gate.** A judgement step that blocks runs would be worse than none; you
 read its findings and decide. Two things it must not do, both in its definition: it must not
-re-derive what `new-run.ps1` already refuses deterministically — a failed setup recipe, a folder
-that fails isolation, a dirty worktree after the first commit — and it must not read
-`process/backlog/`, which would turn it into a restatement of leaks already known.
+re-derive what the deterministic checks already refuse — the product-name scan, the setup exit
+code, the isolation walk, the sideways look, the dirty worktree, the mirror's four exclusions, the
+harness vocabulary, the sprite reference — and it must not read `process/backlog/`, which would
+turn it into a restatement of leaks already known.
 
-**Product names are still its job**, until `#015` lands. Its definition originally told it a
-`new-run.ps1` scan for `Monster-Dev` / `MonsterLib` already covered them. No such scan exists yet,
-so the deterministic check had been traded away before it was built — the exact risk `#017` books
-as a cost, arriving from the other direction. Until the scan is there, the auditor reports product
-names last, below everything else. When it lands, that paragraph comes out of both files.
+That list of eight is why the trade in its definition is now honest. It originally said a
+`new-run.ps1` product-name scan covered those names when no such scan existed — a deterministic
+check traded away before it was built, which is the exact risk `#017` books as a cost. The scan
+landed on `2026-08-02` and the paragraph came out of both files.
 
 ### 5. Hire Monster-Dev
 
@@ -598,6 +629,16 @@ nothing and greps just as well from this side.
 
 For the same reason: **no YAML frontmatter on anything a hire fetches.** It bills every hire
 for metadata only we read, and a greppable line does the same job for free.
+
+Read that sentence exactly as narrow as it is: the rule is about **fetched** files, not about
+Markdown. `process/runs/*/knowledge.md` carries OKF frontmatter and `process/stacks/` carries
+`[[wikilinks]]`, and neither is ever fetched. What makes the distinction safe is that it is
+mechanical rather than remembered — `build-dist.ps1` deletes any mirror containing a `.md` whose
+**first** line is `---`, or containing `[[` anywhere. That check exists for one specific road:
+a paragraph promoted through the A/B gate out of `process/stacks/` and into
+`stacks/<name>/README.md` carries its wiki syntax with it, and `process/stacks/` is precisely the
+tree paragraphs are promoted from. A horizontal rule further down the file is untouched — it is
+what separates orientation from pitfalls.
 
 ## Fragments: four tests, all of them
 

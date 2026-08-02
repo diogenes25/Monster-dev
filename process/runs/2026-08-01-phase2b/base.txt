@@ -1,0 +1,14 @@
+run:      2026-08-01-phase2b
+fixture:  static-site (inferred — every session on record ran against it; predates -Fixture)
+base:     0cc010007eb12b513b600a8046af570048c14b63 Initial site
+captured: 2026-08-02 by the #012 backfill, from the 2026-08-02 rescue copy, not by hire.ps1
+
+git status --porcelain -uall at capture time:
+ M script.js
+ M style.css
+?? assets/monster-walk.png
+
+No worktree/ here. For a backfilled run the project as handed back lives in the record
+tree, at process/stacks/html/css/impl-NN/step-4-result/ — the folder designed for it —
+and a second byte-identical copy in this folder would add 1.9 MB of sprite to the
+checkout and no information. A run captured by hire.ps1 has both.

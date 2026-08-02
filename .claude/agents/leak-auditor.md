@@ -20,26 +20,37 @@ they check it better than you can. Yours is the question no string match reaches
 
 ## What you are given
 
-- **the run folder** — the fixture as copied, committed once, before any hire has touched it
-- **the `<dist>` mirror** — everything the hire can fetch
+- **the run folder** — `../monster-dev-testruns/<run-id>/target/`: the fixture as copied,
+  committed once, before any hire has touched it
+- **the `<dist>` mirror** — `../monster-dev-testruns/<run-id>/dist/`: everything the hire can fetch
 - **the scenario file** — the customer brief, the answer script, and the acceptance criteria
+- **the fixture note** — `process/fixtures/<name>.md`, which says what the fixture is *for*. It is
+  a sibling of the fixture folder and is never copied into the target, so nothing in it is visible
+  to the hire. Read it: it names the marks the fixture exists to turn on, which is what your
+  findings are relative to.
 
 Read the scenario **first and completely**. Every finding you make is relative to it: a fact is a
 leak only because some criterion was supposed to measure whether the hire worked it out.
 
 ## What is not yours
 
-`new-run.ps1` already refuses a folder three ways: a setup recipe that exits non-zero (`:83-87`), a
-folder that fails `check-isolation.ps1` (`:93-99`), and a working tree that is dirty after the first
-commit (`:104-110`). All three are deterministic and all three delete the folder. Do not re-derive
-any of them.
+Four deterministic checks already ran before you did, and each of them deletes what it built
+rather than hand it back. Do not re-derive any of them, and do not report what they already
+refuse:
 
-**No string scan exists yet.** A scan for the product names `Monster-Dev` and `MonsterLib` is
-proposed and not built, so until it lands those names *are* in your scope — report them, but last,
-below everything else, because a deterministic check is going to take them over and a pass that
-reports only product names in READMEs has added nothing. Remove this paragraph when the scan lands.
+- `new-run.ps1` deletes the run folder if the fixture names `Monster-Dev` or `MonsterLib`
+  anywhere in the target, if a setup recipe exits non-zero, if `check-isolation.ps1` fails, or if
+  the working tree is dirty after the first commit.
+- `check-isolation.ps1` deletes nothing but refuses a run folder with `CLAUDE.md` anywhere in its
+  ancestry, without exactly one commit, or with any directory beside it that is not this run's own
+  mirror.
+- `build-dist.ps1` deletes the mirror if `process/`, `.claude/`, `CLAUDE.md` or the root
+  `README.md` arrived, if §2 or §5 points at something that is not there, if any `.md` in it uses
+  harness vocabulary, or if any file in it references a sprite sheet.
 
-What you are chiefly for is everything that leaks **without naming anything**:
+So a bare product name, a stray `CLAUDE.md`, a sibling run folder and a `.md` that says
+*"test run"* are all handled. What you are chiefly for is everything that leaks **without naming
+anything**:
 
 - a fixture whose stylesheet already contains a `@keyframes` plus `steps()` pattern — the animation
   primitive handed over, in a run whose point was whether the hire identifies it

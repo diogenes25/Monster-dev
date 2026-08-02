@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | all of A, B and E at once, if a sibling is ever opened |
@@ -96,3 +96,22 @@ made that it used it, because the transcript says it did not.
   eye afterwards. It also has to land with `#023`, which moves the *other* directory — recorded in
   the cost section above. Those are two different pairings on two different files, and this item is
   in both.
+- `2026-08-02` `proven` — applied, in one sitting with `#018` and `#015`, and verified end to end
+  rather than by reading the diff. `new-run.ps1` writes `<run-id>/target/`, `build-dist.ps1` writes
+  `<run-id>/dist/`, and `check-isolation.ps1` fails on any other directory in the parent. Both
+  halves of the new check were exercised: a probe run passes and prints
+  *"parent holds 1 other directory: dist"*, and a directory planted beside it fails, naming the
+  full path. The success line names the sibling count on purpose — an empty parent and a check that
+  never ran are otherwise the same silence.
+- `2026-08-02` — two design points settled while applying, neither of them in the item as written.
+  **Files beside the run folder are ignored**, only directories fail: the exposure is a folder
+  holding a finished implementation, and failing on a stray note would make the check noisy enough
+  to be switched off. **`-AncestryOnly` skips the sideways look too**, because `score-bundle.ps1`
+  builds every bundle as a direct child of `../monster-dev-scoring/`, so the scorer's parent is not
+  reserved for it and never was — without that, the second scoring of the second run would have
+  started failing isolation for a reason that has nothing to do with blindness.
+- `2026-08-02` — the archive keeps the flat layout as the cost section said, so
+  `../monster-dev-testruns/` now holds both shapes at once: ten flat `<id>` / `<id>.dist` pairs and
+  the nested runs from today on. That is not a transition state to be tidied later — the ten are
+  what `#012`'s backfill paths are written against, and re-shaping them would break that for
+  nothing.

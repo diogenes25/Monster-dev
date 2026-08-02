@@ -19,6 +19,11 @@ folder. A recipe stored beside the fixture would be copied into the target with 
 would then show up in `git status` — the exact diff surface §9 is scored on. A fixture with no recipe
 is the normal case and needs none.
 
+The same rule was overdue for the fixture's own notes and cost ten runs. A fixture folder holds only
+what the target project would hold; what the fixture is *for* goes in `process/fixtures/<name>.md`,
+a sibling. This script enforces the half of that a string can see: if `Monster-Dev` or `MonsterLib`
+appears anywhere in the copied target, the folder is deleted rather than handed back.
+
 Order matters: copy, then set up, then exactly one commit. The commit lands after installation so
 that whatever the project's own .gitignore excludes stays excluded, the way it would in a real
 checkout.
@@ -27,7 +32,13 @@ Like build-dist.ps1, this deletes what it built rather than return something unu
 that fails the isolation check is worse than no run folder, because it looks ready.
 
 .PARAMETER RunId
-Identifies the run. The folder is created at ..\monster-dev-testruns\<RunId>.
+Identifies the run. The folder is created at ..\monster-dev-testruns\<RunId>\target, and its only
+sibling is the <RunId>\dist mirror build-dist.ps1 writes.
+
+Both used to be direct children of ..\monster-dev-testruns\, which made every previous run one
+`ls ..` away from the hire — ten finished, already-scored implementations of the identical brief,
+in dated folders with the model name in them. One hire listed exactly that. Nesting per run costs
+nothing and puts every other run two levels away instead of one.
 
 .PARAMETER Fixture
 A directory name under process\fixtures\.
@@ -60,14 +71,49 @@ if (-not (Test-Path $source)) {
     throw "No fixture '$Fixture'. Known fixtures: $known"
 }
 
-$target = Join-Path (Resolve-Path '..').Path "monster-dev-testruns\$RunId"
+$runRoot = Join-Path (Resolve-Path '..').Path "monster-dev-testruns\$RunId"
+$target  = Join-Path $runRoot 'target'
 if (Test-Path $target) {
     if (-not $Force) { throw "$target already exists. Pass -Force to replace it." }
     Remove-Item -Recurse -Force $target
 }
 
-New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
+New-Item -ItemType Directory -Force $runRoot | Out-Null
 Copy-Item -Recurse $source $target
+
+# --- nothing in the target may name the product -------------------------------------------------
+#
+# A fixture folder contains only what the target project would contain. That rule was violated for
+# ten runs by the fixtures' own README files, which described the expected behaviour to whoever
+# read them — and the reader was the hire. Six of ten transcripts contain the string.
+#
+# Two product names and nothing wider. `monster` alone would fire the moment a fixture legitimately
+# has one, and a check that has to be argued with is a check that gets switched off.
+#
+# Which reader this protects: the **hire's own working copy**, against being handed the expected
+# answer. It is not build-dist.ps1's harness vocabulary, which protects the hire against learning
+# it is measured at all, and it is not score-bundle.ps1's criteria terms, which protect the blind
+# scorer. Three readers, three leaks, three lists on purpose.
+#
+# It runs before the setup recipe rather than after. What a recipe installs is upstream package
+# content: walking it would be slow, and a match inside somebody else's dependency is not this
+# project's leak. What the recipe itself writes is in scope and is not covered here — recorded as a
+# boundary rather than claimed.
+$PRODUCT_NAMES = 'Monster-Dev', 'MonsterLib'
+$named = @()
+foreach ($f in (Get-ChildItem $target -Recurse -File)) {
+    $hits = @(Select-String -LiteralPath $f.FullName -Pattern $PRODUCT_NAMES -SimpleMatch -ErrorAction SilentlyContinue)
+    foreach ($h in $hits) {
+        $rel = $f.FullName.Substring($target.Length).TrimStart('\')
+        $named += "  ${rel}:$($h.LineNumber): $($h.Line.Trim())"
+    }
+}
+if ($named) {
+    Remove-Item -Recurse -Force $target
+    throw ("The fixture names the product inside the target project:`n" + ($named -join "`n") +
+           "`nA hire reads its own working copy first. Move the note to process\fixtures\$Fixture.md, " +
+           "which is a sibling of the fixture folder and is never copied. Run folder deleted.")
+}
 
 # The recipe runs with the run folder as its working directory and is never copied into it.
 $recipe = Join-Path $PSScriptRoot "setup\$Fixture.ps1"
@@ -112,6 +158,7 @@ if ($dirty) {
 [pscustomobject]@{
     RunId    = $RunId
     Fixture  = $Fixture
+    RunRoot  = $runRoot
     Target   = $target
     Setup    = $setup
     Commits  = 1

@@ -21,7 +21,7 @@ the board existed, and everything still open in them is on the board.
 | Date | `<yyyy-mm-dd>` |
 | Scenario | `process/scenarios/<slug>.md` |
 | Fixture | `process/fixtures/<name>/` |
-| Run folder | `../monster-dev-testruns/<run-id>/` |
+| Run folder | `../monster-dev-testruns/<run-id>/target/` |
 | Playbook revision | `<git rev-parse --short HEAD>` |
 | Hire | `claude -p` session `<session_id>`, `<n>` turns |
 

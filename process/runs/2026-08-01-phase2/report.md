@@ -120,3 +120,41 @@ last one measuring it across all 23 frames.
   criterion is unmeasurable rather than failing.
 - §0, §5's fetch split and stack resolution over a real URL remain deferred; the hire flagged the
   `raw.githubusercontent.com` 404 itself, twice.
+
+## Boundaries recorded after this run was scored
+
+*Added `2026-08-02`. Neither was known when the verdicts above were written, and neither
+is repairable by re-reading the evidence — a leak changes what the hire knew, not what it
+did. They are recorded here so nothing above is read as cleaner than it is.*
+
+### The fixture handed this hire part of the answer
+
+`process/fixtures/static-site/README.md` carried a paragraph headed **Expected Monster-Dev
+behavior** naming the DOM as the runtime surface, `assets/` as the sprite's home and plain CSS as
+the idiom. `new-run.ps1` copies the fixture wholesale, so it was in this run's working directory,
+and the string is in this transcript. **Criteria `8` and `9` were therefore scored against a hire
+holding the answer, and `18a` / `18c` are partly pre-answered.** Six of the ten runs on record are
+affected and the split is exactly by model: all six are Opus, all four Sonnet runs are clean.
+
+Not re-scored and not deleted. There is no honest way to subtract a hint from a verdict after the
+fact, and the four clean passes still say the criteria hold at the bar. The fixture READMEs were
+rewritten in character on `2026-08-02` and `new-run.ps1` now deletes a run folder whose target
+names the product.
+
+### The mirror told this hire it was being measured
+
+The `<dist>` mirror carried this repository's own `README.md`, including the section headed
+*"Monster-Dev gets better by being tested"*: *"A test run hires a fresh agent against a sample
+project, scores it criterion by criterion."* It appears in this transcript as a Read tool result
+with the file's own line numbers attached.
+
+**No individual criterion is named, because what this compromises is the premise beneath all of
+them** — that the hire does not know it is being measured. Eight of the ten runs on record are
+affected, `sonnet-base`, `sonnet-base2`, `plan-sonnet` and `index-sonnet` among them, so unlike
+the fixture leak this one has no clean arm at the Sonnet bar. There is no way to quantify what a
+hire does differently knowing it is scored, so nothing is re-scored and nothing is deleted.
+
+Closed on `2026-08-02`: `README.md` joined the mirror's exclusion list, two dev-side paragraphs
+left `tools/project.md` and `monsters/README.md`, and `build-dist.ps1` gained two checks that name
+no path — a harness-vocabulary grep over every `.md` in the mirror, and a sprite-reference check
+that catches a finished implementation, which contains none of those words.

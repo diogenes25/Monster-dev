@@ -127,3 +127,23 @@ first, so it built once.
   the local `<dist>` filter has no equivalent over real URLs, so **live runs can never be as
   cleanly isolated as local ones**. Keep behavioural measurement on mirrors; keep live runs
   scoped to fetch mechanics, as here.
+
+## Boundaries recorded after this run was scored
+
+*Added `2026-08-02`. Neither was known when the verdicts above were written, and neither
+is repairable by re-reading the evidence — a leak changes what the hire knew, not what it
+did. They are recorded here so nothing above is read as cleaner than it is.*
+
+### The fixture handed this hire part of the answer
+
+`process/fixtures/static-site/README.md` carried a paragraph headed **Expected Monster-Dev
+behavior** naming the DOM as the runtime surface, `assets/` as the sprite's home and plain CSS as
+the idiom. `new-run.ps1` copies the fixture wholesale, so it was in this run's working directory,
+and the string is in this transcript. **Criteria `8` and `9` were therefore scored against a hire
+holding the answer, and `18a` / `18c` are partly pre-answered.** Six of the ten runs on record are
+affected and the split is exactly by model: all six are Opus, all four Sonnet runs are clean.
+
+Not re-scored and not deleted. There is no honest way to subtract a hint from a verdict after the
+fact, and the four clean passes still say the criteria hold at the bar. The fixture READMEs were
+rewritten in character on `2026-08-02` and `new-run.ps1` now deletes a run folder whose target
+names the product.

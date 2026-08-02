@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
@@ -147,3 +147,32 @@ the demos are off `main`.
 - `2026-08-02` — **C1**: the two references to *"`#013` Part 1"* are re-pointed. The demos come from
   the run capture, which stays `#013`; the folder they are rendered from is `#023`. Both are now
   named by what they do rather than by a part number that has been renumbered once.
+- `2026-08-02` `proven` — **owner chose (c)**. Half 1 and option (a) are applied here; option (b)
+  is `#030`, `Gate: run`, with both outcomes named in advance. Splitting it out is the whole value
+  of (c): (b) is not presentation and never was, it is an experiment about whether a hire still
+  asks when the answer is written down beside it — three §4 criteria rest on a condition eleven
+  sessions have never varied.
+- `2026-08-02` — `process/tools/publish-demos.ps1` renders all ten results onto an **orphan**
+  `gh-pages` branch: 52 files, no shared history with `main`, `.nojekyll`, a landing page, and the
+  banner injected after `<body>`. The *See it running* table is **printed, not written into
+  `README.md`** — putting ten scored run ids on the public front page is a decision somebody
+  makes, and a script that made it silently would be the wrong shape. Verified by building the
+  branch and reading it: `git merge-base gh-pages main` is empty, `main`'s worktree is untouched,
+  and the temporary worktree is cleaned up.
+- `2026-08-02` — **the branch is not pushed and Pages is not switched on.** Both are outward-facing
+  and neither is this item's to take unasked. The cost section already books the second as a
+  remembered step outside the repository; it is still outstanding and the README link is visibly
+  broken until it is done.
+- `2026-08-02` — **one leak found by building it, which the item had not foreseen.** Every
+  `step-4-result/` captured by `#012` froze the *old* fixture `README.md` — the one headed
+  *"Expected Monster-Dev behavior"* that `#015` removed — so the first build put the answer sheet
+  on ten public URLs. Precisely the surface **B3** established the mirror exclusions do not reach.
+  The publish step now drops `README.md` from every demo, on the grounds that a demo is a page and
+  not a project checkout. What remains on the branch is the hires' own comments, including
+  `/* walking monster easter egg — Monster-Dev (press Alt+A) */`; that is part of what was built
+  and is visible in the result either way.
+- `2026-08-02` — two smaller things the build found. The run id for each demo is read from the
+  `Source: run [[<id>]]` line in `impl-NN/knowledge.md`, never derived from the folder name —
+  impl numbering is capture order and `impl-01` is the eighth run. And `impl-01` was the one folder
+  whose Source line was not a wikilink, so it was not link-checked and the script refused it;
+  fixed, which is `#024`'s graph paying for itself on its first real use.

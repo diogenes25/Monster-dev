@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
@@ -139,3 +139,44 @@ The three divergences above are **candidate observations, not findings**. They g
 - `2026-08-02` — **C1**: `#013` split three ways, so *"is its Phase 4"* no longer names anything.
   This item runs after `#023` (the layout) and `#013` (the capture); `#024` does not gate it, and a
   backfilled `knowledge.md` written before that convention lands is that item's to convert.
+- `2026-08-02` `proven` — applied. `#024` was taken **first** after all, though it does not gate
+  this: landing the convention before the backfill means none of the twenty new `knowledge.md`
+  files needs converting later, which costs nothing and removes a step.
+- `2026-08-02` — what was captured. Eleven transcripts scrubbed into `process/runs/<id>/` and each
+  one independently re-checked afterwards for a surviving home directory and for the account name:
+  **zero hits in all eleven**, 1,186 records. Ten `base.txt`. Eleven OKF run records.
+  `impl-02`…`impl-10` with `step-1-fixture/` taken from the run folder's single commit via
+  `git archive` — not copied from today's `process/fixtures/`, which has since been rewritten and
+  is no longer what any of them started from — and `step-4-result/` from the worktree as handed
+  back. Nine `target-wish.md`, verbatim from each transcript's first user message.
+  `process/stacks` is 18.7 MB and `process/runs` 12.5 MB in the checkout.
+- `2026-08-02` — **three claims in this item were verified from the captured files rather than
+  carried forward.** All ten sprites hash to one blob, `CA22CEFB…`, so git stores it once and only
+  the checkout grows. Six of ten wrote the element from JavaScript and four into `index.html`,
+  and it does not split by model. The sprite has three names and all ten put it in `assets/` —
+  the location was decided identically ten times, the filename never was.
+- `2026-08-02` — **a fourth divergence nobody had seen**, and it only exists because ten results
+  now sit in one folder: `impl-10` is the only implementation that parameterised the frame count,
+  `steps(var(--monster-frames))` against nine hard-coded `steps(23)`. It is in *Candidates* with
+  everything else and is promoted nowhere.
+- `2026-08-02` — two deviations from the item as written, both recorded rather than absorbed.
+  **`resource` in OKF frontmatter is wrong for `impl-NN/knowledge.md`.** This item predates
+  answer **C2**, which gave `process/stacks/` no frontmatter at all; the run is named in the
+  existing `Source:` line instead, which is what `impl-01` already did.
+  **No `worktree/` in the backfilled run folders.** For these ten the project as handed back is in
+  `impl-NN/step-4-result/`, the folder designed for it, and a second byte-identical copy would add
+  1.9 MB of sprite each to the checkout and no information. Each `base.txt` says so and points at
+  the impl folder. A run captured by `hire.ps1` still gets both.
+- `2026-08-02` — **B7 answered without building a renderer.** The role of each run lives in the
+  tags of its own record under `process/runs/` and nowhere else; `html/css/knowledge.md` cites the
+  run with a wikilink instead of restating the role in a column. That is a stricter reading of
+  *"there is no second place for it to drift"* than rendering a duplicate would have been, and it
+  is the first real use of the link graph `#024` had just built. `check-index.ps1` now reports
+  `record tree: 51 file(s), 38 link target(s)` and renders the tag overview — `opus (6)`,
+  `sonnet (5)`, `proof-arm (3)` — which is the archive answering a question for the first time.
+- `2026-08-02` — **nine half-records exist and every one of them says so.** `dialog-NN.md` and
+  `step-3-process/` are absent from `impl-02`…`impl-10`; the line naming that absence is in each
+  folder's `knowledge.md` and in `html/css/knowledge.md`. That was the real price this item booked
+  and it has been paid in disclosure, not in prose. The narratives remain outstanding.
+  The sentence protecting `#006` survived, and is sharper: the table now opens by saying it is one
+  job measured ten times, not ten data points.

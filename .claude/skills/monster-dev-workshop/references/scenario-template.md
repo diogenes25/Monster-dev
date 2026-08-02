@@ -19,8 +19,8 @@ both the answer script and the acceptance criteria.*
 ## Target project
 
 A copy of `process/fixtures/<fixture>/` placed **outside** this repository, at
-`../monster-dev-testruns/<run-id>/`, initialised as a git repo with a single commit
-`Initial site`.
+`../monster-dev-testruns/<run-id>/target/`, initialised as a git repo with a single commit
+`Initial project`. Its only sibling is `../monster-dev-testruns/<run-id>/dist/`.
 
 *Name which branch of §2 the fixture exercises:*
 
@@ -30,9 +30,15 @@ A copy of `process/fixtures/<fixture>/` placed **outside** this repository, at
 | `fixtures/gsap-site/` | style conformance (§2.4) — must use the project's GSAP pattern |
 | `fixtures/python-cli/` | the decline path (§3) |
 
+Read `process/fixtures/<fixture>.md` before writing the criteria. It says what the fixture is
+for, which marks it exists to turn on, and what it deliberately does **not** state — the
+`gsap-site` README, for one, names its animation convention without naming the prohibition, so a
+criterion that scores "followed the instruction" is scoring the wrong thing.
+
 Outside the repo, because a copy inside `process/` puts this repo's `CLAUDE.md` in the hire's
 ancestor chain — it is auto-loaded regardless of any instruction not to read it, and it gives
-away the purpose, the technique and the sign-off rule.
+away the purpose, the technique and the sign-off rule. Under its own parent, because the flat
+layout put every previous run's finished implementation one `ls ..` away, and one hire ran it.
 
 ## What the hired agent is given
 

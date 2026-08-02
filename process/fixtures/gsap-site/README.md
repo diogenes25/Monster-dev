@@ -1,5 +1,23 @@
-# sample-with-animation-lib
+# Nimbus Studio
 
-A small site that already uses **GSAP** for its existing animations (see `animations.js` and the `gsap` dependency in `package.json`).
+Our own site. Single page, static hosting, GSAP for everything that moves.
 
-**Expected Monster-Dev behavior:** notice the existing animation library/pattern (§2.4 in `MONSTER-DEV.md`) and build the walking-monster animation using GSAP the same way `animations.js` already does — a `gsap.timeline()`/`gsap.to()` sprite-position or frame tween — instead of introducing plain CSS `@keyframes` from scratch. Reusing `index.html`'s reference technique verbatim here would be a wrong answer: it ignores the project's own established convention.
+## Layout
+
+```
+index.html      the page
+style.css       layout and type
+animations.js   every animation on the site
+package.json    gsap, pinned
+```
+
+GSAP is loaded from the CDN in `index.html`; the dependency in `package.json` is there so the
+version we test against is written down somewhere.
+
+## House rule on motion
+
+Motion is what we sell, so it goes through one place. `animations.js` owns it, and anything new
+goes in there in the same shape as what is already in the file.
+
+We have had two animation systems on this site before and spent a week working out which one was
+fighting the other. Once was enough.

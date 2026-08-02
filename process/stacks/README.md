@@ -60,3 +60,39 @@ Nothing skips the middle box. Material collected once has no second arm by defin
 exactly why it may be collected freely here and may not be published from here. Writing a
 plausible line straight into a published note is the failure the gates exist to prevent, and this
 tree makes that failure *easier*, not harder — so the rule is stated rather than assumed.
+
+## How the files here are written, and why not the same way as `process/runs/`
+
+Two conventions live under `process/`, and the boundary between them is a directory name:
+
+| | `process/runs/*/knowledge.md` | `process/stacks/**/*.md` |
+|---|---|---|
+| Frontmatter | Open Knowledge Format, required `type` | **none** |
+| First line | `---` | `Stack: <published stack name>` |
+| Tags | free-form, lowercase-kebab | none |
+| `[[wikilinks]]` | yes | yes |
+
+That split is not tidiness deferred. OKF makes the first line `---` and has no field for a
+published stack — `resource` is spent on the run id — and the `Stack:` line is the entire mapping
+between this tree's key and the published one's. A metadata convention is not a good enough reason
+to move a line the two-tree design rests on, so this tree keeps plain Markdown.
+
+The honest consequence, recorded rather than absorbed: the tag layer covers `process/runs/` and
+**not this tree**, which is the one the navigability complaint was actually about. What remains
+reachable here is the `Stack:` line and wikilinks. A tag layer over `process/stacks/` needs its own
+decision; the frontmatter route to it is closed and no other route has been designed.
+
+**Wikilinks are body syntax and work in both trees.** `[[2026-08-01-plan-sonnet]]`,
+`[[impl-01]]`, `[[name|label]]` — a target is the name of a record folder or the stem of a file in
+the tree, and `check-index.ps1` fails on one that resolves to nothing, exactly as it fails on a
+`DEAD POINTER`. A graph with no checker is index drift under a nicer name.
+
+**Nothing writes into `step-1-fixture/` or `step-4-result/`.** They are byte copies by design; a
+copy that has been edited is not a copy. `check-index.ps1` skips them rather than exempting them,
+because an exemption is something the next convention argues with.
+
+**And the sharpest cost of making this tree pleasant to read.** The one-way street above holds
+partly because this is awkward prose nobody would think to ship. Remove that accidental friction
+and only the gate is left holding the line — which is why `build-dist.ps1` refuses any mirror
+containing a `.md` whose first line is `---`, or containing `[[` anywhere. A paragraph promoted
+through the gate carries its syntax with it, and this is the tree paragraphs are promoted *from*.

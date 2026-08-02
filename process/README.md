@@ -29,6 +29,7 @@ when the two disagree, the skill is what actually gets executed.
 ```
 process/
   fixtures/<name>/          target-project templates; a run never modifies one
+  fixtures/<name>.md        what that fixture is for — a sibling, never copied
   scenarios/<name>.md       customer brief + answer script + acceptance criteria
   runs/<run-id>/            everything one run produced — see below
   runs/plan-retro.md        a retrospective across arms; not a run, so not a folder
@@ -36,9 +37,19 @@ process/
   tools/                    the harness itself — see below
   stacks/<lang>/<lib>/      the implementation record — see stacks/README.md
 
-../monster-dev-testruns/<run-id>/        the project the hire actually works in
-../monster-dev-testruns/<run-id>.dist/   what the hire is allowed to see
+../monster-dev-testruns/<run-id>/target/   the project the hire actually works in
+../monster-dev-testruns/<run-id>/dist/     what the hire is allowed to see
 ```
+
+**One run, one parent**, and that is the second isolation rule rather than a tidier path. Both
+used to be direct children of `../monster-dev-testruns/`, so `ls ..` from the hire's working
+directory listed every run and every mirror to date — dated folders in `<name>` / `<name>.dist`
+pairs with the model in the name. `2026-08-01-sonnet-base2` ran exactly that listing. What it
+would have found is the point: ten worktrees holding a finished, already-scored implementation of
+the identical brief against the identical fixture, one of them with
+`/* walking monster easter egg — Monster-Dev (press Alt+A) */` at the top of its stylesheet.
+Ancestry was checked from the first run because `CLAUDE.md` arrives *automatically*; a sibling
+arrives only if you look, which is why nobody looked for ten runs.
 
 `stacks/` here and `stacks/` at the repository root are different trees answering different
 questions. This one is keyed by language → library and is never fetched; the root one is keyed by
@@ -60,7 +71,7 @@ runs/<run-id>/
   worktree/           the target as handed back, minus .git ← written by hire.ps1, every turn
   base.txt            what the run started from             ← written by hire.ps1, every turn
   hire.json           the envelope: cost, turns, session id, per-turn worktrees
-  knowledge.md        what this run was for — created empty, filled in by hand
+  knowledge.md        what this run was for — OKF frontmatter, prose filled in by hand
   report.md           criterion-by-criterion result, with evidence
   score-b.md          the blind second scoring, copied out of the bundle before it is deleted
   findings.md         only where a run produced findings worth their own file
@@ -100,6 +111,22 @@ It was flat until 2026-08-02, keyed by the prefix of each filename. That worked 
 produced three files; it stopped working when a run started producing a transcript, a worktree
 and a second scoring, because a directory has no filename prefix.
 
+**`knowledge.md` is the one file here a person writes, and the only one carrying metadata.** It
+uses the Open Knowledge Format — YAML frontmatter with a required `type`, one of `run`,
+`implementation`, `surface`, `observation` — and `hire.ps1` writes the block on the first turn and
+never touches it again. `tags` arrives empty on purpose: tags are free-form, `check-index.ps1`
+enforces only their shape, and an automatically invented tag would show up in the rendered
+overview as though somebody had chosen it.
+
+`process/stacks/` does **not** get frontmatter. That is not an oversight and the reasoning is in
+[`stacks/README.md`](stacks/README.md): OKF makes the first line `---` and has no field for a
+published stack, and the `Stack:` first line is the whole mapping between the two trees. Two
+conventions inside `process/`, and the boundary between them is a directory name — which is at
+least the kind of boundary a script can check.
+
+Cross-references in both trees are `[[wikilinks]]`. They are body syntax, they need no
+frontmatter, and `check-index.ps1` fails on one that resolves to nothing.
+
 ## Fixtures, and the stack each one exercises
 
 | Fixture | Represents | Exercises | Stack |
@@ -111,19 +138,48 @@ and a second scoring, because a directory has no filename prefix.
 A stack has no notes file until a run has produced something worth writing down. That is the
 point: a `stacks/` entry is a record of what was measured, not a collection of advice.
 
+### A fixture holds only what the target project would hold
+
+Everything in the table above used to be written *inside* the fixture, in its own `README.md`,
+under the heading **Expected Monster-Dev behavior**. `new-run.ps1` copies the folder wholesale, so
+the reader of that paragraph was the hire: it was present in all ten rescued run folders and the
+string reached six of the ten transcripts — five read during analysis, two more surfaced by the
+hire's own §9 cleanup grep. Criteria `8` and `9` were scored, in those six, against a hire holding
+the answer. The two fixtures never yet run against were worse: both cited `MONSTER-DEV.md` by
+section number, and `python-cli`'s named the exact improvisation §3 is scored on.
+
+So the note about a fixture lives at **`fixtures/<name>.md`**, a sibling of the folder, for the
+same reason and in the same shape as `tools/setup/<fixture>.ps1`. A fixture keeps a `README.md`
+only where a real project of that kind would have one, written entirely in character — Acme Kite
+Co.'s site, Nimbus Studio's house rule on motion, a cron-driven CSV report tool. None mentions a
+monster, a sprite, the product or a playbook section, and `new-run.ps1` deletes the run folder if
+one does.
+
+The line to hold when writing one: a fixture may **be** whatever it is, and may not **say** what
+should be done about it. `gsap-site`'s README states that motion goes through `animations.js`,
+because a real studio's README would; it does not say "no CSS keyframes", because that would
+measure instruction-following instead of §2.4.
+
 ## The harness — `process/tools/`
 
 - `build-dist.ps1` — builds the mirror **and** verifies it, deleting it rather than returning
-  one that leaked. Also builds A/B arms via `-Without`.
-- `new-run.ps1` — creates the run folder from a fixture, runs its setup recipe if it has one,
-  commits once, and deletes the folder rather than return one that fails isolation or starts
-  dirty. Recipes live in `tools/setup/<fixture>.ps1` and are never copied into the target, where
-  they would land in the §9 diff surface.
-- `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md` and confirms the
-  folder is a git repo with exactly one commit. `-AncestryOnly` drops the commit half, for a
-  folder that must be free of this repo's context but is not a run folder.
+  one that leaked. Also builds A/B arms via `-Without`. Three checks follow the copy and only the
+  first names a path: the four exclusions arrived nowhere; §2 and §5 agree with what is there; and
+  nothing in the mirror describes the harness or references a sprite sheet. See below.
+- `new-run.ps1` — creates the run folder from a fixture, refuses one that names the product
+  anywhere in the target, runs its setup recipe if it has one, commits once, and deletes the folder
+  rather than return one that fails isolation or starts dirty. Recipes live in
+  `tools/setup/<fixture>.ps1` and are never copied into the target, where they would land in the
+  §9 diff surface.
+- `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md`, looks **sideways** for
+  any directory beside it that is not its own mirror, and confirms the folder is a git repo with
+  exactly one commit. `-AncestryOnly` drops the last two, for a folder that must be free of this
+  repo's context but is not a run folder — the scoring bundle is one, and its parent is not
+  reserved for it.
 - `check-index.ps1` — the indexes against the working tree: §2 ↔ `stacks/`, §5 ↔ `catalog.json`,
-  the 40-line orientation cap, any sheet-shaped PNG outside `monsters/`, and every run id cited
+  the 40-line orientation cap, any sheet-shaped PNG outside `monsters/`, the record tree's two
+  conventions (OKF under `runs/`, the `Stack:` line under `stacks/`, tag *form* only, every
+  `[[wikilink]]` resolving), and every run id cited
   by a report, a scenario or a board item having a `process/runs/<id>/`. That last one is keyed
   *inside* the repository on purpose: a check that reads a sibling directory makes the same commit
   pass on one machine and fail on another. What it cannot catch is a run that was executed and
@@ -133,6 +189,12 @@ point: a `stacks/` entry is a record of what was measured, not a collection of a
   the criteria minus their run-log table, the transcript, the envelope, the measurements, the git
   surface and the worktree. Not the brief, not an earlier report, not `CLAUDE.md`. Deletes the
   bundle rather than return one where the cut failed.
+- `publish-demos.ps1` — renders every `impl-NN/step-4-result/` as a runnable demo onto an orphan
+  `gh-pages` branch, with a banner stating what the customer asked for. The demos are kept **off
+  `main`** on purpose: ten finished implementations of the exact job are the answer sheet, and a
+  mirror exclusion does not contain them — a run over real URLs never reads a mirror, and the base
+  URL a hire derives in §0 points at `main`. It prints the README's *See it running* table rather
+  than writing it, and it neither pushes nor switches Pages on.
 - `scrub-transcript.ps1` — rewrites a session transcript so it can be committed to a public
   repository. Called by `hire.ps1` on every turn; standalone for an archived run. It fails rather
   than half-anonymises, and the check it fails on is *"is any home directory still named"*, not
@@ -166,10 +228,52 @@ path** to `START.md`, and three things stay untested: §0 (base-URL derivation),
 WebFetch-for-text / shell-download-for-binary split, and stack resolution. Report them as
 *deferred*, never as *passed*.
 
-**3. Exclusion is now deliberate, and it names the folder by hand.** `process/` and `.claude/`
-used to drop out of the mirror because git ignored them. They are tracked now, so the filter has
-to name them — which is why building and verifying happen in one script rather than as a
-documented command someone might paste incompletely.
+**3. Exclusion is now deliberate, and a path list only excludes what somebody already found.**
+`process/` and `.claude/` used to drop out of the mirror because git ignored them. They are
+tracked now, so the filter has to name them — which is why building and verifying happen in one
+script rather than as a documented command someone might paste incompletely.
+
+The list has four names on it: `process/`, `.claude/`, `CLAUDE.md` and the root `README.md`. The
+last one joined on `2026-08-02`, after a section headed *"Monster-Dev gets better by being
+tested"* was found in eight of the first ten transcripts as a Read tool result — all four Sonnet
+runs among them, which is the arm the gates are read off. It is the repository's face for a human
+on GitHub and that is the only reader it has; a hire's entry point is `START.md`, by design and
+since the first run.
+
+**What the list could never do is find the next one.** Two of the three leaks discovered that day
+were in files written *in service of* keeping the criteria out of the mirror. So two further
+checks run on the assembled mirror and neither names a path:
+
+- every `.md` in it is grepped for a short **harness vocabulary** — `acceptance criteria`,
+  `test run`, `test hire`, `test harness`, `criterion by criterion`, `what is being measured`,
+  `comparability`, `A/B`. The check found a fourth leak on its first run, in
+  `stacks/dom-css/README.md`, which is a file a hire is told to fetch.
+- every file in it is checked for a reference to a sprite sheet under `monsters/`. A finished
+  implementation of the brief is `.html`, `.css`, `.js` and a sprite and contains none of those
+  words, so the worst thing that could reach a mirror is exactly what the vocabulary grep would
+  miss. `MONSTER-DEV.md`, `index.html` and the `monsters/` folder are the named exceptions.
+- every `.md` in it is refused if its **first** line is `---`, or if it contains `[[` anywhere.
+  That is the record tree's own syntax arriving where it must not: frontmatter bills a hire for
+  metadata only we read, and a `[[stride]]` is a pointer into a tree the mirror does not contain.
+  The road in is a paragraph promoted through the A/B gate out of `process/stacks/`, which is
+  exactly where wikilinks live. Only the first line — a horizontal rule further down is legal and
+  load-bearing, since it separates a stack note's orientation from its pitfalls.
+
+A vocabulary term that fires on legitimate playbook prose comes **out of the list**. It does not
+get accommodated by rewording `MONSTER-DEV.md`, because a check that edits the product to stay
+quiet has stopped being a check. `harness` is out on those grounds: §7 tells a hire to build a
+scratch one.
+
+Three checks now scan for words, and they are three lists on purpose rather than one shared one.
+Each protects a different reader: `new-run.ps1`'s two product names protect **the hire's own
+working copy** against being handed the answer; `build-dist.ps1`'s vocabulary protects **the
+hire** against knowing it is measured at all; `score-bundle.ps1`'s criteria terms protect **the
+blind scorer**. A shared list would be the union of all three and would make every one of them
+noisier.
+
+One consequence worth knowing before it is read as a defect: `monster.png` is still in the mirror
+and now nothing references it, because the only file that did was `README.md`. It stays, because
+it is genuinely public and the mirror is still meant to be the public surface minus the leaks.
 
 The rename from `test/` to `process/` on `2026-08-02` is the sharpest form of the same hazard.
 `build-dist.ps1` carried the literal `'test'` **twice**: once in the exclusion and once in the
@@ -195,3 +299,10 @@ identical. Two principles, both easy to violate:
 
 The bar is a **Sonnet**-class hire. Opus solves the known pitfalls unaided, which leaves an A/B
 nothing to measure; a Haiku failure is explicitly not a finding.
+
+**And one thing outside the harness that invalidates a comparison anyway:** changing
+`catalog.json`'s `default` changes what every client with no preference receives, which is what
+the answer script says in every run to date. Every earlier run becomes incomparable at that
+moment. `monsters/README.md` used to carry this warning; it was moved here on `2026-08-02`,
+because saying it in a published file told a hire both that its choice was being recorded and
+which sheet the recorder expected — and criterion `14b` scores exactly that choice.
