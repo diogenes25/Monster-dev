@@ -377,6 +377,12 @@ Run the `run-scorer` against it as a **separate `claude -p` session with the bun
 directory**, the same way a hire is run and for the same reason: an in-process subagent can read
 this whole repository, so asking it to be blind is not a control.
 
+**Copy its `score-b.md` out of the bundle to `process/runs/<run-id>/score-b.md` before you do
+anything else.** The script deletes the bundle, and the second scoring is evidence: `#020` and
+`#021` were both filed off one. The first two runs scored this way left no file in the repository
+at all — the output path was named nowhere, so both `score-b.md` ended up in the scoring directory
+beside the bundle and stayed there.
+
 Then set the two columns side by side. **Every disagreement is either resolved in the report with a
 stated reason, or filed as a board item.** Quietly keeping your own verdict is the one outcome that
 must not happen — it is what the second pass exists to prevent. Its `UNCERTAIN` list is worth more

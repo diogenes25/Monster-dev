@@ -103,3 +103,8 @@ it is where the primary scoring and yours are most likely to differ for a reason
 
 No summary paragraph, no assessment of how the hire did overall, no recommendations. You produce a
 column of verdicts to set beside another column. That is all.
+
+**Write it to `score-b.md` in your working directory** — the bundle root — as well as returning it.
+Whoever ran you copies it to `process/runs/<run-id>/score-b.md`, and until you write a file there is
+nothing to copy. The first two runs scored this way produced no file at all, because this paragraph
+did not exist: the evidence behind two board items lived only in a console.

@@ -100,3 +100,7 @@ moved report opens with its links intact. `git status` shows renames, not delete
   verifier work, which touches no file this one does. It is not urgent in itself — it is a refactor
   and it blocks `#013`, which is the only item on the board where waiting costs data that cannot be
   recovered. It still lands in one sitting with `#019`, which moves the other directory.
+- `2026-08-02` — **E3**: two more files come in with this move, and they are not in
+  `process/runs/` to be renamed. Both `score-b.md` on record are in `..\monster-dev-scoring\`; they
+  are the evidence behind `#020` and `#021` and are currently unversioned. They land at
+  `process/runs/<id>/score-b.md`, which `run-scorer.md` and Half B step 8 now name for future runs.

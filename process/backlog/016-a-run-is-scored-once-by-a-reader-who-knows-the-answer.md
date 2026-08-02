@@ -151,6 +151,14 @@ backfill has the archive in a uniform shape.
   and `#021` is unversioned, which is `#013`'s complaint reproduced by the fix for this item.
   Whether to write into `process/runs/` now rather than wait on the folder layout is question **E3**
   in `DISCUSSION-2026-08-02.md`.
+- `2026-08-02` — **E3**: the missing output path is closed at its cause. `run-scorer.md` now tells
+  the scorer to write `score-b.md` into the bundle root, and Half B step 8 says to copy it to
+  `process/runs/<run-id>/score-b.md` **before** the script deletes the bundle. Neither document
+  named a path at all, which is why both existing files ended up beside the bundle and stayed
+  there — the deliverable this item shipped without. The folder path is named directly rather than
+  the flat one this item's Cost section proposed: **D4** moved `#023` into the first wave, no run is
+  scheduled before it, and the flat path would have been written and moved within days. The two
+  existing `score-b.md` come in with `#023`.
 - `2026-08-02` — **C1**: `#013` split three ways, and the part this item waits on is now `#023`.
   Both citations above are re-pointed. Two of the three things forcing `#023` are this item's: a
   second scoring per run, and a run that has no report to hang a filename prefix on.

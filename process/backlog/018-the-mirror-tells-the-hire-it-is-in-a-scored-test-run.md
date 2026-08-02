@@ -154,3 +154,9 @@ boundary in the eight reports and in the scenario, not a re-scoring and not a de
   list. The pairing with `#019` survives on a different argument: it moves where the mirror is
   written, and the checks added here run against it. `#024`'s check comes later, behind `#023` and
   `#013`.
+- `2026-08-02` — **E1**, second harm recorded against `monsters/README.md:49` rather than filed as
+  an item. The `leak-auditor` reported that the sentence *"gives a hire a reason to pick the default
+  that has nothing to do with the client"* — a leak of the expected answer, `#015`'s class, not the
+  harness-disclosure this item is named for. Same sentence, same fix, so the board's own rule
+  applies: another evidence line, never a second item. It matters because it widens what the
+  removal buys: criterion `14b` scores which sheet a hire chose, and this sentence argues for one.

@@ -170,6 +170,11 @@ reports belong to whoever settles what `process/runs/` is supposed to contain pe
   caveat lands in five reports and the scenario note, not six reports. Both fixed in place;
   `sonnet-base2` turns out to have no report either, which is a second archive gap and is not this
   item's to close.
+- `2026-08-02` — **E1**: `#025` files a leak this item's fix does not reach.
+  `process/fixtures/static-site/script.js:1-2` states the §2.4 answer in the project's own code —
+  no product name, no section number, no README. The rule proposed here, *"a fixture contains only
+  what the target project would contain"*, does not exclude it, because a target project might well
+  carry that comment. Recorded as a boundary of this item rather than absorbed into it.
 - `2026-08-02` — **D2**: the caveat line in the scenario's *"criteria changed"* note lands with
   `#001`, `#020` and `#021` under one dated boundary. The five report caveats are this item's alone
   and land with it. **D4**: this item stays in the paths wave and remains what `#022` waits on.

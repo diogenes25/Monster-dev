@@ -615,3 +615,69 @@ already destroyed one set. Everything else on the board can wait a week and lose
 
 Files changed: `#001`, `#007`, `#013`, `#015`, `#018`, `#019`, `#020` (target row and log), `#021`,
 `#023`.
+
+### Block E — settled `2026-08-02`, all four as recommended, one with a deviation
+
+**E1 — two items, not three.** `#025` files the fixture's own code stating the §2.4 answer:
+`script.js:1-2` reads *"That's the only JS this site has — no animation library, no framework."*
+`#015`'s fix does not reach it — no product name, no section number, not a README — and its rule
+*"a fixture contains only what the target project would contain"* does not exclude it either,
+because a real project might well carry that comment. The rule that does: **a fixture may not
+assert the absence of something a hire is scored on finding.**
+
+`#026` files the sharp one. The answer script's fallback *„nimm deinen Standard"* routes every hire
+to `green-fuzz-classic`, which is the sheet `index.html` is built on — so a hire that derived the
+geometry and a hire that copied the reference produce identical numbers. It is upstream of `#020`:
+rewording `14b` does not make it measurable while the answer resolves the fork. Criterion `10` is
+hit the same way and is a **risk criterion**, load-bearing in every A/B on record.
+
+*Deviation, and the reason.* The third finding — `monsters/README.md:49` giving a hire a reason to
+pick the default — is **not** a new item. `#018` already names that file and removes that exact
+sentence from the published folders. The board's own rule settles it: *"If the finding is already
+here, its item gets another evidence line — no second item is created."* What the finding adds is a
+second harm to `#018`, in a different class from the one it is named for: not harness disclosure,
+but an argument for the answer `14b` scores. Recorded there.
+
+**E2 — `#027`, and `#020`/`#021` stay open as its evidence.** Section D criteria name their
+instrument; section B criteria do not, so each is scored against whatever the harness emitted. Four
+instances now: `10` (no stride, no viewport, no duration in `measurements.json`), `11` (`#021`),
+`13` (`git status --porcelain` reports paths, never content — and it still names the pre-rename
+product), `14b` (`#020`). The rule: **every criterion names the artifact that settles it**, *"read
+by a human, and here is what to look at"* being a legitimate answer that has to be written as one.
+A criterion whose named instrument does not exist is `NOT SCORABLE`, not `PASS`.
+
+Folding `#020` and `#021` in was the catalog's own recommendation and is declined on one ground:
+they are the two instances found by *measurement*, by a reader who had never seen the run. That
+provenance is the argument for the general rule, and collapsing them deletes it.
+
+Criterion `10` should be re-scored across the runs on record. The `samples` arrays are on disk, so
+stride is recoverable after the fact — one of the few boundaries this project can close rather than
+merely record.
+
+**E3 — done, not filed.** The cause was that no document named an output path, so
+`run-scorer.md` now tells the scorer to write `score-b.md` into the bundle root, and Half B step 8
+says to copy it to `process/runs/<run-id>/score-b.md` **before the script deletes the bundle**. The
+folder path is named directly rather than `#016`'s flat fallback: D4 put `#023` in the first wave,
+no run is scheduled before it, and the flat path would have been written and moved within days. The
+two existing `score-b.md` come in with `#023`.
+
+**E4 — arm B is written and `#002` is `grilled`.** It is the first `Gate: run` item to hold that
+state. The treatment is a §6 paragraph bounding the build to the announced change set, with one
+sentence — *"Checking that what you built works is part of building it, not something extra"* —
+that exists to keep the run interpretable rather than to soften the bound.
+
+Writing it surfaced something the item had not noticed: **the mechanism `#002` hypothesises is one
+arm B permits.** `index-sonnet` spent part of its build turn fixing a real bug in its own work,
+which is inside the announced set. Rather than reword the treatment, both outcomes are now named in
+advance — turns drop and the ten were scope creep, or turns hold and the plan step costs a third
+more *because it works*, in which case arm B is rejected and the +25 % ceiling is the wrong
+instrument for it. Either way the question is settled.
+
+`#004`'s sentence is drafted in `#004` and that item does **not** move — one sighting is not a
+finding. §6 gets edited once, by whoever holds both intentions. Drafting it found a second gap in
+§6's current clause: it fires only when *an answer* overturns the plan, and `index-sonnet` overturned
+its own.
+
+Files changed: new `#025`, `#026`, `#027`; `#002` (state, proof design, arm B), `#004` (drafted
+sentence), `#015`, `#016`, `#018`, `#020`, `#021`, `#023`; and outside the board,
+`.claude/agents/run-scorer.md` and the workshop skill's step 8.

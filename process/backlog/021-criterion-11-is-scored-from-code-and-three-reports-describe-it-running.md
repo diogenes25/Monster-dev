@@ -97,3 +97,7 @@ reports that their evidence line is not reproducible.
   the implementation's numbers cannot be satisfied from a `measurements.json` that only ever records
   the sheet's. **D2**: the scenario half lands with `#001`, `#015` and `#020` under one boundary
   line — so this item's two target files land in two different sittings, and that is deliberate.
+- `2026-08-02` — **E2**: this item and `#020` turn out to be the same defect at two depths, and two
+  further instances exist — criteria `10` and `13`. `#027` states the rule and carries those two.
+  This item stays open as its evidence rather than being folded in: it was found by a reader who had
+  never seen the run, and that is the part of the argument a general rule cannot supply for itself.

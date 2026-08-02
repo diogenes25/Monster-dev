@@ -77,3 +77,10 @@ took it.
   `--monster-frame-w`. Rewording the criterion without extending the instrument would produce a
   criterion no run can satisfy, which is the fault `#021` names in its own words. **D2**: the
   scenario edit lands with `#001`, `#015` and `#021` under one boundary line.
+- `2026-08-02` — **E1**: rewording this criterion does **not** make it measurable on its own.
+  `#026` shows the answer script routes every hire to the sheet `index.html` is built on, so a hire
+  that derived and a hire that copied write the same numbers whatever the criterion asks for. Both
+  changes are needed, they are in two parts of the same file, and they land in the same edit.
+  **E2**: this item stays open as evidence for `#027` rather than being folded into it — it and
+  `#021` are the two instances found by measurement, and that provenance is what makes the general
+  rule credible.
