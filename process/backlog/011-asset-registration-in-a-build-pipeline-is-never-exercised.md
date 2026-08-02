@@ -7,7 +7,8 @@
 | Attribution | scenario defect |
 | Criterion | `9` — its §7 half only |
 | Target file | `process/fixtures/` (a fixture with a build), `MONSTER-DEV.md` §7 |
-| Evidence | every run on record: `2026-08-01-alt-a`, `phase1`, `phase2`, `phase2b`, `sonnet-base`, `sonnet-base2`, `plan-sonnet`, `plan-opus`, `live`, `index-sonnet` |
+| Evidence | every run on record: `2026-08-01-alt-a`, `phase1`, `phase2`, `phase2b`, `sonnet-base`, `sonnet-base2`, `plan-sonnet`, `plan-opus`, `live`, `index-sonnet`, and the `ph0-smoke` smoke test |
+| Blocked on | a fixture with a real build — ecosystem undecided |
 | Proof design | — |
 
 **What happened.** Nothing did, and that is the item. §7 says:
@@ -57,3 +58,8 @@ an untested clause in a published playbook is a claim, not a rule.
   no hire has been in a position to fail it.
 - `2026-08-02` `formulated` — attributed to the fixture set, not the playbook. Blocked on a
   decision about which ecosystem, not on another run.
+- `2026-08-02` — evidence count corrected during the PM pass: `#012`'s inventory counts eleven
+  sessions, not ten; `ph0-smoke` was missing here. Also noted, because `#015` claimed otherwise:
+  `gsap-site` does not unblock this item, and `#015` has been corrected to say so.
+- `2026-08-02` — `Blocked on` added, answer **A3**. It names the ecosystem decision as well as the
+  fixture, because the item's own log says it is blocked on the decision and not on a run.

@@ -6,9 +6,16 @@
 | Gate | `run` |
 | Attribution | harness artefact |
 | Criterion | §2 stack resolution |
-| Target file | `stacks/dom-css/README.md` |
+| Target file | — |
 | Evidence | `2026-08-01-live`, `2026-08-01-phase2b` |
+| Blocked on | a gated pitfall in any published stack note |
 | Proof design | — |
+
+**Nothing here changes a file, and that is the item.** It used to name
+`stacks/dom-css/README.md` as its target while its own text said *"Nothing is wrong with the
+product"* and its proposed change was *none, on principle*. The target row is empty now: what this
+item carries is the caveat every report has to repeat — §2 resolution is **unproven, not passed** —
+and the condition under which that stops being true.
 
 **What happened.** `2026-08-01-live` proved §0 and §5 over real URLs but had to record §2 as
 **unproven rather than passed**. `stacks/dom-css/README.md` is 35 lines of orientation with
@@ -44,3 +51,8 @@ resolved the stack when nothing in the evidence distinguishes that from a hire t
 - `2026-08-01` `intake` — from `2026-08-01-live`, recorded there as unproven rather than passed.
 - `2026-08-01` `formulated` — attributed as a harness artefact: the product is fine, the
   measurement has no signal.
+- `2026-08-02` — re-filed, answer **A4**. The item had been sitting against three of its own
+  statements. Target file dropped: it named a published product file while the body said nothing
+  was wrong with the product and proposed no change. `Blocked on` added, so `Gate: run` +
+  `harness artefact` is now coherent — the lane says a run will prove it, the attribution says the
+  instrument is what is at fault, and the new field says why neither can happen yet.

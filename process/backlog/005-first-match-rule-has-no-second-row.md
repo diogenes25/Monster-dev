@@ -8,6 +8,7 @@
 | Criterion | — |
 | Target file | `process/fixtures/` (a second fixture), `MONSTER-DEV.md` §2 |
 | Evidence | `2026-08-01-index-sonnet` |
+| Blocked on | a second published stack note in `MONSTER-DEV.md` §2 |
 | Proof design | — |
 
 **What happened.** `index-sonnet` rewrote §2's stack list as a table and added a first-match
@@ -20,9 +21,10 @@ purpose: the moment a second stack lands is the first moment an *unwritten* rule
 cost every earlier run its comparability, since two hires could resolve the same project to
 different notes.
 
-**Proposed change.** None to the playbook. What is missing is a fixture: the planned `gsap-site`
-is the case that matches both `dom-css` and a GSAP row, and it is the only way the rule's arms
-exist at all.
+**Proposed change.** None to the playbook. What is missing is a second published stack note:
+`process/fixtures/gsap-site/` exists and is the case that matches both `dom-css` and a GSAP row,
+but §2 has one row, so there is still nothing for the fixture to be ambiguous *between*. The
+fixture half of this blocker is closed; the stack half is not.
 
 **Proof design.** Not designable until the second stack note exists — the treatment is the second
 row, and there is no arm without it. When it does: one Sonnet run on the `gsap-site` fixture,
@@ -39,3 +41,9 @@ as proven on a run where it was structurally invisible.
 - `2026-08-01` `intake` — from `2026-08-01-index-sonnet`, listed under "Not exercised".
 - `2026-08-01` `formulated` — blocked on the second stack and the `gsap-site` fixture, not on a
   decision.
+- `2026-08-02` — corrected during the PM pass: `gsap-site` is no longer "planned", it exists and is
+  read by `#011` and `#015`. Blocked on the second *published* stack note alone, and on `#015`
+  before that fixture can host a run at all.
+- `2026-08-02` — `Blocked on` added, answer **A3**. The lane stays `run`, because a run is still
+  what proves this; the field is what says the item is waiting rather than neglected, and names
+  what to watch for.

@@ -4,7 +4,7 @@
 |---|---|
 | Status | `formulated` |
 | Gate | `none` |
-| Attribution | stale documentation |
+| Attribution | harness artefact |
 | Criterion | — |
 | Target file | `CLAUDE.md`, `SKILL.md` (two places), `references/report-template.md` |
 | Evidence | `2026-08-01-live`, `2026-08-01-plan-sonnet` |
@@ -67,3 +67,8 @@ by a run already on record.
 - `2026-08-01` — two further sites found while wiring the board into Half B and the report
   template. Still not applied, for the same reason: the board's own edit is the change under
   review in that pass.
+- `2026-08-02` — attribution corrected from `stale documentation` to `harness artefact`, answer
+  **A2**. `stale documentation` was never one of the enumerated values; it is a *lane* example from
+  `README.md` that had been borrowed into the field that names the fault. The fault here is
+  dev-side apparatus that has gone wrong — `references/report-template.md` instructs every report
+  to record something untrue — which is what `harness artefact` means.

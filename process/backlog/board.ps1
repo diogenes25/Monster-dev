@@ -12,9 +12,12 @@ exists because the alternative is an item that looks tracked and is not:
 
   * `grilled` with `Gate: run` needs a proof design. The whole point of that state is that the
     thinking happened *before* a run was spent finding out there was nothing to measure.
-  * `Gate: none` may not sit in `grilled` or `in-proof`. Those states are about proving something
-    with a run, and a harness bug or a stale sentence has no run to spend.
+  * `Gate: none` may not sit in `in-proof`. That state assigns a run, and a harness bug or a stale
+    sentence has no run to spend. It *may* sit in `grilled`: the lane says what proves an item, not
+    whether it may be argued with first, and the largest `none` items are the ones that need it.
   * `in-proof` needs a run id in `Proof design`. Otherwise it is `grilled` with a nicer label.
+  * Every item past `intake` needs an attribution and some evidence — a run id or a dated owner
+    decision. Neither, and it is a hunch wearing a header table.
 
 Also warns past 25 open items. Past that the board stops being readable in one pass, and an
 unreadable board loses items exactly the way `15c` was lost — the failure it was built for.
@@ -91,6 +94,7 @@ foreach ($file in (Get-ChildItem $PSScriptRoot -Filter '*.md' | Where-Object { $
         Criterion   = $fields['Criterion']
         Target      = $fields['Target file']
         Evidence    = $fields['Evidence']
+        Blocked     = $fields['Blocked on']
         Proof       = $fields['Proof design']
     }
 
@@ -106,14 +110,16 @@ foreach ($file in (Get-ChildItem $PSScriptRoot -Filter '*.md' | Where-Object { $
     if ($item.Gate -eq 'run' -and $item.Status -in @('grilled', 'in-proof') -and $item.Proof -in @('', '—', $null)) {
         $failures += "#${id}: '$($item.Status)' with no proof design — that state exists to stop a run being spent finding out there was nothing to measure"
     }
-    if ($item.Gate -eq 'none' -and $item.Status -in @('grilled', 'in-proof')) {
-        $failures += "#${id}: 'Gate: none' cannot be '$($item.Status)' — there is no run to spend, so it goes straight to proven when applied"
+    # `grilled` is allowed in the `none` lane — arguing an item out is not the same as proving it —
+    # but `in-proof` assigns a run, and this lane has none to assign.
+    if ($item.Gate -eq 'none' -and $item.Status -eq 'in-proof') {
+        $failures += "#${id}: 'Gate: none' cannot be 'in-proof' — that state assigns a run, and this lane has none to spend. It goes to proven when applied."
     }
     if ($item.Status -eq 'in-proof' -and $item.Proof -notmatch '\d{4}-\d{2}-\d{2}') {
         $failures += "#${id}: 'in-proof' without a run id in 'Proof design'"
     }
     if (-not $item.Evidence) {
-        $failures += "#${id}: no evidence — an item with no run behind it is a hunch"
+        $failures += "#${id}: no evidence — a run id per sighting, or a dated owner decision. Neither is a hunch."
     }
 
     $items += $item
@@ -148,6 +154,7 @@ if (-not $shown) {
         foreach ($i in $shown) {
             "  #$($i.Id)  $($i.Title)"
             "        $($i.File) → $($i.Target)"
+            if ($i.Blocked -and $i.Blocked -ne '—') { "        blocked on: $($i.Blocked)" }
         }
         ''
     }

@@ -10,10 +10,18 @@
 | Evidence | all ten run folders and all ten transcripts, scanned `2026-08-02`; all three fixture READMEs read the same day |
 | Proof design | — |
 
-**This blocks the next run.** `#005` (the §2 first-match rule cannot be observed with one row) and
-`#011` (§7 asset registration is never exercised) both need a *second* fixture, so the next run to
-be spent goes against `gsap-site` or `python-cli` — and both of those are contaminated worse than
-the one that has been running. Fixing this is not tidying up; it is a precondition.
+**This blocks any run against a second fixture.** `#005` (the §2 first-match rule cannot be observed
+with one row) needs one, and the §3 decline path has never been exercised at all, so the next run to
+be spent against something other than `static-site` goes against `gsap-site` or `python-cli` — and
+both of those are contaminated worse than the one that has been running. Fixing this is not tidying
+up; it is a precondition.
+
+It does **not** unblock `#011`, and an earlier version of this paragraph claimed it did. `#011` is
+explicit: *"`gsap-site`, the other web fixture, does not close this either: it loads GSAP from
+`cdn.jsdelivr.net` and its `package.json` declares a dependency nothing installs. It is a fixture
+about *style conformance*, not about a build."* Its target is a fixture with a real build, which
+does not exist. `#005` is only half unblocked for the same reason: it also waits on a second
+*published* stack note, and there is one.
 
 **What happened.** `process/fixtures/static-site/README.md:5` reads:
 
@@ -116,13 +124,20 @@ product."* Nothing about the playbook changes and nothing is claimed about hire 
 What the fix **cannot** do is repair the six runs. Criteria `8` and `9` for `alt-a`, `phase1`,
 `phase2`, `phase2b`, `live` and `plan-opus` were scored against a hire holding a hint, and no rerun
 makes them retroactively clean. The honest handling is a recorded boundary, the way `15c` and
-section E are recorded — a line in each of the six reports and one in the scenario's *"criteria
-changed"* note — not a silent re-scoring and not a deletion.
+section E are recorded — a caveat line in the report of each contaminated run and one in the
+scenario's *"criteria changed"* note — not a silent re-scoring and not a deletion.
+
+**Five of the six have a report; `plan-opus` does not.** `process/runs/` holds
+`2026-08-01-plan-opus-measurements.json`, `.brief.txt` and `.hire.json` and no `.report.md`, so
+there is nothing to caveat. (`sonnet-base2` is missing one too, on the clean side of the split.)
+Two of ten runs were never written up, which is a gap in the archive this item cannot close and
+should not paper over: `plan-opus`'s boundary goes in the scenario note only, and the two missing
+reports belong to whoever settles what `process/runs/` is supposed to contain per run.
 
 **Cost.**
 
-- **Six reports gain a caveat.** The archive reads worse afterwards, and that *is* the archive
-  getting better.
+- **Five reports gain a caveat**, and the sixth contaminated run has no report to put one in.
+  The archive reads worse afterwards, and that *is* the archive getting better.
 - **`8` and `9` lose their strongest evidence.** Both passed in every run on record; four of those
   passes stay clean, which is still enough to say the criteria hold at the bar — but it is four, not
   ten.
@@ -144,3 +159,9 @@ changed"* note — not a silent re-scoring and not a deletion.
   (`#017`). `gsap-site` and `python-cli` cite `MONSTER-DEV.md` section numbers and prescribe the
   answer outright. Neither has been hired against, which makes this a blocker on the next run rather
   than a repair of the archive: `#005` and `#011` both need one of those two fixtures.
+- `2026-08-02` — three corrections during the PM pass over the board. The blocker claim above was
+  overstated: `#011` says in so many words that `gsap-site` does not close it, and `#005` waits on a
+  second published stack note as well as on a fixture. `plan-opus` has no report file, so the
+  caveat lands in five reports and the scenario note, not six reports. Both fixed in place;
+  `sonnet-base2` turns out to have no report either, which is a second archive gap and is not this
+  item's to close.

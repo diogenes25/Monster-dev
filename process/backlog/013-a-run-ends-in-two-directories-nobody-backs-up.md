@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `grilled` |
 | Gate | `none` |
 | Attribution | owner decision |
 | Criterion | — |
@@ -225,6 +225,12 @@ No behaviour changes here; do it first so later phases write into the final shap
    `<id>-measurements-midwalk.png` → `midwalk.png`, `<id>.hire.json` → `hire.json`,
    `<id>.brief.txt` → `brief.txt`, `<id>.findings.md` → `findings.md`,
    `2026-08-01-alt-a-verify.mjs` → `verify.mjs`.
+   **The set is ragged and the mapping must not assume otherwise.** `alt-a` predates the wrapper:
+   its midwalk is `2026-08-01-alt-a-midwalk.png`, without the `-measurements` infix every other run
+   has, and it has no `hire.json` and no `brief.txt`. `plan-opus` and `sonnet-base2` have **no
+   report at all**. Drive the move off the actual directory listing, not off this pattern, and let
+   a run folder be missing a file rather than inventing one — the two absent reports are a real gap
+   in the archive and Phase 1 is not the place to close it.
 2. **`2026-08-01-plan-retro.md` is not a run.** It is a retrospective across the plan arms. It gets
    no run folder; leave it at `process/runs/plan-retro.md` and say so in `process/README.md`, or it
    will be mistaken for a run id by everything built later.
@@ -313,3 +319,14 @@ is not evidence, and this repository has the scar to prove it.
   boundary check from `check-index.ps1` to the mirror, where no path list can go stale. Refined
   against the board's own doctrine: the tag overview is *rendered*, not written to a `TAGS.md` that
   could drift. Phase 0 executed the same day.
+- `2026-08-02` — Phase 1's rename mapping corrected against the actual directory during the PM pass:
+  `alt-a` predates the wrapper and breaks the pattern three ways, and `plan-opus` and `sonnet-base2`
+  have no report to move. Four open questions from that pass are in `DISCUSSION-2026-08-02.md`:
+  whether this item splits into three (**C1**), how OKF frontmatter coexists with the `Stack:`
+  first-line rule (**C2**) and with the frozen fixture copies (**C3**), and how the capture backstop
+  survives `#019`'s layout, which it currently does not (**C4**).
+- `2026-08-02` `grilled` — the state this item has claimed in its own log since the morning and
+  could not hold, because `board.ps1` refused `grilled` to the `none` lane. Answer **A6** lifted
+  that: the lane says what *proves* an item, not whether it may be argued with first, and this item
+  was the case that made the argument. `in-proof` stays closed to the lane, and the "no item in
+  `grilled`, no run" rule now names `Gate: run` explicitly so this does not read as a run brief.

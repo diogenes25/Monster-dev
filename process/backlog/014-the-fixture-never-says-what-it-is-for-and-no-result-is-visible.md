@@ -91,8 +91,15 @@ fixture and its own run before any number out of it is compared with anything.
 
 - **Each demo duplicates a 1.9 MB sprite.** All ten are byte-identical to the already-tracked
   `monsters/green-fuzz-classic.png`, so git stores one blob and only the checkout grows.
-- **`check-index.ps1`'s stray-sheet scan** gets one more sheet-shaped PNG per demo — the same load
-  test on `#008`'s exclusion fix that `#012` already books, arriving twice.
+- **`check-index.ps1` goes red on the first published demo, and this is not the load test `#012`
+  books.** `check-index.ps1:162` filters only `monsters/*` and `process/*`. `docs/demos/**/*.png`
+  matches neither, so every demo sprite trips `STRAY SHEET` at ratio 21.2 and the script throws —
+  and the message it prints, *"reaches the mirror"*, is untrue under this item, which excludes
+  `docs/` from the mirror. `#012`'s files land under `process/` and are filtered before geometry is
+  measured, so that item load-tests nothing; this one breaks the check outright. **Sub-deliverable:**
+  `docs/*` joins the filter at `:162`, or the failure message stops asserting mirror reachability —
+  and whichever is chosen has to say why a sheet-shaped PNG outside `monsters/` is now acceptable,
+  because that scan exists to catch exactly this shape.
 - **A setting outside the repository.** Pages has to be switched on and pointed at `docs/`. Nothing
   in the tree can enforce that, and a remembered step is the failure mode this project has already
   had twice. The mitigation is that the README link is visibly broken until it is done.
@@ -111,3 +118,11 @@ fixture and its own run before any number out of it is compared with anything.
 - `2026-08-02` `formulated` — split into a free half and a forked half once the fixture copy was
   actually measured. The description's *audience* turned out to be the whole question, and `#015`
   was found while establishing it.
+- `2026-08-02` — one cost inverted during the PM pass. Publishing a demo does not load-test
+  `check-index.ps1`'s stray-sheet scan; it **breaks** it, because `docs/` is in neither of the two
+  filters at `:162`. A sub-deliverable now covers that. Three questions this item cannot settle
+  alone are in `DISCUSSION-2026-08-02.md`: `#018` removes the root README from the mirror while
+  this item writes ten run ids into it, so the two are compatible only in one order (**B1**);
+  this item adds the hand-written path name that `#018` exists to abolish, and `#018`'s grep is
+  `.md`-only so the demos would slip past it anyway (**B2**); and mirror exclusion is not
+  containment for a real-URL run or for a published Pages site (**B3**).

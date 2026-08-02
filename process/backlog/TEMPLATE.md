@@ -4,10 +4,11 @@
 |---|---|
 | Status | `intake` / `formulated` / `grilled` / `in-proof` / `proven` / `rejected` |
 | Gate | `run` / `none` |
-| Attribution | playbook gap / model disposition / implementation error / harness artefact / scenario defect |
+| Attribution | playbook gap / model disposition / implementation error / harness artefact / scenario defect / owner decision |
 | Criterion | `<n>` or — |
 | Target file | `MONSTER-DEV.md` §`<n>` / `process/scenarios/<slug>.md` / harness / — |
-| Evidence | `<run-id>` (add a run id per sighting, never a second item) |
+| Evidence | `<run-id>` (add a run id per sighting, never a second item), or a dated owner decision |
+| Blocked on | a precondition that is neither an item nor a decision, or omit the row entirely |
 | Proof design | run id once assigned, or — |
 
 **What happened.** *Behaviour with evidence: a measured value, a command output, a quote from the

@@ -100,9 +100,12 @@ The three divergences above are **candidate observations, not findings**. They g
   to the already-tracked `monsters/green-fuzz-classic.png`, so git stores one blob and only the
   checkout grows. The alternative — a pointer instead of the file — breaks the one thing a
   `step-4-result/` is for: being the project as it was handed back, openable in a browser.
-- **`check-index.ps1`'s stray-sheet scan** gets nine more 21.2-ratio PNGs under `process/`. The
-  exclusion was fixed for exactly this in `#008`; nine more files is a load test of that fix, and it
-  has to be run and seen clean.
+- **Not a cost, recorded because it was booked as one.** This item first claimed the nine new
+  21.2-ratio PNGs would load-test `check-index.ps1`'s stray-sheet scan. They will not.
+  `check-index.ps1:162` filters `process/*` out of `git ls-files '*.png'` *before* any geometry is
+  measured, so nothing under this tree is ever opened by that scan. The exclusion `#008` fixed is
+  therefore untested by this item, and `#014` — whose PNGs land under `docs/` and are **not**
+  filtered — is where that scan actually gets exercised, in the failing direction.
 - **Nine hand-written `step-3-process/` narratives** is the real price and it is not small.
   `impl-01`'s is four files of prose read off a transcript. Capturing without ever narrating leaves
   nine half-records, which is worse than nine absences because it looks finished.
@@ -123,3 +126,7 @@ The three divergences above are **candidate observations, not findings**. They g
   scrubbing, the `runs/` restructure and the boundary. Grew by one case: `ph0-smoke`, an eleventh
   session with no run folder and no report, which is a run record without an implementation. Phase 0
   of `#013` secured all of the material the same day.
+- `2026-08-02` — one cost withdrawn during the PM pass over the board. The stray-sheet load test
+  this item booked cannot happen: `check-index.ps1:162` filters `process/*` before any PNG is
+  opened. `#008`'s exclusion fix is therefore still untested, and `#014` is where that scan gets
+  exercised — in the failing direction.
