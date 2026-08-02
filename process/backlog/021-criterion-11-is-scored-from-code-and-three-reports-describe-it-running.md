@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | `11` |
@@ -101,3 +101,19 @@ reports that their evidence line is not reproducible.
   further instances exist — criteria `10` and `13`. `#027` states the rule and carries those two.
   This item stays open as its evidence rather than being folded in: it was found by a reader who had
   never seen the run, and that is the part of the argument a general rule cannot supply for itself.
+- `2026-08-02` `proven` — both target files, in one sitting after all. `verify-run.mjs` takes a
+  final pass with `Emulation.setEmulatedMedia` on and records `reducedMotion`: `onLoad`,
+  `afterTrigger`, `x.start` / `x.after3s`, `travelledPx`, and `stillOnScreenAfterCrossing` after
+  waiting out the implementation's own declared travel time. `11` names those fields and says in
+  as many words that a `@media` block is not a pass on its own.
+- `2026-08-02` — the first reduced-motion measurement this project has ever taken, against
+  `index.html`: `travelledPx` `0`, and `stillOnScreenAfterCrossing` **`1`**. The reference
+  implementation parks the walker at `translateX(40vw)` with `animation: none`, so `forwards`
+  never fires and it stays there. Under the new wording that is a **fail** on the second half of
+  the criterion — on the reference, on the first pass, before any hire was involved. Whether the
+  right answer is to fix `index.html` or to soften *"does not stay on screen indefinitely"* is a
+  separate question and belongs to whoever writes the next `dom-css` note; what matters here is
+  that the criterion can now produce a verdict nobody expected, which is exactly what a criterion
+  that had passed seven times unmeasured could not do. Filed as `#028`: §5 asks for *visible and
+  still* and asks for nothing more, so the second mark this item proposed scores against behaviour
+  the playbook prescribes — `#001`'s defect, in the criterion written to fix a different one.

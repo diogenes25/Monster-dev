@@ -90,6 +90,22 @@ The customer **never** mentions <the withheld thing>, and **never** asks for a c
 
 *Number them continuously — the report is scored against these numbers.*
 
+**Every criterion names the artifact that settles it.** `measurements.json` and the field,
+`transcript.jsonl`, the worktree and the file, `git status`, or *"read by a human, and here is
+what to look at"*. That last one is a legitimate answer and has to be written down as one,
+because a criterion whose instrument is a reader is a criterion two readers can score
+differently — which is what the blind second scoring exists to catch.
+
+A criterion whose named instrument does not exist is **`NOT SCORABLE`**, not `PASS`.
+
+This rule is here because four criteria in `alt-a-left-to-right.md` were written without it and
+each was then scored off whatever the harness happened to emit: a duration *"derived from stride
+and viewport"* against a measurements file holding none of the three, `prefers-reduced-motion`
+*"handled"* against a verifier that could not emulate it, *"no product name"* against
+`git status`, which reports paths and never opens a file, and the implementation's sprite
+geometry against the sheet's. The pattern is not four accidents — the sections written **after**
+the verifier existed name instruments, and the sections written before it do not.
+
 ### A — Brief fulfilled
 
 *What the customer actually asked for, plus at least one thing they did not ask for but would
@@ -106,13 +122,16 @@ criterion: 4a "did Monster-Dev raise it?" / 4b "does it work?".*
 - Sprite lives where the fixture's existing assets live (§2.5, §7)
 - Offered the choice of monster rather than picking one silently (§4), and the sheet actually
   used is the one the client asked for — or `green-fuzz-classic` where no preference was stated
-- Technique carried over rather than copy-pasted: custom properties for frame geometry,
-  a `steps(N)` cycle matching the chosen sheet's frame count, duration derived from stride and
-  viewport (§5)
-- `prefers-reduced-motion` handled (§5, §9)
+- Technique carried over rather than copy-pasted (§5) — `implementation.customProperties` for the
+  frame geometry, `implementation.steps` against `sheetMatch.frames.sheet` for the cycle, and
+  `derivation.cyclesIsWhole` + `durationVsViewport.changesWithViewport` for *derived, not chosen*.
+  One measurement at one window width cannot tell a derived duration from a typed one
+- `prefers-reduced-motion` handled (§5, §9) — `reducedMotion`, with the media feature **emulated**.
+  A `@media` block in the stylesheet is code presence standing in for behaviour, not a pass
 - `git log --oneline` shows **exactly one** commit; no trailer (§8)
-- `git status` shows only the implementation plus the sprite sheet, under whatever name the
-  fixture's conventions imply; no playbook leftovers, no "MonsterLib" reference (§9)
+- The change surface is only the implementation plus the sprite sheet, under whatever name the
+  fixture's conventions imply (§9). Two instruments: `git status --porcelain -uall` for the file
+  list, and a case-insensitive content search over the worktree for `Monster-Dev` and `MonsterLib`
 
 ### C — Language fidelity
 
@@ -121,7 +140,11 @@ code comments — each scored separately.*
 
 ### D — Actually runs
 
-*No console errors; sprite loads with 200; frames advance past frame 0.*
+*Sprite loads with 200 (`spriteHttpStatus`); frames advance past frame 0 (`samples[].bg` moves);
+and no console errors **the hire introduced** — `consoleErrors`, which is the run's output minus
+what the untouched fixture logs on load (`fixtureConsoleErrors`, measured per run, never a
+hand-written allowlist). Counted against zero instead, Chrome's own favicon 404 makes every arm
+score 1 and the hire's first real error has to reach 2 before anyone notices.*
 
 **Measurement ladder for the trigger.** ① real event → clean pass. ② synthetic event with the
 right modifiers → pass, recorded as "handler verified, trigger path not measurable".

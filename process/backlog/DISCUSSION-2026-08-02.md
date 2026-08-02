@@ -604,6 +604,17 @@ is filed for.
 \* `#015`'s scenario caveat is a Wave 1 line; the fixture rewrite and the `new-run.ps1` scan are
 Wave 2. It is the one item that genuinely spans two sittings.
 
+**Wave 1, scenario and verifier half — executed `2026-08-02`.** `#001`, `#007`, `#020`, `#021`,
+`#026` and `#027` are `proven`; `#015`'s scenario line is in and the item stays `formulated` for
+its Wave 2 half. Six criteria moved under one dated boundary rather than the four D2 planned:
+`#026` and `#027` were filed after D2 was answered and write into the same file, which is the
+decay this block already names. `#023` and `#013` — the other half of Wave 1 — are untouched.
+
+Two things came out of executing it that the plan did not contain. The verifier had to gain a
+**second window width**, because a derived duration and a typed one are the same number at one
+width and no amount of criterion wording fixes that. And the first reduced-motion measurement ever
+taken failed `index.html` on `#021`'s own new criterion, which is `#028`.
+
 Not scheduled and not blocked on any decision: `#002` (see E4), `#004` (waiting on a second
 sighting), `#005`, `#006`, `#011` — each waiting on something that has to be built or found.
 `#022` follows `#015` and then needs a scenario written.

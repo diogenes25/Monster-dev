@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `15c` |
@@ -44,3 +44,8 @@ needs one more line recording that boundary, alongside the one already there for
   dated *"criteria changed"* line, not four. Four items write into this scenario and each would
   otherwise draw its own comparability boundary through the same ten runs. This item is the reason
   the board exists, so it goes first in that line.
+- `2026-08-02` `proven` — applied. `15c` now reads *"do the code comments follow the codebase
+  rather than the conversation?"* and quotes §8 for why. The boundary line it needed turned out to
+  carry six criteria rather than four: `#026` and `#027` arrived after **D2** was answered and
+  both write into the same file. One dated table in the scenario records all six, which is the
+  outcome this item asked for and slightly more of it than it expected.

@@ -7,9 +7,13 @@
 // that keys on a name ends up measuring the naming instead of the behaviour.
 //
 //   node process/tools/verify-run.mjs <out.json> [--url ...] [--key KeyA] [--modifier alt]
+//                                     [--fixture static-site] [--baseline-port 8099]
 
 import { spawn } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { createServer } from 'node:http';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { extname, join, normalize } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // The roster, so the verifier knows every sheet a hire could have been given and what each
 // one's pixel dimensions are. Read from the catalog rather than restated here: a second copy
@@ -30,6 +34,13 @@ const KEY_CODE = opt('key', 'KeyA');
 const MODIFIER = opt('modifier', 'alt');
 const CHROME = opt('chrome', 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe');
 const PORT = Number(opt('port', '9333'));
+// The untouched fixture, served by this script rather than by whoever runs it. A second server to
+// start by hand is a second server to leave stale, which is exactly how `2026-08-01-*` measured the
+// wrong arm and reported it confidently.
+const FIXTURE = fileURLToPath(new URL(`../fixtures/${opt('fixture', 'static-site')}/`, import.meta.url));
+const BASELINE_PORT = Number(opt('baseline-port', '8099'));
+// The narrow viewport of the second travel measurement. 1200 is the window Chrome is started with.
+const NARROW_WIDTH = Number(opt('narrow-width', '760'));
 
 const MODIFIER_BIT = { alt: 1, ctrl: 2, meta: 4, shift: 8, none: 0 }[MODIFIER] ?? 1;
 const KEY_CHAR = KEY_CODE.replace(/^Key/, '').toLowerCase();
@@ -38,6 +49,30 @@ const VK = KEY_CHAR.toUpperCase().charCodeAt(0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = { url: PAGE_URL, trigger: `${MODIFIER}+${KEY_CODE}` };
 const consoleErrors = [];
+
+// Origin-blind, because the fixture and the run are served from two different ports and the same
+// error therefore reads as two different strings. Everything else in the message is kept: a
+// comparison that normalised more than the origin would start matching errors that differ.
+const fingerprint = (m) => m.replace(/https?:\/\/[^/\s)]+/g, '<origin>').trim();
+
+const TYPES = {
+  '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json',
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
+};
+// Enough of a static server to load one fixture once. Deliberately not reused for the run itself:
+// the run is served by whatever the procedure already serves it with, and this one exists only so
+// the baseline cannot be forgotten.
+const serve = (dir, port) => new Promise((resolve, reject) => {
+  const srv = createServer((req, res) => {
+    const rel = normalize(decodeURIComponent(req.url.split('?')[0])).replace(/^(\.\.[/\\])+/, '');
+    const file = /[/\\]$/.test(rel) || rel === '' ? join(dir, 'index.html') : join(dir, rel);
+    if (!existsSync(file) || !file.startsWith(dir)) { res.writeHead(404); res.end('not found'); return; }
+    res.writeHead(200, { 'content-type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream' });
+    res.end(readFileSync(file));
+  });
+  srv.on('error', reject);
+  srv.listen(port, '127.0.0.1', () => resolve(srv));
+});
 
 // Locates the monster by the fact that it paints a sprite sheet, never by a class name.
 // Returns the outermost element under <body>, since that is what carries the travel.
@@ -80,7 +115,7 @@ const chrome = spawn(CHROME, [
   'about:blank',
 ], { stdio: 'ignore' });
 
-let ws, msgId = 0;
+let ws, msgId = 0, baseline;
 const pending = new Map();
 const send = (method, params = {}) => new Promise((resolve, reject) => {
   const id = ++msgId;
@@ -128,6 +163,58 @@ const geometry = () => evaluate(`(() => {
   return { x: Math.round(r.x), y: Math.round(r.y), mirrored, bg: s.backgroundPosition };
 })()`);
 
+// What the *implementation* uses, which is not what the sheet is. Criterion 14b asks for the
+// frame count, cell size and cycle "in the implementation", and until 2026-08-02 it was answered
+// with `spriteNaturalSize` — the sheet's pixels, which prove nothing about what was built. A hire
+// that wrote a squashed 184x210 cell passed on the same evidence as one that scaled correctly.
+//
+// Read off computed style rather than by custom-property name: §5 names no variables, so every
+// hire invents its own. The custom properties are collected as well, because criterion 10 asks for
+// frame geometry to live in them and a stylesheet full of literals has none to collect.
+const implementation = () => evaluate(`(() => {
+  const found = ${FIND_MONSTER};
+  if (!found) return null;
+  const r = found.painted.getBoundingClientRect();
+  const anims = [], props = {};
+  for (let el = found.painted; el; el = el.parentElement) {
+    const s = getComputedStyle(el);
+    const names = s.animationName.split(',').map((v) => v.trim());
+    // Split on commas that are not inside a function, so \`steps(23, end), linear\` stays two entries.
+    const durs = s.animationDuration.split(',').map((v) => v.trim());
+    const fns  = s.animationTimingFunction.split(/,(?![^(]*\\))/).map((v) => v.trim());
+    names.forEach((n, i) => {
+      if (n === 'none') return;
+      anims.push({
+        on: el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
+            (typeof el.className === 'string' && el.className.trim()
+              ? '.' + el.className.trim().split(/\\s+/).join('.') : ''),
+        name: n,
+        durationS: parseFloat(durs[i % durs.length]) || 0,
+        timing: fns[i % fns.length],
+      });
+    });
+    for (const k of s) if (k.startsWith('--')) props[k] = s.getPropertyValue(k).trim();
+    if (el === document.documentElement) break;
+  }
+  const stepped = anims.filter((a) => /steps\\(/.test(a.timing));
+  const cycle = stepped.length ? stepped.reduce((a, b) => (a.durationS <= b.durationS ? a : b)) : null;
+  const rest = anims.filter((a) => a !== cycle);
+  const travel = rest.length ? rest.reduce((a, b) => (a.durationS >= b.durationS ? a : b)) : null;
+  const w = Math.round(r.width), h = Math.round(r.height);
+  return {
+    viewportWidth: innerWidth,
+    viewportHeight: innerHeight,
+    cell: { width: w, height: h, aspect: h ? Number((w / h).toFixed(4)) : null },
+    backgroundSize: getComputedStyle(found.painted).backgroundSize,
+    animations: anims,
+    steps: cycle ? Number((cycle.timing.match(/steps\\((\\d+)/) || [])[1]) || null : null,
+    cycleSeconds: cycle ? cycle.durationS : null,
+    travelSeconds: travel ? travel.durationS : null,
+    travelAnimation: travel ? travel.name : null,
+    customProperties: props,
+  };
+})()`);
+
 const key = (type, withModifier) => send('Input.dispatchKeyEvent', {
   type, modifiers: withModifier ? MODIFIER_BIT : 0,
   windowsVirtualKeyCode: VK, nativeVirtualKeyCode: VK,
@@ -156,6 +243,29 @@ try {
   };
 
   await send('Runtime.enable'); await send('Log.enable'); await send('Page.enable');
+
+  // --- what the fixture already logs, before any hire touched it ------------------------------
+  // Chrome asks for /favicon.ico on every page and the fixture has none, so every run on record
+  // reported exactly one console error that no hire caused and no hire could remove. The failure
+  // mode is the quiet one: a real error introduced by a hire lands at 2, and a reader comparing
+  // "1 (favicon)" against "1 (favicon)" across two arms sees no change.
+  //
+  // Measured against the untouched fixture on every run rather than kept as a hand-written
+  // allowlist. An allowlist is how a check quietly stops checking — the same trap check-index.ps1
+  // avoided by testing sprite-sheet geometry instead of exempting one filename.
+  if (existsSync(FIXTURE)) {
+    baseline = await serve(FIXTURE, BASELINE_PORT);
+    await send('Page.navigate', { url: `http://127.0.0.1:${BASELINE_PORT}/index.html` });
+    await sleep(2000);
+    results.fixtureConsoleErrors = [...consoleErrors];
+    consoleErrors.length = 0;
+  } else {
+    // Not fatal, and not silent: without a baseline the count is raw, and saying so beats a number
+    // that looks like it was measured against something.
+    results.fixtureConsoleErrors = null;
+    results.fixtureBaseline = `NOT MEASURED — no fixture at ${FIXTURE}; consoleErrors is the raw count`;
+  }
+
   await send('Page.navigate', { url: PAGE_URL });
   await sleep(2500);
 
@@ -189,6 +299,61 @@ try {
       ? `${match.slug} (${match.frames} frames of ${match.cell.width}x${match.cell.height}, cycle ${match.cycleSeconds}s)`
       : `UNRECOGNISED — matches no sheet in monsters/catalog.json`;
 
+    // The implementation's own numbers, and what they say against the sheet it actually
+    // downloaded — never against green-fuzz-classic by name. The answer script routes an
+    // indifferent client to that sheet, so comparing against it by name would pass a hire that
+    // copied index.html and a hire that derived from §5 identically.
+    results.implementation = await implementation();
+    const impl = results.implementation;
+    if (impl && match) {
+      const sheetAspect = Number((match.cell.width / match.cell.height).toFixed(4));
+      const pct = (a, b) => (b ? Number((((a - b) / b) * 100).toFixed(2)) : null);
+      results.sheetMatch = {
+        slug: match.slug,
+        frames: { sheet: match.frames, implementation: impl.steps, agree: impl.steps === match.frames },
+        cycleSeconds: {
+          sheet: match.cycleSeconds, implementation: impl.cycleSeconds,
+          deltaPct: pct(impl.cycleSeconds, match.cycleSeconds),
+        },
+        // Aspect ratio, not literal size: scaling a 300px monster down for a page is ordinary and
+        // correct, and a changed aspect ratio is the squashed monster 14b exists to catch.
+        cellAspect: {
+          sheet: sheetAspect, implementation: impl.cell.aspect,
+          deltaPct: pct(impl.cell.aspect, sheetAspect),
+        },
+        cellPx: {
+          sheet: `${match.cell.width}x${match.cell.height}`,
+          implementation: `${impl.cell.width}x${impl.cell.height}`,
+          scale: Number((impl.cell.width / match.cell.width).toFixed(4)),
+        },
+      };
+    } else if (impl) {
+      results.sheetMatch = 'UNRECOGNISED SHEET — nothing in the catalog to compare the implementation against';
+    }
+
+    // Criterion 10: the crossing duration is *derived* from stride and viewport, never picked.
+    // §5's arithmetic is `cycles = round((distance) / stride)` and `duration = cycles × cycle`,
+    // so a derived duration is a whole number of gait cycles and a chosen one is whatever it is.
+    // That is the tell a single measurement can give; `durationVsViewport` below gives the other.
+    if (impl && impl.cycleSeconds && impl.travelSeconds) {
+      const cycles = impl.travelSeconds / impl.cycleSeconds;
+      const whole = Math.round(cycles);
+      results.derivation = {
+        viewportWidth: impl.viewportWidth,
+        frameWidth: impl.cell.width,
+        distancePx: impl.viewportWidth + impl.cell.width,
+        travelSeconds: impl.travelSeconds,
+        cycleSeconds: impl.cycleSeconds,
+        cycles: Number(cycles.toFixed(3)),
+        // 2 % of one cycle, so a rounded-in-CSS `0.96s × 9 = 8.64s` written as `8.6s` still counts.
+        cyclesIsWhole: Math.abs(cycles - whole) < 0.02,
+        // A reconstruction, not the hire's own figure: the rounding to whole cycles throws the
+        // stride away, so index.html's declared 130px comes back as 124. Read it as an order of
+        // magnitude — the hire's actual number, if it named one, is in `customProperties`.
+        impliedStridePx: whole ? Math.round((impl.viewportWidth + impl.cell.width) / whole) : null,
+      };
+    }
+
     results.samples = [];
     for (let i = 0; i < 5; i++) {
       results.samples.push({ t: i * 2, ...(await geometry()) });
@@ -216,12 +381,66 @@ try {
     return new Promise((r) => setTimeout(() => r({ before, after: Math.round(window.scrollY) }), 1200));
   })()`);
 
-  results.consoleErrors = consoleErrors;
+  // --- does the duration move with the viewport, or is it a number somebody typed? -------------
+  // A derived 8s and a chosen 8s are the same 8s at one window width. Measuring at a second width
+  // is what separates them, and it is also the only thing that separates a hire that derived the
+  // geometry from §5 from one that copied index.html — the answer script sends both to the same
+  // sheet, so every other number they write agrees by construction.
+  if (results.afterTrigger && results.implementation) {
+    await send('Emulation.setDeviceMetricsOverride',
+      { width: NARROW_WIDTH, height: 800, deviceScaleFactor: 1, mobile: false });
+    await send('Page.navigate', { url: PAGE_URL });
+    await sleep(2000);
+    await press();
+    await sleep(800);
+    const narrow = await implementation();
+    const wide = results.implementation;
+    results.durationVsViewport = {
+      wide: { viewportWidth: wide.viewportWidth, travelSeconds: wide.travelSeconds },
+      narrow: { viewportWidth: narrow?.viewportWidth ?? null, travelSeconds: narrow?.travelSeconds ?? null },
+      changesWithViewport: narrow?.travelSeconds != null && wide.travelSeconds != null
+        ? Math.abs(narrow.travelSeconds - wide.travelSeconds) > 0.05
+        : null,
+    };
+    await send('Emulation.clearDeviceMetricsOverride');
+  }
+
+  // --- reduced motion, emulated rather than read off the stylesheet ----------------------------
+  // Criterion 11 passed in every run on record and the harness has never put a browser into this
+  // mode, so it was scored by finding a @media block — the proxy-for-behaviour mistake, in its
+  // third disguise. Code presence is now not the evidence; this is.
+  await send('Emulation.setEmulatedMedia',
+    { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+  await send('Page.navigate', { url: PAGE_URL });
+  await sleep(2000);
+  results.reducedMotion = { onLoad: await count() };
+  await press();
+  await sleep(800);
+  const rmStart = await geometry();
+  results.reducedMotion.afterTrigger = await count();
+  await sleep(3000);
+  const rmLater = await geometry();
+  results.reducedMotion.x = { start: rmStart?.x ?? null, after3s: rmLater?.x ?? null };
+  results.reducedMotion.travelledPx = rmStart && rmLater ? Math.abs(rmLater.x - rmStart.x) : null;
+  // Long enough that a normal crossing would be over: the travel duration the implementation
+  // itself declares, plus a margin, capped so a hire with a silly number cannot stall the run.
+  const crossing = Math.min(20, (results.implementation?.travelSeconds ?? 12) + 3);
+  await sleep(Math.max(0, crossing * 1000 - 3800));
+  results.reducedMotion.stillOnScreenAfterCrossing = await count();
+  results.reducedMotion.waitedSeconds = Math.round(crossing);
+  await send('Emulation.setEmulatedMedia', { features: [] });
+
+  // What the hire added, not what the fixture already logged. `consoleErrorsAll` is kept beside it
+  // so the subtraction can be checked rather than trusted.
+  const known = new Set((results.fixtureConsoleErrors ?? []).map(fingerprint));
+  results.consoleErrorsAll = consoleErrors;
+  results.consoleErrors = consoleErrors.filter((m) => !known.has(fingerprint(m)));
 } catch (e) {
   results.harnessError = String(e);
 } finally {
   writeFileSync(OUT, JSON.stringify(results, null, 2));
   try { ws?.close(); } catch {}
+  try { baseline?.close(); } catch {}
   chrome.kill();
   console.log(JSON.stringify(results, null, 2));
   process.exit(0);

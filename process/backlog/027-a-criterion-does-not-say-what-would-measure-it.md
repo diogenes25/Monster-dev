@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `10` and `13` directly; the rule covers all of section B |
@@ -105,3 +105,23 @@ Whether the re-scoring changes any verdict is unknown, and that is the reason to
   silently overwrites the header field — no failure, just a wrong column. Worked around by renaming
   the column to `#`. Not filed: it is one line to fix properly (anchor the parse to the rows above
   the first blank line) and this item is not about the board's own tooling.
+- `2026-08-02` `proven` — all three target files. Every criterion in `alt-a-left-to-right.md` that
+  makes a behavioural or numeric claim now names the artifact that settles it; the rule and the
+  `NOT SCORABLE` verdict are in the scenario template under `references/`, so the next scenario is
+  written with it rather than audited against it, and in Half B step 7, which is where a scorer
+  reads. Six criteria moved, not four: `#007`'s `16` came along in the same boundary because it is
+  the same defect from the harness side.
+- `2026-08-02` — `10` and `13`, this item's own two, as applied. **`10`** splits into three marks
+  and is scored from `derivation`, `durationVsViewport` and `implementation.customProperties`. The
+  instrument had to be invented, not just named: §5's arithmetic ends on a *whole number of gait
+  cycles*, so `travelSeconds / cycleSeconds` being an integer is the tell a single measurement can
+  give — and because that is reproducible by copying, the verifier reads the duration at a second
+  window width as well. Both marks are required. **`13`** becomes `13a` (`git status --porcelain
+  -uall`, the file list) and `13b` (a case-insensitive content search over the worktree), with the
+  product name corrected from `MonsterLib` alone to both names.
+- `2026-08-02` — the re-scoring of `10` across the runs on record, which this item asks for, is
+  **not** done and is not silently dropped. It is now cheaper than when it was written: the whole
+  cycle can be recovered from any `measurements.json` that records the samples, but
+  `travelSeconds` cannot — no run on record captured the implementation's declared duration, only
+  positions over time. A stride is still recoverable from consecutive `x` values, and that is the
+  half worth doing.

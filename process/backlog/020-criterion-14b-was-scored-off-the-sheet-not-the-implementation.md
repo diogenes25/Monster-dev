@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `14b` |
@@ -84,3 +84,13 @@ took it.
   **E2**: this item stays open as evidence for `#027` rather than being folded into it — it and
   `#021` are the two instances found by measurement, and that provenance is what makes the general
   rule credible.
+- `2026-08-02` `proven` — both halves applied. `verify-run.mjs` emits `implementation` (the hire's
+  own cell size, `steps(N)` and cycle, read off computed style rather than by custom-property
+  name, since §5 names no variables and every hire invents its own) and `sheetMatch`, which
+  compares those against **whichever** row of the catalog matches `spriteNaturalSize`. `14b` names
+  those fields and asks for `cellAspect.deltaPct` within one percent, with `cellPx.scale` recorded
+  beside it so a uniform scale reads as the hire's call rather than as a miss.
+- `2026-08-02` — the instrument reproduces this item's own finding. Run against `index.html`:
+  `cellPx` is `276x300` sheet against `184x200` implementation, `scale` `0.6667`, `cellAspect`
+  delta `0`. The arithmetic that took a hand-check and a blind scorer to notice is now one field.
+  A hire that had written `184x210` would show a `4.7 %` aspect delta on the same line.

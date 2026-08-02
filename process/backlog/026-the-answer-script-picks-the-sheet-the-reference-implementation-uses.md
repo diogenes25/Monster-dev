@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `10`, `14b` — both, at their root |
@@ -89,3 +89,16 @@ boundary line in the scenario's *"criteria changed"* note, under **D2**, togethe
   `index.html`'s sprite against each other. **E1** also settled that this does not supersede `#020`:
   the criterion asks the wrong thing *and* the answer makes the right question unanswerable, and
   those are two edits to two parts of one file.
+- `2026-08-02` `proven` — applied, and the fix went further than the wording proposed here. Scoring
+  against both sheets' numbers is not what landed; scoring against **whichever sheet the page
+  actually downloaded** is, identified by `spriteNaturalSize` and never by name. That is the same
+  idea with the enumeration removed, and it does not need editing when a third sheet joins the
+  roster. The answer table keeps its fallback and gains a paragraph saying what the fallback costs
+  and where `10` and `14b` now look.
+- `2026-08-02` — the harder half of this item is settled by a measurement rather than by wording.
+  A copied duration and a derived one are the same number at one window width, so the verifier
+  reads the travel duration at two: `durationVsViewport`. On `index.html` it is `10.56s` at
+  `1184px` and `6.72s` at `760px`. A hire that lifted a literal from the reference writes the same
+  number twice, and that is the one thing a copy cannot fake — the sheet, the frame count, the
+  cycle and the cell size are all identical for both hires by construction, which is what this
+  item is about.

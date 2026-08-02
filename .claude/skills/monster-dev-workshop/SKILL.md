@@ -347,11 +347,28 @@ the direct evidence for whether questions came before the build.
 
 ### 7. Gather evidence, not impressions
 
-- §8/§9: `git -C $target log --oneline`, `git -C $target status --porcelain`
+- §8/§9: `git -C $target log --oneline`, `git -C $target status --porcelain -uall`. That is the
+  file list and only the file list — a product name *inside* a modified file needs a content
+  search over the worktree, which is a second instrument and was missing until 2026-08-02.
 - Behaviour: measure it. Positions via `getBoundingClientRect()` at two moments, not eyeballed
-  screenshots. Sprite loads with 200, frames advance past frame 0, no console errors.
+  screenshots. Sprite loads with 200, frames advance past frame 0, no console errors beyond what
+  the untouched fixture already logs.
 - Trigger paths: prefer a real key/click event; a synthetic event is a qualified pass
   ("handler verified, key path not measurable"), not a clean one; neither is a fail.
+
+**Score each criterion off the artifact it names, and if it names none, that is the finding.**
+Four criteria in `alt-a-left-to-right.md` were written before the verifier existed and named no
+instrument, so each was scored off whatever the harness happened to emit — a duration *"derived
+from stride and viewport"* against a measurements file holding none of the three, reduced motion
+*"handled"* against a verifier that could not emulate it, *"no product name"* against a command
+that never opens a file, and the implementation's sprite geometry against the sheet's. A criterion
+whose named instrument does not exist is **`NOT SCORABLE`**, never `PASS`.
+
+`verify-run.mjs` now also emits `implementation` (the hire's own numbers, off computed style),
+`sheetMatch` (those numbers against whichever sheet the page really downloaded, identified by
+pixel size and never by name), `derivation` + `durationVsViewport` (derived-or-typed, which needs
+two window widths to answer), `reducedMotion` (emulated, not read off the CSS) and
+`fixtureConsoleErrors` (the baseline `consoleErrors` is subtracted against).
 
 ### 8. Score it twice, the second time blind
 

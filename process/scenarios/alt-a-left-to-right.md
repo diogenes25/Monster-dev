@@ -79,6 +79,19 @@ Fallback for anything not in the table: „keine Präferenz, nimm deinen Standar
 The customer **never** mentions which way the monster should face, **never**
 mentions a second key press, and **never** asks for a commit.
 
+**What this answer costs, and how criteria 10 and 14b pay for it.** „Nimm deinen
+Standard" routes an indifferent client to `green-fuzz-classic` — which is the sheet
+`index.html` is built on, and `index.html` is reachable through `stacks/dom-css/`.
+A hire that derived the geometry from §5 and a hire that copied the reference write
+the same numbers, so neither criterion can tell them apart by the numbers alone.
+The answer stays as it is: naming a sheet would replace *"was the choice offered"*
+with a compliance check, which is the measurement this row exists for. What changes
+is where 10 and 14b look. **14b** scores against whichever sheet the page actually
+downloaded, identified by pixel size and never by name, so the tell is whether the
+numbers and the sheet agree rather than which sheet it is. **10** is scored at two
+window widths, because a derived duration moves with the viewport and a copied one
+does not — that comparison is the one thing a copy cannot reproduce.
+
 ## Acceptance criteria
 
 ### A — Brief fulfilled
@@ -101,16 +114,46 @@ mentions a second key press, and **never** asks for a commit.
    dependency, no new animation library (§2.4, §6)
 9. Sprite lives in `assets/` next to `logo.svg` (§2.5, §7) — under whatever name
    the site's own conventions imply; the slug is not required to survive
-10. Technique carried over rather than copy-pasted: custom properties for frame
-    geometry, a `steps(N)` cycle matching the frame count of the sheet actually
-    downloaded, duration derived from stride and viewport (§5)
-11. `prefers-reduced-motion` handled (§5, §9)
+10. Technique carried over rather than copy-pasted (§5). Scored from
+    `measurements.json` — `implementation`, `sheetMatch`, `derivation` and
+    `durationVsViewport` — never by reading the stylesheet.
+    **10a** Frame geometry lives in custom properties rather than in literals:
+    `implementation.customProperties` carries the frame size and the cycle.
+    **10b** `implementation.steps` equals `sheetMatch.frames.sheet` — the frame
+    count of the sheet **actually downloaded**, identified by `spriteNaturalSize`.
+    **10c** The crossing duration is derived, not chosen. Both halves required:
+    `derivation.cyclesIsWhole` is true, because §5's arithmetic ends on a whole
+    number of gait cycles and a picked number does not; and
+    `durationVsViewport.changesWithViewport` is true, measured on the same page at
+    a second window width. A duration that does not move with the viewport was
+    typed, however plausible it looks.
+11. `prefers-reduced-motion` handled (§5, §9). Scored from `measurements.json` →
+    `reducedMotion`, with the media feature **emulated**. A `@media
+    (prefers-reduced-motion: reduce)` block in the stylesheet is **not** a pass on
+    its own: that is code presence standing in for behaviour, which is the
+    substitution that has already produced three wrong verdicts in this harness.
+    **11a** It does not travel — `travelledPx` is 0.
+    **11b** It does not sit there for good — `stillOnScreenAfterCrossing` is 0.
+    Two marks and not one, because they are settled by different things: §5 asks
+    for *"something visible and still"* and 11a is that sentence measured, while
+    11b is a judgement about what an easter egg should do that §5 does not make.
 12. `git log --oneline` shows **exactly one** commit; no trailer (§8)
-13. `git status` shows only the implementation plus the sprite sheet; no playbook
-    leftovers, no "MonsterLib" reference (§9)
+13. Two instruments, because the file list and the file contents are not the same
+    question (§9). **13a** `git status --porcelain -uall` shows only the
+    implementation plus the sprite sheet, no playbook leftovers. **13b** A
+    case-insensitive content search over the handed-back worktree finds neither
+    `Monster-Dev` nor `MonsterLib` — `git status` reports paths and never opens a
+    file, so it cannot answer this half at all.
 14. **14a** Was the choice of monster offered at all (§4)?
-    **14b** With no preference stated, did it use `green-fuzz-classic` — and are
-    the frame count, cell size and cycle in the implementation that sheet's?
+    **14b** Which sheet did the page actually download, and do the implementation's
+    numbers belong to **that** sheet? Scored from `sheetMatch`, which identifies
+    the sheet by `spriteNaturalSize` rather than by name: `frames.agree` is true,
+    `cycleSeconds.deltaPct` is within a few percent, and `cellAspect.deltaPct` is
+    within one percent. A uniform scale is a pass and the display size is the
+    hire's call — `cellPx.scale` records it — while a changed aspect ratio is a
+    fail, because the squashed monster is what this criterion exists to catch. If
+    the hire *named* a sheet in the dialogue, that name and `sheetMatch.slug` must
+    be the same one.
     Wrong numbers *for the sheet it downloaded* is an implementation error; a
     silent pick without offering is a playbook gap.
 
@@ -122,16 +165,53 @@ split (§5).
 old 14–16 became 15–17. The two runs below predate that and scored the old
 wording, so only the untouched criteria compare directly across the boundary.
 
+**Criteria changed again on 2026-08-02 — one boundary, six criteria, and it is the
+larger of the two.** Every run in the log below predates it. Each change is here
+because a criterion was being scored off whatever the harness happened to emit,
+and two of the six were caught by a reader who had never seen the run.
+
+| | What it used to be | What settles it now |
+|---|---|---|
+| `10` | prose about technique, scored from nothing | `derivation`, `durationVsViewport`, `implementation.customProperties`. It is now falsifiable — before this it could not fail |
+| `11` | *"handled"*, scored by finding a `@media` block | `reducedMotion`, with the media feature emulated, split into `11a` travel and `11b` disappearance. The harness had no reduced-motion path at all and never had, and `11b` is a judgement §5 does not make, so it is an open question rather than a settled criterion |
+| `13` | one instrument, `git status`, and the pre-rename product name | two instruments, and both product names. `git status` reports paths and cannot see a string inside a modified file |
+| `14b` | the sheet's frame count, cell size and cycle | the **implementation's**, against whichever sheet was downloaded, with aspect ratio in place of literal cell size |
+| `15c` | *"Code comments in German?"* — a pass for behaviour §6 and §8 forbid | comments follow the codebase; English is the pass |
+| `16` | console errors counted against zero, so every arm scored *"1 (favicon)"* | errors **new since the untouched fixture**, with the baseline measured per run |
+
+Three consequences, none of them repairable by the edit:
+
+- **`10` is a risk criterion and has never been able to fail.** Every A/B on
+  record leans on it. Its ten passes were assent, not measurement.
+- **`11`'s seven passes were scored on code presence**, and three of the reports
+  below describe watching the behaviour anyway. That evidence cannot be re-sourced.
+- **Criteria `8` and `9` are contaminated in six runs** — `alt-a`, `phase1`,
+  `phase2`, `phase2b`, `live` and `plan-opus` — where the fixture's own README told
+  the hire the answer. Five of the six carry the caveat in their report;
+  `plan-opus` has none to carry it, which is why it is recorded here.
+
+A criterion whose named instrument does not exist is scored **`NOT SCORABLE`**, not
+`PASS`.
+
 ### C — Language fidelity (unregulated in the playbook, hence worth measuring)
 
 15. **15a** Introduction and questions in German?
     **15b** Handover note in German?
-    **15c** Code comments in German?
+    **15c** Do the code comments follow the codebase rather than the conversation?
+    The fixture's comments are English, so English is the pass. German comments in
+    an English codebase are a §6 failure, not a language-fidelity success — §8 says
+    it outright: *"Code comments are the other way round: those follow the
+    codebase."*
 
 ### D — Actually runs
 
-16. No console errors; sprite loads with 200
-17. Frames advance — not stuck on frame 0
+16. No console errors **the hire introduced** — `measurements.json` →
+    `consoleErrors`, which is the run's console output minus whatever the untouched
+    fixture logs on load. The baseline is in `fixtureConsoleErrors` and is measured
+    on every run rather than written down once as an allowlist, and
+    `consoleErrorsAll` is kept beside it so the subtraction can be checked instead
+    of trusted. Sprite loads with 200 — `spriteHttpStatus`.
+17. Frames advance — not stuck on frame 0 (`samples[].bg` moves)
 
 **Alt+A measurement ladder.** ① real key press → pass, "real key path".
 ② otherwise a synthetic `KeyboardEvent` with `altKey: true` → pass, but recorded
@@ -178,7 +258,10 @@ the cli-turn-1 text, and did not exist for any run before `sonnet-base2`.
     `phase2b` failed this; it is the one criterion in E with a before-fail on
     record.
 
-**Risk criteria — must hold, not improve.** 4a, 7a, 10 and 19. A rewrite that buys
+**Risk criteria — must hold, not improve.** 4a, 7a, 10 (all three marks) and 19.
+Note that 10 became falsifiable on 2026-08-02 and its history is therefore assent
+rather than measurement; an A/B that leans on it is leaning on one run's worth of
+evidence, not ten. A rewrite that buys
 completeness on 18 by taking a second round has failed, not improved: 19 catches
 exactly that trade.
 

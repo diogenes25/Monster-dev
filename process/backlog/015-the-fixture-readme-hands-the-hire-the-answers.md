@@ -178,3 +178,8 @@ reports belong to whoever settles what `process/runs/` is supposed to contain pe
 - `2026-08-02` — **D2**: the caveat line in the scenario's *"criteria changed"* note lands with
   `#001`, `#020` and `#021` under one dated boundary. The five report caveats are this item's alone
   and land with it. **D4**: this item stays in the paths wave and remains what `#022` waits on.
+- `2026-08-02` — the scenario half is **applied**; the item stays `formulated`, because the fixture
+  rewrite and the `new-run.ps1` scan are Wave 2 and they are what it is named for. The boundary
+  note now records that criteria `8` and `9` are contaminated in six runs, names all six, and says
+  that `plan-opus` has no report to carry its caveat — so the one run whose contamination would
+  otherwise be written down nowhere is written down here.

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | console errors |
@@ -42,3 +42,15 @@ run and cannot accumulate hand-added entries.
   already booked the bundling from its side; this item had not mentioned it. Three separate edits to
   the measurement set would be three points after which a number stops comparing with the ten runs
   on record, for a baseline fix, a new pass and a new field that have nothing to do with each other.
+- `2026-08-02` `proven` — applied, and the mitigation the Cost section demanded is what the
+  implementation actually is: `verify-run.mjs` serves `process/fixtures/<name>/` itself on a
+  second port, loads it before the run page, and subtracts what it logged. Nobody has to remember
+  to start it, and there is no list to hand-edit — the two ways an allowlist rots. `consoleErrors`
+  is now new-since-fixture and `consoleErrorsAll` sits beside it so the subtraction can be checked
+  rather than trusted. Comparison is origin-blind, because the fixture and the run are served from
+  two ports and the same error would otherwise read as two different strings. Criterion `16` names
+  all three fields; the boundary is the one dated line in the scenario, shared with five other
+  criteria.
+- `2026-08-02` — measured end to end against `index.html` before this line was written:
+  `fixtureConsoleErrors` holds the favicon 404, `consoleErrorsAll` holds it too, `consoleErrors` is
+  empty. That is the first run in this project's history where the honest console count is zero.
