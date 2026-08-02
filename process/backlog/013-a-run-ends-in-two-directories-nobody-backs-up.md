@@ -241,3 +241,7 @@ and the `monster-dev-workshop` skill's run procedure.
   what it was named for and the only part that is losing data today. **C4**: the capture backstop is
   re-keyed inside the repository. Its first form read a sibling directory — which `#019` was about
   to make match nothing, and which made a commit gate machine-dependent either way.
+- `2026-08-02` — **D4**: moved to the front of the queue with `#023`, which it is blocked on. The
+  reason is not that this item is large but that it is the only one where the cost of waiting is
+  paid in data: every run executed before it lands keeps its transcript and its worktree in one
+  place, outside the repository, where `new-run.ps1 -Force` has already destroyed one set.

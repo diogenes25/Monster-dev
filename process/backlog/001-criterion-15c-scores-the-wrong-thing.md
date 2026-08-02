@@ -40,3 +40,7 @@ needs one more line recording that boundary, alongside the one already there for
 - `2026-08-01` `intake` — from `2026-08-01-alt-a`, withdrawn as mis-specified, not rewritten.
 - `2026-08-01` `formulated` — written up as F1 of `2026-08-01-plan-sonnet`, replacement wording
   ready to paste, after a fourth run re-litigated it.
+- `2026-08-02` — **D2**: this edit lands together with `#015`, `#020` and `#021` under a single
+  dated *"criteria changed"* line, not four. Four items write into this scenario and each would
+  otherwise draw its own comparability boundary through the same ten runs. This item is the reason
+  the board exists, so it goes first in that line.

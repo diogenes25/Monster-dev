@@ -6,7 +6,7 @@
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `14b` |
-| Target file | `process/scenarios/alt-a-left-to-right.md` |
+| Target file | `process/scenarios/alt-a-left-to-right.md`, `process/tools/verify-run.mjs` |
 | Evidence | `2026-08-01-plan-sonnet` (all three arms), found `2026-08-02` by the blind second scoring |
 | Proof design | — |
 
@@ -71,3 +71,9 @@ took it.
 - `2026-08-02` `formulated` — verified by hand against `worktree/style.css` before being written
   down. The primary report's evidence line was read the same day and does not mention the
   implementation's cell size at all.
+- `2026-08-02` — **D3**: `verify-run.mjs` added to the target row. This item asks a criterion to
+  record *the implementation's* numbers, and `measurements.json` carries `spriteNaturalSize` and the
+  catalog's cell geometry — the **sheet's** numbers — and never reads the hire's
+  `--monster-frame-w`. Rewording the criterion without extending the instrument would produce a
+  criterion no run can satisfy, which is the fault `#021` names in its own words. **D2**: the
+  scenario edit lands with `#001`, `#015` and `#021` under one boundary line.

@@ -27,6 +27,9 @@ to any one item:
 2. **Four items edit the same two hand-written lists in `build-dist.ps1`** (`#013` P5, `#014`,
    `#018`, `#019`), and five items write into `process/scenarios/alt-a-left-to-right.md`. `CLAUDE.md`
    calls the first of those *"the one invariant that silently invalidates everything."*
+   *Both counts have since moved — B3 and C1 took two items off `build-dist.ps1`, and the second
+   count was one too many to begin with. D1 and D2 carry the corrected figures; this line is left as
+   the pass found it.*
 3. **`#013` is a bottleneck** — eleven deliverables, at least six separable decisions, four items
    waiting on it, and one of those decisions collides with two standing rules.
 
@@ -287,22 +290,36 @@ behaves differently on another machine, and this one would gate commits.
 
 ### D1 — `build-dist.ps1` in one sitting
 
-Four items edit the same two hand-written lists. `CLAUDE.md`'s lesson from the `test/` → `process/`
-rename: *"change every site, then build one and look inside it; a green script is not evidence."*
-Landing them one at a time is four chances to repeat that.
+*Corrected before it was asked — by the answers to B3 and C1, which landed after this was written.*
+As first put: *"four items edit the same two hand-written lists"* — `#013` P5, `#014`, `#018`,
+`#019`. Today that is wrong twice. **B3** took `#014` off the file entirely, **C1** moved `#013`'s
+check to `#024`, and `#023` never touched it. What is left is three items in one file, editing three
+different lines:
 
-**Question.** Land `#018`, `#019`, `#013`(a) and — if it is approved — `#014`'s exclusion together,
-then build a mirror and read it?
+| Item | What it edits |
+|---|---|
+| `#018` | the exclusion list at `:73` — the invariant itself — plus two new mirror checks |
+| `#019` | the mirror's output path at `:56` |
+| `#024` | one new check after assembly |
 
-**Recommendation.** Yes, minus `#014`, which waits on B1/B2/B3. Three items, one sitting, one mirror
-inspected by eye.
+So the "same two hand-written lines" argument now applies to exactly one open item. `CLAUDE.md`'s
+lesson from the `test/` → `process/` rename still applies to it alone: *"change every site, then
+build one and look inside it; a green script is not evidence."*
+
+**Question.** Land them together anyway, or pair only the two that need each other?
+
+**Recommendation.** `#018` + `#019`, then build a mirror and read it. Not because they touch the same
+list — they do not — but because `#019` moves where the mirror is written and `#018`'s new checks run
+against it. `#024` is blocked on `#023` and `#013`, so including it would drag the whole capture
+chain forward.
 
 ### D2 — one scenario boundary instead of four
 
-Five items write into `alt-a-left-to-right.md`, and four of them append to the same *"criteria
-changed"* note: `#001` (`15c`), `#020` (`14b`), `#021` (`11`), plus caveat lines from `#015` and
-`#018`. Landed separately that is four comparability boundaries where one would do — and every
-boundary makes the ten runs on record harder to read against the next one.
+*Corrected before it was asked:* **four** items write into `alt-a-left-to-right.md`, not five, and
+`#018` is not one of them — it names four target files and the scenario is not among them. The four
+are `#001` (`15c`), `#020` (`14b`), `#021` (`11`) and `#015` (a caveat recording that six runs were
+scored while contaminated). Landed separately that is four comparability boundaries where one would
+do — and every boundary makes the ten runs on record harder to read against the next one.
 
 **Question.** One edit, one boundary line naming everything that changed on `2026-08-02`?
 
@@ -546,3 +563,55 @@ covers that case, and it covers it by construction.
 
 Files changed: `#013` rewritten to its remaining third, new `#023` and `#024`, and the inbound
 citations in `#012`, `#014`, `#016`, `#018`, `#019`.
+
+### Block D — settled `2026-08-02`, all four as recommended
+
+Two of the four findings were wrong by the time they were asked, and both are corrected above rather
+than answered around. That is worth naming as a pattern: **a sequencing plan decays as soon as the
+items it sequences are answered.** B3 and C1 changed which items touch `build-dist.ps1` inside the
+same afternoon. Any plan below has the same shelf life.
+
+**D1 — `#018` and `#019` land together, then a mirror is built and read by eye.** The original
+argument does not survive: after B3 and C1, `#018` is the *only* open item that edits the exclusion
+list — the two hand-written lines `CLAUDE.md` calls the invariant. The pairing survives on a
+different one. `#019` moves where the mirror is written and `#018` adds two checks that run against
+it; landing them apart means writing the checks twice or writing them against a path about to move.
+`#024`'s check comes later, behind `#023` and `#013`, and `#018`'s log says the three path-free
+mirror checks should read alike when they all exist.
+
+**D2 — one edit, one dated boundary line.** `#001`, `#015`, `#020` and `#021` all write into
+`alt-a-left-to-right.md`, three changing what a criterion means and one recording that six runs were
+scored contaminated. Four separate boundaries through the same ten runs, for changes made on one
+day, would be four reasons a future comparison has to be qualified. The cheapest decision on the
+list with the longest tail.
+
+**D3 — one `verify-run.mjs` pass covering three items,** and `verify-run.mjs` is now in `#020`'s
+target row. `#021` had booked the bundling and named `#007`; neither had noticed `#020`. Its
+criterion asks for *the implementation's* numbers and `measurements.json` records the **sheet's** —
+`spriteNaturalSize` and the catalog's cell geometry, never the hire's `--monster-frame-w`. Rewording
+the criterion alone would have produced one no run can satisfy, which is the exact fault `#021`
+is filed for.
+
+**D4 — the order, with `#023` and `#013` moved forward.**
+
+| Wave | Items | Why together |
+|---|---|---|
+| 0 — done | ten corrections, `leak-auditor.md` | — |
+| 1 | `#001`, `#015`*, `#020`, `#021`, `#007` — plus `#023` and `#013` in parallel | one scenario boundary (D2), one verifier pass (D3); the capture touches none of those files |
+| 2 | `#015`, `#018`, `#019` | everything that moves a path; `#019` pairs with `#023` above and with `#018` here |
+| 3 | `#012`, `#024`, `#014` | each needs the wave above it to exist first |
+
+\* `#015`'s scenario caveat is a Wave 1 line; the fixture rewrite and the `new-run.ps1` scan are
+Wave 2. It is the one item that genuinely spans two sittings.
+
+Not scheduled and not blocked on any decision: `#002` (see E4), `#004` (waiting on a second
+sighting), `#005`, `#006`, `#011` — each waiting on something that has to be built or found.
+`#022` follows `#015` and then needs a scenario written.
+
+`#023` and `#013` move forward for one reason and it is not their size. The capture is the only
+place on this board where waiting is paid for in data: every run executed before it lands keeps its
+transcript and its worktree in one location outside the repository, and `new-run.ps1 -Force` has
+already destroyed one set. Everything else on the board can wait a week and lose nothing.
+
+Files changed: `#001`, `#007`, `#013`, `#015`, `#018`, `#019`, `#020` (target row and log), `#021`,
+`#023`.

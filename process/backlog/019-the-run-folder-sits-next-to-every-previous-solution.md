@@ -91,3 +91,8 @@ made that it used it, because the transcript says it did not.
   rather than resolving it in prose. **C4**: `#013`'s capture backstop, which this layout would have
   silently disabled, is re-keyed inside the repository; recorded above as a cost of the layout, not
   as a defect of the backstop.
+- `2026-08-02` — **D1** and **D4**: this item lands in one sitting with `#018`, which is the only
+  other open edit to `build-dist.ps1` that matters to a mirror, and a mirror is built and read by
+  eye afterwards. It also has to land with `#023`, which moves the *other* directory — recorded in
+  the cost section above. Those are two different pairings on two different files, and this item is
+  in both.

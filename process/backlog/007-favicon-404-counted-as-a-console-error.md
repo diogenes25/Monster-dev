@@ -38,3 +38,7 @@ run and cannot accumulate hand-added entries.
   Phase 4 allowlist.
 - `2026-08-01` `formulated` — unchanged in `2026-08-01-index-sonnet`; identical in all arms of
   both runs, so it is fixture-inherent rather than run-to-run noise.
+- `2026-08-02` — **D3**: lands in one `verify-run.mjs` pass with `#021` and `#020`. `#021` had
+  already booked the bundling from its side; this item had not mentioned it. Three separate edits to
+  the measurement set would be three points after which a number stops comparing with the ten runs
+  on record, for a baseline fix, a new pass and a new field that have nothing to do with each other.

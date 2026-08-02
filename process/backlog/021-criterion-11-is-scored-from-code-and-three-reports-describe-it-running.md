@@ -92,3 +92,8 @@ reports that their evidence line is not reproducible.
 - `2026-08-02` `formulated` — verified beyond what the scorer could see: it had one bundle, so it
   could only say its own run was unmeasured. Grepping `verify-run.mjs` shows the capability has never
   existed, and reading all seven reports shows three of them describing behaviour anyway.
+- `2026-08-02` — **D3**: the bundling this item booked is confirmed and is wider than it knew. It
+  named `#007`; `#020` belongs in the same pass and did not know it, because a criterion asking for
+  the implementation's numbers cannot be satisfied from a `measurements.json` that only ever records
+  the sheet's. **D2**: the scenario half lands with `#001`, `#015` and `#020` under one boundary
+  line — so this item's two target files land in two different sittings, and that is deliberate.

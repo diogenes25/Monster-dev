@@ -96,3 +96,7 @@ moved report opens with its links intact. `git status` shows renames, not delete
 - `2026-08-02` — this is the part `#016` and `#014` are actually waiting on, and `#019` collides
   with. Their citations of *"`#013` Phase 1"* and *"`#013` Part 1"* now point here; `#019`'s said
   "Part 1" and meant Phase 1, which is the confusion the split removes.
+- `2026-08-02` — **D4**: moved forward, out of the paths wave and alongside the scenario and
+  verifier work, which touches no file this one does. It is not urgent in itself — it is a refactor
+  and it blocks `#013`, which is the only item on the board where waiting costs data that cannot be
+  recovered. It still lands in one sitting with `#019`, which moves the other directory.

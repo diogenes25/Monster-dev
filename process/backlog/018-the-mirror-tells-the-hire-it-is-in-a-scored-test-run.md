@@ -146,3 +146,11 @@ boundary in the eight reports and in the scenario, not a re-scoring and not a de
   one's vocabulary grep, its sprite check, and `#024`'s frontmatter-and-wikilink check. They are
   independent by design and should still read alike; whoever lands the second one writes them
   together.
+- `2026-08-02` — **D1**: lands in one sitting with `#019`, then a mirror is built and read by eye.
+  The catalog's premise for that sitting has shrunk and is corrected here: after **B3** removed
+  `#014`'s exclusion and **C1** moved `#013`'s check to `#024`, this is the **only** open item that
+  edits the exclusion list at `build-dist.ps1:73` — the two hand-written lines `CLAUDE.md` calls the
+  invariant. `#019` changes the mirror's output path and `#024` appends a check; neither touches the
+  list. The pairing with `#019` survives on a different argument: it moves where the mirror is
+  written, and the checks added here run against it. `#024`'s check comes later, behind `#023` and
+  `#013`.
