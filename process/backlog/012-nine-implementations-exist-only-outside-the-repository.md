@@ -10,11 +10,12 @@
 | Evidence | `2026-08-01-alt-a`, `phase1`, `phase2`, `phase2b`, `sonnet-base`, `sonnet-base2`, `plan-sonnet`, `plan-opus`, `live`, `index-sonnet`, `ph0-smoke` — inventory `2026-08-02` |
 | Proof design | — |
 
-**Depends on `#013`, and is its Phase 4.** `#013` owns the machinery — capture on `hire.ps1`, the
-scrubber, `runs/` as folders, OKF, the boundary checks. This item is the one-off backfill of
-everything that ran before that machinery existed, and it is deliberately run *with* that machinery
-rather than by hand: ten differently-aged real cases are the sharpest test the capture will ever
-get.
+**Depends on `#023` and `#013`, and runs after both.** Those two own the machinery — `#023` the
+`runs/<id>/` layout, `#013` the capture on `hire.ps1` and the scrubber. (`#024` owns the metadata
+convention and does not gate this: a backfilled run whose `knowledge.md` predates OKF is corrected
+by that item, not by this one.) This item is the one-off backfill of everything that ran before the
+machinery existed, and it is deliberately run *with* that machinery rather than by hand: ten
+differently-aged real cases are the sharpest test the capture will ever get.
 
 **What happened.** `#008` built the record tree and filled exactly one folder,
 `html/css/impl-01/`, from run `2026-08-01-plan-sonnet`. Nine other hires had already run the same
@@ -135,3 +136,6 @@ The three divergences above are **candidate observations, not findings**. They g
   this item booked cannot happen: `check-index.ps1:162` filters `process/*` before any PNG is
   opened. `#008`'s exclusion fix is therefore still untested, and `#014` is where that scan gets
   exercised — in the failing direction.
+- `2026-08-02` — **C1**: `#013` split three ways, so *"is its Phase 4"* no longer names anything.
+  This item runs after `#023` (the layout) and `#013` (the capture); `#024` does not gate it, and a
+  backfilled `knowledge.md` written before that convention lands is that item's to convert.

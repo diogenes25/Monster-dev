@@ -114,8 +114,8 @@ run. The `UNCERTAIN` list is where both came from, which is what it was put in t
 for.
 
 Not run: `2026-08-01-live`, which has no `hire.json` and needs `-Target` pointed at the rescued
-copy. Two of three is enough to clear the bar as stated; the third is worth doing when `#013`
-Phase 4 has the archive in a uniform shape.
+copy. Two of three is enough to clear the bar as stated; the third is worth doing when `#012`'s
+backfill has the archive in a uniform shape.
 
 **Cost.**
 
@@ -127,8 +127,8 @@ Phase 4 has the archive in a uniform shape.
 - **Disagreements cost time even when the second reader is wrong.** That is the price of the
   mechanism, not a defect in it — but it means a scorer that disagrees constantly is as useless as
   one that never does.
-- **`process/runs/<id>/score-b.md` presumes `#013` Phase 1** (runs as folders). Until that lands it
-  is `process/runs/<id>.score-b.md` and moves with everything else.
+- **`process/runs/<id>/score-b.md` presumes `#023`** (runs as folders). Until that lands it is
+  `process/runs/<id>.score-b.md` and moves with everything else.
 
 **Log.**
 
@@ -149,5 +149,8 @@ Phase 4 has the archive in a uniform shape.
   this item's Cost section names. Nothing in `run-scorer.md` or Half B step 8 states an output path
   at all; step 8 ends at *"set the two columns side by side"*. So the evidence that produced `#020`
   and `#021` is unversioned, which is `#013`'s complaint reproduced by the fix for this item.
-  Whether to write into `process/runs/` now rather than wait on `#013` Phase 1 is question **E3**
+  Whether to write into `process/runs/` now rather than wait on the folder layout is question **E3**
   in `DISCUSSION-2026-08-02.md`.
+- `2026-08-02` — **C1**: `#013` split three ways, and the part this item waits on is now `#023`.
+  Both citations above are re-pointed. Two of the three things forcing `#023` are this item's: a
+  second scoring per run, and a run that has no report to hang a filename prefix on.

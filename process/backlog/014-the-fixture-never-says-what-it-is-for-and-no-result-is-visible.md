@@ -8,7 +8,7 @@
 | Criterion | — |
 | Target file | `README.md` (root), `process/fixtures/<name>/`, a new `gh-pages` branch |
 | Evidence | owner request `2026-08-02`; ten results on record, none of them reachable from this repository |
-| Blocked on | `#018` — see B1 below; and `#013` Part 1, which produces the demos |
+| Blocked on | `#018` — see B1 below; and `#013`, whose run capture produces the demos |
 | Proof design | — |
 
 **What happened.** Two absences that one change closes, and they are not equally cheap.
@@ -44,7 +44,7 @@ reports — verdicts, not artifacts.
 *Half 1 — publish the results. No fork here.*
 
 > `demos/<run-id>/` holds a copy of each result that is a static site, taken from the run capture
-> `#013` Part 1 produces. The root `README.md` gains a **See it running** section listing them, each
+> `#013` produces. The root `README.md` gains a **See it running** section listing them, each
 > line naming the run id, the model and one sentence on what that run was for — rendered from
 > `process/runs/<id>/`, never hand-written (**B7**).
 >
@@ -144,3 +144,6 @@ the demos are off `main`.
   hire. **B2**: the general guard against a published implementation lives in `#018`, keyed on the
   sprite rather than on a path. **B7**: the README lines are rendered from `process/runs/<id>/`,
   not hand-written, so they cannot drift from `#012`'s column.
+- `2026-08-02` — **C1**: the two references to *"`#013` Part 1"* are re-pointed. The demos come from
+  the run capture, which stays `#013`; the folder they are rendered from is `#023`. Both are now
+  named by what they do rather than by a part number that has been renumbered once.

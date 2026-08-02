@@ -497,3 +497,52 @@ overview rendered rather than a `TAGS.md` that could drift.
 Files changed: items `#006`, `#012`, `#013`, `#014`, `#015`, `#018`, new `#022`; `README.md` and
 `TEMPLATE.md` again, because `Blocked on` was defined too narrowly to say "another item" and was
 being used that way within the hour.
+
+### Block C — settled `2026-08-02`, all four as recommended
+
+**C1 — `#013` splits three ways.** `#023` takes the `runs/` layout and arrives `grilled`, because it
+was grilled inside `#013` the same day and nothing about it is newly proposed. `#013` keeps the
+capture and the scrubber — what it is named for, and the only part losing data today. `#024` takes
+OKF, tags, wikilinks, the link checker and the mirror boundary check, and stays `formulated`,
+because C2 changed what it covers.
+
+The split is worth more than tidiness. Four items were waiting on `#013`, and **none of them was
+waiting on the same third of it**: `#016` and `#014` want the folder (`#023`), `#012` wants the
+capture (`#013`), `#018` cites the mirror check (`#024`). One of those citations was wrong about
+which half it meant — `#019` said *"Part 1"* and described Phase 1, which are the capture and the
+layout respectively. That ambiguity is what an eleven-deliverable item costs, and it is now gone.
+
+**C2 — OKF applies to `process/runs/` only.** `process/stacks/` keeps its plain `Stack: <name>`
+first line. That line is the whole mapping between the two trees called `stacks/`; a metadata
+convention is not a good enough reason to move it, and OKF has no field to move it *into* —
+`resource` is spent on the run id.
+
+*Consequence, recorded rather than absorbed:* the tag overview now covers `process/runs/` and not
+`process/stacks/` — which is the tree the navigability complaint was actually about. What remains
+there is the `Stack:` line and `[[wikilinks]]`, which are body syntax and need no frontmatter. A tag
+layer over `process/stacks/` would need its own decision; C2 closed the frontmatter route to it and
+no other route has been designed. Written into `#024` as an open fork, not as a plan.
+
+*And the wikilink hazard goes up, not down.* `process/stacks/` is the tree paragraphs are promoted
+*from*, and under C2 it keeps wikilinks while losing frontmatter — so the `[[` half of the mirror
+check is now the load-bearing half. The `---` half stays as a standing guard on a rule that has
+just acquired an exception.
+
+**C3 — dissolved by C2, and stated anyway.** The frozen copies needed excluding from *"frontmatter
+on every `.md` under `process/stacks/`"*; C2 removed that requirement wholesale, so there is nothing
+left to exclude. The rule is written into `#024` regardless — **nothing writes into
+`step-1-fixture/` or `step-4-result/`** — because the collision was with the *idea* of a convention
+over that tree, and the next one will arrive at the same two files.
+
+**C4 — the capture backstop is keyed inside the repository.** Every run id cited by a report, a
+scenario or a board item must have a `process/runs/<id>/`. Its first form read a sibling directory,
+which was wrong twice over: `#019` was about to make the pattern match nothing, and independently of
+that it made a commit gate depend on a directory outside the repository — the same commit passing on
+one machine and failing on another.
+
+What that trades away is in `#013` in plain words: a run executed and then cited nowhere leaves no
+trace inside the repository, so no repo-internal check can miss it. The per-turn capture is what
+covers that case, and it covers it by construction.
+
+Files changed: `#013` rewritten to its remaining third, new `#023` and `#024`, and the inbound
+citations in `#012`, `#014`, `#016`, `#018`, `#019`.

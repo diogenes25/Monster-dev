@@ -73,8 +73,9 @@ test hires is a good README; it is simply not one a test hire may read.
 > assembled and before it is handed back, `build-dist.ps1` greps every `.md` in it for a small
 > harness vocabulary — `acceptance criteria`, `test run`, `criterion`, `what is being measured`,
 > `comparability` — and fails the build, deleting the mirror, naming file and line. No path is
-> named, so a new published file cannot slip past it. This is `#013` Part 5's shape applied to a
-> second leak class.
+> named, so a new published file cannot slip past it. This is `#024`'s boundary check in the same
+> shape, applied to a second leak class — three mirror checks that name no path, and they should
+> read alike.
 >
 > The list carries a comment saying which reader it protects and why it is not one of the other two
 > — `new-run.ps1`'s product names guard the *hire's own working copy*, `score-bundle.ps1`'s criteria
@@ -140,3 +141,8 @@ boundary in the eight reports and in the scenario, not a re-scoring and not a de
   `raw.githubusercontent.com` URLs, which never reads a mirror — `README.md` stays public and
   `2026-08-01-live` would still have read it. That class is contained by what is *on `main`*, not
   by the mirror, and `#014`'s demos move off `main` for the same reason.
+- `2026-08-02` — **C1**: the citation of *"`#013` Part 5"* now names `#024`, which took that check
+  in the split. Three mirror checks that name no path will exist when all three items land — this
+  one's vocabulary grep, its sprite check, and `#024`'s frontmatter-and-wikilink check. They are
+  independent by design and should still read alike; whoever lands the second one writes them
+  together.

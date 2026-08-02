@@ -67,10 +67,15 @@ made that it used it, because the transcript says it did not.
   `check-isolation.ps1`, the skill's Half B, `CLAUDE.md`'s command block, and every example run
   command. This is exactly the class of change that broke the `test/` → `process/` rename, so the
   rule from that scar applies: change every site, then build one and look inside it.
-- **It collides with `#013` Part 1**, which is restructuring `process/runs/` in the same motion.
-  Doing both at once risks confusing *where a run executes* with *where a run is recorded* — the two
-  halves `#013` opens by separating. They should land in one sitting, with that distinction stated,
-  or the second one will read as undoing the first.
+- **It collides with `#023`**, which is restructuring `process/runs/` in the same motion. Doing both
+  at once risks confusing *where a run executes* with *where a run is recorded* — the two halves
+  `#013` opens by separating. They should land in one sitting, with that distinction stated, or the
+  second one will read as undoing the first.
+- **It was about to break a check that had not been written yet.** `#013`'s capture backstop keyed
+  on *"a directory under `../monster-dev-testruns/`, ignoring `*.dist`"*, which this item's layout
+  makes match nothing. Answer **C4** re-keyed that check inside the repository, so the collision is
+  closed — but it is recorded here because neither item had noticed it, and this layout will do the
+  same thing to the next check written against the old shape.
 - **The ten rescued run folders keep the flat layout.** They are an archive and are not re-run;
   reshaping them buys nothing and breaks the paths `#012`'s backfill was written against.
 
@@ -81,3 +86,8 @@ made that it used it, because the transcript says it did not.
   afterwards while checking whether the exposure had ever been taken.
 - `2026-08-02` `formulated` — measured and bounded: one hire listed the parent, no hire opened a
   sibling, no other transcript contains a foreign run id.
+- `2026-08-02` — **C1**: the item this collides with is `#023`, not `#013`. This item said "Part 1"
+  and described Phase 1 — two different halves of the same item, and the split removes the ambiguity
+  rather than resolving it in prose. **C4**: `#013`'s capture backstop, which this layout would have
+  silently disabled, is re-keyed inside the repository; recorded above as a cost of the layout, not
+  as a defect of the backstop.
