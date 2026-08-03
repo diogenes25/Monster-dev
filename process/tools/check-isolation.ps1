@@ -71,7 +71,12 @@ if (Test-Path (Join-Path $HOME '.claude\CLAUDE.md')) {
 # a stray note or a .zip beside the run folder is untidy, and failing on it would make the check
 # noisy enough to be switched off.
 if (-not $AncestryOnly) {
-    $self   = (Resolve-Path $Target).Path
+    # TrimEnd before GetFileName: `Resolve-Path` *preserves* a trailing separator, and
+    # `GetFileName('C:\a\b\')` is the empty string — so a `-Target` that ends in a backslash,
+    # which is exactly what tab-completion produces, would leave the run folder's own name out
+    # of $allowed and make the check report the folder as a leaking sibling of itself.
+    $self   = (Resolve-Path $Target).Path.TrimEnd([System.IO.Path]::DirectorySeparatorChar,
+                                                  [System.IO.Path]::AltDirectorySeparatorChar)
     $parent = Split-Path $self -Parent
     $allowed = @([System.IO.Path]::GetFileName($self)) + $Sibling
 
@@ -103,7 +108,11 @@ if ($AncestryOnly) {
 } else {
     # The sibling count is named rather than implied: a parent that happened to be empty and a
     # sideways check that never ran produce the same silence otherwise.
-    $beside = @(Get-ChildItem (Split-Path (Resolve-Path $Target).Path -Parent) -Directory |
-        Where-Object { $_.Name -ne [System.IO.Path]::GetFileName((Resolve-Path $Target).Path) })
+    #
+    # $self and $parent come from the check above rather than being derived a second time. The
+    # duplicate derivation that used to be here re-ran GetFileName on the *untrimmed* path, so a
+    # `-Target` ending in a separator listed the run folder among its own neighbours — the same
+    # defect as the check, surviving in the line that reports the check passed.
+    $beside = @(Get-ChildItem $parent -Directory | Where-Object { $_.Name -ne [System.IO.Path]::GetFileName($self) })
     "isolation OK — $Target (parent holds $($beside.Count) other director$(if ($beside.Count -eq 1) {'y'} else {'ies'})$(if ($beside) { ': ' + (($beside | ForEach-Object Name) -join ', ') }))"
 }

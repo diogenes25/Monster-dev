@@ -123,9 +123,24 @@ if (Test-Path $recipe) {
     # Cleared first: a stale code left by any earlier native command would otherwise read as a
     # failed recipe and delete a perfectly good run folder.
     $global:LASTEXITCODE = 0
+    $recipeError = $null
     Push-Location $target
+    # The catch is not belt-and-braces for the exit-code branch below — it is its other half. A
+    # recipe that *exits* non-zero is handled there; one that *raises a terminating error* — a
+    # missing command, a failed download, anything at all under $ErrorActionPreference = 'Stop' —
+    # went past both and left the run folder on disk. What happens next is somebody hires against
+    # a folder whose dependencies were never installed, and that cost lands in num_turns, one of
+    # the three numbers the tooling gate is stated in.
+    #
+    # The failure is recorded and re-thrown *after* Pop-Location rather than inside the catch:
+    # $target is the working directory at that point, and Windows will not delete it.
     try { & $recipe }
+    catch { $recipeError = $_ }
     finally { Pop-Location }
+    if ($recipeError) {
+        Remove-Item -Recurse -Force $target
+        throw "Setup recipe '$setup' threw: $recipeError`nRun folder deleted so it cannot be hired against."
+    }
     if ($LASTEXITCODE) {
         Remove-Item -Recurse -Force $target
         throw "Setup recipe '$setup' failed with exit code $LASTEXITCODE. Run folder deleted so it cannot be hired against."

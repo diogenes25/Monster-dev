@@ -12,7 +12,7 @@
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { extname, join, normalize } from 'node:path';
+import { dirname, extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // The roster, so the verifier knows every sheet a hire could have been given and what each
@@ -22,6 +22,14 @@ const CATALOG = JSON.parse(readFileSync(new URL('../../monsters/catalog.json', i
 
 const args = process.argv.slice(2);
 const OUT = args[0];
+// A fixed name beside OUT, not a stem derived from it. `OUT.replace(/\.json$/, '-midwalk.png')`
+// wrote `measurements-midwalk.png` for the documented invocation, while `score-bundle.ps1` copies
+// `midwalk.png` — the two never agreed, and a copy that finds nothing produced a bundle without
+// the screenshot and without a line saying so. All ten runs on record hold `midwalk.png` because
+// the #012 backfill normalised them by hand, so this is the name that already exists on disk and
+// the mismatch was latent rather than fired (#035). Two names for one file is what caused it;
+// this is the one place either is written.
+const SHOT = join(dirname(OUT), 'midwalk.png');
 const opt = (name, fallback) => {
   const i = args.indexOf(`--${name}`);
   return i === -1 ? fallback : args[i + 1];
@@ -359,7 +367,7 @@ try {
       results.samples.push({ t: i * 2, ...(await geometry()) });
       if (i === 1) {
         const shot = await send('Page.captureScreenshot', { format: 'png' });
-        writeFileSync(OUT.replace(/\.json$/, '-midwalk.png'), Buffer.from(shot.data, 'base64'));
+        writeFileSync(SHOT, Buffer.from(shot.data, 'base64'));
       }
       await sleep(2000);
     }
@@ -443,5 +451,10 @@ try {
   try { baseline?.close(); } catch {}
   chrome.kill();
   console.log(JSON.stringify(results, null, 2));
-  process.exit(0);
+  // Non-zero when the verifier itself broke — wrong Chrome path, CDP never up, a throw anywhere
+  // above. Exiting 0 unconditionally made a crashed measurement indistinguishable from a clean
+  // one to anything reading the exit code, which is the worst failure this project can have:
+  // the instrument reporting success while broken. `measurements.json` is still written either
+  // way, so the diagnosis survives; only the verdict changes.
+  process.exit(results.harnessError ? 1 : 0);
 }

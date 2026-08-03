@@ -115,11 +115,31 @@ if (Test-Path $hireJson) {
     if (-not $Target) { $Target = $record.target }
 }
 
+# Every optional copy below records its own absence. The scorer is blind by construction — it sees
+# this bundle and nothing else — so a file it was never told to expect is indistinguishable from a
+# file that was never produced, and it scores the criteria off whatever is left without hedging.
+# That is exactly what #035 was: the screenshot was copied under a name nothing wrote, the copy
+# found nothing, and the bundle came out looking complete. The name agreement is what breaks again
+# on the next rename; this list is the part that survives it.
+$missing = @()
+
 $measurements = Join-Path $runsDir "$RunId\measurements.json"
-if (Test-Path $measurements) { Copy-Item $measurements (Join-Path $bundle 'measurements.json') }
+if (Test-Path $measurements) {
+    Copy-Item $measurements (Join-Path $bundle 'measurements.json')
+} else {
+    $missing += 'No `measurements.json`. The whole of section D is measured from it and cannot be'
+    $missing += 'scored from what is here. Record those criteria as NOT SCORABLE, not as failures.'
+    $missing += ''
+}
 
 $shot = Join-Path $runsDir "$RunId\midwalk.png"
-if (Test-Path $shot) { Copy-Item $shot (Join-Path $bundle 'midwalk.png') }
+if (Test-Path $shot) {
+    Copy-Item $shot (Join-Path $bundle 'midwalk.png')
+} else {
+    $missing += 'No `midwalk.png`. Section D''s visual marks have no screenshot behind them here —'
+    $missing += 'score them from `measurements.json` alone and say in the verdict that you did.'
+    $missing += ''
+}
 
 if (-not $Target) {
     Remove-Item -Recurse -Force $bundle
@@ -166,13 +186,16 @@ if ($transcript) {
 } else {
     # Not fatal: the git surface, the worktree and the measurements still carry sections A, B and D.
     # Section E cannot be scored without it, and saying so beats a bundle that looks complete.
-    Set-Content (Join-Path $bundle 'MISSING.md') @(
-        '# Not in this bundle'
-        ''
-        'No transcript could be resolved for this run. Sections that are scored from the dialogue —'
-        'criteria 6, 7, 14a, 15a, 15b and the whole of section E — cannot be scored from what is here.'
-        'Record them as NOT SCORABLE rather than as failures.'
-    ) -Encoding utf8
+    $missing += 'No transcript could be resolved for this run. Sections that are scored from the dialogue —'
+    $missing += 'criteria 6, 7, 14a, 15a, 15b and the whole of section E — cannot be scored from what is here.'
+    $missing += 'Record them as NOT SCORABLE rather than as failures.'
+    $missing += ''
+}
+
+# One MISSING.md for all of them. It used to be written by the transcript branch alone with
+# Set-Content, so a second absence would have overwritten the first rather than joined it.
+if ($missing) {
+    Set-Content (Join-Path $bundle 'MISSING.md') (@('# Not in this bundle', '') + $missing) -Encoding utf8
 }
 
 # --- nothing that names the answer may have arrived -------------------------------------------
@@ -181,7 +204,11 @@ $leaks = @()
 foreach ($f in Get-ChildItem $bundle -Recurse -File -Include '*.md','*.json','*.txt') {
     if ($f.Name -eq 'criteria.md') { continue }
     if ($f.Name -eq 'transcript.jsonl') { continue }
-    if (Select-String -Path $f.FullName -Pattern 'acceptance criteria|proof design|playbook gap|board' -Quiet) {
+    # `board` is word-bounded. Unanchored it matches inside **keyboard**, and the brief this
+    # bundle is built around is a keyboard shortcut — so a hire writing "the keyboard handler"
+    # anywhere in `worktree/**` or `hire.json` deleted the whole bundle. The other three terms
+    # are multi-word and cannot collide this way.
+    if (Select-String -Path $f.FullName -Pattern 'acceptance criteria|proof design|playbook gap|\bboard\b' -Quiet) {
         $leaks += "LEAK: $($f.FullName) reads like harness material"
     }
 }
@@ -191,7 +218,20 @@ if ($leaks) {
     throw ($leaks -join "`n") + "`nBundle deleted rather than handed back."
 }
 
-& (Join-Path $repoRoot 'process\tools\check-isolation.ps1') -Target $bundle -AncestryOnly | Out-Null
+# Every failure path above deletes the bundle; this one was the exception, and it is the worst one
+# to leave behind. A bundle that fails isolation is left looking complete at exactly the path the
+# procedure tells the operator to `cd` into — and the blind scoring is the control on the first
+# scoring, so a control run against a bundle this script refused is worse than no second pass.
+# The check throws rather than returning a value, so catching is the only way to reach that.
+# The reason is captured before the delete and carried into the throw: deleting on failure
+# destroys the evidence of the failure, and the message is all the operator gets to look at.
+try {
+    & (Join-Path $repoRoot 'process\tools\check-isolation.ps1') -Target $bundle -AncestryOnly | Out-Null
+} catch {
+    $reason = "$_"
+    Remove-Item -Recurse -Force $bundle
+    throw "$reason`nBundle deleted rather than handed back."
+}
 
 [pscustomobject]@{
     RunId          = $RunId
