@@ -54,43 +54,39 @@ process/stacks/**/knowledge.md  →  A/B run  →  stacks/<name>/README.md  → 
 
 ### The one invariant that silently invalidates everything
 
-`process/`, `.claude/`, `CLAUDE.md` and the root `README.md` are all **tracked**, and all four are kept out of the `<dist>` mirror by hand. The first two used to drop out because git ignored them; now every exclusion is deliberate. Miss one and every hire reads its own acceptance criteria — or, in `README.md`'s case, reads that it is a fresh agent in a scored test run, which is what eight of the first ten hires did.
+`process/`, `.claude/`, `CLAUDE.md` and the root `README.md` are all **tracked**, and all four are kept out of the `<dist>` mirror by hand — every exclusion deliberate, none of them inherited from `.gitignore` any more. Miss one and every hire reads its own acceptance criteria, or reads that it is a fresh agent in a scored test run, which is what eight of the first ten did (`#018`).
 
-Each name is written by hand in **two** places in `build-dist.ps1` — the exclusion glob and the backstop that verifies it. Renaming one breaks both in the same moment and in the same direction: the filter matches nothing, and the check hunts a file that no longer exists and reports clean. That is what the `test/` → `process/` rename on 2026-08-02 walked into. Rename one again and you must change both lines *and* build a mirror and look inside it; a green script is not evidence.
+Each name is written by hand in **two** places in `build-dist.ps1` — the exclusion glob and the backstop that verifies it. Renaming one breaks both in the same moment and in the same direction: the filter matches nothing, and the check hunts a file that no longer exists and reports clean. That is what the `test/` → `process/` rename walked into (`#008`). Rename one again and you must change both lines *and* build a mirror and look inside it; a green script is not evidence.
 
-**Two further mirror checks name no path at all**, because a path list only ever excludes the leaks somebody already found. Every `.md` in the assembled mirror is grepped for a short harness vocabulary (`acceptance criteria`, `test run`, `A/B`, …), and every file in it is checked for a reference to a sprite sheet under `monsters/` — the first catches prose that describes the experiment, the second catches a finished solution to the brief, which contains none of those words. A vocabulary term that fires on legitimate playbook prose is **removed from the list**, never accommodated by rewording the playbook; `harness` is out for exactly that reason, since §7 tells a hire to build a scratch one.
+**Two further mirror checks name no path at all**, because a path list only ever excludes the leaks somebody already found. Every `.md` in the assembled mirror is grepped for a short harness vocabulary (`acceptance criteria`, `test run`, `A/B`, …), and every file is checked for a reference to a sprite sheet under `monsters/` — the first catches prose describing the experiment, the second a finished solution to the brief, which contains none of those words. A vocabulary term that fires on legitimate playbook prose is **removed from the list**, never accommodated by rewording the playbook; `harness` is out for exactly that reason, since §7 tells a hire to build a scratch one.
 
 Never hand-roll the mirror. `process/tools/build-dist.ps1` builds and verifies it in one step and deletes the mirror rather than return a leaking one. For the same reason, **nothing that encodes the acceptance criteria may live under `tools/`** — the run verifier belongs in `process/tools/`, which is excluded already.
 
 ### The mirror is a blindfold, not a vault — and the difference decides every question about it
 
-**Nothing here is secret, and nothing here may become secret.** This is open source, and the thing it distributes is a *stranger's AI developer working inside your codebase*. That asks an unusual amount of trust, and the only currency it can be paid in is legibility: how the contractor works, what it is scored on, what has already been measured and what went wrong. A user who cannot read the acceptance criteria cannot judge whether the thing is any good. A contributor who cannot read them cannot do the thing this project wants contributors to do — clone it, pose their own requirement, and push back another test.
-
-So `process/`, `.claude/` and this file being world-readable on `main` is **the design**, not an exposure. Measured unauthenticated on `2026-08-02`, `process/scenarios/alt-a-left-to-right.md`, `process/backlog/README.md`, `.claude/agents/run-scorer.md` and this file all answer HTTP 200. That is correct and stays correct.
+**Nothing here is secret, and nothing here may become secret.** This is open source, and what it distributes is a *stranger's AI developer working inside your codebase*. That asks an unusual amount of trust, and the only currency it can be paid in is legibility: how the contractor works, what it is scored on, what has already been measured and what went wrong. A user who cannot read the acceptance criteria cannot judge whether the thing is any good; a contributor who cannot read them cannot do what this project wants contributors to do — clone it, pose their own requirement, push back another test. So `process/`, `.claude/` and this file being world-readable on `main` is **the design**, not an exposure.
 
 What the mirror exists for is something else entirely: **a hire that reads its own acceptance criteria mid-run stops being a measurement.** Not because it learned a secret, but for the same reason a subject is not told what is being scored while it is being scored. The exclusions are a blindfold worn for the duration of an experiment, by one participant, and they say nothing about who else may look.
 
-Read every question about the mirror that way and it answers itself. Two immediate ones:
+Read every question about the mirror that way and it answers itself. Two that follow — full argument and its measurements in `#031`:
 
-- **`build-dist.ps1`'s exclusions cover exactly one run class.** A hire fetching over real `raw.githubusercontent.com` URLs reads `main` and never sees a mirror at all, so nothing blindfolds it. That is not a hole to plug by hiding things — it is a **validity condition of that run class**, and the way to hold it is to measure it: after a real-URL run, list every URL the hire fetched out of the captured transcript and check it against the playbook's own pointers. Say in the report that you did. `2026-08-01-live` fetched five, all of them pointed at, and never reached for this file. If a future one reaches further, that run is contaminated — the repository is not.
-- **The demos live on `gh-pages` and not on `main`** for the same reason and not for a secrecy one. Visitors and contributors *should* see ten finished results; a hire being measured on the identical brief should not be able to copy one. Off `main`, both hold at once.
+- **The exclusions cover exactly one run class.** A hire fetching real `raw.githubusercontent.com` URLs reads `main` and never sees a mirror, so nothing blindfolds it. That is not a hole to plug by hiding things — it is a **validity condition of that run class**, and the way to hold it is to measure it (`check-reach.ps1` section D) and to say in the report that you did. If a run reaches further than the playbook pointed, that run is contaminated — the repository is not.
+- **The demos live on `gh-pages` and not on `main`** for the same reason and not a secrecy one. Visitors and contributors *should* see ten finished results; a hire measured on the identical brief should not be able to copy one. Off `main`, both hold at once.
 
-Do not reach for the sentence about `raw.githubusercontent.com` serving no directory index when reasoning about any of this. It is true of that one endpoint and of nothing else — `github.com/<owner>/<repo>/tree/main/process/scenarios` returns an HTML listing to the same `WebFetch` the playbook hands the hire, and one unauthenticated call to `api.github.com/repos/<owner>/<repo>/git/trees/main?recursive=1` returned **397 paths**, every file named, in one request. Nothing is hidden by obscurity here, and nothing should be built as though it were.
+Do not reach for the sentence about `raw.githubusercontent.com` serving no directory index when reasoning about any of this. It is true of that one endpoint and of nothing else — `github.com/<owner>/<repo>/tree/main/...` returns an HTML listing to the same `WebFetch` the playbook hands the hire, and one unauthenticated `api.github.com/...git/trees/main?recursive=1` call names every file in the repository in a single request. Nothing is hidden by obscurity here, and nothing should be built as though it were.
 
 ### One run, one parent
 
-A run folder and its mirror are `../monster-dev-testruns/<run-id>/target/` and `.../<run-id>/dist/`. They used to be direct children of `../monster-dev-testruns/`, which put every previous run one `ls ..` away from the hire — dated folders in `<name>`/`<name>.dist` pairs with the model in the name, holding ten finished, already-scored implementations of the identical brief. One hire ran that listing. `check-isolation.ps1` now looks sideways as well as up: any directory beside the run folder that is not its own mirror fails the check.
+A run folder and its mirror are `../monster-dev-testruns/<run-id>/target/` and `.../<run-id>/dist/`. They used to be direct children of the runs root, which put every previous run one `ls ..` away from the hire — dated folders with the model in the name, holding finished, already-scored implementations of the identical brief. One hire ran that listing (`#019`). Hence the nesting, and hence `check-isolation.ps1` looking sideways at **two** levels: the fix that nested the run also moved the dangerous listing from `..` to `..\..`, where the sibling test it added in the same change no longer looked, and it printed `isolation OK` over twenty directories (`#040`). **A check that relocates an exposure and then reports clean is worse than the exposure** — that is the sentence to remember before simplifying either level away.
 
-**The sideways look is two levels, and that second level is there because the first fix moved its own subject out of reach.** `#019` nested the run one deeper *and* added the sibling test — but the test follows the run folder, so it began inspecting a parent that by construction holds only `target` and `dist`, while the dangerous listing moved to `..\..` where nothing looked. On `2026-08-03` the check reported `isolation OK — parent holds 1 other directory: dist` while `ls ..\..` returned twenty directories, nine of them mirrors still carrying the root `README.md`. A check that relocates an exposure and then reports clean is worse than the exposure. Both levels are now checked and named separately in the failure (`#040`).
+**Nobody may say that closes it.** `ls ..\..\..` returns this repository — the runs root is a sibling of the working copy, so `CLAUDE.md`, `process/` and the run's own scenario are three `cd ..` from where a hire starts, and were for all eleven runs on record (`#041`). It is a **location** problem, and no arrangement of sideways checks fixes a location; the level above the runs root holds unrelated projects, so it cannot be required to hold only the run. Two things follow:
 
-**Nobody may say that closes it.** One level higher, `ls ..\..\..` returns the repository itself — the runs root is a sibling of the working copy, so `CLAUDE.md`, `process/` and the run's own scenario are three `cd ..` from where a hire starts, and were for all eleven runs on record. That is `#041`. It is a **location** problem and no arrangement of sideways checks fixes a location; the level above the runs root is a general source directory holding unrelated projects, so it cannot be required to hold only the run. Two things follow, and the first is the one to internalise:
+- **The location was deliberately not changed**, for the reason the section above already gives about the real-URL class: measure the exposure rather than hide it. `check-reach.ps1` reports what the hire actually walked to, and a report silent about reach has not checked — strictly better evidence than a relocation, which only ever supports *"we believe it could not get there."*
+- **Where the runs root is lives in exactly one place** — `process/tools/lib/run-root.ps1`, dot-sourced by `new-run.ps1`, `build-dist.ps1`, `score-bundle.ps1` and `check-isolation.ps1`, overridable by `MONSTER_DEV_RUN_ROOT`, refusing any root inside this repository. Three scripts used to derive `..` separately and agreed by coincidence. Moving the root later is a one-line edit there.
 
-- **The location was deliberately not changed, and the reason is in this file already.** Of the real-URL run class §"blindfold, not a vault" says: *that is not a hole to plug by hiding things — it is a validity condition of that run class, and the way to hold it is to measure it.* The same answer applies here. `check-reach.ps1` reads a finished run's transcript and reports what the hire actually walked to; a report that says nothing about reach has not checked. That is strictly better evidence than a relocation, which only ever supports *"we believe it could not get there."*
-- **Where the runs root is now lives in exactly one place** — `process/tools/lib/run-root.ps1`, dot-sourced by `new-run.ps1`, `build-dist.ps1`, `score-bundle.ps1` and `check-isolation.ps1`, overridable by `MONSTER_DEV_RUN_ROOT`, and refusing any root that resolves inside this repository. Three scripts used to derive `..` separately and agreed by coincidence. Moving the root later is a one-line edit there; that is the part of `#041` which was decidable without deciding where.
+**A blind-scoring bundle left on disk blocks the next hire.** Each holds `criteria.md` in full and the scoring root is a sibling of the runs root, so the same walk reaches both — and being buried among unrelated folders is obscurity, which this file forbids relying on. Deleting it after scoring is a closing step, and a closing step is a step to forget, so `check-isolation.ps1` refuses to start a hire while any bundle exists. Close one deliberately with `score-bundle.ps1 -RunId <id> -Remove`. A bundle for the run *being hired* is the sharpest case rather than an exemption: it means an earlier attempt was already scored.
 
-**A blind-scoring bundle left on disk blocks the next hire.** Each one holds `criteria.md` in full and the scoring root is a sibling of the runs root, so the same walk reaches both — and being buried among unrelated folders is obscurity, which this file forbids relying on. Deleting it after scoring is a closing step, and a closing step is a step to forget, so `check-isolation.ps1` refuses to start a hire while any bundle exists. Close one deliberately with `score-bundle.ps1 -RunId <id> -Remove`. A bundle for the run *being hired* is the sharpest case rather than an exemption: it means an earlier attempt was already scored.
-
-**And a path handed to a hire is part of the mirror surface.** `2026-08-01-alt-a` — the first run, the one whose criteria the whole series is scored against — was given an entry-point path running through a session scratchpad, and a scratchpad segment is a CLI project slug: this repository's absolute path with the separators turned into dashes. The hire decoded it and listed the repository root. It never walked up; it was handed the address (`#042`). Check what turn 1 *says*, not only where it runs.
+**And a path handed to a hire is part of the mirror surface.** The first run was given an entry point running through a session scratchpad, whose slug is this repository's absolute path with the separators turned into dashes; the hire decoded it and listed the repository root. It never walked up — it was handed the address (`#042`, and `#057` for what the path itself still says). Check what turn 1 *says*, not only where it runs.
 
 ### The proof gates
 
@@ -123,144 +119,66 @@ There is no build/lint/test tooling for this repo (static HTML/CSS/JS + Markdown
 
 **Preview `index.html`:** `.vscode/launch.json` is set up to launch Chrome against `http://localhost:8080` with the repo root as web root — serve the repo root with any static file server on port 8080, or simply open `index.html` directly in a browser.
 
-**Build the `<dist>` mirror for a test hire** (never by hand — it builds *and* verifies, and deletes a leaking mirror instead of returning it):
-```powershell
-.\process\tools\build-dist.ps1 -RunId 2026-08-02-alt-a
-```
+### The run harness — `process/tools/`
 
-**Create the run folder** — also never by hand. It copies the fixture, refuses one that names the
-product anywhere in the target, runs the fixture's setup recipe if one exists
-(`process/tools/setup/<fixture>.ps1`, kept out of the fixture so it cannot be copied into the
-target and pollute the §9 diff surface), commits exactly once, and deletes the folder rather than
-hand back one that fails isolation or starts dirty. It also **opens the run's record** —
-`process/runs/<run-id>/assembly.md`, which `build-dist.ps1` writes the mirror half of and the
-`leak-auditor`'s findings go into. Until `#048` the record began at the first paid turn, so a setup
-that was assembled, audited, corrected and then refused left nothing behind; three runs on
-`2026-08-03` wrote that history by hand. Dependencies are installed here rather than by
-the hire: inside the session they would land in `num_turns` and `total_cost_usd`, two of the three
-numbers the gates are stated in:
-```powershell
-.\process\tools\new-run.ps1 -RunId 2026-08-02-alt-a -Fixture static-site
-.\process\tools\check-isolation.ps1 -Target ..\monster-dev-testruns\2026-08-02-alt-a\target   # standalone; new-run already ran it
-```
-A fixture folder holds **only what the target project would hold**. What a fixture is *for* — the
-marks it exists to turn on, and what a correct run looks like — goes in `process/fixtures/<name>.md`,
-a sibling of the folder, for the same reason the setup recipe does. Every fixture README said the
-opposite until 2026-08-02, and the string reached six of the first ten transcripts.
+**The `monster-dev-workshop` skill is authoritative for the sequence** and `process/README.md` for
+why the harness is shaped the way it is. What follows is the map, not the procedure: open the skill
+before running or scoring a hire, and when the two disagree the skill is what actually gets
+executed. Nothing here is ever done by hand — each of these refuses or deletes rather than hand back
+something subtly wrong, which is the whole reason it exists.
 
-**Check the indexes against the working tree** — the same question one step earlier, so a
-disagreement is caught while it is still an edit. Run it after touching §2, §5, a stack note or
-the catalog; it exits non-zero, so it can gate a commit:
-```powershell
-.\process\tools\check-index.ps1
-```
-It goes further than the mirror check in three ways the mirror check cannot: §5's figures are
-compared against `catalog.json` row by row (the catalog is the authority, §5 the only published
-copy, and a regenerated sheet leaves them disagreeing), the 40-line orientation cap on stack
-notes is enforced rather than trusted, and any PNG *shaped like a sprite sheet* — one horizontal
-row of cells, so aspect ratio ≥ 5 — living outside `monsters/` is reported. The geometry test is
-deliberate: keying on the folder alone flags `monster.png`, which is the README's banner.
+| Command | What it does |
+|---|---|
+| `new-run.ps1 -RunId <id> -Fixture <name>` | Creates the run folder from a fixture **and opens the run's record** (`process/runs/<id>/assembly.md`, so an assembled-then-refused setup still leaves something behind — `#048`) |
+| `build-dist.ps1 -RunId <id>` | Assembles the mirror **and verifies it**. `-Without <path>` builds an A/B arm; a whole stack fails by design, because §2 would still point at a file that is gone |
+| `check-isolation.ps1 -Target <path>` | Standalone; `new-run.ps1` has already run it. Up **and two levels sideways**, and refuses to start a hire while any scoring bundle is on disk |
+| `check-index.ps1` | §2 and §5 against the working tree *and* the mirror — `catalog.json` row by row, the 40-line orientation cap, sheet-shaped PNGs outside `monsters/`. Run it after touching §2, §5, a stack note or the catalog |
+| `backlog/board.ps1 -Open -Full` | The board, read from the item files so no index can drift, with the state rules enforced |
+| `hire.ps1 -RunId <id> -Target <path> -Dist <path> -Model sonnet -BriefFile <file>`, then `-Answer '<text>'` | **The only way to hire.** Holds the cost/turn envelope and snapshots the target's worktree between turns |
+| `score-bundle.ps1 -RunId <id> -Scenario <file>`, later `-Remove` | Builds what the blind `run-scorer` sees, and takes it back off disk |
+| `check-reach.ps1 -RunId <id>` | What the hire walked to and every URL it fetched. For an **archived** run pass the path the run *used* — it matches strings, so today's location matches nothing and everything reads as a reach |
+| `publish-demos.ps1 [-WhatIf]` | Every `impl-NN/step-4-result/` onto an orphan `gh-pages` branch, with a banner stating what the customer asked for. Prints the README's *See it running* table rather than writing it, and neither pushes nor switches Pages on — both are outward-facing and stay deliberate |
 
-It verifies the mirror against the playbook's own indexes too — §2 for stacks, §5 for sheets —
-and refuses one where they disagree. `-Without` on a whole stack therefore fails by design:
-§2 would still send the hire after a file that is gone, costing a turn on a 404 in the metric
-the tooling gate reads.
+**And the rules around them, which no exit code enforces.** Each of these has already cost a run:
 
-**Read the board before a run and before scoring one** — `process/backlog/` is one file per problem,
-carried across runs. A run's brief is an item in `grilled`; no item, no run. The script reads the
-item files themselves, so there is no index to drift, and it enforces the state rules — exits
-non-zero, so it can gate a commit:
-```powershell
-.\process\backlog\board.ps1 -Open -Full
-```
+- **A run's brief is a `Gate: run` item in `grilled`.** No item, no run.
+- **Dependencies are installed at setup, never by the hire** — inside the session they land in
+  `num_turns` and `total_cost_usd`, two of the three numbers the gates are stated in.
+- **A fixture folder holds only what the target project would hold.** What a fixture is *for* — the
+  marks it exists to turn on, what a correct run looks like — goes in `process/fixtures/<name>.md`,
+  a sibling, for the same reason the setup recipe does. Every fixture README said the opposite until
+  `2026-08-02`, and it reached six of the first ten transcripts (`#015`, `#054`).
+- **Two check roles sit either side of the hire**, in `.claude/agents/`, because every failure this
+  project found late was a single unopposed reader. The **`leak-auditor`** asks the one question no
+  path check asks — *does this setup already answer what the run is trying to measure?* — reports,
+  and does not gate; it is told not to read `process/backlog/`, since a reader who knows the filed
+  leaks restates instead of finding. The **`run-scorer`** scores blind, as a separate `claude -p`
+  session with the bundle as its working directory, because an in-process subagent can read this
+  repository and asking it to be blind is not a control.
+- **Above `## Run log` in a scenario is what the blind scorer reads** — the setup, the **current**
+  answer script, the criteria, the rules for scoring them. How the file got that way goes below it
+  under `## Provenance`, because **a criterion's history is not an instrument**: handing it over
+  hands over the map with the criterion at risk already circled (`#056`, `#047`). The bundle refuses
+  a criteria half that names any run id, and that check is narrower than the rule — a pass rate
+  quoted without a run id defeats it.
+- **Every disagreement with the first scoring is resolved in the report with a reason, or filed.**
+  Keeping your own verdict quietly is the outcome the second pass exists to prevent.
+- **A report silent about what the hire reached has not checked it** (`#041`).
+- **The demos stay off `main`.** Ten finished implementations of the exact job are the answer sheet,
+  and a mirror exclusion does not contain them: a run over real URLs never reads a mirror, and §0's
+  base URL points at `main`.
 
-**Hire through the wrapper, never `claude -p` directly** — it keeps the cost/turn envelope and
-snapshots the target's worktree between turns, which is what makes "asked before building"
-a measurement rather than a recollection:
-```powershell
-.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a\target `
-  -Dist ..\monster-dev-testruns\2026-08-02-alt-a\dist -Model sonnet -BriefFile .\process\scenarios\alt-a.brief.txt
-.\process\tools\hire.ps1 -RunId 2026-08-02-alt-a -Target ..\monster-dev-testruns\2026-08-02-alt-a\target -Answer 'keine Präferenz'
-```
+**Add, regenerate or re-cut a sprite sheet** — two generators and a loop gate under
+`tools/provenance/`, run once per sheet and never during a run. **The recipes, every tunable, and
+the ordered steps that follow a generator live in [`monsters/README.md`](monsters/README.md)** — go
+there rather than here, which held a partial second copy until `2026-08-03`. Two points belong in
+this file because they are easy to get wrong from outside that one:
 
-**Two check roles sit around the hire**, in `.claude/agents/`, because every failure this project
-has found late was a single unopposed reader — three verifier defects, three misattributions, and a
-leak that survived ten runs.
-
-Before the hire, the **`leak-auditor`** reads the run folder, the mirror and the scenario and asks
-the one question no path check asks: *does this setup already answer what the run is trying to
-measure?* It reports and does not gate. It is told not to read `process/backlog/` — a reader that
-knows the leaks already filed produces a restatement instead of a finding.
-
-After the hire, the **`run-scorer`** scores the run a second time, blind. `score-bundle.ps1` builds
-what it sees, and what it cannot see is the point: not the board item that was the run's brief, not
-an earlier report, not `CLAUDE.md`. Like a hire, it runs as a separate `claude -p` session with the
-bundle as its working directory — an in-process subagent can read this repository, so asking it to
-be blind is not a control:
-```powershell
-.\process\tools\score-bundle.ps1 -RunId 2026-08-02-alt-a -Scenario process\scenarios\alt-a-left-to-right.md
-.\process\tools\score-bundle.ps1 -RunId 2026-08-02-alt-a -Remove   # once the second scoring is written up
-```
-Every disagreement with the first scoring is resolved in the report with a reason, or filed on the
-board. Keeping your own verdict quietly is the outcome the second pass exists to prevent.
-
-**A scenario is split by that bundle, and the split is a rule about writing, not about tooling.**
-`score-bundle.ps1` cuts everything from `## Run log` down, so everything above it is what the blind
-scorer reads. Above the cut belongs what a scorer needs to reach a verdict — the setup, the
-**current** wording of the answer script, the criteria, the rules for scoring them. Below it, in the
-scenario's `## Provenance` section, belongs how the file got that way: what a pre-run audit found,
-what an earlier run scored, why a row or a criterion was reworded. **A criterion's history is not an
-instrument**, and handing it to the second reader hands over the map with the criterion at risk
-already circled — `alt-a-left-to-right.md` used to tell it *"`13b` had failed 12 of 12"* and
-*"`10`'s ten passes were assent"*, by number, above the cut (`#056`). The script refuses a bundle
-whose criteria half names **any** run id, but that check is narrower than the rule and knows it: the
-two sentences just quoted name no run. Leave a pointer at the criterion and put the reasoning below.
-
-**Measure what the hire reached, and say in the report that you did** — the standing answer to
-`#041`, and the same move this file already prescribes for the real-URL run class. It reads the
-captured transcript for paths outside the run folder, `..` traversal, what those calls printed back,
-and every URL fetched. Section D is the URL audit that used to be a habit. It exits non-zero on any
-reach, so a run whose report is silent about this cannot have been checked:
-```powershell
-.\process\tools\check-reach.ps1 -RunId 2026-08-03-r12
-```
-For an archived run, pass the path the run **used**, not where the files sit today — it matches
-strings in a transcript, so the current location matches nothing and everything reads as a reach.
-Its first sweep over all eleven transcripts reproduced `#019`'s finding on `sonnet-base2` and found
-`#042` in the oldest run on the board, which no item had predicted.
-
-**Publish the results as runnable demos** — every `impl-NN/step-4-result/` onto an orphan
-`gh-pages` branch, with a banner stating what the customer asked for. They are kept **off `main`**
-deliberately: ten finished implementations of the exact job are the answer sheet, and a mirror
-exclusion does not contain them, because a run over real URLs never reads a mirror and §0's base
-URL points at `main`. The script prints the README's *See it running* table instead of writing it,
-and it neither pushes nor switches Pages on — both are outward-facing and stay deliberate:
-```powershell
-.\process\tools\publish-demos.ps1 -WhatIf   # render and report, touch no branch
-.\process\tools\publish-demos.ps1
-```
-
-**Add or regenerate a sprite sheet from a video** (requires `ffmpeg` on PATH, Windows PowerShell with `System.Drawing`) — full recipe and the checks that follow it are in `monsters/README.md`:
-```powershell
-.\tools\provenance\New-SpriteSheetFromVideo.ps1 -VideoPath walk.mp4 `
-  -OutputPath .\monsters\<slug>.png `
-  -CatalogPath .\monsters\catalog.json -Slug <slug> -Faces left
-```
-Key tunables: `-DarkThreshold` (outline luminance cutoff), `-NoTealFill` (disable growing into dark-teal-filled limbs), `-TailFadePx` / `-TopTrimMinWidth`, and `-Period` / `-StartFrame` to override the detected gait cycle. Full parameter docs are in the script's comment-based help.
-
-Writing the sheet is not the same as publishing it: `MONSTER-DEV.md` §5 is the only roster a hire can see, so a sheet that isn't in that table is unreachable no matter what `catalog.json` says.
-
-**Check that a sheet loops** — the gate before a sheet is published, and a regression check over the whole roster. Exits non-zero if any wrap exceeds the sheet's own adjacent-cell step:
-```powershell
-.\tools\provenance\Test-SheetLoop.ps1
-```
-The generator's own loop-closure figure ranks candidate periods but does not predict the shipped seam: a period it rated an acceptable `1.06x` produced a sheet that hitches at `1.39x`. This script measures the artifact, so it decides.
-
-**Rebuild a sprite sheet from a flat, multi-pose image** (e.g. AI-generated pose sheets with uneven spacing):
-```powershell
-.\tools\provenance\New-SpriteSheetFromImage.ps1 -ImagePath sheet.png -OutputPath ..\..\walk.png -Background Dark -FrameCount 11
-```
-`-Background Light` vs `Dark` changes the cutout strategy (flood-fill from a neutral background vs. synthesizing an outline around detected body color, since a black-on-black outline can't be recovered directly). `-FrameCount` must match the actual number of figures — the script keeps only the N largest connected components.
+- The gate is `Test-SheetLoop.ps1`, which measures the shipped artifact, **not** the generator's own
+  loop-closure figure. The two disagree, and the README has the case that showed it.
+- Writing a sheet is not publishing it: `MONSTER-DEV.md` §5 is the only roster a hire can see, so a
+  sheet missing from that table is unreachable no matter what `catalog.json` says. `check-index.ps1`
+  compares the two row by row.
 
 ## Working on `START.md` / `MONSTER-DEV.md`
 

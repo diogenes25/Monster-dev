@@ -130,6 +130,28 @@ foreach ($file in (Get-ChildItem $PSScriptRoot -Filter '*.md' | Where-Object { $
     $items += $item
 }
 
+# --- two files may not claim the same id ----------------------------------------------------
+#
+# The per-file check above compares each heading against its own filename, so a file whose name and
+# heading agree passes — twice, if two files agree on the *same* number. That happened on
+# 2026-08-03: two sessions working in parallel each filed a `#065`, both files were internally
+# consistent, the board rendered 67 items with two `065` rows, and nothing failed. One of them was
+# already cited from four other files by the time it was noticed.
+#
+# An id is the only citation key this folder has — `#012` is how items reference each other, and
+# `check-index.ps1` resolves run ids but not item ids. A duplicate makes every citation to it
+# ambiguous, and the older file loses silently because a reader follows the number, not the slug.
+#
+# Reported as a failure rather than renumbered: which of the two moves is a judgement — first-come
+# is the rule, but the cheaper renumber may be the newer one and the citations have to move with it.
+$dupes = @($items | Group-Object Id | Where-Object { $_.Count -gt 1 })
+foreach ($d in $dupes) {
+    $names = ($d.Group | ForEach-Object File) -join ', '
+    $failures += ("#$($d.Name): claimed by $($d.Count) files — $names. An id is this folder's only " +
+                  "citation key; a duplicate makes every reference to it ambiguous. Renumber one " +
+                  "(first filed keeps the number) and move its citations with it.")
+}
+
 # --- filter ---------------------------------------------------------------------------------
 
 $shown = $items

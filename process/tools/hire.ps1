@@ -48,7 +48,13 @@ A file holding the customer brief, so a long or multi-line brief stays out of th
 A customer answer, taken verbatim from the scenario's answer script. Turn 2 onward.
 
 .PARAMETER Model
-Passed to claude --model. Recorded as hire.modelFlag, which is authoritative: what the
+Passed to claude --model on turn 1, and re-passed on every later turn from the record rather than
+from this parameter — `--resume` does not restore a session's model, so before #062 a follow-up turn
+ran on the launching environment's default while modelFlag still named the flag. Omit it on an
+-Answer turn; passing it there overrides the record and is almost certainly a mistake.
+
+After each turn, modelFlag's tier is compared against envelope.modelUsage and a mismatch warns
+loudly. Recorded as hire.modelFlag, which is authoritative: what the
 envelope reports has changed across CLI versions.
 
 .PARAMETER Fixture
@@ -122,6 +128,22 @@ if (Test-Path $recordPath) {
 
     $sessionId = $record.sessionId
     if (-not $sessionId) { throw "BROKEN: no session id stored in $recordPath — cannot resume." }
+
+    # #062. `--resume` does NOT restore the session's model, and no caller passes -Model on an
+    # -Answer turn — so before this line turn 2 ran on whatever the launching environment's default
+    # was. Measured on 2026-08-03: an unflagged `claude -p` in this working copy selects
+    # `claude-opus-5[1m]`, and nothing pins a model in either settings.json or $env:ANTHROPIC_MODEL.
+    # So a `-Model sonnet` run's second turn was silently Opus while `modelFlag` still read `sonnet`.
+    #
+    # The archived record happens to be right — r15's turn 2 reports claude-sonnet-5 and r16's
+    # claude-opus-5 — because each was launched from a session whose own default matched its flag.
+    # Two different correct answers cannot come from one shared default, so it held by coincidence.
+    # That is the same shape as the three scripts which each derived `..` separately and agreed until
+    # one moved (lib\run-root.ps1). This turns the coincidence into a guarantee.
+    #
+    # The record is the authority rather than the parameter: the flag belongs to the *run*, and a
+    # follow-up turn that could pick a different one would not be the same experiment.
+    if (-not $Model) { $Model = $record.modelFlag }
 
     $prompt   = $Answer
     $kind     = 'answer'
@@ -213,6 +235,43 @@ if ($exit -ne 0) {
 }
 
 $envelope = ($raw -join "`n") | ConvertFrom-Json
+
+# --- did the flag actually take? ------------------------------------------------------------
+#
+# The other half of #062, and the half that survives the next change: passing `--model` every turn
+# is a fix whose success is unobservable, which is the class of thing this project keeps finding
+# late. `modelFlag` is what we asked for; `envelope.modelUsage` is what the CLI actually billed.
+# Nothing compared them until now.
+#
+# Compared by TIER, never by string. `modelFlag` is an alias (`sonnet`, `opus`) while modelUsage is
+# keyed by concrete id (`claude-sonnet-5`, `claude-opus-5[1m]`), and a turn legitimately lists more
+# than one model — r16's turn 1 carries claude-haiku-4-5 beside claude-opus-5 because the CLI used
+# Haiku internally. An equality check would fire on every run and be deleted for being noisy, which
+# is how a real check gets lost.
+#
+# The tier is looked up rather than parsed, and the first attempt at this got it wrong in the
+# direction that matters. Splitting the flag on `-` reduces `claude-sonnet-5` to `claude`, and
+# `claude` then matches every Claude model — so the check went vacuous for exactly the caller who
+# was being *more* specific. Nine cases were run against both versions before either shipped.
+#
+# `.Contains()` rather than `-like` on purpose: a local model slug may contain `[` or `*`, which are
+# wildcard metacharacters, and `-like` would quietly reinterpret them.
+#
+# A warning and not a throw. The turn is already paid for; killing the script here would lose the
+# envelope and the worktree snapshot, which is the evidence needed to decide whether the run is
+# still usable. Loud, recorded, and the operator's call.
+if ($Model) {
+    $usedModels = @($envelope.modelUsage.PSObject.Properties.Name)
+    $knownTiers = @('sonnet', 'opus', 'haiku')
+    $matched    = @($knownTiers | Where-Object { $Model -match $_ })
+    $tier       = if ($matched) { $matched[0] } else { $Model.ToLower() }
+    if ($usedModels -and -not ($usedModels | Where-Object { $_.ToLower().Contains($tier) })) {
+        Write-Warning ("MODEL MISMATCH (#062): asked for '$Model' (tier '$tier') and this turn " +
+                       "billed " + ($usedModels -join ', ') + ". The turn is recorded so the " +
+                       "evidence is not lost, but this run is NOT the arm it claims to be — decide " +
+                       "before scoring it.")
+    }
+}
 
 # --- record it -----------------------------------------------------------------------------
 

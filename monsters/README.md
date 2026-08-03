@@ -48,6 +48,42 @@ Then, in order:
 4. **Leave `default` alone** unless you mean to change what every client gets who has no
    preference.
 
+Requires `ffmpeg` on `PATH`, and Windows PowerShell for `System.Drawing`.
+
+### Tunables, for when the default cut-out is wrong
+
+Every parameter is documented in the script's own comment-based help. These are the ones actually
+reached for, and step 2 above is what sends you to them:
+
+- `-DarkThreshold` — the luminance cutoff below which a pixel counts as outline. Raise it when a
+  dark scene bleeds into the figure, lower it when a thin outline is being lost.
+- `-NoTealFill` — stop growing the cut-out into dark-teal-filled limbs. On this character that fill
+  is body rather than background, so growing into it is right; a different creature may not want it.
+- `-TailFadePx` / `-TopTrimMinWidth` — how far a fading tail is still kept, and how narrow a strip
+  at the top still counts as figure rather than scenery.
+- `-Period` / `-StartFrame` — override the detected gait cycle. Step 1 is what tells you to.
+
+## Re-cutting a flat pose sheet
+
+`New-SpriteSheetFromImage.ps1` is the other way in: one flat image holding several poses at uneven
+spacing — an AI-generated pose sheet, typically — re-cut into the evenly spaced cells the animation
+technique needs.
+
+```powershell
+.\tools\provenance\New-SpriteSheetFromImage.ps1 -ImagePath sheet.png `
+  -OutputPath .\monsters\<slug>.png -Background Dark -FrameCount 11
+```
+
+- `-Background` picks the cut-out strategy and is not cosmetic. `Light` floods in from a neutral
+  background; `Dark` instead synthesises an outline around the detected body colour, because a
+  black outline on a black background cannot be recovered directly. `-InkThreshold` /
+  `-OutlineRadius` tune the `Dark` path, `-BrightMin` / `-NeutralMax` the `Light` one.
+- `-FrameCount` must match the number of figures actually present: the script keeps the N largest
+  connected components, so too low a number silently drops poses.
+
+It takes no `-CatalogPath` and writes no catalog entry, so steps 1 and 3 of *Adding a monster* are
+both still owed — including the `MONSTER-DEV.md` §5 row, without which the sheet is unreachable.
+
 ## Why the sheet, and not the footage, decides
 
 `Test-SheetLoop.ps1` reports `green-fuzz-classic` at `1.03x` and `green-fuzz-strolling` at

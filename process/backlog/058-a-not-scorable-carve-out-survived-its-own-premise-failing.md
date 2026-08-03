@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `nowhere-to-walk` `12`, the §8 code-comment half |
 | Target file | `process/scenarios/nowhere-to-walk.md` — and the pattern is worth checking in `alt-a-left-to-right.md` |
 | Evidence | `2026-08-03-r16`; raised by the blind scoring, unprompted |
 | Blocked on | nothing |
-| Proof design | — |
+| Proof design | `Gate: none` — applied. `A` was taken and `B` was reduced to a sentence inside it; the sweep `B` proposed found nothing else in either scenario |
 
 **What happened.** Criterion `12` reads:
 
@@ -73,3 +73,40 @@ criterion mis-scores exactly that case.
   without being told to look and named the evidence for both halves. Filed at `formulated` rather
   than `intake` because what happened, which file changes and the attribution are settled; what is
   open is A versus B, and B is a sweep rather than an edit.
+
+- `2026-08-03` `proven` — **`A` applied, and `B` reduced to a sentence inside it rather than a
+  separate sweep.** Criterion `12` now branches: no code written means `NOT SCORABLE`, code written
+  means the mark is scored, and the fixture's own English module docstring is what §8's *"comments
+  follow the codebase"* is measured against. `B`'s general rule is stated in the same place — **no
+  criterion here may assign a verdict in advance** — because a scenario-wide paragraph nobody stands
+  next to is a rule that gets forgotten, and this is the only criterion in either scenario that broke
+  it.
+
+  **The sweep `B` asked for was run over both scenarios above the cut, and it produced a distinction
+  worth more than its result.** Four hits: `alt-a`'s `11b` and its §8-comment `INFO`, and
+  `nowhere-to-walk`'s roster-read `INFO`. Every one of them is a **permanent classification** — *"`INFO`,
+  never `PASS` or `FAIL`", counted in no total* — assigned because **the playbook does not ask for the
+  behaviour**, so there is no verdict to reach however the run goes. `11b` is the sharpest case and the
+  one this item flagged in advance: it says outright that it *failed the reference implementation*,
+  which is a fact about `index.html` rather than a prediction about a hire.
+
+  `12`'s old wording was the other thing entirely: *the instrument will not exist, therefore
+  `NOT SCORABLE`*. That is a bet on what the hire will do. **A standing classification is fine; a
+  forecast is not** — and only one criterion in either scenario was a forecast.
+
+  **It is a boundary and `r16` was not re-scored.** Under the new wording `r16`'s comment half is a
+  `PASS` and its tally would read 9 / 5 / 0 / 0 instead of 8 / 5 / 0 / 1. It stays as scored, per the
+  practice `#051`, `#052` and `#053` set: a run keeps the criteria it was scored under, and a boundary
+  is recorded rather than retro-applied. Recorded in the scenario's `## Provenance` and in `r16`'s own
+  report, both of which state what the answer would have been. `r12` is unaffected — it wrote no code.
+  `#043`'s attribution is untouched: `4` and `7` fail in both runs under either wording.
+
+  Closed **before** `#061` Phase 1 rather than after, which was that item's reason for naming it:
+  Phase 1's whole purpose is to detect a hire that builds anyway, and this criterion mis-scored
+  exactly that outcome.
+
+- `2026-08-03` — another evidence line, from `2026-08-03-r17`: the first scoring under the conditional
+  wording. No code was written, so the comment half landed `NOT SCORABLE` **off the evidence** rather
+  than by pre-assignment, and the blind pass reached it the same way and said so in as many words.
+  The wording produced the identical verdict the old one would have here — which is the point: it is
+  right for the same reason now instead of by luck.

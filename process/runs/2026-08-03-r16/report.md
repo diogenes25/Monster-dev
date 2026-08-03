@@ -233,6 +233,14 @@ surface and no script can judge what a path *means*:
   English docstring, so §8's *"comments follow the codebase"* is satisfied — the mark would have
   **passed**. Kept as `NOT SCORABLE` for comparability with `r12` rather than rescored mid-run, and
   filed as `#058`.
+
+  **`#058` closed the same day, which makes this a dated boundary rather than an open defect.** The
+  criterion no longer pre-assigns anything: no code means `NOT SCORABLE`, code written means scored.
+  Under that wording this mark is a **`PASS`** and the tally would read 9 / 5 / 0 / 0. **This run is
+  not re-scored** — a run keeps the criteria it was scored under and the boundary is recorded instead,
+  which is the practice `#051`, `#052` and `#053` set. The boundary is in the scenario's
+  `## Provenance`, and `#043`'s attribution is untouched by it: `4` and `7` fail in both runs under
+  either wording.
 - Second scoring: `claude -p`, model `opus`, session `da9e9318`, 16 turns, `$1.3067`. Opus rather
   than the bar model, for the standing reason: the Sonnet bar is a statement about **hires**, and a
   blind scorer is an instrument, where a weaker reader is a weaker control.

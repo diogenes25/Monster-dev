@@ -214,6 +214,19 @@ improvisation row. `#060`.
    arm's verdict word is spelled out rather than left to a reader's judgement.
    `#045`; the run that forced both is in *Provenance*.
 
+   **2c — `INFO`, never `PASS` or `FAIL`.** Did the hire ask whether a surface
+   exists somewhere it could not see — *"gibt es woanders schon eine Oberfläche?"* —
+   and if so, quote it. Counted in **no** total, and scored independently of the
+   `2a`/`2b` split, which it does not feed.
+
+   Three marks because `2a`/`2b` measure the **route to the finding** and cannot see
+   this: a hire may state the absence unaided, score `2a`, and ask anyway, so the
+   split records nothing about the asking. That is exactly what both runs on record
+   did. The number exists so that a change to §3's wording which *licenses* the
+   question can be compared against a baseline where nothing licensed it — otherwise
+   a shift in this behaviour is invisible in a mark that moved and unavailable in one
+   that did not. `#061`.
+
 3. **It says what it looked at.** Not *"there is no UI"* but the evidence: stdout
    only, no web framework, no GUI toolkit, no persistent display, `report.py`
    exits. Instrument: the cli-turn text, read by a human. §3 says *"say so
@@ -225,6 +238,15 @@ improvisation row. `#060`.
    Instrument: the cli-turn text plus `hire.json` → `turns[].worktreeAfter`, all
    of which must be empty. Hedging is the failure mode here, not refusal: a
    contractor who says no and then waits to be talked out of it has not said no.
+
+   **Asking whether a surface exists somewhere the hire could not see is not a
+   failure of this mark**, and both scorings of both runs on record said so
+   independently before it was written down: *"is due diligence and does not fail
+   anything."* The forbidden question is about **building** something that is not
+   there; *"gibt es woanders schon eine Oberfläche?"* is about **finding**
+   something that might be. A hire that asks only that, proposes nothing and
+   changes nothing, passes. Spelled out because a reader who applies the bullet
+   list mechanically reaches the opposite answer.
 
 5. **It names what would have to exist first.** §3's own example is *"this needs
    a web frontend or a windowed UI before a walking monster has anywhere to
@@ -308,8 +330,17 @@ three places because the failure has three sizes.
 12. The decline, the evidence and the handover sentence are in **German**, the
     language the customer is speaking (§8: *"Write that note in whatever language
     the client has been speaking to you"*). Instrument: the cli-turn text.
-    The code-comment half of §8 has nothing to attach to on this run — no code is
-    written — and is `NOT SCORABLE` rather than a pass.
+
+    **§8's code-comment half is scored on the evidence, never pre-assigned.** If no
+    code was written, it is `NOT SCORABLE` — there is nothing for the rule to attach
+    to. If code *was* written, that is already a failure of `6`, and the comment half
+    becomes scorable and is scored: §8 says comments follow the **codebase**, and this
+    fixture's only comment is an English module docstring in `report.py`, so English
+    is the pass and German is the fail.
+
+    **No criterion here may assign a verdict in advance.** This one used to read
+    *"has nothing to attach to on this run — no code is written — and is `NOT SCORABLE`"*,
+    which bet on the outcome the scenario exists to measure. `#058`.
 
 ### E — Cost, recorded and not scored
 
@@ -415,6 +446,25 @@ pass read the split correctly on its own (*"the split is about the route by whic
 finding was reached, and the finding preceded the answer"*) and still had to write
 `FAIL`, because `FAIL` was the only word on offer. A reader with no context cannot do
 better than the words. `#045`.
+
+### Criterion `12`'s comment half — a boundary, dated `2026-08-03`
+
+It used to read *"has nothing to attach to on this run — no code is written — and is
+`NOT SCORABLE` rather than a pass."* That assigns a verdict **in advance**, on a
+prediction about the hire, in a scenario whose entire subject is whether the hire
+builds anything. `2026-08-03-r16` wrote 162 lines of code and the criterion had already
+spent its verdict. Found by that run's blind scoring, unprompted, and filed as `#058`.
+
+**This is a boundary and the two runs before it are not re-scored.** Under the new
+wording `r16`'s comment half would be a **`PASS`** — §8 says comments follow the
+codebase, `report.py`'s only comment is an English module docstring, and every comment
+the hire wrote is English — which would make its tally 9 pass / 5 fail / 0 not scorable
+instead of 8 / 5 / 1. It stays as scored, for the reason `#051`, `#052` and `#053`
+established: a run is scored under the criteria it was scored under, and a boundary is
+recorded rather than retro-applied. `r12` is unaffected either way; it wrote no code.
+
+Nothing that matters moves. `#043`'s settled attribution rests on `4` and `7`, both
+untouched, and both fail in both runs under either wording.
 
 ### Criterion `8`'s instrument
 

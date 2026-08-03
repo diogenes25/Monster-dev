@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | none of its own, and potentially every criterion of every multi-turn run — the model is what an attribution is stated against |
 | Target file | `process/tools/hire.ps1` — line 195, and the record it writes |
 | Evidence | `2026-08-03-local-floor` found it against Ollama, where it is a hard 404. Verified independently on `2026-08-03-r16` |
 | Blocked on | nothing |
-| Proof design | — |
+| Proof design | `Gate: none` — both halves applied. The tier comparison was tested against nine cases **before** it shipped, and the first version was wrong; see the `proven` entry |
 
 **What happened.** `hire.ps1:195` is
 
@@ -81,3 +81,44 @@ every run and be deleted for being noisy.
   directly, and the `modelFlag`-is-written-once behaviour confirmed in its own `hire.json`. The
   spike's account was accurate on every point checked, which is a reason to read it and not a reason
   to skip the checking.
+
+- `2026-08-03` `proven` — **both halves applied, and it stopped being a tidying job when it was
+  measured.** It was filed as cheap board work. Then a live check made it a blocker for `#061`
+  Phase 1: an unflagged `claude -p` in this working copy selects `claude-opus-5[1m]`, and nothing
+  pins a model — not `~/.claude/settings.json`, not `.claude/settings.local.json`, not
+  `$env:ANTHROPIC_MODEL`. Phase 1 is the **Sonnet** arm, so its turn 2 would have run on Opus while
+  `modelFlag` read `sonnet`. The defect was about to corrupt the next run rather than the last one.
+
+  **`A`:** the resume branch takes `$Model` from `$record.modelFlag` when the caller passed none, so
+  the flag is re-passed every turn. The record is the authority rather than the parameter — the flag
+  belongs to the *run*, and a follow-up turn free to pick a different model would not be the same
+  experiment.
+
+  **`B`:** after each turn, `modelFlag`'s tier is compared against `envelope.modelUsage` and a
+  mismatch warns loudly. A **warning and not a throw**, deliberately: the turn is already paid for,
+  and throwing would destroy the envelope and the worktree snapshot — the exact evidence needed to
+  decide whether the run is still usable.
+
+  **The check's first version was wrong, in the direction that matters, and testing is what caught
+  it.** Taking the tier as `($Model -split '[-\[]')[0]` reduces `claude-sonnet-5` to `claude`, and
+  `claude` then matches every Claude model — so the check went **vacuous for exactly the caller who
+  was being more specific**. Nine cases were run against both versions: the first failed one, the
+  second passed all nine. The shipped version looks the tier up from a known list and falls back to
+  the whole flag, which also keeps a local slug like `gemma4:e2b` working. `.Contains()` replaced
+  `-like` in the same pass, because a local slug may carry `[` or `*` and `-like` would silently
+  reinterpret them as wildcards.
+
+  That near miss is the item's own subject arriving one level up: a check that cannot fire is
+  indistinguishable from a check that passes, and this project has found four of those late.
+
+  Not re-verified across the archive, because it does not need to be: `modelUsage` is already in
+  every `hire.json` on disk, so the whole record can be audited at any time without spending a run.
+  `#043`'s attribution was audited that way before this fix and holds — `r16`'s turn 2 billed
+  `claude-opus-5`.
+
+- `2026-08-03` — **verified on its first real run, by measurement.** `2026-08-03-r17` is a Sonnet arm
+  launched from an Opus session, which is exactly the configuration that used to break: per-turn
+  `envelope.modelUsage` reads `claude-sonnet-5` on **both** turns (turn 1 also lists a
+  `claude-haiku-4-5` the CLI used internally). Before the fix turn 2 would have billed
+  `claude-opus-5[1m]` while `modelFlag` read `sonnet`. No tier-mismatch warning fired, which is the
+  other half working: the check is quiet when the flag took.

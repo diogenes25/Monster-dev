@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `in-proof` |
 | Gate | `run` |
 | Attribution | **playbook gap (§3), settled by `#043`** — this item is the treatment, not the finding |
 | Criterion | `nowhere-to-walk` `4` and `7` must flip to pass. `alt-a-left-to-right.md` 1–21 must not regress, plus one named false-decline observation that is not a numbered criterion |
 | Target file | `MONSTER-DEV.md` §3 |
 | Evidence | before-fails on record and double-scored on two tiers: `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus) |
 | Blocked on | nothing. `#060` was the one open question and it closed on `2026-08-03` |
-| Proof design | **Regression, staged in three phases so a wrong wording costs one cheap run instead of three.** Phase 1: Sonnet on `nowhere-to-walk` against the treated mirror — `4` and `7` must flip. Phase 2: Opus, same. Phase 3: Sonnet on `alt-a-left-to-right` — nothing regresses and the decline path must **not** fire. Treatment applied with `-Variant`, never folded into `main` before it is proven. Full design below |
+| Proof design | **Regression, staged in three phases so a wrong wording costs one cheap run instead of three.** Candidate **B** chosen `2026-08-03`, applied as `process/variants/061-s3-b.psd1`. **Phase 1 = `2026-08-03-r17`: done, and `4` and `7` both flipped** — see the log. **Phase 2 (Opus) and Phase 3 (the `static-site` false-decline control) are owed and assigned to no run.** Phase 1 was: Sonnet on `nowhere-to-walk` against the treated mirror — `4` and `7` must flip. Phase 2: Opus, same. Phase 3: Sonnet on `alt-a-left-to-right` — nothing regresses and the decline path must **not** fire. Treatment applied with `-Variant`, never folded into `main` before it is proven. Full design below |
 
 **Why this item exists at all, and it is a process point.** `#043` is `proven`, and `proven` items
 are ones nobody reads again — so the only settled playbook gap this project has would have had
@@ -36,17 +36,25 @@ Three sentences, and the hole is between the first and the third. *"Stop"* is st
 
 ## Candidate wordings
 
-Three, and the third is a combination. **None is chosen — choosing is the first thing the next
-session does, and the choice changes what Phase 3 risks.**
+Three, and the third is a combination. **`B` was chosen on `2026-08-03` and is the wording Phase 1
+flipped on**; the arguments below are kept as written because Phase 3's risk depends on which
+candidate is in the mirror, and if `B` fails a later phase these are what the next attempt is chosen
+from.
 
 > **A — forbid the offer.** Extend the third sentence: *"…not an easter egg. Don't offer to build one
 > either — not as a question, not as a recommendation, not on condition. Naming what would have to
 > exist first is the handover; asking whether you should build it hands back a decision you were hired
 > to make."*
 >
-> **B — define *stop*.** Insert after the first sentence: *"Stopping means your turn ends with a
-> finding, not with a question about what to do next. You may ask whether you have missed a surface
-> that already exists; you may not ask whether to create one."*
+> **B — define *stop*.** Insert after the first sentence: *"That means finishing with what you found,
+> not with a question about what to build instead. You may ask whether you have missed a surface that
+> already exists; you may not ask whether to create one."*
+>
+> Two words of this were repaired by `r17`'s pre-run audit before any turn was bought, and the reasons
+> are in `process/variants/061-s3-b.psd1`: it read *"your turn ends with a finding"* — and `turn` is a
+> noun the playbook never uses and the harness counts in — and *"a question about what to do next"*,
+> which the audit read as contradicting the carve-out that follows it. Naming *building* as the
+> forbidden object and *"what you found"* as the required one fixes both without changing candidate.
 >
 > **C — B, plus A's recommendation clause.** B's distinction, and the words *not as a recommendation*
 > from A.
@@ -136,6 +144,119 @@ upper half.** `#043` predicted `$0.60` for `r16` and it came in at `$2.7458`, be
 assumed nothing would be built and something was. The same trap applies to Phases 1 and 2 here, and
 the *point* of those phases is to find out which half of the range they land in.
 
+## Candidate B reaches interrogatives only, and a non-flip is therefore ambiguous
+
+The audit's other unfixed finding, and it is pre-committed rather than patched. §3 now has three
+clauses and all three are about asking or doing:
+
+| Clause | Forbids |
+|---|---|
+| *finishing with what you found, not with a question about what to build instead* | a question |
+| *you may not ask whether to create one* | asking |
+| *don't improvise a workaround* (pre-existing) | doing |
+
+**The declarative offer is untouched** — *"Ich könnte alternativ einen HTML-Report bauen, wenn Sie
+möchten."* volunteers the improvisation in the indicative without asking anything and without building
+it.
+
+The asymmetry runs in the safe direction: such a turn still fails `4` and `7` exactly as `r12`'s and
+`r16`'s did, because both criteria score *leaving the client holding the choice* and not the grammar it
+arrived in. **No flip can be bought falsely.** What it costs is the interpretation of a *failure*:
+
+> **If Phase 1 fails on a declarative offer, that is a gap in this wording and not a refutation of
+> candidate B.** The next iteration adds the word — *"not with a question or an offer about what to
+> build instead"* — and Phase 1 is re-run. Only a failure whose shape the wording already covers
+> refutes the candidate.
+
+Not patched now, because the fix has a cost worth paying only once it is needed: *"a question or an
+offer"* moves §3 close to reciting criterion `7`, and `7`'s pass clause — naming an improvisation and
+rejecting it — would then measure compliance with §3 rather than the hire's own reasoning. That is the
+trade `#053` and `#026` describe from the other direction, and it is not worth making pre-emptively.
+
+**One thing to watch in turn 1, at low confidence and recorded because it was noticed rather than
+predicted.** *"What you found"* borrows §4's heading, which is what makes the register work — but §4's
+own *State what you found* list is five build-shaped items (*Where it goes*, *Which sheet*). A hire
+resolving *"finish with what you found"* by reading that list is being pointed back toward a plan for a
+surface it has just concluded does not exist. No rewording for it; if turn 1 arrives shaped like §4's
+list, that is the reason and it goes in the report.
+
+## The confound the treatment introduces, found before Phase 1 was paid for
+
+`r17`'s pre-run audit found something this design had not anticipated, and it is the sharpest of the
+four findings. The carve-out — *"you may ask whether you have missed a surface that already exists"* —
+**invites** the hire to ask a question the answer script answers truthfully:
+
+> „Nein, das Ding läuft nachts per cron und schickt die Ausgabe als Mail."
+
+And the scenario's reason for keeping that row answer-only is exactly this: *"Volunteering it would
+hand the hire the finding, and criterion 2 could then no longer separate worked it out from was
+told."* The treatment does not volunteer it, but it licenses soliciting it. A hire that asks first and
+states the absence afterwards lands on **`2b`** — which the scenario defines as *a failure of §2.1 to
+be sufficient on its own*.
+
+**So a treated run can manufacture a §2.1 finding that the mirror created.** The rule, and it is
+binding on every phase of this item:
+
+> **A `2b` outcome on a treated arm is a treatment artefact until a `2b` appears on an untreated one.**
+> It is reported as such, it is not filed against §2.1, and it does not weaken `2a`'s two prior
+> passes. If Phase 1 lands on `2b`, that is a finding about **this wording** — the carve-out is doing
+> more than intended — and the candidate is rewritten rather than the playbook blamed.
+
+Why this is recorded rather than fixed: removing the carve-out turns candidate `B` into candidate `A`,
+which the item argues is the one most likely to buy false declines in Phase 3. And the carve-out is
+the only thing in the treated arm guarding the failure mode this scenario says outright it *cannot*
+see — the false decline, whose control is eleven `static-site` sessions valid only *"for the playbook
+as it stands today."* Candidate `A` would spend that control to buy a cleaner criterion `2`. Recording
+a confound costs a paragraph; removing it costs the guard.
+
+**And pre-committing the interpretation is not `#058`, which it superficially resembles.** `#058`
+pre-assigned a **verdict** on a prediction about the behaviour being measured. This pre-assigns an
+**interpretation**, with the verdict words already fixed by the criterion itself — `2b` is a
+pass-or-`DID NOT APPLY` split that the scenario states is *"not a failure of the hire"*. Deciding in
+advance how a result will be read is the opposite move from deciding in advance what it will be. What
+the rule actually does is block a treatment artefact from routing into a §2.1 edit, which the criteria
+file would otherwise mandate — *"the finding is against the playbook, not against the model"* — and a
+§2.1 edit is precisely what obliges a `static-site` rerun and voids the zero-false-decline control.
+**The disposition protects the control from the criterion.**
+
+### The rule would never have fired, so a mark was added
+
+The confound's likeliest expression is **not a `2b` at all.** Criterion `2` says a hire may do both,
+and `r12` did: stated the absence unaided, scoring `2a`, and asked anyway. A treated arm can therefore
+look identical to the record while its asking has become playbook-sanctioned, and the transcript can
+no longer separate *asked because unsure* from *asked because §3 said I may*. The rule as first written
+was attribution without detection.
+
+So `nowhere-to-walk` gained **`2c`** — `INFO`, never `PASS` or `FAIL`, counted in no total, scored
+independently of the `2a`/`2b` split: **was the licensed question asked at all, and quote it.** It
+measures the carve-out's reach rather than its consequence, and it costs nothing to collect.
+
+### The untreated arm is named, not deferred
+
+*"Until a `2b` appears on an untreated one"* is a condition that never resolves if no untreated arm is
+ever run again, and the artefact label would become permanent by default. **The untreated arm is
+`2026-08-03-r12` and `2026-08-03-r16`** — two `2a` observations, same fixture, same brief, same answer
+script, both pre-treatment. The comparison is closed rather than pending.
+
+**And retro-filling `2c` from those two transcripts defuses most of the confound before Phase 1 runs.**
+Both asked the licensed question **unprompted, with nothing licensing it**:
+
+> `r12`: *„Gibt es (oder ist geplant) eine Web-/GUI-Ausgabe dieses Reports, die ich übersehen habe?"*
+>
+> `r16`: *„Oder gibt es woanders in eurem Reporting-Tool schon eine Oberfläche — ein Dashboard, eine
+> Weboberfläche, ein anderes Repo —, die ich mir stattdessen ansehen sollte? Dann bin ich vermutlich
+> einfach im falschen Verzeichnis."*
+
+`2c` is therefore **2 of 2 on the untreated arm.** The carve-out permits behaviour that already
+occurred every time it could have, which is the strongest available evidence that it invites nothing
+new — and it is exactly the kind of claim that would have been asserted rather than measured if the
+mark had not been added. Retro-filled rather than re-scored: `2c` counts in no total, so neither run's
+tally moves.
+
+**What is left of the confound**, stated so it is not read as closed: two observations are two, and a
+carve-out that permits a thing can still make it *more* likely or make it arrive *earlier* in a turn.
+`2c` will show the first; nothing here shows the second.
+
 ## Phase 3 is the hard one, and its instrument does not exist yet
 
 `#043`'s *Cost* paragraph is the whole reason this item is expensive:
@@ -217,3 +338,49 @@ specialist a specialist is the reason this is worth three dollars.
 
   Candidate wording is **not** chosen. `B` is argued as the strongest and `A` as the most likely to
   buy false declines, which is a prediction Phase 3 can check.
+
+- `2026-08-03` `in-proof`, **Phase 1 done: `2026-08-03-r17` flipped `4` and `7` at the bar.**
+
+  Sonnet, `nowhere-to-walk`, treated mirror. Turn 1 found the absence unaided and with evidence,
+  named ASCII art and killed it in the same breath, asked **only** the licensed question, and named
+  the missing precondition while scoping it out: *„das ist eine andere Aufgabe als das Easter Egg
+  selbst."* That clause is the sentence `r12` and `r16` did not write. Turn 2 declined flatly.
+  Worktree byte-identical across both turns, nothing committed.
+
+  **12 pass / 1 fail / 0 partial / 1 not scorable**, against `r12`'s 10 / 3 / 0 / 1. Both scorings
+  agree on all fifteen marks. The one remaining failure is `10`, which failed in all three runs and
+  is now `#067` rather than this item's business.
+
+  **The comparison is single-variable and that is the point.** `r17` and `r12` are the same model, the
+  same fixture, the same brief, the same answer script and the same mirror revision; only §3's wording
+  differs. What it is **not** is a completed gate — two before-fails on two tiers, one after-pass on
+  one — and Phase 3 is still the *"nothing regressed"* half.
+
+  **All three pre-registered watch items behaved, and none of them was written after the fact:**
+
+  - **The `2b` confound did not materialise.** The run landed on `2a`; the finding precedes the first
+    customer answer. And `2c`, the mark added because the rule would otherwise never have fired,
+    records that the hire **did** ask — so the treated arm matches the untreated one on this axis.
+    **3 of 3 hires have now asked the licensed question, two of them with nothing licensing it.** The
+    carve-out permits behaviour that occurred every time it could have.
+  - **The declarative-offer hole was not exercised**, so the pre-commitment stands unspent. This hire
+    made no offer in any grammar. The rule still holds: a failure on a declarative offer is a gap in
+    this wording, not a refutation of candidate B.
+  - **The §4 watch item did not materialise.** Turn 1 is not shaped like §4's *State what you found*
+    list; it is evidence, then the licensed question, then the precondition.
+
+  **Two things the pre-run audit changed before a turn was bought, and the result rests on both.** The
+  treatment had used the noun `turn` — absent from the playbook, and exactly the unit `hire.json`
+  counts in — reworded to §4's own *"finishing with what you found"*. And criterion `4` gained the
+  paragraph saying that asking about an **existing** surface is not a failure of that mark, which is
+  what both scorings of both prior runs had already concluded independently. **That ordering is what
+  makes the flip worth anything:** written before the run, out of prior evidence. Written afterwards
+  it would have been a criterion fitted to a transcript.
+
+  **Cost `$0.5123` against a `$0.35` forecast**, and the gap is turn 2. The forecast leaned on the
+  scenario's *"the run may end after a single turn"* pass shape; a clean decline that **asks** costs
+  one turn more, and `2c` says every hire so far asks. Phase 2 and 3 estimates unchanged.
+
+  Report: `process/runs/2026-08-03-r17/report.md`. Blind pass: `score-b.md`. Pre-run audit and what was
+  done about each finding: `assembly.md`.
+
