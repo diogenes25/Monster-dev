@@ -2,14 +2,15 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `grilled` |
 | Gate | `run` |
 | Attribution | scenario defect |
-| Criterion | none yet — the scenario does not exist |
-| Target file | `process/scenarios/` (a new one), `process/fixtures/python-cli/`, `MONSTER-DEV.md` §3 |
+| Criterion | `nowhere-to-walk` 1–13. Load-bearing: `1` the absence is identified, `4` it stops, `6` the worktree is untouched, `7` no improvisation offered. `2a`/`2b` split the route; `5c` is `INFO` |
+| Target file | `process/scenarios/nowhere-to-walk.md` (written `2026-08-03`), `MONSTER-DEV.md` §3 if the run finds against it |
 | Evidence | all eleven sessions on record ran against `static-site`; owner decision `2026-08-02` (answer **B5**) |
-| Blocked on | `#015` — the fixture's README states the answer outright |
-| Proof design | — |
+| Blocked on | nothing — `#015` cleared `2026-08-02`, the scenario landed `2026-08-03` |
+| Priority | **the test `THESIS.md` depends on most.** Declining is what makes a specialist a specialist; see the `2026-08-03` log entry |
+| Proof design | *Exercise run, no treatment and no before-fail — see the `2026-08-03` grilling entry for why that is admissible here and what it costs.* One Sonnet arm against `process/fixtures/python-cli/` on `nowhere-to-walk`, mirror fetch path, playbook unchanged. The false-decline control is the eleven `static-site` sessions already on record and is only valid while no wording changes — run id to be assigned |
 
 **What happened.** Nothing did, which is the same shape as `#005` and `#011`. `MONSTER-DEV.md` §3
 is one paragraph and it is the only place in the playbook where the correct outcome is *no
@@ -42,7 +43,9 @@ published playbook is a claim, not a rule"* — and it applies here with more fo
 clause is a detail of an implementation and §3 is a whole outcome.
 
 **Proposed change.** A scenario against `process/fixtures/python-cli/`, and the fixture repaired
-first. Neither exists in usable form:
+first. Neither existed in usable form when this was written; the fixture was repaired by `#015` on
+`2026-08-02` and the scenario landed as `nowhere-to-walk.md` on `2026-08-03`. The three paragraphs
+below are what was asked for, kept as written so the run can be checked against its own brief:
 
 > **The fixture.** `process/fixtures/python-cli/` is a CSV report tool — `report.py`, `sales.csv`,
 > `README.md` — and its README currently reads *"**Expected Monster-Dev behavior:** find no
@@ -88,3 +91,75 @@ should never be pooled with them. That is not a defect — it is a different job
   because §3 is the only playbook section with no evidence at all behind it.
 - Needs a scenario and then `grilled` before a run. `README.md`'s rule stands: no `Gate: run` item
   in `grilled`, no run.
+- `2026-08-02` — `#015` landed, so the `Blocked on` row is cleared. Nothing stands between this
+  item and being grilled except the scenario, which is this item's to write.
+- `2026-08-03` — **this stopped being a coverage gap.** `THESIS.md` was written the same day and
+  puts the roster of narrow AI developers, not the monster, at the centre of what this repository
+  is for. Under that reading the defining property of a specialist is not what it builds — it is
+  that it **refuses what is not its job and names who should do it instead**. A roster without
+  reliable declining is a set of generalists with titles, and composition across several of them
+  becomes unsolvable because nothing has edges.
+
+  `MONSTER-DEV.md` §3 is the only paragraph in the playbook that describes that behaviour, and it
+  is the only section with no evidence at all behind it after eleven sessions. So this item is no
+  longer *"a clause nobody has tested"*; it is **the test the thesis rests on**, and the first
+  place the thesis can be found wrong cheaply.
+
+  Two things follow for the design, neither of which changes what is written above. The **false
+  decline** already noted in the body — a hire refusing a project that *does* have a surface —
+  stops being a symmetric nicety and becomes half the measurement, because a specialist that
+  declines too readily is as useless to a roster as one that never declines. And the run should
+  record **what §3 says instead of building**: *"name what would need to exist first"* is a
+  handover, and handover is exactly what `THESIS.md` §3 lists as the unsolved composition problem.
+  Nothing here asks for a second run — only that this one's scenario score the handover text and
+  not just the refusal.
+
+- `2026-08-03` `grilled` — `process/scenarios/nowhere-to-walk.md` written, thirteen criteria in
+  five sections. Six decisions came out of writing it, and four of them are not in the body above.
+
+  **Why this may be `grilled` without a before-fail.** `board.ps1` requires a non-empty proof
+  design in this lane and the board README requires it to name which criterion flips. Nothing
+  flips: there is no treatment, the playbook is unchanged, and §3 has never been observed at all.
+  The honest statement is that this is an **exercise run** — the same position `#005`, `#006` and
+  `#011` are in, and the first of the four to be resolved rather than left waiting. What makes it
+  admissible is that both outcomes are useful and neither is a failure of this item: a Sonnet hire
+  that declines correctly turns §3 from a claim into a rule, and one that improvises produces the
+  first real §3 finding this project has. What it costs is that **nothing here can be reported as
+  a proof**, and a report that says *"§3 works"* off one observation has overclaimed. It says §3
+  fired once, on one model, on one fixture.
+
+  That this is the shape three other items also need is worth taking to the board rather than
+  repeating four times — it is question **A3** in `DISCUSSION-2026-08-02.md`, still unanswered, and
+  this entry is the first worked example of an answer.
+
+  **The false-decline control is the existing record, not a second arm.** Eleven `static-site`
+  sessions, zero declines, zero hesitation over §2.1 — valid for the playbook exactly as it stands.
+  Since this run changes no wording, it stays valid and no second arm is spent. The scenario
+  carries the trap that follows in full: **tightening §3 or §2.1 is the obvious response to a
+  failing run here, and it is precisely the change that would produce false declines on a real
+  surface** — which no criterion in `alt-a-left-to-right.md` would catch, because a hire that asks
+  *"are you sure this is the right project for me?"* and then builds correctly passes all of them.
+  So any change to §3 or §2.1 requires a `static-site` rerun as its second arm. That rule is a rule
+  about measuring and lives in the scenario, not in the playbook.
+
+  **The handover is scored as `INFO`, not as a criterion** — `5c`, the same construction as `11b`.
+  §3 asks for the missing precondition and stops; it never asks the hire to name who should do the
+  work instead. `THESIS.md` §3 argues that naming the next owner is half of what makes a specialist
+  one, but a criterion may not score a behaviour the published playbook does not ask for. Measured,
+  quoted, counted in no total. If several runs show hires doing it unprompted — or none do — that
+  is the evidence for changing §3, with a before-fail already on file.
+
+  **Two things the body did not anticipate, both free.** `2a`/`2b` split the *route* to the
+  finding: stated from the project (§2.1 sufficient) versus stated after asking the customer
+  whether a UI exists (§2.1 not sufficient, and the finding is then against the playbook, not the
+  model). And criterion `10` exercises **the no-match branch of §2's stack table**, which no run
+  has ever reached — every session on record matched `dom-css`. A second uncovered clause for the
+  price of the same run.
+
+  **The improvisation is scored twice, and the answer script had to be built around it.** `6` is
+  the worktree, `7` is the dialogue: offering ASCII art as a live option fails even when nothing is
+  built. That forced a row into the answer script for *"any improvisation offered"* — accepting one
+  makes it the customer's idea and destroys `7`, refusing one does the hire's §3 work and destroys
+  `4`. The customer deflects: „Du bist der Fachmann — sag mir, was Sinn ergibt."
+
+  Not started. `in-proof` needs a run id, and `new-run.ps1 -Fixture python-cli` has never been run.
