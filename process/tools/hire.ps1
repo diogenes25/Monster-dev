@@ -221,27 +221,41 @@ $record | ConvertTo-Json -Depth 20 | Set-Content $recordPath -Encoding utf8
 # It runs *after* the envelope is on disk and it never throws: a bug in the capture must not
 # cost a turn that has already been paid for. It fails loudly instead — CAPTURE-FAILED.txt in
 # the run folder, and a line in the object this script returns.
-$captureError = $null
-try {
-    Remove-Item -LiteralPath (Join-Path $runDir 'CAPTURE-FAILED.txt') -ErrorAction SilentlyContinue
+#
+# The three artefacts are captured **independently**, each attempted whatever the others did.
+# They used to be one sequence, and `scrub-transcript.ps1` is built to *throw* rather than write
+# a transcript it could not fully anonymise — correct on its own, and it aborted the whole block,
+# so the worktree copy and base.txt were not written either. Neither of those contains the
+# account name the scrubber was worried about. A failure in the most protective component
+# destroyed the two artefacts it was not protecting (#034), and it failed worst exactly when it
+# mattered most: a transcript with an unanticipated shape is the one worth having a worktree of.
+$captureErrors = [ordered]@{}
+Remove-Item -LiteralPath (Join-Path $runDir 'CAPTURE-FAILED.txt') -ErrorAction SilentlyContinue
 
+# 1/3 — the transcript. A transcript that fails to scrub is not written at all: not unscrubbed,
+# and not to a `.unscrubbed` sidecar either, because process/ is tracked and pushed and a sidecar
+# is a file somebody commits by accident. What is kept is the reason, below.
+try {
     # Glob the CLI's own project folders. The slug rule is the CLI's, not ours, and deriving it
     # from the target path is how that breaks silently on the next CLI version.
     $hits = @(Get-ChildItem (Join-Path $HOME '.claude\projects') -Recurse -Filter "$($record.sessionId).jsonl" -ErrorAction SilentlyContinue)
     if ($hits.Count -ne 1) { throw "expected exactly 1 transcript for session $($record.sessionId), found $($hits.Count)" }
 
-    # Scrubbed on the way in, because process/ is tracked and this repository is pushed. The
-    # scrubber deletes nothing on failure and writes nothing on failure, so a transcript that
-    # cannot be anonymised simply does not arrive — which is what CAPTURE-FAILED.txt then says.
     & (Join-Path $repoRoot 'process\tools\scrub-transcript.ps1') `
         -In $hits[0].FullName -Out (Join-Path $runDir 'transcript.jsonl') `
         -Run $targetPath -Dist $record.dist -RepoRoot $repoRoot | Out-Null
+} catch { $captureErrors['transcript.jsonl'] = "$_" }
 
+# 2/3 — the worktree, which is what §9's diff surface and the 18-marks are read against.
+try {
     $work = Join-Path $runDir 'worktree'
     if (Test-Path $work) { Remove-Item -Recurse -Force $work }
     Copy-Item -Recurse $targetPath $work
     if (Test-Path (Join-Path $work '.git')) { Remove-Item -Recurse -Force (Join-Path $work '.git') }
+} catch { $captureErrors['worktree/'] = "$_" }
 
+# 3/3 — base.txt and the record stub.
+try {
     @(
         "run:      $RunId"
         "fixture:  $(if ($record.fixture) { $record.fixture } else { '(not recorded — hire.ps1 was called without -Fixture)' })"
@@ -283,14 +297,29 @@ try {
             '`check-index.ps1` fails on one with no target.*'
         ) | Set-Content $knowledge -Encoding utf8
     }
-} catch {
-    $captureError = $_.Exception.Message
+} catch { $captureErrors['base.txt'] = "$_" }
+
+# Named per artefact, because "the transcript and/or the worktree are not in this folder" was
+# accurate only while the block was all-or-nothing. Now each can fail alone, and a reader has to
+# be able to tell which of them did without going and looking.
+#
+# knowledge.md is deliberately *not* written to here, which departs from #034's proposal that the
+# run record should say the transcript is missing. That file is created once and then left alone
+# — it is the one file in the folder a person writes — and an automatically inserted line reads
+# exactly like a written one, which is the same reason its `tags` are left empty rather than
+# guessed. CAPTURE-FAILED.txt is rewritten every turn and is the honest place for a machine fact.
+$captureError = $null
+if ($captureErrors.Count) {
+    $captureError = ($captureErrors.Keys | ForEach-Object { "${_}: $($captureErrors[$_])" }) -join '; '
+    $all = @('transcript.jsonl', 'worktree/', 'base.txt')
     @(
-        "The capture failed after cli turn $($turn.index). The envelope in hire.json is intact and",
-        'the turn is not lost, but the transcript and/or the worktree are not in this folder.',
-        '',
-        $captureError
-    ) | Set-Content (Join-Path $runDir 'CAPTURE-FAILED.txt') -Encoding utf8
+        "The capture partly failed after cli turn $($turn.index). The envelope in hire.json is intact"
+        'and the turn is not lost. Each artefact is captured independently, so the ones marked ok'
+        'below are complete and usable.'
+        ''
+    ) + @($all | ForEach-Object {
+        if ($captureErrors.Contains($_)) { "  FAILED  $_ — $($captureErrors[$_])" } else { "  ok      $_" }
+    }) | Set-Content (Join-Path $runDir 'CAPTURE-FAILED.txt') -Encoding utf8
 }
 
 # --- the harness must leave no trace in the target -------------------------------------------
