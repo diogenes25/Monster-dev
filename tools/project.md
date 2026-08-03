@@ -25,10 +25,15 @@ If a sheet's frame count changes, see the sync list in the `monster-dev-workshop
 per-monster figures live in the catalog and in `MONSTER-DEV.md` §5, but `green-fuzz-classic`'s
 `23` is also baked into `index.html` and into two dev-side scripts the skill names.
 
-## `hire/` — fetched and run by a hired agent
+## `hire/` — the rules for tooling a hire may fetch
+
+**There is no `hire/` folder, and there never has been.** This section is the standard anything
+would have to meet to earn one; nothing has. Do not go looking for the directory, and do not read
+the absence as something missing — the formula a tool would shortcut is spelled out in
+`MONSTER-DEV.md` §5, which is where a hire gets it.
 
 Shortcuts that spare a hire the derivation and the measuring. Two rules hold for everything
-here, and both exist to keep the product from quietly turning into a library:
+that would live here, and both exist to keep the product from quietly turning into a library:
 
 - **It computes, it does not write.** A tool may return frame geometry, cycle counts, a
   crossing duration, a measured shadow offset. It may not emit a finished file. §6 stands:

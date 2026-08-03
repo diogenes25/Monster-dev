@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | `alt-a-left-to-right` `11a` — `NOT SCORABLE` on its first real use |
@@ -65,3 +65,34 @@ the verifier runs *after* the hire and outside the envelope, so it costs nothing
   it became a behaviour criterion. Both `NOT SCORABLE`. The first scoring called it *"qualified —
   it appeared and was removed, so it demonstrably did not cross"*; the blind pass refused that and was
   right, because the reading it rests on is the same reading a full crossing would produce.
+- `2026-08-03` `proven` — applied to `verify-run.mjs`. The two point probes became one in-page poll,
+  `pollTravel(maxMs)`, sampling every 100 ms from the trigger until the element is gone or 4 s pass.
+  `travelledPx` is `max(x) − min(x)` over the samples actually taken; `samplesTaken`,
+  `disappearedAfterMs` and `x.{first,last,min,max}` are new. `11a`'s wording is untouched, as the
+  item argued it should be.
+
+  The loop runs **in the page** rather than as 40 CDP round-trips, so the interval means what it says
+  and the whole window costs one `Runtime.evaluate`. That also disposes of the wall-clock caveat: the
+  block is ~200 ms longer than the two sleeps it replaced, not four seconds longer.
+
+  **Verified against a known implementation rather than reasoned about**, which is the point of the
+  note this run's report ends on — *a check that confirms what you expected has earned less trust
+  than one that surprises you.* `index.html` under emulated reduced motion parks the walker at
+  `translateX(40vw)`, so it is the *appeared and did not move* case the old instrument scored `null`:
+
+  ```json
+  "reducedMotion": { "x": { "first": 474, "last": 474, "min": 474, "max": 474 },
+                     "travelledPx": 0, "samplesTaken": 38, "disappearedAfterMs": null,
+                     "afterTrigger": 1, "stillOnScreenAfterCrossing": 1 }
+  ```
+
+  `0` where it used to be `null`, over 38 samples. A crossing that tidied up after itself now reads
+  as a large `travelledPx` **plus** a `disappearedAfterMs`, so the two outcomes that shared one
+  reading no longer do. The same run reproduced every other figure the reference is known for — 23
+  steps, 11 whole cycles, 10.56 s against 6.72 s at the narrow width — so the poll did not disturb
+  anything upstream of it.
+
+  **One change to a field a report quotes, named because it is otherwise silent:**
+  `reducedMotion.afterTrigger` is now derived from the poll's samples instead of probed once at
+  0.8 s. Same question, and it can no longer miss an appearance shorter than the probe delay — but a
+  reader comparing this field across the boundary is comparing two instruments.

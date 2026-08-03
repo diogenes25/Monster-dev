@@ -98,3 +98,12 @@ warns about, arriving from an unexpected direction.
   the same hour with both sessions on record and the mirror hashes compared. Filed at `formulated`
   rather than `intake` because what happened, which file would change and the attribution are all
   settled; what is not settled is the wording, and the proof design says why that is the expensive part.
+- `2026-08-03` — **the interim measure is in place**, in `references/report-template.md` as an
+  `Entry point` row in the header table plus the paragraph saying why it is not bookkeeping. It landed
+  in `22b8351`, the same commit as the handoff that recommended it, so the rate starts accumulating
+  from the next run rather than from the next wording change. The item stays `formulated`: measuring
+  the rate is not the same as proving a fix, and no wording has been chosen.
+
+  The instruction is to state the row **even when nothing happened**, for the same reason the `Reach`
+  section is stated when it found nothing — an omitted row and a clean row read identically, and only
+  one of them means anybody looked. Current denominator: 12 sessions, 1 refusal.

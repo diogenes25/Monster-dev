@@ -161,6 +161,39 @@ Set-Content (Join-Path $bundle 'criteria.md') $kept -Encoding utf8
 $residue = @($kept | Select-String -Pattern '\b20\d\d-\d\d-\d\d-[a-z0-9-]+' -AllMatches |
              ForEach-Object { $_.Matches.Value } | Sort-Object -Unique)
 
+# --- but the run being scored may never name itself ---------------------------------------------
+#
+# #047. Another run's id in the prose is a residual anchor and gets the NOTE at the bottom. *This*
+# run's id is a different thing entirely: it tells the blind reader which run it is holding, and on
+# 2026-08-03-r12 the passage went further and named the criterion the pre-run audit had been worried
+# about. A second reader that knows where to look is not the reader the second pass was designed to
+# be.
+#
+# So this is a refusal and not a note. The note already existed, said the right thing, and was read
+# and not acted on — which is what makes the difference between reporting and refusing the whole
+# finding. Same shape as build-dist.ps1: delete rather than hand back a leaking artifact.
+#
+# The remedy is local and small: move the passage into process/fixtures/<name>.md or the board
+# item's log, where the audit's findings mostly live already, and leave the scenario carrying the
+# *current* wording of the answer script. It must never be to stop recording what an audit found —
+# the audits are the most productive check this project has added.
+#
+# -SimpleMatch with ONE escaped pattern, deliberately. `-Pattern 'a|b' -SimpleMatch` searches for
+# the pipe literally and can never match; that broke a 13b check on 2026-08-03 and returned the
+# expected answer while measuring nothing.
+$selfNamed = @($kept | Select-String -Pattern $RunId -SimpleMatch)
+if ($selfNamed) {
+    $where = ($selfNamed | ForEach-Object { "  line $($_.LineNumber): $($_.Line.Trim())" }) -join "`n"
+    Remove-Item -Recurse -Force $bundle
+    throw ("BROKEN: $Scenario names the run being scored, '$RunId', in the prose the scorer reads:`n" +
+           "$where`n" +
+           "That tells a blind reader which run it is holding, and a passage about a pre-run " +
+           "correction also tells it which criterion was thought to be at risk. Move the passage to " +
+           "process\fixtures\<name>.md or the board item's log and leave the scenario the current " +
+           "wording of its answer script. Do not stop recording what the audit found. " +
+           "Bundle deleted rather than handed back. (#047)")
+}
+
 # --- the envelope, the measurements, the git surface ------------------------------------------
 
 $hireJson = Join-Path $runsDir "$RunId\hire.json"

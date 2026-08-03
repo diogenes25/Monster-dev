@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `nowhere-to-walk` `2a`/`2b`; the instrument of `8`; and the turn-scope question behind `4`/`7` |
@@ -58,3 +58,22 @@ which is not what `4` is about.
 - `2026-08-03` `formulated` — from `2026-08-03-r12`. All three come out of the blind pass's
   `UNCERTAIN` list, which is the part of that output `SKILL.md` says is worth more than its verdicts.
   This is the first run where that claim paid: the verdicts matched, the uncertainties did not.
+- `2026-08-03` `proven` — all three applied to `nowhere-to-walk.md`.
+
+  `2b` is now worded by **first** rather than by whether the hire asked, which is the part that
+  actually fixes it: `r12` did both, so the old wording was literally true of a run that had already
+  passed `2a`. The verdict word for the arm that did not apply is spelled out as `DID NOT APPLY`.
+
+  `8`'s instrument is narrowed to `monsters/*.png`, with reading the roster or the catalog kept as a
+  separate `INFO` — the two behaviours no longer share a verdict, because one is a download and one is
+  a reflex.
+
+  The third edit is the one the item warned about, and it is written with its own limit attached. The
+  sentence says all cli-turn text is one instrument; the paragraph under it says what that does **not**
+  mean — raising an improvisation and rejecting it in the same breath is what `7` already calls a pass,
+  and correcting yourself before the client is asked to decide costs the client nothing. What is
+  forbidden is scoring a run by its best turn, and the thing that cannot be undone is **leaving the
+  client holding the choice**. Stated any more broadly it would have made mid-run correction
+  unforgivable, which the item said would be wrong and which criterion `7` contradicts outright.
+
+  No comparability cost: one run, and these are its own words.

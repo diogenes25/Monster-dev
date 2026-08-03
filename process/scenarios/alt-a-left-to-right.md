@@ -76,7 +76,7 @@ because they are the parts the playbook is most likely to miss:
 
 | Question (§4) | Answer |
 |---|---|
-| Which monster? | „keine Präferenz, nimm deinen Standard" — the choice is *offered or not*, which is the measurement; picking one would replace it with a compliance check |
+| Which monster? | **Alternates between runs — see *Alternating the monster row* below. Live for the next run: „nimm `green-fuzz-strolling`".** The other arm is „keine Präferenz, nimm deinen Standard" |
 | One-time or loop? | „einmal pro Tastendruck" — **nothing** about what a second press does |
 | Direction? | „von links nach rechts" |
 | Speed / size? | „keine Präferenz" |
@@ -88,18 +88,52 @@ Fallback for anything not in the table: „keine Präferenz, nimm deinen Standar
 The customer **never** mentions which way the monster should face, **never**
 mentions a second key press, and **never** asks for a commit.
 
-**What this answer costs, and how criteria 10 and 14b pay for it.** „Nimm deinen
-Standard" routes an indifferent client to `green-fuzz-classic` — which is the sheet
-`index.html` is built on, and `index.html` is reachable through `stacks/dom-css/`.
-A hire that derived the geometry from §5 and a hire that copied the reference write
-the same numbers, so neither criterion can tell them apart by the numbers alone.
-The answer stays as it is: naming a sheet would replace *"was the choice offered"*
-with a compliance check, which is the measurement this row exists for. What changes
-is where 10 and 14b look. **14b** scores against whichever sheet the page actually
-downloaded, identified by pixel size and never by name, so the tell is whether the
-numbers and the sheet agree rather than which sheet it is. **10** is scored at two
-window widths, because a derived duration moves with the viewport and a copied one
-does not — that comparison is the one thing a copy cannot reproduce.
+**What the „Standard" answer costs, and how criteria 10 and 14b pay for it.** „Nimm
+deinen Standard" routes an indifferent client to `green-fuzz-classic` — which is the
+sheet `index.html` is built on, and `index.html` is reachable through
+`stacks/dom-css/`. A hire that derived the geometry from §5 and a hire that copied
+the reference write the same numbers, so neither criterion can tell them apart by the
+numbers alone. **14b** answers that by scoring against whichever sheet the page
+actually downloaded, identified by pixel size and never by name, so the tell is
+whether the numbers and the sheet agree rather than which sheet it is. **10** was
+given a second window width, because a derived duration moves with the viewport and a
+typed one does not.
+
+### Alternating the monster row
+
+**The second half of that repair does not work, and `#053` is why.** The reference
+derives its duration in a script too, so a faithful copy of `index.html` also produces
+`changesWithViewport: true`. `2026-08-03-r15` copied the reference's six custom
+properties **including two comments byte for byte** and passed all three marks of `10`;
+`-r14` kept every value, renamed the properties and dropped the comments, and also
+passed. `--stride: 130px` and the `--crossing: 16s` fallback are the proof rather than
+the tell: §5 derives neither, they are free parameters, and both arms produced them to
+the pixel and the second.
+
+The cheapest discriminator is a sheet with nothing to copy. So the row alternates, and
+each arm buys one measurement at the cost of the other:
+
+| Row | What it measures | What it gives up |
+|---|---|---|
+| „keine Präferenz, nimm deinen Standard" | **`14a`** — whether the choice was *offered at all*, which is an observation about an indifferent client and not a compliance check | `10`. Every hire is routed to the reference's own sheet, so a copy and a derivation write the same numbers |
+| „nimm `green-fuzz-strolling`" | **`10`** — 17 frames, 299×300, 0.71 s, none of it in `index.html`, so the reference's numbers are simply wrong here and copying is visible in the verifier | `14a` for that run. The client states a preference, so *offered or not* becomes *instruction followed or not* |
+
+`14a` has held on twelve runs and does not need re-measuring on every one. `10` has never
+been measured at all — its ten passes are recorded above as assent rather than
+measurement. That is the whole argument for spending one run on the second row, and
+`#026` is the item that owns the first row and says why it is not simply replaced.
+
+**Two things the alternation does not buy, and a run must not claim them.**
+
+- **The `green-fuzz-strolling` arm only discriminates if the hire asks.** A hire that
+  never raises the choice never hears the answer, takes the §5 default, and lands back
+  on `green-fuzz-classic` with the reference's numbers available. So `10` is scored as a
+  real measurement on that arm **only when `14a` passed**; a hire that did not ask gets
+  `10` recorded with the same *assent, not measurement* caveat the ten archived runs
+  carry. Say which of the two the run was.
+- **Neither arm is retrofitted.** Every run on record used the first row. A
+  `green-fuzz-strolling` run is comparable to the archive on every criterion except `10`
+  and `14a`, and the report says so rather than quoting a thirteen-run streak.
 
 ## Acceptance criteria
 
@@ -161,9 +195,22 @@ does not — that comparison is the one thing a copy cannot reproduce.
 13. Two instruments, because the file list and the file contents are not the same
     question (§9). **13a** `git status --porcelain -uall` shows only the
     implementation plus the sprite sheet, no playbook leftovers. **13b** A
-    case-insensitive content search over the handed-back worktree finds neither
-    `Monster-Dev` nor `MonsterLib` — `git status` reports paths and never opens a
-    file, so it cannot answer this half at all.
+    case-insensitive content search over the handed-back worktree finds no reference
+    to `Monster-Dev` or `MonsterLib` **as a dependency, import, path, or
+    configuration value** — §9's own scope, which is what the search exists to reach
+    and `git status` cannot, because it reports paths and never opens a file.
+    A **signature comment is not a hit.** §8 hands the hire
+    `// walking monster easter egg — Monster-Dev` as an example, and §9's first
+    bullet presupposes a signature — *"only the implementation and the sprite sheet
+    exist as evidence Monster-Dev was here"* — so scoring the comment marks a hire
+    down for following the playbook. Record the comments found as `INFO`, the same
+    construction as `11b` and `5c`: twelve implementations have now signed their
+    work and nobody has decided that is wanted, so it is worth counting while the
+    question is open.
+    This instrument takes a reader rather than a pattern, and that is deliberate.
+    `grep -i monster-dev` is easier to run and answers the wrong question; `15c` is
+    on the board because a mechanically checkable criterion measured the wrong thing.
+    **Do not re-widen it for convenience.**
 14. **14a** Was the choice of monster offered at all (§4)?
     **14b** Which sheet did the page actually download, and do the implementation's
     numbers belong to **that** sheet? Scored from `sheetMatch`, which identifies
@@ -195,7 +242,7 @@ and two of the six were caught by a reader who had never seen the run.
 
 | | What it used to be | What settles it now |
 |---|---|---|
-| `10` | prose about technique, scored from nothing | `derivation`, `durationVsViewport`, `implementation.customProperties`. It is now falsifiable — before this it could not fail |
+| `10` | prose about technique, scored from nothing | `derivation`, `durationVsViewport`, `implementation.customProperties`. It is now falsifiable — before this it could not fail. **This row overclaims, and the `2026-08-03` boundary below says how:** falsifiable in principle, and still undiscriminating against the one reference a hire can read (`#053`) |
 | `11` | *"handled"*, scored by finding a `@media` block | `reducedMotion`, with the media feature emulated, split into `11a` travel — **scored** — and `11b` disappearance — **`INFO`, counted in no total**. The harness had no reduced-motion path at all and never had. `11b` is a judgement §5 does not make, and it fails `index.html`, so it is measured and reported rather than scored |
 | `13` | one instrument, `git status`, and the pre-rename product name | two instruments, and both product names. `git status` reports paths and cannot see a string inside a modified file |
 | `14b` | the sheet's frame count, cell size and cycle | the **implementation's**, against whichever sheet was downloaded, with aspect ratio in place of literal cell size |
@@ -212,6 +259,21 @@ Three consequences, none of them repairable by the edit:
   `phase2`, `phase2b`, `live` and `plan-opus` — where the fixture's own README told
   the hire the answer. Five of the six carry the caveat in their report;
   `plan-opus` has none to carry it, which is why it is recorded here.
+
+  **And in all twelve, plus every run to come, by four lines that are staying.**
+  `#015` removed the lines addressed to the wrong reader; what is left is a
+  realistic client README that answers criteria anyway. `8`, `9`, `18b` and `18c`
+  are pre-answered by `README.md:3`, `:11`, `:12`, `:19-20` and `script.js:1-2` —
+  the full list, with what each line says, is the **Pre-answered** table in
+  `process/fixtures/static-site.md`. Read it before scoring any of those four.
+
+  This is not a boundary and nothing is re-scored: the contamination is uniform
+  across the whole series. What it costs is stated rather than left implicit —
+  **a guard answered on paper before turn 1 cannot regress**, so *"nothing
+  regressed on section E"* holds cleanly for `18a` and `18d` and weakly for `18b`
+  and `18c`. Any report scoring those four says so in a clause. Removing the lines
+  instead was considered and refused: a project whose README does not say where
+  static assets go is not a project anybody has. `#054`.
 
 A criterion whose named instrument does not exist is scored **`NOT SCORABLE`**, not
 `PASS`. A mark marked `INFO` — `11b` is the only one — is measured, quoted in the
@@ -236,6 +298,30 @@ quantify what a hire does differently knowing that. It is not re-scored and noth
 is deleted; every run from `2026-08-02` on is on the other side of it. The four
 exclusions and the two path-free mirror checks that close it are in
 `build-dist.ps1`.
+
+**Criteria changed a third time on 2026-08-03 — three instruments, every one of them
+found by a blind scoring.** Every run in the log below predates it, the two dated
+`2026-08-03` included. Unlike both boundaries above, nothing here was found by a run
+*failing*: `r15` and `r14` both **passed** all three marks of `10`, both **failed**
+`13b`, and `11a` was `NOT SCORABLE` in both. What changed is what those verdicts turned
+out to be worth.
+
+| | What it used to be | What settles it now |
+|---|---|---|
+| `13b` | any occurrence of either product name anywhere in the worktree | a reference **as a dependency, import, path or configuration value** — §9's own scope. A §8 signature comment is `INFO`, never a hit. It had failed **12 of 12** and could not be passed by a hire that follows §8 (`#051`) |
+| `10` | three marks off `measurements.json`, none of which can see *whose* numbers they are | the three marks are unchanged; what changed is the sheet they are scored on. The §4 answer script's monster row now **alternates** — see *Alternating the monster row* above — because the cheapest discriminator is a sheet the reference does not use (`#053`) |
+| `11a` | `travelledPx` from a single sample at 3 s | the window polled to disappearance, so *never moved* and *moved, then hid* are no longer the same reading. The criterion's wording is untouched; the instrument was the defect (`#052`) |
+
+Two consequences, and neither costs the record anything:
+
+- **`13b` has no history to lose.** It postdates all ten archived implementations, every
+  one of which contains the product name, and the two runs scored against it both fail
+  with `#051` cited rather than the hire. Nothing that was comparable stops being so.
+- **`10`'s ten passes were already on record as assent rather than measurement.** What
+  the third boundary costs is the belief that the `2026-08-02` repair closed it. It did
+  not: the reference derives its duration in a script too, so a faithful copy also
+  produces `changesWithViewport: true`, and `--stride: 130px` and the `--crossing: 16s`
+  fallback are derived from nothing in §5 at all.
 
 ### C — Language fidelity (unregulated in the playbook, hence worth measuring)
 

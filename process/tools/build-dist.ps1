@@ -389,6 +389,27 @@ if ($failures) {
     throw ($failures -join "`n") + "`nMirror deleted so it cannot be used by accident."
 }
 
+# The mirror half of the pre-turn record (#048). Written only past the failure gate above, which
+# deletes a leaking mirror rather than hand it back — so a line here always describes a mirror that
+# exists and passed every check, and the arms of an A/B can be compared out of two run folders
+# instead of two scrollbacks.
+. (Join-Path $PSScriptRoot 'lib\assembly.ps1')
+# Precomputed rather than interpolated inline: a nested double-quoted string inside $() in a
+# double-quoted string does not survive PowerShell's tokenizer once it contains backtick escapes,
+# and the parse error it produces names a line that looks correct.
+$noteVariant = if ($Variant) { "``$Variant``" } else { '(none)' }
+$noteEdits   = if ($variantEdits) { $variantEdits -join '; ' } else { '(none)' }
+$noteWithout = if ($Without) { $Without -join ', ' } else { '(none)' }
+Add-MonsterDevAssemblyNote -RunId $RunId -Step 'build-dist.ps1' -Detail @(
+    "mirror: ``$dist`` — $copied file(s)"
+    "excluded: $($excluded -join ', ')"
+    "stacks listed in §2: $($listedStacks -join ', ') · sheets listed in §5: $($listedSheets -join ', ')"
+    "variant: $noteVariant"
+    "variant edits: $noteEdits"
+    "-Without: $noteWithout"
+    'checks: four exclusions verified, indexes agree, harness vocabulary clean, no sprite reference, no frontmatter, no wikilinks'
+) | Out-Null
+
 [pscustomobject]@{
     Dist     = $dist
     Files    = $copied

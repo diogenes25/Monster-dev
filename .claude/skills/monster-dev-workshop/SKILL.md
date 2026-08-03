@@ -252,6 +252,39 @@ Build both arms and **diff the two mirrors before hiring against either**. One f
 and it should differ by exactly the treatment; the returned object names the variant and every
 edit it made, so the report can state what the arms differed by without anybody retyping it.
 
+#### An A/B is assembled together and run one arm at a time
+
+**Both arms cannot sit on disk while either is hired**, and the two rules that say otherwise are both
+right. `check-isolation.ps1`'s second sideways look refuses any directory beside the run folder in the
+runs root — and for an A/B the other arm is not merely another run, it is **a finished implementation
+of the identical brief against the identical fixture**. That is `#019`'s exposure in its sharpest
+form, so the refusal stays. `#049`.
+
+The order that satisfies both:
+
+1. Build **both** mirrors, up front, with the commands above. This is what freezes the playbook: both
+   arms must read the same revision, and a pair that straddles a change to this repository is not
+   comparable.
+2. Diff them. One file, differing by exactly the treatment — checked line by line, not taken from the
+   tool's own report.
+3. **Record the treated file's hash**, then delete the second arm's whole run folder.
+4. Hire arm A, capture it, and move its run folder to the archive root.
+5. Rebuild arm B with the same `-Variant` command and **check the hash against what you recorded.**
+6. Only then hire arm B.
+
+Step 5 is not hand-rolling the mirror: `build-dist.ps1 -Variant` is deterministic and verifies what it
+built, so the arm that runs second is byte-identical to the one that was diffed — and that is
+*checked* rather than asserted. `2026-08-03-r14`'s `MONSTER-DEV.md` hashed `73CE9CA8…` both before
+deletion and after rebuild.
+
+**Not available, and deliberately:** an `-Arm` allowance in `check-isolation.ps1` letting sibling arms
+coexist. Two lines, and it re-opens the exposure on the one run class where the sibling is most
+dangerous.
+
+The `-Without` example above writes `<run-id>-armA`, which has the same shape and predates the level-2
+check. It is still the right command; it is the *sequence* that had never been written down, so the
+first A/B on the other side of `#040` met the conflict mid-setup with two mirrors already built.
+
 **Two of the three checks name no path**, and they are the ones that will stop a leak nobody has
 found yet. Every `.md` in the assembled mirror is grepped for a harness vocabulary, and every file
 in it for a reference to a sprite sheet under `monsters/` — the first catches prose describing the
@@ -348,6 +381,18 @@ three separate leaks were sitting in plain sight the whole time — see `#015`, 
 
 Hand the `leak-auditor` subagent the run folder, the `<dist>` path, the scenario and the fixture
 note. It reports `file:line`, the criterion short-circuited, and the quote.
+
+**Its findings go into `process/runs/<run-id>/assembly.md`, under the `## Pre-run audit` heading
+that is already there** — `new-run.ps1` and `build-dist.ps1` open that file between them, so the
+folder exists before a turn is bought (`#048`). Write what was found *and*, separately, what was
+done about each one. A finding deliberately not acted on is a finding to record: on
+`2026-08-03-r15` all nine were properties of the fixture, the stack note or the mirror, hence
+identical in both arms and unable to bias the comparison. That is a reason, and it belongs on
+paper. An empty audit section under a finished run is not.
+
+The three runs that predate this wrote it by hand into `knowledge.md` or a loose `audit.md`, and
+one of them was refused by the hire before any turn was paid — which is exactly the run whose
+folder somebody deletes.
 
 It **reports, it does not gate.** A judgement step that blocks runs would be worse than none; you
 read its findings and decide. Two things it must not do, both in its definition: it must not

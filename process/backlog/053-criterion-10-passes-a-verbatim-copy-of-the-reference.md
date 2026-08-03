@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `alt-a-left-to-right` `10a`/`10b`/`10c` — the risk criterion every A/B on record leans on |
@@ -89,3 +89,30 @@ which is a smaller improvement than the change table claims, and the change tabl
   scoring. The verbatim comments were then confirmed by hand across the reference and both arms. Neither
   the first scoring nor arm A's blind pass caught it; arm A's blind pass had scored `10` a clean triple
   PASS three files away from the copied comment it could not read, because the criterion told it not to.
+- `2026-08-03` `proven` — applied as the **structural** fix, not the fourth mark. Owner decision on
+  `F3` of `DISCUSSION-2026-08-03.md`: the §4 answer script's monster row alternates, and the next run
+  takes „nimm `green-fuzz-strolling`" — 17 frames, 299×300, 0.708 s, none of it anywhere in
+  `index.html`.
+
+  **`10d` was not added, and the reason is worth keeping.** It would have been a new instrument
+  reading the one artifact `10a`–`10c` are forbidden to read, and the handoff's warning is right that
+  a stylesheet-reading mark added for the wrong reason re-opens `#009`. The alternation needs **no new
+  instrument at all**: `verify-run.mjs` already identifies the sheet by `spriteNaturalSize` and scores
+  the implementation's own numbers against whichever sheet the page downloaded, which is `#026`'s
+  `2026-08-02` fix doing exactly the job it was built for. A hire that copies `index.html` onto a
+  `green-fuzz-strolling` run writes `steps(23)` against a 17-frame sheet and `frames.agree` goes
+  false. The copy becomes a **failure of `10b` and `14b`**, mechanically, off measurements that
+  already exist.
+
+  **Two limits are written into the scenario rather than left to be rediscovered:**
+
+  - The arm only discriminates **when `14a` passed.** A hire that never raises the choice never hears
+    the answer, takes the §5 default, and lands back on `green-fuzz-classic` with the reference's
+    numbers available — so `10` on that run carries the same *assent, not measurement* caveat the ten
+    archived runs carry. The run must say which of the two it was.
+  - **Nothing is retrofitted.** Every run on record used the „Standard" row, so a
+    `green-fuzz-strolling` run is comparable to the archive on every criterion except `10` and `14a`.
+
+  What this item's `proven` does **not** mean: that `10` has been measured. It means the next run can
+  measure it. The `2026-08-02` change table now says so of itself — its `10` row carries the sentence
+  that it overclaims — which is the correction this item asked for.

@@ -112,3 +112,21 @@ boundary line in the scenario's *"criteria changed"* note, under **D2**, togethe
   It removes the only cheap discriminator there is: a run on `green-fuzz-strolling` (17 frames,
   299×300, 0.71 s) leaves nothing to copy. `#053` proposes exactly that and notes it collides with this
   item — both cannot hold on the same run, and they can hold on alternating runs.
+- `2026-08-03` — **the collision is resolved by alternating, and this item keeps the first row.** Owner
+  decision on `F3` of `DISCUSSION-2026-08-03.md`. The scenario's monster row now names which arm is
+  live and carries a table of what each one buys and gives up: „keine Präferenz, nimm deinen Standard"
+  measures `14a` and blinds `10`; „nimm `green-fuzz-strolling`" measures `10` and turns `14a` into a
+  compliance check. The next run takes the second.
+
+  **This item is not superseded and its reasoning is not weakened.** Everything above about why naming
+  a sheet would replace an observation with a compliance check is still true — that is precisely what
+  the second row costs, and it is now written down as a cost rather than discovered as a surprise.
+  `14a` has held on twelve runs; `10` has never been measured once. Alternating spends the cheaper of
+  the two.
+
+  Worth noting what this item's own `2026-08-02` fix turned out to be worth. Scoring against
+  *whichever sheet the page actually downloaded* is what makes the alternation free: no new criterion,
+  no new instrument, `frames.agree` goes false on its own when a hire brings `steps(23)` to a
+  17-frame sheet. The half of the fix that did **not** hold is `durationVsViewport`, because the
+  reference derives its duration in a script too — recorded here and in the scenario's `10` row, since
+  this item is where that discriminator was proposed.

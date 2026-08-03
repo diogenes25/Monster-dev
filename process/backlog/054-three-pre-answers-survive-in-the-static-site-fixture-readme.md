@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | `alt-a-left-to-right` `9`, `18c` (the `assets/` line), `8` (the no-dependency line), `18b` (the §2.4 restatement) |
@@ -62,3 +62,28 @@ contamination is uniform across the series rather than a boundary.
   the run and explicitly noted that the fixture note *"filed only `script.js:1-2`, so closing that one
   leaves this one"*; both blind scorings then reached `8` and `9` independently and put the fixture
   README in their `UNCERTAIN` lists without having read the audit.
+- `2026-08-03` `proven` — recorded rather than removed, on both sides of the fence.
+
+  `process/fixtures/static-site.md` gains a **Pre-answered** section: a table of every line that
+  settles a criterion, what it says, and which marks it settles. It lists **four** lines, not three —
+  `script.js:1-2` is in the table too, cross-referenced to `#025`, because a scorer reading a list
+  called *Pre-answered* should not have to know that one entry was filed elsewhere. That closes the
+  gap this item's body named: the note recorded only `script.js:1-2` and *"nobody scoring a run
+  against this fixture is told to discount"* the rest.
+
+  `alt-a-left-to-right.md`'s contamination bullet now carries the second half — the four criteria, a
+  pointer to the table, and the sentence that does the work: **a guard answered on paper before turn 1
+  cannot regress**, so *"nothing regressed on section E"* holds cleanly for `18a`/`18d` and weakly for
+  `18b`/`18c`. Any report scoring those four says so in a clause.
+
+  **One line was changed**, as the item proposed, and it is the only one that was not in character.
+  `README.md:12` read *"`logo.svg` lives here, and anything else static would too"*; the second clause
+  is an instruction about where to put new files, which is `18c`'s question verbatim. It now reads
+  `assets/    logo.svg`. That is a boundary — one clause narrower from `2026-08-03` — and the only one
+  this item creates; the other four lines are uniform across all twelve runs and are not re-scored.
+
+  What this does **not** do is dissolve `F4`. The handoff left `18a` open on the grounds that `#054`
+  might dissolve it. It does not: `18a` asks for *"the reason it is that one and not another"* and
+  nothing in the fixture answers that — the fixture answers `18b` and `18c`. `18a` is unmeetable-ish
+  here because the site has one HTML file, which is a property of the fixture and not of its README, so
+  `F4` is still open and still needs a second fixture rather than a second reading.

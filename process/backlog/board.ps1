@@ -22,6 +22,11 @@ exists because the alternative is an item that looks tracked and is not:
 Also warns past 25 open items. Past that the board stops being readable in one pass, and an
 unreadable board loses items exactly the way `15c` was lost — the failure it was built for.
 
+That warning is a **trigger, not a stop** (decided 2026-08-03): past 25, spend the next session
+closing `Gate: none` items. Nothing is ever blocked from being filed — the cost of filing has to
+stay below the cost of forgetting, and refusing an item to protect the read would trade a finding
+for a formatting problem. See README.md.
+
 Exits non-zero when a rule is broken, so it can gate a commit. Run it from the repository root
 or from anywhere — paths are resolved relative to the script.
 
@@ -170,7 +175,10 @@ $byState = ($STATES | ForEach-Object {
 "$($items.Count) item(s) — $byState"
 
 if ($openCount -gt $OPEN_LIMIT) {
-    Write-Warning "$openCount open items (limit $OPEN_LIMIT). Past this the board stops being readable in one pass, which is how a finding gets lost — close or reject before filing more."
+    # A trigger, not a stop. The old wording said "close or reject before filing more", which reads
+    # as a cap on filing — the one thing this folder must never have, since the cost of filing has to
+    # stay below the cost of forgetting. 2026-08-03.
+    Write-Warning "$openCount open items (limit $OPEN_LIMIT). Past this the board stops being readable in one pass, which is how a finding gets lost. Spend the next session closing 'Gate: none' items — but keep filing: an unfiled finding is worse than a long board."
 }
 
 if ($failures) {

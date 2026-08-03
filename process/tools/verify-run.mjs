@@ -171,6 +171,45 @@ const geometry = () => evaluate(`(() => {
   return { x: Math.round(r.x), y: Math.round(r.y), mirrored, bg: s.backgroundPosition };
 })()`);
 
+// Polls the travel window instead of sampling a point in it, and the difference is a defect this
+// verifier actually had. Reduced motion was read as `x` at 0.8 s and `x` at 3.8 s, so an
+// implementation that showed the monster and removed it after 2 s produced `null` for the second
+// reading and `null` for `travelledPx` — and **a full crossing that cleaned up after itself
+// produces exactly the same `null`.** One reading, two opposite outcomes: the same defect class as
+// `#009`, where CSS-visible stood in for visible. `#052`.
+//
+// The loop runs *in the page* rather than as 40 CDP round-trips: the interval then means what it
+// says, and one `Runtime.evaluate` costs what one costs. It resolves when the element is gone —
+// which, since `FIND_MONSTER` requires visibility, is the same event as "removed or hidden" — or
+// when `maxMs` is up, and it reports how many samples it actually got. `samplesTaken: 0` is the
+// only reading that may become `null`: the element was never there at all.
+const pollTravel = (maxMs) => evaluate(`(() => new Promise((resolve) => {
+  const samples = [];
+  const t0 = performance.now();
+  let disappearedAfterMs = null;
+  const done = () => resolve({
+    samples, disappearedAfterMs, elapsedMs: Math.round(performance.now() - t0),
+  });
+  const tick = () => {
+    const found = ${FIND_MONSTER};
+    const t = Math.round(performance.now() - t0);
+    if (found) {
+      const r = found.node.getBoundingClientRect();
+      // Same on-screen test count() applies, per sample, so "did anything appear" and "did it
+      // move" come out of one measurement rather than out of two probes at different moments.
+      const onScreen = r.width > 0 && r.height > 0
+        && r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
+      samples.push({ t, x: Math.round(r.x), onScreen: onScreen ? 1 : 0 });
+    } else if (samples.length) {
+      disappearedAfterMs = t;
+      return done();
+    }
+    if (performance.now() - t0 >= ${maxMs}) return done();
+    setTimeout(tick, 100);
+  };
+  tick();
+}))()`);
+
 // What the *implementation* uses, which is not what the sheet is. Criterion 14b asks for the
 // frame count, cell size and cycle "in the implementation", and until 2026-08-02 it was answered
 // with `spriteNaturalSize` — the sheet's pixels, which prove nothing about what was built. A hire
@@ -391,9 +430,13 @@ try {
 
   // --- does the duration move with the viewport, or is it a number somebody typed? -------------
   // A derived 8s and a chosen 8s are the same 8s at one window width. Measuring at a second width
-  // is what separates them, and it is also the only thing that separates a hire that derived the
-  // geometry from §5 from one that copied index.html — the answer script sends both to the same
-  // sheet, so every other number they write agrees by construction.
+  // is what separates them.
+  //
+  // It does **not** separate a hire that derived the geometry from §5 from one that copied
+  // index.html, which is what this comment used to claim: the reference derives its duration in a
+  // script too, so a faithful copy also lands `changesWithViewport: true`. `#053`. That question is
+  // answered by the scenario instead — a run scored on a sheet the reference does not use makes a
+  // copy fail `sheetMatch.frames.agree` on its own, with no new instrument here.
   if (results.afterTrigger && results.implementation) {
     await send('Emulation.setDeviceMetricsOverride',
       { width: NARROW_WIDTH, height: 800, deviceScaleFactor: 1, mobile: false });
@@ -423,17 +466,33 @@ try {
   await sleep(2000);
   results.reducedMotion = { onLoad: await count() };
   await press();
-  await sleep(800);
-  const rmStart = await geometry();
-  results.reducedMotion.afterTrigger = await count();
-  await sleep(3000);
-  const rmLater = await geometry();
-  results.reducedMotion.x = { start: rmStart?.x ?? null, after3s: rmLater?.x ?? null };
-  results.reducedMotion.travelledPx = rmStart && rmLater ? Math.abs(rmLater.x - rmStart.x) : null;
+  // Polled from the trigger, not probed at two moments — see `pollTravel` and `#052`. Four seconds,
+  // which is long enough to cover the 2 s window both hires on record gave this path and to let a
+  // normal crossing get well under way if one starts.
+  const rm = await pollTravel(4000);
+  const xs = rm.samples.map((s) => s.x);
+  results.reducedMotion.x = {
+    first: xs.length ? xs[0] : null,
+    last: xs.length ? xs[xs.length - 1] : null,
+    min: xs.length ? Math.min(...xs) : null,
+    max: xs.length ? Math.max(...xs) : null,
+  };
+  // `0` and `null` now mean different things, which is the whole point of the change: `0` is an
+  // element that appeared and did not move, `null` is an element that was never there. A crossing
+  // that finished and tidied up reads as a large number plus a `disappearedAfterMs`, and no longer
+  // as the same `null` a correct static appearance produces.
+  results.reducedMotion.travelledPx = xs.length ? Math.max(...xs) - Math.min(...xs) : null;
+  results.reducedMotion.samplesTaken = xs.length;
+  results.reducedMotion.disappearedAfterMs = rm.disappearedAfterMs;
+  // Derived from the poll rather than from a single probe at 0.8 s, so it cannot miss an appearance
+  // that is shorter than the probe delay. One sample is enough to answer *did it appear*; read it
+  // beside `samplesTaken` before reading anything into `travelledPx`, because a single sample makes
+  // `0` arithmetically true and evidentially thin.
+  results.reducedMotion.afterTrigger = rm.samples.some((s) => s.onScreen) ? 1 : 0;
   // Long enough that a normal crossing would be over: the travel duration the implementation
   // itself declares, plus a margin, capped so a hire with a silly number cannot stall the run.
   const crossing = Math.min(20, (results.implementation?.travelSeconds ?? 12) + 3);
-  await sleep(Math.max(0, crossing * 1000 - 3800));
+  await sleep(Math.max(0, crossing * 1000 - rm.elapsedMs));
   results.reducedMotion.stillOnScreenAfterCrossing = await count();
   results.reducedMotion.waitedSeconds = Math.round(crossing);
   await send('Emulation.setEmulatedMedia', { features: [] });

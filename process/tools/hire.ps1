@@ -89,6 +89,10 @@ $repoRoot   = (Resolve-Path '.').Path
 $targetPath = (Resolve-Path $Target).Path
 $runDir     = Join-Path $repoRoot "process\runs\$RunId"
 $recordPath = Join-Path $runDir 'hire.json'
+# Since #048 this folder normally already exists — new-run.ps1 creates it and writes assembly.md
+# into it, so the record of a run starts when the run is assembled rather than when it is first
+# paid for. The -Force stays anyway: it is idempotent on a directory, and a run folder built some
+# other way must not make the wrapper throw before it has captured anything.
 New-Item -ItemType Directory -Force $runDir | Out-Null
 
 # The whole isolation story depends on the run folder not sitting under this repo, where
@@ -133,6 +137,45 @@ if (Test-Path $recordPath) {
     $distPath = (Resolve-Path $Dist).Path
     $kind     = 'brief'
     $claudeArgs = @('-p', $prompt, '--output-format', 'json', '--add-dir', $distPath)
+
+    # Closes the assembly record: an assembly.md with no `hire.ps1` entry is a setup that was
+    # built and never hired, which is precisely the case #048 exists for.
+    #
+    # The entry-point path is written down here because #042 makes it part of the mirror surface.
+    # `2026-08-01-alt-a` was handed a path running through a session scratchpad, and a scratchpad
+    # segment is a CLI project slug — this repository's absolute path with the separators turned
+    # into dashes. The hire decoded it and listed the repository root without ever walking up. That
+    # is checkable before a turn is bought, and only if the path is on record.
+    # Measured, not asserted. A line saying "no scratchpad segment" that nothing looked for is the
+    # fourth instrument in this project to confirm an expectation while measuring nothing, and one of
+    # those four was written the same day #042 was found. The check itself lives in the lib so it can
+    # be exercised without paying for a turn.
+    . (Join-Path $repoRoot 'process\tools\lib\assembly.ps1')
+    $epMatch   = [regex]::Match($prompt, '\S*START\.md')
+    $entry     = if ($epMatch.Success) { $epMatch.Value } else { '' }
+    $decodable = Test-MonsterDevEntryPointLeak -Prompt $prompt -DistPath $distPath -RepoRoot $repoRoot
+
+    # Precomputed, not interpolated inline: a nested double-quoted string carrying backtick escapes
+    # inside $() inside a double-quoted string does not survive PowerShell's tokenizer.
+    $noteFixture = if ($Fixture) { "``$Fixture``" } else { '(not passed)' }
+    $noteEntry   = if ($entry) { "``$entry``" } else { 'no START.md path in the brief text' }
+    $noteDecode  = if ($decodable) { 'FOUND — ' + ($decodable -join '; ') } else { 'none found' }
+
+    Add-MonsterDevAssemblyNote -RunId $RunId -Step 'hire.ps1' -Detail @(
+        "model: ``$Model`` · fixture: $noteFixture"
+        "mirror handed over as: ``$distPath``"
+        "entry point in the brief: $noteEntry"
+        "#042 — decodable references to this repository in turn 1's prompt and mirror path: $noteDecode"
+    ) | Out-Null
+
+    # Reports, does not gate — the leak-auditor's rule, for the same reason: a judgement step that
+    # blocks runs is worse than none, and this one matches strings. A hit is still a stop; it is the
+    # person reading it who decides, before the turn is paid for rather than after.
+    if ($decodable) {
+        Write-Warning ("#042: turn 1 hands the hire " + ($decodable -join ' and ') +
+                       ". The alt-a hire decoded exactly this and listed the repository root. " +
+                       "Recorded in assembly.md — read it before continuing.")
+    }
 
     $record = [pscustomobject]@{
         runId        = $RunId

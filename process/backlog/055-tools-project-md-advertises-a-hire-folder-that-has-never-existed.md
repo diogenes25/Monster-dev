@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact — documentation, not tooling |
 | Criterion | — |
@@ -56,3 +56,23 @@ product is not a library, and they are worth keeping wherever they end up.
 - `2026-08-03` `intake` — from the pre-run audit of `2026-08-03-r15`, filed with its own refutation
   attached so nobody re-raises it as urgent. `check-index.ps1` does not catch it: it verifies §2's stacks
   and §5's sheets against the tree, and `tools/project.md`'s pointers are not an index it reads.
+- `2026-08-03` `proven` — the middle option, plus the empty directory removed. Three edits:
+
+  - The heading becomes *"the rules for tooling a hire may fetch"* and the section opens by saying
+    outright that there is no such folder and never has been, that this is the standard something would
+    have to meet, and that a hire should not read the absence as anything missing — §5 carries the
+    formula a tool would shortcut. The two rules are untouched, because the item is right that they are
+    the strongest statement in the repository about why the product is not a library.
+  - `CLAUDE.md`'s layout row is corrected: it named `tools/hire/` as fetched. It now names the *file*
+    and says the folder does not exist.
+  - The empty untracked `tools/hire/` is deleted. Local-only either way — git tracks no empty directory
+    — but the item's one constraint is that nothing may *"read as an invitation to start filling the
+    folder"*, and an empty folder of that name is exactly that invitation.
+
+  **Option three was declined, and not on cost.** Moving the rules into `MONSTER-DEV.md` §5 would edit
+  the product to repair a documentation defect, and it would bill every hire for a page of policy about
+  tooling that does not exist. §5 is a roster a hire reads to get numbers out of.
+
+  Applied, not shown to have helped — and here that is the whole of it, since the item's own measurement
+  already refuted the cost hazard: `tools/project.md` in ten of eleven transcripts, `tools/hire/` in
+  none. What was repaired is an honesty defect, the class `#037` is about, and no run will show it.

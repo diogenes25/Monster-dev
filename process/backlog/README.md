@@ -25,6 +25,18 @@ at all — the turn overrun is recorded verbatim as *"cost envelope, not a numbe
 Reading a short board beats mis-keying a long one. `board.ps1` warns past 25 open items, which is
 where the method stops holding.
 
+**And 25 is a trigger, not a stop** — decided `2026-08-03`, because the warning had no stated
+meaning and the obvious reading was the wrong one. Past 25, the next session is spent closing
+`Gate: none` items; **nothing is ever blocked from being filed.** The reasoning above is about the
+cost of *reading* a long board, and refusing new items to protect the read would trade a finding
+for a formatting problem — which is the one thing this folder exists to prevent. The cost of
+filing has to stay below the cost of forgetting, and a filing cap inverts that at exactly the
+moment the board is busiest.
+
+The evidence that the trigger is the right shape is the session that decided it: the board stood at
+20, eight `Gate: none` items were closed without a single run being spent, and it came out at 12.
+A `Gate: none` backlog is not pressure on the method — it is the cheapest work available.
+
 ## Two lanes
 
 The header line `Gate:` says which one an item is in.
@@ -70,6 +82,33 @@ intake ──▶ formulated ──▶ grilled ──▶ in-proof ──▶ prove
   nothing regressed. In the `none` lane there is nothing to flip, so applied *is* the whole bar —
   and an item that reaches `proven` that way has been shown to be **done**, never to have **helped**.
   `#008` says so of itself, and five of five `proven` items are in that lane.
+
+  **A third way in, discovered by use on `2026-08-03` and settled as a rule rather than a state.**
+  Some `Gate: run` items are not proposals at all — they ask whether a path in the playbook works,
+  and the run that answers them changes nothing. `#022` is the worked case: §3's decline path had
+  no evidence behind it after eleven sessions, `nowhere-to-walk` was built to exercise it, and the
+  run found that §3 fires one turn late. Nothing flipped, so `proven` in its usual sense does not
+  apply; and `rejected` is plainly wrong, because §3 *did* fire and the exercise did what it was
+  built to do.
+
+  Such an item reaches **`proven` plus a mandatory `What proven means here` row** in its header
+  table, second row, saying in as many words that the exercise ran and was scored and that nothing
+  was flipped — and pointing at the log entry to read before citing the item. `#022` carries one and
+  is the template. `#005`, `#006` and `#011` will all arrive here, since each says in its own words
+  that it has no before-fail and cannot have one until its precondition exists.
+
+  The row is not enforced by `board.ps1`, deliberately: an ordinary `Gate: run` item that really did
+  flip a criterion must not be nagged for a caveat it does not have, and no script can tell the two
+  apart. This is a rule for whoever closes the item.
+
+  A sixth state (`exercised`) was considered and declined — `A1` had already declined it once, for
+  a different reason — as was amending this paragraph's definition a second time. **A rule
+  discovered by use is cheaper than a state nobody has needed twice**, and the qualifying row puts
+  the caveat where a reader of the item is standing rather than in a legend.
+
+  This is **not** the question `A3` asked, and two places said it was until `2026-08-03`. `A3`
+  asked why `#005`, `#006` and `#011` *"can never reach `grilled`"* and was answered by the
+  `Blocked on` field below, which is about visibility and says nothing about the ending verdict.
 - **`rejected`** — no measurable difference, or the fault did not reproduce.
 
 Rejected items stay. They are the only defence against having the same idea again in a year.

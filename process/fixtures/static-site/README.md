@@ -9,7 +9,7 @@ edit the files and upload them.
 index.html      the whole site: header, hero, products, about, contact
 style.css       all of it; no preprocessor
 script.js       smooth-scroll for the nav links, and nothing else
-assets/         logo.svg lives here, and anything else static would too
+assets/         logo.svg
 ```
 
 ## Working on it

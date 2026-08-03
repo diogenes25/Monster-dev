@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | — |
@@ -59,3 +59,41 @@ start reporting them as incomplete, and whoever implements this owes that check 
   One correction to this item as filed: `hire.ps1` *does* write a `knowledge.md` stub with frontmatter
   on the first turn, so the gap is narrower than the body implies — it is everything before that turn,
   not the record as a whole. The proposed `assembly.md` is unaffected.
+- `2026-08-03` `proven` — applied, and in one place rather than three. `process/tools/lib/assembly.ps1`
+  holds `Add-MonsterDevAssemblyNote`, dot-sourced by `new-run.ps1`, `build-dist.ps1` and `hire.ps1`,
+  the same shape `run-root.ps1` already uses for the runs root and for the same reason: three scripts
+  deriving the same fact separately agree by coincidence.
+
+  **Append-only from the bottom, so neither tool owns the file.** The human sections — `## Pre-run
+  audit`, `## Notes` — are pinned above a `## Tool log` heading and every machine entry goes
+  underneath it. That is what makes the order of `build-dist.ps1` and `new-run.ps1` irrelevant;
+  `CLAUDE.md` documents them mirror-first, nothing enforces it, and nothing now needs to. Verified by
+  building a probe run mirror-first and reading the file: `build-dist.ps1` created it, `new-run.ps1`
+  appended, and the audit heading stayed where a person will look for it.
+
+  Three departures from the item as written, each deliberate:
+
+  - **`hire.ps1` keeps its `New-Item -Force`.** The item says it should stop creating the directory.
+    It is idempotent on a directory, and a run folder assembled some other way must not make the
+    wrapper throw *before* it has captured anything — a turn that has been paid for must not be lost
+    to bookkeeping. What changed is the comment saying the folder normally already exists and why the
+    line stays.
+  - **`hire.ps1` writes one entry too**, on turn 1 only: model, fixture, the mirror path as handed
+    over, and the entry point parsed out of the brief. That gives the record a property the item did
+    not ask for and which is worth more than the rest — **an `assembly.md` with no `hire.ps1` entry is
+    a setup that was never hired**, which is the case this item exists for, now legible without
+    reading anything else.
+  - **The entry point is checked, not just recorded.** `Test-MonsterDevEntryPointLeak`, in the same
+    lib, looks in turn 1's prompt and the mirror path for this repository's absolute path, for the
+    dash-encoded slug a CLI project directory is named after, and for a scratchpad segment — `#042`,
+    asked *before* the turn is bought rather than out of the transcript afterwards. It reports and
+    warns; it does not gate, for the `leak-auditor`'s reason. It lives in the lib specifically so it
+    can be exercised against strings instead of a paid turn, and it was: it fires on `alt-a`'s shape
+    (slug + scratchpad) and is silent on `r14`'s, which `check-reach.ps1` independently cleared.
+
+  On the cost the item names — `process/runs/` accumulating records with no transcript.
+  `check-index.ps1` was read rather than assumed: its run check flags ids *cited with no folder*, never
+  folders with no transcript, and its frontmatter rule keys on `knowledge.md` by name. So an
+  `assembly.md`-only folder passes, which is the intended behaviour and not luck. `assembly.md` carries
+  no `[[wikilinks]]`, because the record tree resolves them and a link to a run that was never scored
+  would fail a check for something that is not a problem.

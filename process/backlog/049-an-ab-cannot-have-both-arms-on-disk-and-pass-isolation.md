@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | — |
@@ -66,3 +66,16 @@ procedure should say to build both mirrors up front — which it already does �
   `2026-08-03-r14`. Both mirrors built and diffed cleanly (one file, one paragraph, verbatim), and the
   conflict appeared at the next step. `#040` is a week old in commits and one day old in practice;
   this is the first A/B on the other side of it.
+- `2026-08-03` `proven` — written into `SKILL.md` step 2 as its own sub-heading, *An A/B is assembled
+  together and run one arm at a time*: the six-step order, the hash check either side of the rebuild,
+  the reason the refusal is correct, and the `-Arm` allowance named as declined. The `-Without` example
+  is left as it is, with a line saying it predates the level-2 check — the command was never wrong, the
+  sequence was never written.
+
+  **`CLAUDE.md` is deliberately not touched.** Its own rule is that the full run procedure lives in the
+  skill and that it carries the pointer, so duplicating a six-step sequence there would create a second
+  copy to drift. The procedure changed; where it is documented did not.
+
+  Applied, not shown to have helped — `Gate: none`. The evidence that it works is `r13`/`r14`, which
+  did it this way before it was written down; the evidence it was needed is that they had to discover
+  it first.

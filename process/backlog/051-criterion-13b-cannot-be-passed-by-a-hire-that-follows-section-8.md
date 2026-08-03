@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `alt-a-left-to-right` `13b`. It has never been passed and cannot be |
@@ -72,3 +72,13 @@ and the report attributes it here rather than to either hire.
   list: *"as written it cannot be passed by a hire that follows §8."* The first scoring had it as
   *"13b overreaches §9"*, which is the same conclusion from the weaker of the two arguments. Same
   shape as `#001`/`15c`: a criterion scoring a behaviour the playbook prescribes.
+- `2026-08-03` `proven` — applied to `alt-a-left-to-right.md` criterion `13`, as proposed: §9's four
+  categories, the signature comment as `INFO` rather than a hit, and the sentence saying the
+  instrument takes a reader so nobody re-widens it to `grep -i monster-dev`. The `2026-08-02` change
+  table is left as it stands and a **third boundary section** records the narrowing, because the
+  scenario's convention is to append boundaries rather than rewrite them.
+
+  What `proven` means here is what `README.md` says it means in the `Gate: none` lane: **applied, and
+  shown to be done rather than to have helped.** There was nothing to flip — the criterion's first
+  meaningful verdict will be the next run's, and if that run passes `13b` it will be the first thing
+  ever to do so.

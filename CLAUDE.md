@@ -27,7 +27,7 @@ Three layers grow with every run — the playbook (general), stack notes (per su
 | `MONSTER-DEV.md` | The playbook: analysis framework, onboarding questions, the surface-agnostic technique, sign-off, cleanup | yes |
 | `stacks/<name>/README.md` | One rendering surface: orientation above the `---` rule, measured pitfalls below it, each pitfall traceable to the run that produced it | yes, the matching one |
 | `stacks/<name>/tools/` | Tooling for that surface only | yes, with it |
-| `tools/hire/` | Cross-stack hire tooling | yes |
+| `tools/project.md` § `hire/` | The **rules** cross-stack hire tooling would have to meet. No such folder exists and none ever has — git tracks no empty directory, so nothing was ever fetchable (`#055`) | the file, yes; the folder, there is none |
 | `monsters/<slug>.png` | The sprite sheets — shell download, never WebFetch, since WebFetch is unreliable for raw binary bytes | yes, the chosen one |
 | `monsters/catalog.json` | Machine-readable record of each sheet's geometry, tempo and provenance, written by the generator | no — the roster a hire reads is the table in `MONSTER-DEV.md` §5 |
 | `index.html` | A working `dom-css` implementation. **No longer the universal reference** — reachable via `stacks/dom-css/` | via that stack |
@@ -132,7 +132,11 @@ There is no build/lint/test tooling for this repo (static HTML/CSS/JS + Markdown
 product anywhere in the target, runs the fixture's setup recipe if one exists
 (`process/tools/setup/<fixture>.ps1`, kept out of the fixture so it cannot be copied into the
 target and pollute the §9 diff surface), commits exactly once, and deletes the folder rather than
-hand back one that fails isolation or starts dirty. Dependencies are installed here rather than by
+hand back one that fails isolation or starts dirty. It also **opens the run's record** —
+`process/runs/<run-id>/assembly.md`, which `build-dist.ps1` writes the mirror half of and the
+`leak-auditor`'s findings go into. Until `#048` the record began at the first paid turn, so a setup
+that was assembled, audited, corrected and then refused left nothing behind; three runs on
+`2026-08-03` wrote that history by hand. Dependencies are installed here rather than by
 the hire: inside the session they would land in `num_turns` and `total_cost_usd`, two of the three
 numbers the gates are stated in:
 ```powershell

@@ -179,6 +179,28 @@ if ($dirty) {
            "contaminate the §9 diff surface. Run folder deleted.")
 }
 
+# --- the run gets a record here, not at the first paid turn -------------------------------------
+#
+# #048. Everything above this line used to be printed to a console and forgotten: a setup that was
+# assembled and then refused, or corrected six times before anybody hired against it, left nothing
+# behind. Three runs on 2026-08-03 wrote that history by hand.
+#
+# Written last, so nothing is recorded about a folder this script has already deleted. Every failure
+# path above deletes the target and throws, which means an assembly.md exists only for a run folder
+# that actually reached the end of this script — and `Clean` in the record below is therefore a fact
+# rather than a claim.
+. (Join-Path $PSScriptRoot 'lib\assembly.ps1')
+$baseCommit = (git -C $target rev-parse --short HEAD)
+$noteSetup  = if ($setup -eq 'none') { 'none (the normal case)' } else { "``process/tools/setup/$setup``" }
+$assembly = Add-MonsterDevAssemblyNote -RunId $RunId -Step 'new-run.ps1' -Detail @(
+    "fixture: ``$Fixture`` (from ``$source``)"
+    "target: ``$target``"
+    "base commit: ``$baseCommit`` — one commit, worktree clean"
+    "setup recipe: $noteSetup"
+    'product-name scan: no hit — nothing in the target names the product'
+    'isolation: passed `check-isolation.ps1` (ancestry, both sideways levels, no scoring bundle)'
+)
+
 [pscustomobject]@{
     RunId    = $RunId
     Fixture  = $Fixture
@@ -187,4 +209,5 @@ if ($dirty) {
     Setup    = $setup
     Commits  = 1
     Clean    = $true
+    Assembly = $assembly
 }
