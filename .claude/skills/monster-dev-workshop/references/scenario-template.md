@@ -159,10 +159,32 @@ right modifiers → pass, recorded as "handler verified, trigger path not measur
 ③ neither → fail.
 
 *Not exercised by a mirror run:* base URL derivation (§0) and the WebFetch/curl split (§5).
-Both are proven by `2026-08-01-live`; neither is deferred.
+Both are already proven by an earlier run over real URLs; neither is deferred — do not report
+them as such. *(The run's id belongs in `## Provenance` below, not here.)*
 
 ## Run log
 
 | Run | Date | Result |
 |---|---|---|
 | | | |
+
+## Provenance — how this file got its wording
+
+*Everything from `## Run log` down is below the cut `score-bundle.ps1` makes, so no blind second
+scoring reads it. That is what this section is for.*
+
+***The rule that decides where a new paragraph goes.** Above the cut belongs what a scorer needs
+in order to reach a verdict: the setup, the **current** wording of the answer script, the
+criteria, and the rules that say how to score them. Below the cut belongs how the file got that
+way: what a pre-run audit found, what an earlier run scored, why a row or a criterion was
+reworded, and what a future change would owe. A criterion's history is not an instrument, and
+handing it to the second reader hands over the map with the criterion at risk already circled.*
+
+***Leave a pointer, not the reasoning.** At the row or criterion, write* „see Provenance at the
+foot of this file" *— a pointer costs the blind scorer nothing and is what somebody about to
+reword the row is standing next to. `#056`.*
+
+***`score-bundle.ps1` refuses a bundle whose criteria half names any run id**, so a run id above
+the cut is a hard failure rather than a note. It is a narrower rule than the one above — a
+passage can give a verdict away without naming a run — so read the rule as well as running the
+script.*

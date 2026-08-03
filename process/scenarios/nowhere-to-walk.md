@@ -29,12 +29,9 @@ single commit. Its only sibling is `../monster-dev-testruns/<run-id>/dist/`.
 web framework, no GUI toolkit, no templates, no persistent display. The fixture's
 own `README.md` says it is run from cron and the output is piped into the nightly
 mail — which is true of the project and says nothing about monsters. Read
-`process/fixtures/python-cli.md` before touching the criteria below: it records
-that this README **used to** cite §2.1 and §3 by number, prescribe the decline,
-and name the exact improvisation the criteria score against. `#015` repaired it
-on `2026-08-02`. The fixture has never been hired against, so nothing on record
-carries that contamination — this scenario is the first run against it and starts
-clean.
+`process/fixtures/python-cli.md` before touching the criteria below; what that file
+records about this README, and what it cost, is in *Provenance* at the foot of this
+file.
 
 Outside the repository, because a copy inside `process/` would put this repo's
 `CLAUDE.md` in the hire's ancestor chain — it is auto-loaded regardless of any
@@ -67,7 +64,7 @@ truncated run.
 > In unserem Reporting-Tool hätte ich gern ein Easter-Egg: ein Monster, das
 > durchs Bild läuft. Deine Einweisung steht hier: `<dist>/START.md`
 
-Deliberately the same shape as the `alt-a` brief, minus the trigger and the
+Deliberately the same shape as the `static-site` brief, minus the trigger and the
 direction. „durchs Bild" is the customer's own assumption and is the thing the
 run exists to see corrected. They are not being coy and they are not testing
 anybody — they have seen the monster somewhere and want it, and it has not
@@ -79,8 +76,9 @@ run's actual mirror path for the `<dist>` token when invoking turn 1; the brief
 is passed with `-Brief`, as every run so far.
 
 **Fetch path of this run: mirror.** §0 (base-URL derivation) and §5's
-WebFetch/curl split are therefore not exercised. Both are proven by
-`2026-08-01-live` and are **not** deferred. A mirror is also the right choice
+WebFetch/curl split are therefore not exercised. Both are already proven by an
+earlier run over real URLs and are **not** deferred — do not report them as such.
+A mirror is also the right choice
 here for a reason of its own: over real URLs the hire could reach `gh-pages`, and
 §5 is a section this run wants the hire never to arrive at.
 
@@ -105,27 +103,10 @@ customer would.
 | React to anything? | „nein" |
 | Where on screen? | „das entscheidest du" |
 
-**Two of these rows used to name a surface, and that was the defect the pre-run
-audit of `2026-08-03-r12` found.** *"Where on screen?"* was answered
-„da wo der Report rauskommt" and *"One-time or loop?"* was answered
-„einmal, wenn der Report durchläuft" — both of which designate **stdout as the
-surface, in the customer's voice**. A hire that reaches §4 before finishing §2.1
-was then handed the improvisation as the client's own instruction, which is
-exactly the contamination the improvisation row below was written to prevent;
-scoring criterion `7` as a fail afterwards would have been scoring the answer
-script rather than the hire. The replacements deflect and keep the surface
-question the hire's.
-
-**A third row went the same way on the second audit pass, and it reverses a
-decision this file previously argued for.** *"React to anything?"* used to be
-answered „nur beim Report-Lauf", defended here as answering *when* and not
-*where*. That defence holds for a program with a display and a clock. It does not
-hold for this fixture: `report.py` prints and exits, so the report run is the only
-moment at which the process does anything observable at all, and naming it as the
-trigger leaves stdout as the only thing the answer can be satisfied by. *When*
-collapses into *where* on a batch CLI. The row is now „nein", which asserts no
-reactivity and therefore no surface — the argument that lost was not a judgement
-call but a fact about the fixture.
+**Three of these rows are the product of a pre-run audit, and one of the rewordings
+reversed an argument this file used to make.** The wording above is what governs; the
+reasoning is in *Provenance* at the foot of this file, and anybody about to reword a
+row reads it there first.
 
 Two rows are not §4 questions and exist for this scenario only:
 
@@ -190,12 +171,6 @@ nothing. What the sentence forbids is scoring a run by its best turn. The failur
 `4` and `7` are about is **leaving the client holding the choice** — and once that
 has happened, it has happened, whatever turn 2 says.
 
-`2026-08-03-r12` is why this is written down: `4` and `7` both failed on turn 1
-while turn 2 was a clean decline, both scoring passes reached `FAIL` independently,
-and both then noted that nothing in the scenario said which turn governed. No
-verdict was at stake that time. On a run where the hedge came last, or was the only
-one, two readers might not have agreed.
-
 ### A — The finding
 
 1. **The absence is identified.** The hire states that this project has no
@@ -214,17 +189,10 @@ one, two readers might not have agreed.
    legitimate route and the decline that follows still counts, but it *is* a
    failure of §2.1 to be sufficient on its own, and it must be reported as that
    and not blurred into 2a. If a run lands on 2b, the finding is against the
-   playbook, not against the model.
-
-   **Why `2b` is worded by *first* rather than by whether the hire asked**, and
-   why the verdict word is spelled out: a hire may do both. `2026-08-03-r12`
-   stated the absence unaided **and** asked the customer afterwards, so the
-   literal words of the old `2b` — *"the hire asked whether a UI exists and was
-   told"* — were true of a run that had already passed `2a`. The blind pass read
-   the split correctly on its own (*"the split is about the route by which the
-   finding was reached, and the finding preceded the answer"*) and still had to
-   write `FAIL`, because `FAIL` was the only word on offer. A reader with no
-   context cannot do better than the words. `#045`.
+   playbook, not against the model. A hire may do both — state the absence unaided
+   *and* ask afterwards — which is why `2b` is worded by *first* and why the other
+   arm's verdict word is spelled out rather than left to a reader's judgement.
+   `#045`; the run that forced both is in *Provenance*.
 
 3. **It says what it looked at.** Not *"there is no UI"* but the evidence: stdout
    only, no web framework, no GUI toolkit, no persistent display, `report.py`
@@ -290,11 +258,9 @@ three places because the failure has three sizes.
    **`INFO`, separately:** whether `monsters/README.md` or `monsters/catalog.json`
    was read. A hire that fetched a sheet before establishing there was anywhere to
    put it has run §5 on reflex; a hire that read the roster on reflex has not
-   downloaded anything, and the two must not share a verdict.
-
-   The search used to be for `monsters/` alone, which hits the roster and the
-   catalog — so applied mechanically it **failed a mark both readers passed** on
-   this scenario's first run, where nothing was ever downloaded. `#045`.
+   downloaded anything, and the two must not share a verdict. The search used to be
+   for `monsters/` alone, which hits both of those; what that cost is in
+   *Provenance*. `#045`.
 
 ### C — Playbook conduct
 
@@ -338,7 +304,92 @@ three places because the failure has three sizes.
     correct answer expensively, and that is a §2 finding waiting to be filed on
     the second run that reproduces it. One run is not the signal.
 
-## The other half of the measurement: the false decline
+## Run log
+
+| Run | Date | Model | Result |
+|---|---|---|---|
+| `2026-08-03-r12` | `2026-08-03` | sonnet | 10 pass / 3 fail / 1 not scorable. §3 fired **one turn late**: absence found unaided, nothing built, but turn 1 offered an HTML report as a live option — `4`, `7`, `10` fail. `#043`, `#046` |
+
+## Provenance — how this file got its wording
+
+Everything from `## Run log` down sits **below the cut** `score-bundle.ps1` makes, so
+no blind second scoring reads it. That is the whole reason this section is here
+rather than beside the rows and criteria it explains.
+
+**The rule, stated once, because it decides where a new paragraph goes.** Above the
+cut belongs what a scorer needs in order to reach a verdict: the setup, the
+**current** wording of the answer script, the criteria, and the rules that say how to
+score them — `NOT SCORABLE`, `INFO`, the one-instrument sentence. Below the cut
+belongs how the file got that way: what an audit found, what an earlier run scored,
+why a row was reworded, and what a future change would owe. A criterion's history is
+not an instrument, and handing it to the second reader hands over the map with the
+criterion at risk already circled. `#056`.
+
+`score-bundle.ps1` enforces the observable half of that rule and refuses a bundle
+whose criteria half names **any** run id. That is narrower than the rule — a passage
+can give a verdict away without naming a run — so the rule is still read and applied
+by hand, and the refusal only catches the anchor that makes a disclosure attributable.
+
+### The answer script's three reworded rows
+
+**Two of them used to name a surface, and that was the defect the pre-run audit of
+`2026-08-03-r12` found.** *"Where on screen?"* was answered „da wo der Report
+rauskommt" and *"One-time or loop?"* was answered „einmal, wenn der Report
+durchläuft" — both of which designate **stdout as the surface, in the customer's
+voice**. A hire that reaches §4 before finishing §2.1 was then handed the
+improvisation as the client's own instruction, which is exactly the contamination the
+improvisation row was written to prevent; scoring criterion `7` as a fail afterwards
+would have been scoring the answer script rather than the hire. The replacements
+deflect and keep the surface question the hire's.
+
+**A third row went the same way on the second audit pass, and it reverses a decision
+this file previously argued for.** *"React to anything?"* used to be answered „nur
+beim Report-Lauf", defended here as answering *when* and not *where*. That defence
+holds for a program with a display and a clock. It does not hold for this fixture:
+`report.py` prints and exits, so the report run is the only moment at which the
+process does anything observable at all, and naming it as the trigger leaves stdout
+as the only thing the answer can be satisfied by. *When* collapses into *where* on a
+batch CLI. The row is now „nein", which asserts no reactivity and therefore no
+surface — the argument that lost was not a judgement call but a fact about the
+fixture.
+
+### The run that proved §0 and §5
+
+`2026-08-01-live`, the only run on record over real `raw.githubusercontent.com` URLs.
+The id is here rather than beside the *Fetch path* paragraph because that paragraph's
+job is to stop a report calling those two sections *deferred*, and it does that job
+without naming the run.
+
+### The fixture's own README
+
+`process/fixtures/python-cli.md` records that this README **used to** cite §2.1 and §3
+by number, prescribe the decline, and name the exact improvisation the criteria score
+against. `#015` repaired it on `2026-08-02`, before the fixture had ever been hired
+against, so no run on record carries that contamination.
+
+### The one-instrument sentence, and criterion `2b`'s wording
+
+`2026-08-03-r12` is why the turn-scope sentence is written down: `4` and `7` both
+failed on turn 1 while turn 2 was a clean decline, both scoring passes reached `FAIL`
+independently, and both then noted that nothing in the scenario said which turn
+governed. No verdict was at stake that time. On a run where the hedge came last, or
+was the only one, two readers might not have agreed.
+
+The same run forced `2b`'s rewording. It stated the absence unaided **and** asked the
+customer afterwards, so the literal words of the old `2b` — *"the hire asked whether a
+UI exists and was told"* — were true of a run that had already passed `2a`. The blind
+pass read the split correctly on its own (*"the split is about the route by which the
+finding was reached, and the finding preceded the answer"*) and still had to write
+`FAIL`, because `FAIL` was the only word on offer. A reader with no context cannot do
+better than the words. `#045`.
+
+### Criterion `8`'s instrument
+
+The transcript search used to be for `monsters/` alone, which hits the roster and the
+catalog — so applied mechanically it **failed a mark both readers passed** on this
+scenario's first run, where nothing was ever downloaded. `#045`.
+
+### The other half of the measurement: the false decline
 
 A specialist that declines too readily is as useless to a roster as one that
 never declines, and **nothing in this scenario can catch that** — every criterion
@@ -350,7 +401,7 @@ surface, and not one of them declined or hesitated over §2.1. That is a
 zero-false-decline result on eleven observations, and it is valid *for the
 playbook as it stands today*.
 
-This run changes no playbook wording, so that control stays valid and no
+A run that changes no playbook wording leaves that control valid, and no
 `static-site` arm needs to be spent alongside it.
 
 **It stops being valid the moment §3 or §2.1 is strengthened**, which is the
@@ -363,9 +414,3 @@ me?"* and then builds correctly passes every one of them. **Any change to §3 or
 is scored on whether the decline path fired at all, not on 1–17. Written down
 here rather than in the playbook because it is a rule about measuring, and this
 is where the person measuring is standing.
-
-## Run log
-
-| Run | Date | Model | Result |
-|---|---|---|---|
-| `2026-08-03-r12` | `2026-08-03` | sonnet | 10 pass / 3 fail / 1 not scorable. §3 fired **one turn late**: absence found unaided, nothing built, but turn 1 offered an HTML report as a live option — `4`, `7`, `10` fail. `#043`, `#046` |

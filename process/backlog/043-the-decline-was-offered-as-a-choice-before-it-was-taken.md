@@ -98,13 +98,13 @@ which is what the *treatment* would cost and is the expensive part.
    declines, valid *only while §3 and §2.1 are unchanged*. This run changes neither, so the control
    stays valid **and unspent** — it is owed by whatever treatment comes later, not by this.
 
-**One validity caveat this run inherits from today's work.** `#056`: `nowhere-to-walk.md` names
-`2026-08-03-r12` in three passages, one of which says which criterion the pre-run audit was worried
-about — and criterion `7` is that criterion, and `7` is one of the two marks this run exists to read.
-`#047`'s new refusal in `score-bundle.ps1` will **not** fire, because it keys on the run being scored
-and this will be a different id. So the blind scorer of this run *will* read that passage. Either
-close `#056` before the run, or state in the report that the second scoring of `7` was not blind to
-the concern. Do not discover this after paying for the turn.
+**One validity caveat this run inherited, now discharged.** `#056`: `nowhere-to-walk.md` named
+`2026-08-03-r12` in three passages, one of which said which criterion the pre-run audit had been
+worried about — criterion `7`, one of the two marks this run exists to read. It is **closed**
+(`2026-08-03`): all three passages moved into a `## Provenance` section below the cut
+`score-bundle.ps1` makes, and the script now refuses a bundle whose criteria half names any run id.
+Nothing about this needs declaring in the report; the second scoring of `7` is blind. Verified by
+rebuilding `r12`'s bundle against the edited scenario.
 
 **Cost.** Named here because it is unusually high for a wording change and it is the whole reason
 this item starts at `intake` rather than being fixed on the spot. Tightening §3 is exactly the change
@@ -135,6 +135,7 @@ rerun as its second arm, and this item costs two runs rather than one.
     the proof design rather than left as a claim, because an edited scenario is the ordinary way an A/B
     quietly stops comparing.
 
-  And one caveat inherited from the same sitting: `#056` means the blind scorer of this run will read
-  the passage naming criterion `7` as the audit's concern, and `#047`'s refusal will not fire on a
-  foreign run id. Close `#056` first or declare it in the report.
+  And one caveat inherited from the same sitting, **since discharged**: `#056` meant the blind scorer
+  of this run would read the passage naming criterion `7` as the audit's concern, with `#047`'s
+  refusal keyed on the wrong id to catch it. `#056` was closed the same day — the passage is below
+  the cut and the refusal now fires on any run id — so nothing is owed to the report on this account.

@@ -16,8 +16,15 @@ What goes in is the evidence. What stays out is everything that says what the an
 
   the board item that was the run's brief   — the sharpest anchor there is
   every earlier report                      — including this run's own first scoring
-  the scenario's run-log table              — ten prior verdicts on the same criteria
+  the scenario's run log and provenance     — prior verdicts, and how each criterion got its wording
   CLAUDE.md and the workshop skill          — the gates, the technique, what is measured
+
+Both of those last two live below one heading, `## Run log`, and everything from it down is cut.
+A scenario's `## Provenance` section sits after it deliberately: a criterion's *history* — what an
+audit found, what an earlier run scored, why a row was reworded — is not an instrument, and handing
+it to the second reader hands over the map with the criterion at risk already circled (#056). The
+cut is enforced twice over: no run id may appear above it, and this script refuses rather than
+strips, because cutting prose by pattern would take criteria with it.
 
 The bundle is built outside this repository and outside the runs root, because a scoring session
 started under either would pick up CLAUDE.md from its ancestry (see check-isolation.ps1) or the
@@ -41,7 +48,8 @@ Run it from the repository root.
 The run to assemble. Reads process/runs/<RunId>.* and the target recorded in its hire.json.
 
 .PARAMETER Scenario
-The scenario the run was scored against, repo-relative. Its run-log table is stripped.
+The scenario the run was scored against, repo-relative. Everything from its `## Run log` heading
+down is cut, its `## Provenance` section included.
 
 .PARAMETER Target
 The run folder, if there is no hire.json to read it from — true for six of the ten runs on record,
@@ -155,28 +163,16 @@ if (-not $cut) {
 $kept = $lines[0..($cut - 2)]
 Set-Content (Join-Path $bundle 'criteria.md') $kept -Encoding utf8
 
-# The run-log table is the bulk of the anchor, not all of it: scenario prose cites run ids too
-# (alt-a-left-to-right.md explains its dialogue protocol by quoting what 2026-08-01-phase2 did).
-# Reported rather than stripped — cutting prose by pattern would silently remove criteria.
-$residue = @($kept | Select-String -Pattern '\b20\d\d-\d\d-\d\d-[a-z0-9-]+' -AllMatches |
-             ForEach-Object { $_.Matches.Value } | Sort-Object -Unique)
-
-# --- but the run being scored may never name itself ---------------------------------------------
+# --- the run being scored may never name itself -------------------------------------------------
 #
-# #047. Another run's id in the prose is a residual anchor and gets the NOTE at the bottom. *This*
-# run's id is a different thing entirely: it tells the blind reader which run it is holding, and on
+# #047. This run's id above the cut tells the blind reader which run it is holding, and on
 # 2026-08-03-r12 the passage went further and named the criterion the pre-run audit had been worried
 # about. A second reader that knows where to look is not the reader the second pass was designed to
 # be.
 #
-# So this is a refusal and not a note. The note already existed, said the right thing, and was read
-# and not acted on — which is what makes the difference between reporting and refusing the whole
-# finding. Same shape as build-dist.ps1: delete rather than hand back a leaking artifact.
-#
-# The remedy is local and small: move the passage into process/fixtures/<name>.md or the board
-# item's log, where the audit's findings mostly live already, and leave the scenario carrying the
-# *current* wording of the answer script. It must never be to stop recording what an audit found —
-# the audits are the most productive check this project has added.
+# It runs before the general check below and is not redundant with it. Two reasons, in order of
+# how much they matter: this message names the one thing that has to move, and the general check
+# keys on a *dated* id, so a run called `ph0-smoke` is caught here and nowhere else.
 #
 # -SimpleMatch with ONE escaped pattern, deliberately. `-Pattern 'a|b' -SimpleMatch` searches for
 # the pipe literally and can never match; that broke a 13b check on 2026-08-03 and returned the
@@ -189,9 +185,47 @@ if ($selfNamed) {
            "$where`n" +
            "That tells a blind reader which run it is holding, and a passage about a pre-run " +
            "correction also tells it which criterion was thought to be at risk. Move the passage to " +
-           "process\fixtures\<name>.md or the board item's log and leave the scenario the current " +
-           "wording of its answer script. Do not stop recording what the audit found. " +
+           "the scenario's '## Provenance' section, which sits below this cut, or to " +
+           "process\fixtures\<name>.md, and leave the scenario the current wording of its answer " +
+           "script. Do not stop recording what the audit found. " +
            "Bundle deleted rather than handed back. (#047)")
+}
+
+# --- and no *other* run may be named above the cut either ---------------------------------------
+#
+# The run-log table is the bulk of the anchor, not all of it: scenario prose used to cite run ids
+# too, and this was a NOTE for exactly one reason — cutting prose by pattern would silently remove
+# criteria, so stripping was never an option. Refusing is a different move and was available all
+# along: it hands the passage back to a human instead of guessing which words to keep.
+#
+# #056 is why it escalated. The residual anchors were not neutral trivia. alt-a-left-to-right.md's
+# boundary sections named criteria *and* their pass counts — "`13b` had failed 12 of 12", "`r15`
+# and `r14` both passed all three marks of `10`" — and nowhere-to-walk.md said which criterion a
+# pre-run audit had been worried about. A blind scorer read all of it. The NOTE said "read those
+# passages before trusting a close verdict", which is advice to the wrong person: by the time
+# anybody reads the NOTE the disclosure is already in the bundle, and the scoring may be done.
+#
+# So both scenarios now keep their history in a `## Provenance` section placed *after* `## Run log`,
+# below this same cut. No second hardcoded heading was needed and none was added: a section below
+# the one cut that already hard-fails when absent cannot be forgotten into a leak.
+#
+# What this enforces is narrower than the rule that matters — a passage can give a verdict away
+# without naming a run, and "its ten passes were assent" is exactly such a passage — so
+# `## Provenance` stays a discipline applied by hand. What this catches is the anchor that makes a
+# disclosure attributable to a run.
+$residue = @($kept | Select-String -Pattern '\b20\d\d-\d\d-\d\d-[a-z0-9-]+' -AllMatches |
+             ForEach-Object { $_.Matches.Value } | Sort-Object -Unique)
+if ($residue) {
+    $lineNos = @($kept | Select-String -Pattern '\b20\d\d-\d\d-\d\d-[a-z0-9-]+' |
+                 ForEach-Object { "  line $($_.LineNumber): $($_.Line.Trim())" }) -join "`n"
+    Remove-Item -Recurse -Force $bundle
+    throw ("BROKEN: $Scenario names $($residue.Count) run id(s) above the '## Run log' cut, in the " +
+           "prose the scorer reads — $($residue -join ', ')`n$lineNos`n" +
+           "A run id above the cut is what makes a disclosure attributable, and a passage that " +
+           "carries one is usually a criterion's history rather than its wording. Move it to the " +
+           "scenario's '## Provenance' section, which sits below this cut, and leave the criteria " +
+           "the wording that governs. Do not stop recording what an audit or an earlier run found. " +
+           "Bundle deleted rather than handed back. (#056)")
 }
 
 # --- the envelope, the measurements, the git surface ------------------------------------------
@@ -356,13 +390,10 @@ try {
     CriteriaLines  = $kept.Count
     StrippedAtLine = $cut
     Transcript     = if ($transcript) { Split-Path $transcript -Leaf } else { '(none — section E not scorable)' }
+    # Always '(none)' now that a run id above the cut is a refusal. Reported anyway, because a
+    # field that is always the same is still the field somebody looks at to confirm it was checked
+    # — and because the day it says anything else, the refusal above has stopped firing.
     RunIdsInProse  = if ($residue) { $residue -join ', ' } else { '(none)' }
-}
-
-if ($residue) {
-    "`nNOTE: the stripped scenario still names $($residue.Count) run id(s) in its prose. That is a"
-    "residual anchor this script does not remove, because cutting prose by pattern would take"
-    "criteria with it. Read those passages before trusting a close verdict."
 }
 
 "`nThis bundle holds criteria.md in full and now blocks the next hire — check-isolation.ps1 refuses"

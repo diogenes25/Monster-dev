@@ -204,6 +204,18 @@ be blind is not a control:
 Every disagreement with the first scoring is resolved in the report with a reason, or filed on the
 board. Keeping your own verdict quietly is the outcome the second pass exists to prevent.
 
+**A scenario is split by that bundle, and the split is a rule about writing, not about tooling.**
+`score-bundle.ps1` cuts everything from `## Run log` down, so everything above it is what the blind
+scorer reads. Above the cut belongs what a scorer needs to reach a verdict — the setup, the
+**current** wording of the answer script, the criteria, the rules for scoring them. Below it, in the
+scenario's `## Provenance` section, belongs how the file got that way: what a pre-run audit found,
+what an earlier run scored, why a row or a criterion was reworded. **A criterion's history is not an
+instrument**, and handing it to the second reader hands over the map with the criterion at risk
+already circled — `alt-a-left-to-right.md` used to tell it *"`13b` had failed 12 of 12"* and
+*"`10`'s ten passes were assent"*, by number, above the cut (`#056`). The script refuses a bundle
+whose criteria half names **any** run id, but that check is narrower than the rule and knows it: the
+two sentences just quoted name no run. Leave a pointer at the criterion and put the reasoning below.
+
 **Measure what the hire reached, and say in the report that you did** — the standing answer to
 `#041`, and the same move this file already prescribes for the real-URL run class. It reads the
 captured transcript for paths outside the run folder, `..` traversal, what those calls printed back,

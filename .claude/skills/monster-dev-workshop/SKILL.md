@@ -191,7 +191,7 @@ anything. `board.ps1` refuses `in-proof` without one.
 ### 1. Pick or write the scenario
 
 Existing scenarios: `process/scenarios/*.md`. A new one follows
-`references/scenario-template.md`. Two design principles, both easy to violate:
+`references/scenario-template.md`. Three design principles, all easy to violate:
 
 - **Stay vague where a real customer would be.** Anything the answer script spells out is
   something the run can no longer measure. If the customer states the requirement, you only
@@ -200,6 +200,14 @@ Existing scenarios: `process/scenarios/*.md`. A new one follows
 - **Split "didn't ask" from "didn't build".** Score likely gaps twice: did Monster-Dev raise
   it (§4 signal), and does it work (§5/§6 signal)? Missing *without* asking is a playbook gap;
   missing *with* asking is an implementation error. A report must never blur the two.
+- **A criterion's wording goes above the `## Run log` cut; its history goes below it.** That
+  cut is what `score-bundle.ps1` strips, so everything above it is read by the blind second
+  scoring. Which means a paragraph explaining *why* a criterion was reworded — what an audit
+  found, what an earlier run scored — hands the second reader the map with the criterion at
+  risk already circled. Put it in the scenario's `## Provenance` section, which sits after the
+  run log and therefore below the same cut, and leave a bare pointer at the criterion. The
+  script refuses a bundle whose criteria half names **any** run id, but that is narrower than
+  the rule: *"its ten passes were assent"* names no run and gives the same thing away. `#056`.
 
 ### 2. Build the `<dist>` mirror
 

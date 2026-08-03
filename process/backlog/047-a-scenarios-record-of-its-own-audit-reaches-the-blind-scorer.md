@@ -85,3 +85,11 @@ to record what an audit found. The audits are the most productive check this pro
   risk, and the criteria are shared between the two runs, so the map survives with a different label on
   it. That is a distinct question with the same two candidate fixes and it is **filed as `#056`** rather
   than left inside a `proven` item, because a `proven` item is one nobody reads again.
+
+- `2026-08-03` — **`#056` closed, and it changed this item's code.** Two things above are now stale as
+  written. The NOTE for *other* runs' ids no longer exists: it is a refusal too, since a passage
+  carrying any run id above the cut is almost always a criterion's history rather than its wording.
+  And this item's own check was moved to run **first**, so its sharper message still fires — it is not
+  redundant, because the general check keys on a *dated* id and would miss a run called `ph0-smoke`.
+  The remedy named in the message changed with it: the passage goes to the scenario's `## Provenance`
+  section, which sits below the same cut, rather than to the fixture note.
