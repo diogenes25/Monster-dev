@@ -1,0 +1,10 @@
+run:      2026-08-03-r14
+fixture:  static-site
+base:     e9c8e3a4d61889d1a811db230df17377eb5dd8db Initial project
+captured: 2026-08-03T13:05:11.2213898Z after cli turn 2
+
+git status --porcelain -uall at capture time:
+ M index.html
+ M script.js
+ M style.css
+?? assets/monster.png

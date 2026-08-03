@@ -50,3 +50,12 @@ start reporting them as incomplete, and whoever implements this owes that check 
 
 - `2026-08-03` `formulated` — noted in `2026-08-03-r12`'s `knowledge.md` as *"not yet filed"* while the
   run was still refused; filed when the run was scored.
+- `2026-08-03` — two more instances the same day, both written by hand because there was nowhere for them
+  to go. `2026-08-03-r15/audit.md` holds the `leak-auditor`'s nine findings and their triage, produced
+  **before** the first paid turn of a two-arm A/B; and `2026-08-03-r13/knowledge.md` documents a run that
+  was assembled, hired for two model turns, refused by the hire, and archived. Both would have been a
+  folder somebody deleted.
+
+  One correction to this item as filed: `hire.ps1` *does* write a `knowledge.md` stub with frontmatter
+  on the first turn, so the gap is narrower than the body implies — it is everything before that turn,
+  not the record as a whole. The proposed `assembly.md` is unaffected.

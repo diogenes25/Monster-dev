@@ -2,14 +2,15 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `rejected` |
 | Gate | `run` |
 | Attribution | playbook gap |
 | Criterion | cost envelope, not a numbered criterion |
 | Target file | `MONSTER-DEV.md` §4 / §6 |
 | Evidence | `2026-08-01-plan-sonnet`, `2026-08-01-index-sonnet` (against `2026-08-01-sonnet-base2`) |
-| Blocked on | `#034` only. The variant-overlay blocker **cleared `2026-08-03`** — `build-dist.ps1 -Variant` exists and `process/variants/002-arm-b.psd1` is arm B |
-| Proof design | A/B with cost, two Sonnet arms on `alt-a-left-to-right`, mirror both sides — run id to be assigned |
+| Blocked on | nothing. Both blockers cleared `2026-08-03` — `build-dist.ps1 -Variant` exists with `process/variants/002-arm-b.psd1` as arm B, and `#034` is `proven` |
+| Proof design | A/B with cost, two Sonnet arms on `alt-a-left-to-right`, mirror both sides — **arm A `2026-08-03-r15`** (playbook as it stands), **arm B `2026-08-03-r14`** (the §6 bound). `2026-08-03-r13` was arm A's first attempt and produced no data: the hire refused the entry point, see `#050` |
+| Result | **`rejected` `2026-08-03`** — arm B cost +20 % model turns and lost half a mark on `18a`. Report: `process/runs/2026-08-03-r14/report.md` |
 
 **What happened.** Model turns on the bar model, before the plan step and after it:
 
@@ -139,3 +140,71 @@ four marks to save turns, which is the wrong trade at these prices.
   future work in two documents, blocked the only run-eligible item on the board for a day, and had
   no item of its own — `board.ps1` validates item *state* and cannot see a blocker living in the
   tooling.
+- `2026-08-03` `in-proof` — **both preconditions cleared, run ids assigned: arm A `2026-08-03-r13`,
+  arm B `2026-08-03-r14`.** `#034` reached `proven` (a scrub failure no longer takes the worktree copy
+  and `base.txt` with it, which was the reason not to spend a two-arm run through that capture path),
+  and `-Variant` landed the same day.
+
+  **Neither id carries an arm letter, and that is deliberate.** `2026-08-03-r12` found that a run id
+  is part of the mirror surface: the hire's working directory *is* the run folder and turn 1 is handed
+  an absolute path through it, so anything the id says is in the hire's own prompt and in the output
+  of its first `pwd`. `r13a`/`r13b` would have told both hires that a second arm exists — i.e. that
+  this is a comparison — which is the one thing neither may know. Two consecutive neutral ids say
+  nothing, and the mapping lives here.
+- `2026-08-03` `rejected` — **arm B cost more turns, not fewer.** Report:
+  `process/runs/2026-08-03-r14/report.md`.
+
+  | | `sonnet-base2` | `plan-sonnet` | `index-sonnet` | **arm A** `r15` | **arm B** `r14` |
+  |---|---|---|---|---|---|
+  | turn 1, the plan | 12 | 11 | 14 | **12** | **15** |
+  | turn 2, the build | 19 | 30 | 28 | **38** | **45** |
+  | total | 31 | 41 | 42 | **50** | **60** |
+  | cost | $1.66 | $1.84 | $2.32 | **$2.3180** | **$2.3359** |
+
+  **+20 % model turns, +0.8 % cost** — more turns, individually cheaper. The build turn went 38 → 45,
+  the direction this item needed it not to go. And section E, the mark set the whole plan step exists
+  for, went *backwards*: `18a` pass → partial, both readings independent and blind. Every other
+  criterion is identical in the two arms, including every figure the verifier produced.
+
+  This is **outcome 2 of the two named above**, and the paragraph naming it was written before the run:
+  *"Turns do not drop → the ten turns were verification of the announced set. Then the plan step costs
+  a third more turns because it works, arm B is rejected, and the +25 % ceiling is the wrong instrument
+  for a step that changes what a hire does rather than how much."* That sentence is now the finding
+  rather than a hypothesis, and it settles what this item asked without a further run.
+
+  **The mechanism is confirmed and the remedy is refuted, and those are the same fact.** Both hires
+  verified their own work with a headless Playwright check outside the project — which §9 tells them to
+  do and which arm B's own last sentence permits in as many words (*"Checking that what you built works
+  is part of building it, not something extra"*). So arm B bounded scope creep, there was none, and it
+  added the cost of a hire re-reading a bound it then had to satisfy. The section *"What the arms
+  actually separate"* above predicted exactly this and it should be read as the item's best work rather
+  than as a near miss.
+
+  **The sentence stays on file and must not be redrafted.** A `Gate: run` item that is rejected is the
+  only defence against having the idea again, and this idea is unusually re-inventable: *"tell the hire
+  to build only what it announced"* reads like free money every time. It costs 20 %.
+
+  Three things this run establishes beyond the item's own question:
+
+  - **The +25 % soft ceiling is the wrong instrument for §4 and should be retired for this step.** It
+    was written for changes that make a hire do the same work differently. The plan step makes it do
+    different work, and the extra turns are the work. Not filed as an item because the ceiling is not
+    written down anywhere as a rule — it lives in this item's prose — so retiring it means this
+    paragraph, which is now written.
+  - **This item's stated floor was already invalid.** *"`sonnet-base2`'s 19/31 is the floor to read
+    against, not a third arm to re-run"* — but `process/fixtures/static-site/README.md` and
+    `tools/project.md` both changed on `2026-08-02` in `ac2808b`, after every baseline run, and `#015`
+    removed the *"Expected Monster-Dev behavior"* heading those hires read. `19`, `28` and `30` were
+    measured against a target and a mirror that no longer exist. **Arm A is the honest baseline at 38
+    build turns**, which is above every historical figure — so the drift the two arms were built to
+    control for was real and larger than the effect being chased.
+  - **What the run cannot say**, stated because the verdict does not need it and a reader will look for
+    it: whether +20 % is the treatment or the day. One arm each, one fixture, and this series has no
+    repeat measurement of a single arm to quote a spread from. The verdict rests on the sign, which is
+    the opposite of what arm B needed, not on the size.
+
+  Six items came out of the two arms besides this answer: `#049` (an A/B cannot have both arms on disk),
+  `#050` (a hire refused the entry point outright), `#051` (`13b` contradicts §8), `#052` (the
+  reduced-motion instrument), `#053` (**criterion `10` passes a verbatim copy of the reference** — found
+  by arm B's blind pass, and worth more than this item's own result), `#054`/`#055` (fixture and
+  documentation). `#026` and `#048` each gained an evidence line.

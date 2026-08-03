@@ -1,0 +1,7 @@
+run:      2026-08-03-r13
+fixture:  static-site
+base:     6ca70e51ed8fbd84e25ef7cfaae41bd951c0f981 Initial project
+captured: 2026-08-03T12:23:07.5757166Z after cli turn 1
+
+git status --porcelain -uall at capture time:
+(clean)

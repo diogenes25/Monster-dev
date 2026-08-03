@@ -102,3 +102,13 @@ boundary line in the scenario's *"criteria changed"* note, under **D2**, togethe
   number twice, and that is the one thing a copy cannot fake — the sheet, the frame count, the
   cycle and the cell size are all identical for both hires by construction, which is what this
   item is about.
+- `2026-08-03` — another evidence line, and it turns this item from a comparability note into a
+  measurement problem. `2026-08-03-r15` and `-r14` both took the default sheet, as every run does, and
+  `#053` is what that cost: the reference implementation is built on `green-fuzz-classic`, so routing
+  every hire to that sheet means every hire has the reference's numbers available to copy — and both
+  arms did copy them, arm A including two comments verbatim. Criterion `10` cannot see it.
+
+  So this row does not only make `10` and `14b` harder to read, which is what this item already says.
+  It removes the only cheap discriminator there is: a run on `green-fuzz-strolling` (17 frames,
+  299×300, 0.71 s) leaves nothing to copy. `#053` proposes exactly that and notes it collides with this
+  item — both cannot hold on the same run, and they can hold on alternating runs.
