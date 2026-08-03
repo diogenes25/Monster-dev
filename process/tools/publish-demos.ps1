@@ -39,6 +39,12 @@ The orphan branch the demos are committed to. Default `gh-pages`.
 Publish the results without the requirement banner, byte-identical to `step-4-result/`. Not the
 default: an unlabelled demo is a page about kites with an undocumented keyboard shortcut.
 
+.PARAMETER Rebuild
+Discard an existing local $Branch and build it again from nothing. Required to republish: the
+branch is orphan and rebuilt from scratch every time, so a second run necessarily throws the
+first one away, and doing that silently is not this script's decision to make. Without it, an
+existing branch is a refusal that names the choice.
+
 .PARAMETER WhatIf
 Render and report, touch no branch. Use this first.
 
@@ -47,15 +53,47 @@ Render and report, touch no branch. Use this first.
 
 .EXAMPLE
 .\process\tools\publish-demos.ps1
+
+.EXAMPLE
+.\process\tools\publish-demos.ps1 -Rebuild
 #>
 [CmdletBinding()]
 param(
     [string]$Branch = 'gh-pages',
     [switch]$NoBanner,
+    [switch]$Rebuild,
     [switch]$WhatIf
 )
 
 $ErrorActionPreference = 'Stop'
+
+# Every git call that must succeed goes through here, which before #033 not one of them did.
+# `git checkout --orphan` exits 128 once the branch exists; unguarded, that failure was invisible.
+# The script carried on, committed to the worktree's detached HEAD, discarded that commit with
+# `git worktree remove --force`, and then printed `Demos = 10` and the tip of the *stale* branch.
+# Reproduced 2026-08-03 against the branch built on 2026-08-02: same tip before and after, exit 0,
+# full success report. A publish step that silently does nothing and says it worked is the same
+# failure class as an instrument that reports success while broken, which is why this is a helper
+# and not four inline `if ($LASTEXITCODE)` blocks somebody can forget to add a fifth of.
+#
+# $ErrorActionPreference = 'Stop' does not cover this: a native command's non-zero exit is not a
+# PowerShell error, and 2>&1 here is what keeps git's own diagnosis in the thrown message.
+#
+# Called with one array argument — Invoke-Git @('branch','-D',$Branch) — and never with loose
+# words. ValueFromRemainingArguments looks like the natural signature and is a trap of exactly the
+# kind #032 collected: PowerShell binds a leading-dash token to a *parameter name* before it ever
+# reaches the remaining-arguments collector, so `Invoke-Git branch -D $Branch` silently ran
+# `git branch gh-pages` with the -D dropped, and created the branch instead of deleting it.
+# Caught on 2026-08-03 by this function's own exit-code check, on the first run of the fix.
+function Invoke-Git {
+    param([Parameter(Position = 0, Mandatory)][string[]]$Arguments)
+    $global:LASTEXITCODE = 0
+    $out = & git @Arguments 2>&1
+    if ($LASTEXITCODE) {
+        throw "BROKEN: git $($Arguments -join ' ') exited $LASTEXITCODE`n$($out -join "`n")"
+    }
+    $out
+}
 
 if (-not (Test-Path 'START.md')) {
     throw "Run this from the repository root — START.md is not here."
@@ -161,7 +199,10 @@ foreach ($demo in $demos) {
 </div>
 "@
         # After <body ...>, so the banner is the first thing painted and nothing below it moves.
-        $patched = [regex]::Replace($html, '(<body[^>]*>)', "`$1`n$banner", 1)
+        # The *instance* Replace is the one with a count overload. The static
+        # [regex]::Replace(input, pattern, replacement, 1) has none — the 1 binds to
+        # RegexOptions.IgnoreCase and every <body> gets a banner.
+        $patched = [regex]::new('(<body[^>]*>)').Replace($html, "`$1`n$banner", 1)
         if ($patched -eq $html) { throw "BROKEN: no <body> in $($demo.Impl)'s index.html — cannot place the banner." }
         Set-Content (Join-Path $out 'index.html') $patched -Encoding utf8 -NoNewline
     }
@@ -195,26 +236,58 @@ if ($WhatIf) {
 
 # An orphan branch, rebuilt from nothing each time. It shares no history with main on purpose:
 # nothing on it should ever be merged back, and a demo is a snapshot rather than a line of work.
-$current = (git rev-parse --abbrev-ref HEAD)
-$tree    = Join-Path ([System.IO.Path]::GetTempPath()) "monster-dev-pages-wt-$PID"
+#
+# Rebuilt from nothing is exactly why an existing branch has to be a decision. Asked with
+# rev-parse rather than discovered by letting the checkout fail, so the answer is in hand before
+# anything is destroyed and the refusal can name the two ways out. Bare `git` and not Invoke-Git:
+# exit 1 here means "no such ref", which is the ordinary answer and not a failure.
+$tipBefore = (git rev-parse --verify --quiet "refs/heads/$Branch")
+if ($tipBefore -and -not $Rebuild) {
+    throw ("Branch '$Branch' already exists, at $(git log -1 --format='%h %s' $Branch).`n" +
+           "Republishing rebuilds it from nothing, which discards that commit. Re-run with " +
+           "-Rebuild to do it, or 'git branch -D $Branch' yourself first. Refusing rather than " +
+           "rebuilding silently — and refusing out loud rather than doing nothing quietly, " +
+           "which is what this script did until #033.")
+}
+
+$tree = Join-Path ([System.IO.Path]::GetTempPath()) "monster-dev-pages-wt-$PID"
 if (Test-Path $tree) { Remove-Item -Recurse -Force $tree }
 
-git worktree add --detach -q $tree
+# Deleted before the worktree is created, so a branch that is checked out somewhere else fails
+# here — cheaply and with nothing half-built — rather than partway through the rebuild.
+if ($tipBefore) { Invoke-Git @('branch', '-D', $Branch) | Out-Null }
+
+Invoke-Git @('worktree', 'add', '--detach', '-q', $tree) | Out-Null
 try {
     Push-Location $tree
-    git checkout -q --orphan $Branch
+    Invoke-Git @('checkout', '-q', '--orphan', $Branch) | Out-Null
+    # The one git call here left unchecked, deliberately: an orphan checkout with nothing staged
+    # has nothing to unstage, and `git rm` calls that empty pathspec a fatal error. Its failure
+    # is harmless because the line below removes the files anyway.
     git rm -rq --cached . 2>$null | Out-Null
     Get-ChildItem . -Force | Where-Object { $_.Name -ne '.git' } | Remove-Item -Recurse -Force
     Copy-Item -Recurse (Join-Path $staging '*') .
     # Pages runs Jekyll otherwise, which silently drops anything starting with an underscore.
     New-Item -ItemType File -Force '.nojekyll' | Out-Null
-    git add -A
-    git commit -qm "Publish $($demos.Count) results as runnable demos"
+    Invoke-Git @('add', '-A') | Out-Null
+    Invoke-Git @('commit', '-qm', "Publish $($demos.Count) results as runnable demos") | Out-Null
     Pop-Location
 } finally {
     if ((Get-Location).Path -eq $tree) { Pop-Location }
     git worktree remove --force $tree 2>$null | Out-Null
     Remove-Item -Recurse -Force $staging -ErrorAction SilentlyContinue
+}
+
+# The post-condition, because reporting a tip it had not written is precisely what this script
+# did. Checking the calls is not the same as checking the outcome: #032's fifth defect was found
+# by running the repaired code and reading what it printed, and this is that lesson wired in so
+# it does not depend on somebody reading.
+$tipAfter = (git rev-parse --verify --quiet "refs/heads/$Branch")
+if (-not $tipAfter) {
+    throw "BROKEN: '$Branch' does not exist after publishing — nothing was written."
+}
+if ($tipBefore -and $tipAfter -eq $tipBefore) {
+    throw "BROKEN: '$Branch' still points at $tipBefore — the rebuild committed nothing."
 }
 
 [pscustomobject]@{

@@ -166,6 +166,10 @@ Add-Type -AssemblyName System.Drawing
 $SHEET_RATIO = 5
 
 foreach ($p in (git ls-files '*.png' | Where-Object { $_ -notlike 'monsters/*' -and $_ -notlike 'process/*' })) {
+    # Same guard, and for the same reason, as the citation loop below: ls-files lists the index,
+    # not the working tree. A PNG deleted but not yet staged makes Resolve-Path throw, and the
+    # check then fails for a reason that has nothing to do with what it checks.
+    if (-not (Test-Path -LiteralPath $p -PathType Leaf)) { continue }
     $img = [System.Drawing.Image]::FromFile((Resolve-Path $p))
     try   { $ratio = $img.Width / $img.Height; $dims = "$($img.Width)x$($img.Height)" }
     finally { $img.Dispose() }
