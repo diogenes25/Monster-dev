@@ -24,6 +24,14 @@ the board existed, and everything still open in them is on the board.
 | Run folder | `../monster-dev-testruns/<run-id>/target/` |
 | Playbook revision | `<git rev-parse --short HEAD>` |
 | Hire | `claude -p` session `<session_id>`, `<n>` turns |
+| Entry point | accepted without objection / **refused** — see `#050` |
+
+*The `Entry point` row is not bookkeeping. `2026-08-03-r13` refused `START.md` as a prompt-injection
+and supply-chain risk and produced no data, while `2026-08-03-r15` accepted it on a byte-identical
+mirror in the same hour — so this is within-tier variance at a base rate of roughly one in twelve.
+`#050`'s honest proof needs several arms per side and is the most expensive item on the board; one line
+per report accumulates the rate as a by-product instead. State it even when nothing happened, for the
+same reason the Reach section is stated when it found nothing.*
 
 ## Verdict
 

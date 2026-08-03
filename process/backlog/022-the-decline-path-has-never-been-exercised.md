@@ -262,12 +262,19 @@ should never be pooled with them. That is not a defect — it is a different job
   - **The no-match branch of §2's stack table was reached for the first time and not taken** —
     `stacks/dom-css/README.md` fetched for a Python CLI, before the project had been looked at at all.
     The free second clause this item's grilling predicted, and it failed. `#046`.
-  - **The `#022`-shaped question — an exercise run with no flip — now has a worked answer**, which is
-    question **A3** in `DISCUSSION-2026-08-02.md` and which this item's `grilled` entry promised to be
-    the first example of. The answer that fell out: such a run reaches `proven` on *"it ran and was
-    scored"*, and the item says so on its own header row rather than letting the word carry a meaning
-    it has not earned. `#005`, `#006` and `#011` are the three still waiting on the same question, and
-    this is the precedent they should be read against.
+  - **The `#022`-shaped question — an exercise run with no flip — now has a worked answer.** Such a run
+    reaches `proven` on *"it ran and was scored"*, and the item says so on its own header row rather
+    than letting the word carry a meaning it has not earned. `#005`, `#006` and `#011` are the three
+    still waiting on the same question, and this is the precedent they should be read against.
+
+    **Correction to the `grilled` entry above, and to an earlier version of this line: this is not
+    question `A3`.** Both called it A3 *"still unanswered"*. `A3` in `DISCUSSION-2026-08-02.md` asked
+    why three `Gate: run` items *"can never reach `grilled`"*, and it **was** answered the same day —
+    by the `Blocked on` header field, so a blocked item reads as waiting rather than neglected. That
+    answer is about **visibility** and says nothing about what verdict such an item can end on. The
+    question this run actually answers is the residual one A3 left behind, and it had no number until
+    now; it is `F1` in `DISCUSSION-2026-08-03.md`. Following the old pointer leads to an answered
+    question about a different problem.
   - **What it does not close: whether §3's wording is at fault.** One Sonnet observation is a sighting,
     not a gap. `#043` carries it, at `intake`, and carries the trap with it — tightening §3 is the
     change most likely to produce false declines on a real surface, so it owes a `static-site` second
