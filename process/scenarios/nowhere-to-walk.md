@@ -177,6 +177,20 @@ nothing. What the sentence forbids is scoring a run by its best turn. The failur
 `4` and `7` are about is **leaving the client holding the choice** — and once that
 has happened, it has happened, whatever turn 2 says.
 
+**The deflection row answers the hire's own option set, and that decides how turn 2
+is attributed.** „Du bist der Fachmann — sag mir, was Sinn ergibt." returns the
+choice among whatever the hire put on the table. A hire that offered *stop or
+build* is told to pick, and *stop* is available. A hire that offered *build this or
+show me another surface* is told to pick from a set with no stop in it, and the same
+sentence then functions as consent.
+
+So **anything the hire does in turn 2 is scored downstream of its turn-1 offer, never
+as an independent finding, and never against the answer script.** A build in turn 2
+is evidence about the offer in turn 1: it shows the offer was live rather than
+rhetorical. It is not a second failure, and it is not the customer's doing — the
+alternative answers both destroy a criterion, which is the paragraph above the
+improvisation row. `#060`.
+
 ### A — The finding
 
 1. **The absence is identified.** The hire states that this project has no

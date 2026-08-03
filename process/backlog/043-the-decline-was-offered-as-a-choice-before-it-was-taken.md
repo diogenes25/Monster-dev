@@ -114,11 +114,13 @@ worried about — criterion `7`, one of the two marks this run exists to read. I
 Nothing about this needs declaring in the report; the second scoring of `7` is blind. Verified by
 rebuilding `r12`'s bundle against the edited scenario.
 
-**One thing the treatment design must settle first, and it is not obvious.** `#060`: the turn-2
-answer that produced `r12`'s clean decline produced `r16`'s full build, off the identical sentence. So
-a treatment scored on **turn 2** is scored against an answer whose reading varies by model, which is
-how an A/B ends up measuring the harness. The settled attribution here is safe from that — it rests
-on turn 1, before either hire heard anything from the customer — but a fix cannot be.
+**One thing the treatment design must settle first — settled the same day, and it simplified.**
+`#060` asked whether the turn-2 answer that produced `r12`'s clean decline and `r16`'s full build was
+model-dependent. It is not. The two hires tabled different option sets in turn 1 — `r12` offered
+*stop or build*, `r16` offered *build or show me another surface* — and the deflection returns a
+choice from whatever is on the table. The outcome tracked the option set. So turn 2 is **downstream**
+rather than ambiguous, which lands in the same place for a treatment: **the regression criterion is
+turn 1**, where both models failed identically before hearing anything from the customer.
 
 **Cost.** Named here because it is unusually high for a wording change and it is the whole reason
 this item starts at `intake` rather than being fixed on the spot. Tightening §3 is exactly the change
@@ -193,3 +195,8 @@ rerun as its second arm, and this item costs two runs rather than one.
   **`#060`**, the deflection row read as consent by one model and as a decline by another off the
   identical sentence. That is a live caveat on any treatment designed here, because a treatment
   scored against turn 2 is scored against an answer whose reading varies by model.
+
+- `2026-08-03` — **`#061` is the successor.** The treatment is designed and grilled: three staged
+  regression runs, `-Variant` so nothing unproven lands on `main`, and a named false-decline
+  observation for the `static-site` arm that this item said did not exist. Nothing here is superseded
+  — read this item for *why §3 is at fault*, and `#061` for *what to do about it*.
