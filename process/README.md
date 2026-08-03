@@ -51,6 +51,20 @@ the identical brief against the identical fixture, one of them with
 Ancestry was checked from the first run because `CLAUDE.md` arrives *automatically*; a sibling
 arrives only if you look, which is why nobody looked for ten runs.
 
+The sideways look is **two** levels, and the second is there because `#019`'s own fix moved the
+listing beyond the check it added in the same change: after nesting, the checked parent held only
+`target` and `dist`, and the twenty dated folders sat at `..\..` unlooked-at while the check printed
+`isolation OK`. `#040`.
+
+`ls ..\..\..` returns this repository, and that is open — `#041`. The runs root is a sibling of the
+working copy by nothing more than convention, so `CLAUDE.md`, `process/` and the run's own scenario
+are three `cd ..` from where a hire starts, and were for all eleven runs. It is a location problem,
+not a check problem: the level above the runs root holds unrelated projects. The location was
+deliberately **not** changed, for the reason `CLAUDE.md` already gives about the real-URL run class —
+measure the exposure instead of hiding it. `check-reach.ps1` is that measurement and is a numbered
+step, and the runs root itself is now defined in one place, `tools/lib/run-root.ps1`, rather than
+derived from `..` by three scripts separately.
+
 `stacks/` here and `stacks/` at the repository root are different trees answering different
 questions. This one is keyed by language → library and is never fetched; the root one is keyed by
 rendering surface + animation primitive and is the only stack index a hire can see. The `Stack:`
@@ -171,11 +185,20 @@ measure instruction-following instead of §2.4.
   rather than return one that fails isolation or starts dirty. Recipes live in
   `tools/setup/<fixture>.ps1` and are never copied into the target, where they would land in the
   §9 diff surface.
-- `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md`, looks **sideways** for
-  any directory beside it that is not its own mirror, and confirms the folder is a git repo with
-  exactly one commit. `-AncestryOnly` drops the last two, for a folder that must be free of this
-  repo's context but is not a run folder — the scoring bundle is one, and its parent is not
-  reserved for it.
+- `check-isolation.ps1` — walks the run folder's ancestry for `CLAUDE.md`, looks **sideways** at two
+  levels (beside the run folder, and beside the runs root), refuses to start while a blind-scoring
+  bundle exists anywhere in the scoring root, and confirms the folder is a git repo with exactly one
+  commit. `-AncestryOnly` drops all of those but the ancestry, for a folder that must be free of this
+  repo's context but is not a run folder — the scoring bundle is one, and its parent is not reserved
+  for it. That exemption is what lets `score-bundle.ps1` check the bundle it just built.
+- `check-reach.ps1` — reads a finished run's captured transcript and reports what the hire actually
+  reached: paths outside the run folder, mirror and scratch dir; `..` traversal; **what those calls
+  printed back**, paired by `tool_use_id`; and every URL fetched. `#041`'s standing answer, and a
+  numbered step rather than a habit, because a report that omits the section and one that says "no
+  reach" read the same. Exits non-zero on any reach.
+- `lib/run-root.ps1` — where run folders and scoring bundles live, in one place, dot-sourced.
+  Overridable by `MONSTER_DEV_RUN_ROOT` / `MONSTER_DEV_SCORING_ROOT`, and it refuses a root that
+  resolves inside this repository, which is the failure mode the override newly introduces.
 - `check-index.ps1` — the indexes against the working tree: §2 ↔ `stacks/`, §5 ↔ `catalog.json`,
   the 40-line orientation cap, any sheet-shaped PNG outside `monsters/`, the record tree's two
   conventions (OKF under `runs/`, the `Stack:` line under `stacks/`, tag *form* only, every

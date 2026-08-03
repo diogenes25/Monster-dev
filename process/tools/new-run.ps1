@@ -32,13 +32,20 @@ Like build-dist.ps1, this deletes what it built rather than return something unu
 that fails the isolation check is worse than no run folder, because it looks ready.
 
 .PARAMETER RunId
-Identifies the run. The folder is created at ..\monster-dev-testruns\<RunId>\target, and its only
-sibling is the <RunId>\dist mirror build-dist.ps1 writes.
+Identifies the run. The folder is created at <runs root>\<RunId>\target, and its only sibling is
+the <RunId>\dist mirror build-dist.ps1 writes. Where the runs root is, and how to move it, is
+lib\run-root.ps1's business and no longer this script's — it used to derive `..` itself, as did
+build-dist.ps1, with nothing making the two agree.
 
-Both used to be direct children of ..\monster-dev-testruns\, which made every previous run one
-`ls ..` away from the hire — ten finished, already-scored implementations of the identical brief,
-in dated folders with the model name in them. One hire listed exactly that. Nesting per run costs
-nothing and puts every other run two levels away instead of one.
+Both used to be direct children of the runs root, which made every previous run one `ls ..` away
+from the hire — ten finished, already-scored implementations of the identical brief, in dated
+folders with the model name in them. One hire listed exactly that. Nesting per run costs nothing
+and puts every other run two levels away instead of one.
+
+The run id itself is not checked by anything and is worth choosing carefully. One assembled on
+2026-08-03 carried the scenario's own finding in its name, which would have put that word in the
+hire's working directory and in the output of its first `pwd`. No check here looks at what an id
+*means*.
 
 .PARAMETER Fixture
 A directory name under process\fixtures\.
@@ -71,8 +78,10 @@ if (-not (Test-Path $source)) {
     throw "No fixture '$Fixture'. Known fixtures: $known"
 }
 
-$runRoot = Join-Path (Resolve-Path '..').Path "monster-dev-testruns\$RunId"
-$target  = Join-Path $runRoot 'target'
+. (Join-Path $PSScriptRoot 'lib\run-root.ps1')
+$paths   = Get-MonsterDevRunPaths -RunId $RunId
+$runRoot = $paths.Folder
+$target  = $paths.Target
 if (Test-Path $target) {
     if (-not $Force) { throw "$target already exists. Pass -Force to replace it." }
     Remove-Item -Recurse -Force $target

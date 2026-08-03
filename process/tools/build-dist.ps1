@@ -40,10 +40,13 @@ Three checks follow the copy, and only the first names a path.
 Run it from the repository root.
 
 .PARAMETER RunId
-Identifies the run; the mirror is created at ..\monster-dev-testruns\<RunId>\dist, beside the
-run folder new-run.ps1 writes and inside a parent reserved for this run alone. It used to be a
-direct child of ..\monster-dev-testruns\, where one `ls ..` from the hire's working directory
-listed every previous run and mirror by name.
+Identifies the run; the mirror is created at <runs root>\<RunId>\dist, beside the run folder
+new-run.ps1 writes and inside a parent reserved for this run alone. The runs root comes from
+lib\run-root.ps1, which is also where new-run.ps1 reads it — this script used to derive `..`
+separately, so the two agreed about the layout by coincidence.
+
+The mirror used to be a direct child of the runs root, where one `ls ..` from the hire's working
+directory listed every previous run and mirror by name.
 
 .PARAMETER Without
 Paths (repo-relative, wildcards allowed) to additionally leave out.
@@ -105,7 +108,8 @@ if (-not (Test-Path 'START.md')) {
     throw "Run this from the repository root — START.md is not here."
 }
 
-$dist = Join-Path (Resolve-Path '..').Path "monster-dev-testruns\$RunId\dist"
+. (Join-Path $PSScriptRoot 'lib\run-root.ps1')
+$dist = (Get-MonsterDevRunPaths -RunId $RunId).Dist
 if (Test-Path $dist) { Remove-Item -Recurse -Force $dist }
 New-Item -ItemType Directory -Force $dist | Out-Null
 

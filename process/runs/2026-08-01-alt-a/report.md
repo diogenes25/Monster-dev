@@ -14,6 +14,8 @@ An in-process subagent was tried first and rejected: it inherits the session wor
 
 The hire therefore ran as a separate `claude` CLI session with the run folder as its working directory. Verified beforehand: no `CLAUDE.md` anywhere above the run folder, none at user level, no memory history for that path. Its only entry point was a filesystem path to `START.md` inside a `git ls-files` mirror; nothing else was said about what Monster-Dev is, and no path-for-URL substitution rules were given.
 
+> **Caveat added `2026-08-03` — this section overstates what was verified. See `#042`.** Every claim above is true of what it checked, and the ancestry was genuinely clean. What nobody checked was the entry-point path itself. It pointed into a **session scratchpad**, and the scratchpad segment is a CLI project slug — this repository's absolute path with the separators turned into dashes. Turn 1 therefore contained the repository's address, and the transcript shows the hire decoding it: `ls -d`, `git remote -v` twice, a listing of the repository root in which `CLAUDE.md` appears by name, and the sprite sheet copied out of the working copy rather than out of the mirror. There is **no evidence it read `CLAUDE.md`, any scenario, or any criteria file**, and the §4 ordering failure below is a behavioural observation that nothing here touches. But this run was not the clean room this section describes, and it should not be cited as one. The copy it was pointed at was also not a `build-dist.ps1` mirror — it contained the root `README.md`, which a real mirror excludes.
+
 ## Evidence sources
 
 - `measurements.json` — raw output of the acceptance test

@@ -29,12 +29,14 @@ Run it from the repository root.
 Identifies the run. Everything it produces goes in process/runs/<RunId>/.
 
 .PARAMETER Target
-The run folder the hire works in — ..\monster-dev-testruns\<RunId>\target. Must be outside this
-repository, and its parent must hold nothing but this run; check-isolation.ps1 enforces both.
+The run folder the hire works in — <runs root>\<RunId>\target, as new-run.ps1 printed it. Must be
+outside this repository, and neither its parent nor the runs root may hold anything but this run;
+check-isolation.ps1 enforces all three. Passed rather than derived on purpose: the paid turn is in
+this script, and a path it computed for itself would be a path nobody looked at.
 
 .PARAMETER Dist
-The mirror from build-dist.ps1 — ..\monster-dev-testruns\<RunId>\dist, the one directory beside
-the run folder a hire is meant to reach. Handed over with --add-dir. Turn 1 only.
+The mirror from build-dist.ps1 — <runs root>\<RunId>\dist, the one directory beside the run folder
+a hire is meant to reach. Handed over with --add-dir. Turn 1 only.
 
 .PARAMETER Brief
 The customer brief from the scenario. Turn 1 only; mutually exclusive with -BriefFile.

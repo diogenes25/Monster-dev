@@ -19,11 +19,21 @@ What goes in is the evidence. What stays out is everything that says what the an
   the scenario's run-log table              — ten prior verdicts on the same criteria
   CLAUDE.md and the workshop skill          — the gates, the technique, what is measured
 
-The bundle is built outside this repository and outside ../monster-dev-testruns/, because a
-scoring session started under either would pick up CLAUDE.md from its ancestry (see
-check-isolation.ps1) or the neighbouring run folders (see #019). The second scoring is then run as
-a separate `claude -p` session with the bundle as its working directory — an in-process subagent
-cannot be blind, because it can read this whole repository, and asking it not to is not a control.
+The bundle is built outside this repository and outside the runs root, because a scoring session
+started under either would pick up CLAUDE.md from its ancestry (see check-isolation.ps1) or the
+neighbouring run folders (see #019). Both roots come from lib\run-root.ps1 rather than from a
+literal in this file. The second scoring is then run as a separate `claude -p` session with the
+bundle as its working directory — an in-process subagent cannot be blind, because it can read this
+whole repository, and asking it not to is not a control.
+
+**A bundle is transient, and leaving one behind is now a blocked hire rather than a private
+untidiness.** It contains `criteria.md` in full, and the scoring root sits beside the runs root
+where a hire that walks up can reach it. Being buried among unrelated folders is obscurity, and
+CLAUDE.md says nothing here is hidden by obscurity. So `check-isolation.ps1` — which hire.ps1 runs
+before every turn — refuses to start a hire while any bundle exists. Delete it with -Remove when
+the second scoring is written up; if you forget, the next run tells you instead of the hire finding
+it. That placement is deliberate: a closing step is a step to forget, and this repository has
+already lost a run that way.
 
 Run it from the repository root.
 
@@ -43,18 +53,28 @@ The session transcript, if the sessionId cannot be resolved. Normally found by g
 derived from the target path.
 
 .PARAMETER OutRoot
-Where bundles are built. Default ..\monster-dev-scoring.
+Where bundles are built. Defaults to lib\run-root.ps1's scoring root, which is overridable by
+MONSTER_DEV_SCORING_ROOT and refuses to resolve inside this repository.
+
+.PARAMETER Remove
+Deletes this run's bundle and reports what is left in the scoring root. Run it once the second
+scoring is written up — until then the bundle is what the blind scorer reads, and afterwards it is
+a copy of the criteria sitting where a hire can walk to it.
 
 .EXAMPLE
 .\process\tools\score-bundle.ps1 -RunId 2026-08-01-plan-sonnet -Scenario process\scenarios\alt-a-left-to-right.md
+
+.EXAMPLE
+.\process\tools\score-bundle.ps1 -RunId 2026-08-01-plan-sonnet -Remove
 #>
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = 'Build')]
 param(
     [Parameter(Mandatory)][string]$RunId,
-    [Parameter(Mandatory)][string]$Scenario,
-    [string]$Target,
-    [string]$TranscriptPath,
-    [string]$OutRoot = '..\monster-dev-scoring'
+    [Parameter(Mandatory, ParameterSetName = 'Build')][string]$Scenario,
+    [Parameter(ParameterSetName = 'Build')][string]$Target,
+    [Parameter(ParameterSetName = 'Build')][string]$TranscriptPath,
+    [string]$OutRoot,
+    [Parameter(Mandatory, ParameterSetName = 'Remove')][switch]$Remove
 )
 
 $ErrorActionPreference = 'Stop'
@@ -67,6 +87,35 @@ $repoRoot = (Resolve-Path '.').Path
 $runsDir  = Join-Path $repoRoot 'process\runs'
 
 # --- where it goes ---------------------------------------------------------------------------
+#
+# Resolved here rather than as a param default, because a param default binds before the script
+# body runs and so cannot call anything this file dot-sources.
+. (Join-Path $PSScriptRoot 'lib\run-root.ps1')
+if (-not $OutRoot) { $OutRoot = Get-MonsterDevScoringRoot }
+
+# --- -Remove: the explicit close ---------------------------------------------------------------
+#
+# Reports the rest of the root rather than emptying it. A bundle belonging to another run is
+# somebody else's evidence mid-scoring, and deleting it unasked is not this switch's business —
+# but it will block the next hire, so saying so is.
+if ($Remove) {
+    $doomed = Join-Path $OutRoot $RunId
+    $existed = Test-Path $doomed
+    if ($existed) { Remove-Item -Recurse -Force $doomed }
+
+    $left = @(Get-ChildItem $OutRoot -Directory -ErrorAction SilentlyContinue | ForEach-Object Name)
+    [pscustomobject]@{
+        RunId   = $RunId
+        Removed = if ($existed) { $doomed } else { '(nothing there)' }
+        Left    = if ($left) { $left -join ', ' } else { '(empty)' }
+    }
+    if ($left) {
+        "`nNOTE: $($left.Count) bundle(s) still in $OutRoot. check-isolation.ps1 will refuse the next"
+        "hire while any of them is there, because each holds a copy of some run's criteria.md a"
+        "hire could walk up to. Remove them with -Remove once their scoring is written up."
+    }
+    return
+}
 
 New-Item -ItemType Directory -Force $OutRoot | Out-Null
 $bundle = Join-Path (Resolve-Path $OutRoot).Path $RunId
@@ -247,3 +296,7 @@ if ($residue) {
     "residual anchor this script does not remove, because cutting prose by pattern would take"
     "criteria with it. Read those passages before trusting a close verdict."
 }
+
+"`nThis bundle holds criteria.md in full and now blocks the next hire — check-isolation.ps1 refuses"
+"to start one while any bundle exists. Delete it once the second scoring is written up:"
+"    .\process\tools\score-bundle.ps1 -RunId $RunId -Remove"

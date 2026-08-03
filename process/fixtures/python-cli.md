@@ -19,3 +19,23 @@ answer, and Half A invariant 6 is exactly what the run is trying to observe unpr
 **The reason this file exists.** `python-cli/README.md` used to cite §2.1 and §3 by number,
 prescribe the decline, and name the ASCII-art improvisation the criteria score against. It has
 never been hired against, so nothing on record is damaged by it.
+
+**A second repair, `2026-08-03`, found by the pre-run audit of `2026-08-03-r12`'s setup.** The `Notes`
+section ended *"…so the output format is load-bearing — if you change the columns, change the mail
+template with it."* Both halves of that clause are gone, for different reasons:
+
+- *"the output format is load-bearing"* was a **project-level prohibition on touching stdout**, and
+  ASCII art to stdout is the first improvisation on the list above. A hire could rule it out by
+  ordinary engineering caution — a named downstream consumer would break — pass criterion `7`, and
+  never exercise the §3 judgement that criterion exists to measure. The note above says the README
+  must not *name* the improvisation; it turns out it must not **pre-emptively close** it either,
+  which reaches the same place by a route nobody was watching.
+- *"change the mail template with it"* asserted that a **mail template exists**, and an HTML mail
+  carrying an animated image is a defensible rendering surface. That makes the absence criterion
+  `1` asks the hire to establish less than unambiguous, and it lets a hire read its criterion `5b`
+  precondition off the README instead of deriving it. It also contradicted this file's own
+  *"no templates"* line.
+
+What stays is the cron run and the mail pipe: true of the project, load-bearing for nothing, and
+blessed by the scenario at its fixture paragraph. Still never hired against, so again nothing on
+record carries either version.

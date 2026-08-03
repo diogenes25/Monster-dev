@@ -163,3 +163,45 @@ should never be pooled with them. That is not a defect — it is a different job
   `4`. The customer deflects: „Du bist der Fachmann — sag mir, was Sinn ergibt."
 
   Not started. `in-proof` needs a run id, and `new-run.ps1 -Fixture python-cli` has never been run.
+- `2026-08-03` — **setup assembled as `2026-08-03-r12` and the `leak-auditor` found three things
+  that would have pre-answered it. All three fixed before any turn was spent; the scenario changed
+  while `grilled`, which is recorded here because that is a thing this item's grilling did not
+  cover.**
+
+  **The run id was the first finding, and the harness cannot see it.** The id first chosen carried
+  the scenario's own name — the word *nowhere* — followed by the model tier. It is deliberately not
+  written out here: it was never a run, and `check-index.ps1` rightly reads a date-prefixed id in
+  tracked prose as a citation of a run that has a record. The hire's working directory *is* the run
+  folder and turn 1 is handed
+  an absolute mirror path, so the word `nowhere` — the finding this run exists to watch a hire reach
+  unaided — would have sat in the hire's own prompt and in the output of its first `pwd`, beside
+  `testruns` and its own model tier. None of the four deterministic checks looks at what a run id
+  *means*: `check-isolation.ps1` says outright that it matches no run id and no date pattern, and
+  `new-run.ps1`'s product-name refusal scans target *contents*. Renamed to `2026-08-03-r12`, which
+  poses nothing. The ancestor `monster-dev-testruns` is structural and left alone.
+
+  **Two edits to the fixture README**, both in one clause of its `Notes` section, both recorded in
+  `process/fixtures/python-cli.md`: a project-level prohibition on changing stdout, which let a
+  hire close off the ASCII-art improvisation by ordinary caution and pass `7` without exercising
+  the §3 judgement `7` measures; and an asserted mail *template*, which is a defensible rendering
+  surface and so softened the absence `1` asks the hire to establish.
+
+  **Two rows of the answer script named a surface in the customer's voice** — *"Where on screen?"*
+  → „da wo der Report rauskommt" and *"One-time or loop?"* → „einmal, wenn der Report durchläuft".
+  A hire reaching §4 before finishing §2.1 was handed the improvisation as the client's own
+  instruction, so a `7` failure afterwards would have scored the answer script rather than the
+  hire. Now „das entscheidest du" and „einmal reicht". *"React to anything? — nur beim Report-Lauf"*
+  is kept deliberately: it answers *when*, not *where*.
+
+  **What this says about the grilling, and it is not comfortable.** This item was grilled on
+  `2026-08-03` and the grilling produced the criteria, the two-way `2a`/`2b` split and the
+  improvisation row — good work that specifically reasoned about contamination from the answer
+  script. It still shipped an answer script that designated the surface, and a fixture that closed
+  the improvisation. Grilling an item and auditing an assembled setup are **different readings**,
+  and the second is not a formality after the first. That is the `leak-auditor`'s whole warrant and
+  the first time it has been demonstrated rather than assumed: three findings on a setup that had
+  already passed a dedicated adversarial pass.
+
+  Nothing is measured yet. The setup is built, the corrections are in, and the audit has to be run
+  a second time against the corrected setup before a turn is paid for — a first audit's clean
+  bill on a since-edited setup is not evidence about what will be run.

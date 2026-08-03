@@ -46,6 +46,17 @@ value, or a file:line — never "looks right".*
 *What happened, what the evidence was, and — for a failure — why it is attributed the way it
 is. For split criteria (asked vs. built), state both halves explicitly; never collapse them.*
 
+## Reach
+
+*What `check-reach.ps1` found, stated even when it found nothing — a section left out and a section
+saying "no reach" read identically, and only one of them means the transcript was read. Give the
+counts per section, and for any hit in A or B say what its paired result in C actually showed. `#041`
+is why this exists: the runs root is a sibling of the working copy and the location was not changed,
+so this measurement is the control that stands in for the move. Section D's URLs get checked against
+the playbook's own pointers by hand — the script cannot do that half.*
+
+- A/B/C/D: `<n>` / `<n>` / `<n>` / `<n>`. `<one clause on what, if anything, the hire was shown.>`
+
 ## Harness notes
 
 *Anything that went wrong on the measurement side: permission denials that were widened and

@@ -310,7 +310,8 @@ created some other way or has been sitting around:
 ```
 
 Walks the run folder's whole ancestry for `CLAUDE.md`, checks the user-level one, looks sideways
-for any directory beside the run folder that is not its own mirror, and confirms the folder is a
+for any directory beside the run folder that is not its own mirror **and for any directory beside
+the runs root**, refuses to start while a blind-scoring bundle exists, and confirms the folder is a
 git repo with exactly one commit. The mirror side was already checked in step 2. Any hit
 invalidates the run before it starts — treat a failure as a stop, not a warning.
 
@@ -319,9 +320,24 @@ The sideways look is the newer half and answers a different question from the an
 while a sibling arrives only if the hire looks — which is why nobody checked for ten, and why one
 hire's `ls ..` returned every previous run and mirror by name.
 
-`-AncestryOnly` skips the single-commit test **and the sideways look**, for a folder that must be
-free of this repo's context but is not a run folder — the scoring bundle in step 8 is one, and
-its parent is not reserved for it.
+It is **two** levels because `#019`'s own fix moved the listing out of the reach of the check it
+added in the same change: nesting the run one deeper made the checked parent a directory that by
+construction holds only `target` and `dist`, and the twenty dated folders moved to `..\..` where
+nothing looked. `#040`. After changing where a thing lives, re-ask what the check points at.
+
+`ls ..\..\..` still returns this repository, and that is **not** closed — `#041`. It is a location
+problem, the level above the runs root holds unrelated projects, and no sideways check fixes a
+location. What is done instead is step 7b: measure the reach out of the transcript and say so in the
+report. The runs root itself is defined once, in `process/tools/lib/run-root.ps1`.
+
+The bundle refusal has no `-Remove` habit behind it on purpose. A bundle holds `criteria.md` in
+full, and "delete it after scoring" is a closing step, which is a step to forget — so the check that
+runs before every turn owns the rule instead. If it fires, close the bundle from step 8 and re-run.
+
+`-AncestryOnly` skips the single-commit test, **the sideways look and the bundle refusal**, for a
+folder that must be free of this repo's context but is not a run folder — the scoring bundle in
+step 8 is one, and its parent is not reserved for it. That exemption is what lets `score-bundle.ps1`
+check the bundle it has just built without tripping over it.
 
 ### 4b. Audit the setup before spending the run on it
 
@@ -428,6 +444,32 @@ pixel size and never by name), `derivation` + `durationVsViewport` (derived-or-t
 two window widths to answer), `reducedMotion` (emulated, not read off the CSS) and
 `fixtureConsoleErrors` (the baseline `consoleErrors` is subtracted against).
 
+### 7b. Measure what the hire reached, and say in the report that you did
+
+```powershell
+.\process\tools\check-reach.ps1 -RunId <run-id>
+```
+
+`#041`: the runs root is a sibling of this working copy, so `ls ..\..\..` from a hire's working
+directory returns `CLAUDE.md`, `process/` and the run's own scenario, and did for all eleven runs on
+record. The location was **not** changed, and the reason is the one this repo already gives for the
+real-URL run class — *not a hole to plug by hiding things, a validity condition, and the way to hold
+it is to measure it.* This is that measurement, widened from URLs to the tree.
+
+Four sections: paths outside the run folder, mirror and scratch dir; `..` traversal; **what those
+calls printed back**, paired by `tool_use_id`; and every URL fetched, which is the audit §"blindfold,
+not a vault" used to prescribe as a habit. It exits non-zero on any reach.
+
+Read a hit, do not just count it. The two verdicts it exists to separate are *"it looked up and saw
+nothing of ours"* and *"it looked up and the listing named the repository"*. A hire that saw the
+criteria voids the run; one that saw folder names is a finding to weigh. **A report silent about this
+section has not checked** — that is the whole reason the step is numbered.
+
+Its first sweep reproduced `#019`'s finding on `sonnet-base2` and found `#042` in `2026-08-01-alt-a`,
+which no item had predicted: turn 1's entry-point path ran through a session scratchpad, and a
+scratchpad segment is a CLI slug spelling out this repository's absolute path. So check what turn 1
+*says*, not only where it runs — a path handed to a hire is part of the mirror surface.
+
 ### 8. Score it twice, the second time blind
 
 You designed the run, wrote the item it came from, and know which criterion was supposed to flip.
@@ -462,6 +504,17 @@ Then set the two columns side by side. **Every disagreement is either resolved i
 stated reason, or filed as a board item.** Quietly keeping your own verdict is the one outcome that
 must not happen — it is what the second pass exists to prevent. Its `UNCERTAIN` list is worth more
 than its verdicts: that is where the two of you differ for a reason.
+
+Then close the bundle:
+
+```powershell
+.\process\tools\score-bundle.ps1 -RunId <run-id> -Remove
+```
+
+It holds `criteria.md` in full and sits in a root beside the runs root, so the same walk that reaches
+one reaches the other. Forgetting is not silent — `check-isolation.ps1` refuses to start the next
+hire while any bundle exists — but the next run is a bad place to be told, and a bundle whose scoring
+is written up has no reason to exist.
 
 ### 8b. Write the report, then touch the board
 

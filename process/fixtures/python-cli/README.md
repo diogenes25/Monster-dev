@@ -18,5 +18,4 @@ The CSV needs `region` and `amount` columns; anything else in it is ignored.
 ## Notes
 
 It is run from cron on the reporting box and the output is piped into the nightly mail. That is
-the only caller, so the output format is load-bearing — if you change the columns, change the
-mail template with it.
+the only caller.

@@ -81,6 +81,17 @@ Do not reach for the sentence about `raw.githubusercontent.com` serving no direc
 
 A run folder and its mirror are `../monster-dev-testruns/<run-id>/target/` and `.../<run-id>/dist/`. They used to be direct children of `../monster-dev-testruns/`, which put every previous run one `ls ..` away from the hire — dated folders in `<name>`/`<name>.dist` pairs with the model in the name, holding ten finished, already-scored implementations of the identical brief. One hire ran that listing. `check-isolation.ps1` now looks sideways as well as up: any directory beside the run folder that is not its own mirror fails the check.
 
+**The sideways look is two levels, and that second level is there because the first fix moved its own subject out of reach.** `#019` nested the run one deeper *and* added the sibling test — but the test follows the run folder, so it began inspecting a parent that by construction holds only `target` and `dist`, while the dangerous listing moved to `..\..` where nothing looked. On `2026-08-03` the check reported `isolation OK — parent holds 1 other directory: dist` while `ls ..\..` returned twenty directories, nine of them mirrors still carrying the root `README.md`. A check that relocates an exposure and then reports clean is worse than the exposure. Both levels are now checked and named separately in the failure (`#040`).
+
+**Nobody may say that closes it.** One level higher, `ls ..\..\..` returns the repository itself — the runs root is a sibling of the working copy, so `CLAUDE.md`, `process/` and the run's own scenario are three `cd ..` from where a hire starts, and were for all eleven runs on record. That is `#041`. It is a **location** problem and no arrangement of sideways checks fixes a location; the level above the runs root is a general source directory holding unrelated projects, so it cannot be required to hold only the run. Two things follow, and the first is the one to internalise:
+
+- **The location was deliberately not changed, and the reason is in this file already.** Of the real-URL run class §"blindfold, not a vault" says: *that is not a hole to plug by hiding things — it is a validity condition of that run class, and the way to hold it is to measure it.* The same answer applies here. `check-reach.ps1` reads a finished run's transcript and reports what the hire actually walked to; a report that says nothing about reach has not checked. That is strictly better evidence than a relocation, which only ever supports *"we believe it could not get there."*
+- **Where the runs root is now lives in exactly one place** — `process/tools/lib/run-root.ps1`, dot-sourced by `new-run.ps1`, `build-dist.ps1`, `score-bundle.ps1` and `check-isolation.ps1`, overridable by `MONSTER_DEV_RUN_ROOT`, and refusing any root that resolves inside this repository. Three scripts used to derive `..` separately and agreed by coincidence. Moving the root later is a one-line edit there; that is the part of `#041` which was decidable without deciding where.
+
+**A blind-scoring bundle left on disk blocks the next hire.** Each one holds `criteria.md` in full and the scoring root is a sibling of the runs root, so the same walk reaches both — and being buried among unrelated folders is obscurity, which this file forbids relying on. Deleting it after scoring is a closing step, and a closing step is a step to forget, so `check-isolation.ps1` refuses to start a hire while any bundle exists. Close one deliberately with `score-bundle.ps1 -RunId <id> -Remove`. A bundle for the run *being hired* is the sharpest case rather than an exemption: it means an earlier attempt was already scored.
+
+**And a path handed to a hire is part of the mirror surface.** `2026-08-01-alt-a` — the first run, the one whose criteria the whole series is scored against — was given an entry-point path running through a session scratchpad, and a scratchpad segment is a CLI project slug: this repository's absolute path with the separators turned into dashes. The hire decoded it and listed the repository root. It never walked up; it was handed the address (`#042`). Check what turn 1 *says*, not only where it runs.
+
 ### The proof gates
 
 - **Playbook wording** → regression: fold in, rerun the same scenario, the failing criterion must flip.
@@ -184,9 +195,23 @@ bundle as its working directory — an in-process subagent can read this reposit
 be blind is not a control:
 ```powershell
 .\process\tools\score-bundle.ps1 -RunId 2026-08-02-alt-a -Scenario process\scenarios\alt-a-left-to-right.md
+.\process\tools\score-bundle.ps1 -RunId 2026-08-02-alt-a -Remove   # once the second scoring is written up
 ```
 Every disagreement with the first scoring is resolved in the report with a reason, or filed on the
 board. Keeping your own verdict quietly is the outcome the second pass exists to prevent.
+
+**Measure what the hire reached, and say in the report that you did** — the standing answer to
+`#041`, and the same move this file already prescribes for the real-URL run class. It reads the
+captured transcript for paths outside the run folder, `..` traversal, what those calls printed back,
+and every URL fetched. Section D is the URL audit that used to be a habit. It exits non-zero on any
+reach, so a run whose report is silent about this cannot have been checked:
+```powershell
+.\process\tools\check-reach.ps1 -RunId 2026-08-03-r12
+```
+For an archived run, pass the path the run **used**, not where the files sit today — it matches
+strings in a transcript, so the current location matches nothing and everything reads as a reach.
+Its first sweep over all eleven transcripts reproduced `#019`'s finding on `sonnet-base2` and found
+`#042` in the oldest run on the board, which no item had predicted.
 
 **Publish the results as runnable demos** — every `impl-NN/step-4-result/` onto an orphan
 `gh-pages` branch, with a banner stating what the customer asked for. They are kept **off `main`**

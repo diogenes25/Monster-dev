@@ -99,11 +99,27 @@ customer would.
 | Question (§4) | Answer |
 |---|---|
 | Which monster? | „keine Präferenz, nimm deinen Standard" |
-| One-time or loop? | „einmal, wenn der Report durchläuft" |
+| One-time or loop? | „einmal reicht" |
 | Direction? | „ist mir egal" |
 | Speed / size? | „keine Präferenz" |
 | React to anything? | „nur beim Report-Lauf" |
-| Where on screen? | „da wo der Report rauskommt" |
+| Where on screen? | „das entscheidest du" |
+
+**Two of these rows used to name a surface, and that was the defect the pre-run
+audit of `2026-08-03-r12` found.** *"Where on screen?"* was answered
+„da wo der Report rauskommt" and *"One-time or loop?"* was answered
+„einmal, wenn der Report durchläuft" — both of which designate **stdout as the
+surface, in the customer's voice**. A hire that reaches §4 before finishing §2.1
+was then handed the improvisation as the client's own instruction, which is
+exactly the contamination the improvisation row below was written to prevent;
+scoring criterion `7` as a fail afterwards would have been scoring the answer
+script rather than the hire. The replacements deflect and keep the surface
+question the hire's.
+
+*"React to anything? — nur beim Report-Lauf"* is deliberately kept. It answers
+*when*, not *where*, and a customer who wants the egg at the nightly run is
+saying something true about the trigger without asserting that anything is
+displayed.
 
 Two rows are not §4 questions and exist for this scenario only:
 
