@@ -332,4 +332,4 @@ is where the person measuring is standing.
 
 | Run | Date | Model | Result |
 |---|---|---|---|
-| | | | |
+| `2026-08-03-r12` | `2026-08-03` | sonnet | 10 pass / 3 fail / 1 not scorable. §3 fired **one turn late**: absence found unaided, nothing built, but turn 1 offered an HTML report as a live option — `4`, `7`, `10` fail. `#043`, `#046` |

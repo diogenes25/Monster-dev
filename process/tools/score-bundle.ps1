@@ -56,6 +56,13 @@ derived from the target path.
 Where bundles are built. Defaults to lib\run-root.ps1's scoring root, which is overridable by
 MONSTER_DEV_SCORING_ROOT and refuses to resolve inside this repository.
 
+.PARAMETER NoVerifier
+Say, in MISSING.md, that this run produced no verifier output *by design* rather than lost it. A
+decline run has no page for verify-run.mjs to drive, so measurements.json and midwalk.png are
+absent on purpose — and a note that reads as damage is a note that invites a blind scorer to hedge
+marks that were never measured that way. Set by whoever builds the bundle; deriving it from the
+scenario text would be guessing (#038).
+
 .PARAMETER Remove
 Deletes this run's bundle and reports what is left in the scoring root. Run it once the second
 scoring is written up — until then the bundle is what the blind scorer reads, and afterwards it is
@@ -73,6 +80,7 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Build')][string]$Scenario,
     [Parameter(ParameterSetName = 'Build')][string]$Target,
     [Parameter(ParameterSetName = 'Build')][string]$TranscriptPath,
+    [Parameter(ParameterSetName = 'Build')][switch]$NoVerifier,
     [string]$OutRoot,
     [Parameter(Mandatory, ParameterSetName = 'Remove')][switch]$Remove
 )
@@ -170,23 +178,41 @@ if (Test-Path $hireJson) {
 # That is exactly what #035 was: the screenshot was copied under a name nothing wrote, the copy
 # found nothing, and the bundle came out looking complete. The name agreement is what breaks again
 # on the next rename; this list is the part that survives it.
+#
+# What these notes may not do is name criteria. Section letters and criterion numbers are
+# scenario-local, and until #038 these strings spelled out alt-a-left-to-right.md's — which was
+# harmless while one scenario existed and became a fabrication the moment a second one had a
+# section D of its own. A criterion names its instrument (#027); so an absent instrument does not
+# have to name its criteria. Say what is gone and what class of question went with it, and let the
+# scorer map that onto criteria.md, which run-scorer.md has it read in full first anyway.
 $missing = @()
 
 $measurements = Join-Path $runsDir "$RunId\measurements.json"
 if (Test-Path $measurements) {
     Copy-Item $measurements (Join-Path $bundle 'measurements.json')
+} elseif ($NoVerifier) {
+    $missing += 'No `measurements.json`, and **this run produced none by design.** There was no page for a'
+    $missing += 'headless browser to drive, so the verifier was never meant to run: its absence is not damage'
+    $missing += 'and not a gap in the evidence. Score every criterion off the instrument it names.'
+    $missing += ''
 } else {
-    $missing += 'No `measurements.json`. The whole of section D is measured from it and cannot be'
-    $missing += 'scored from what is here. Record those criteria as NOT SCORABLE, not as failures.'
+    $missing += 'No `measurements.json`. Nothing a headless browser would have measured is in this bundle —'
+    $missing += 'position over time, rendered sprite geometry, computed style, page console output. Any'
+    $missing += 'criterion naming that instrument is NOT SCORABLE, not a failure. `criteria.md` says which.'
     $missing += ''
 }
 
 $shot = Join-Path $runsDir "$RunId\midwalk.png"
 if (Test-Path $shot) {
     Copy-Item $shot (Join-Path $bundle 'midwalk.png')
+} elseif ($NoVerifier) {
+    $missing += 'No `midwalk.png`, and **this run produced none by design** — nothing was rendered, so there'
+    $missing += 'was nothing to screenshot. Not damage and not a gap.'
+    $missing += ''
 } else {
-    $missing += 'No `midwalk.png`. Section D''s visual marks have no screenshot behind them here —'
-    $missing += 'score them from `measurements.json` alone and say in the verdict that you did.'
+    $missing += 'No `midwalk.png`. Nothing in this bundle can be settled by looking at the rendered page. A'
+    $missing += 'criterion whose only instrument is the screenshot is NOT SCORABLE; where it names a second'
+    $missing += 'one, score it from that and say in the verdict that you did.'
     $missing += ''
 }
 
@@ -209,6 +235,14 @@ $targetPath = (Resolve-Path $Target).Path
     ''
     '=== git diff --stat ==='
     (git -C $targetPath diff --stat)
+    ''
+    # The §8 trailer rule is scored off the message *body*, and --oneline is the subject only.
+    # nowhere-to-walk's criterion 11 names `git log --format=%B` as one of its two instruments and
+    # this file shipped the other one alone, so the blind scorer passed 11 on the inference that a
+    # hire which never invoked git cannot have written a trailer — sound, and not the named
+    # instrument (#044). An instrument a criterion names is an instrument the bundle ships.
+    '=== git log --format=%B ==='
+    (git -C $targetPath log --format='%B%n---')
 ) | Set-Content (Join-Path $bundle 'git.txt') -Encoding utf8
 
 # The project as it was handed back. Without .git, so the scorer reads the state rather than
@@ -233,11 +267,12 @@ if ($TranscriptPath) {
 if ($transcript) {
     Copy-Item $transcript (Join-Path $bundle 'transcript.jsonl')
 } else {
-    # Not fatal: the git surface, the worktree and the measurements still carry sections A, B and D.
-    # Section E cannot be scored without it, and saying so beats a bundle that looks complete.
-    $missing += 'No transcript could be resolved for this run. Sections that are scored from the dialogue —'
-    $missing += 'criteria 6, 7, 14a, 15a, 15b and the whole of section E — cannot be scored from what is here.'
-    $missing += 'Record them as NOT SCORABLE rather than as failures.'
+    # Not fatal: the git surface, the worktree and whatever the verifier produced are still here.
+    # Saying what went with the transcript beats a bundle that looks complete.
+    $missing += 'No transcript could be resolved for this run. Nothing the hire *said* is in this bundle, and'
+    $missing += 'nothing about the order it did things in: no turn text, no questions asked, no tool calls, no'
+    $missing += 'record of what it read. Any criterion whose instrument is the transcript or the cli-turn text'
+    $missing += 'is NOT SCORABLE rather than a failure. `hire.json` still carries the cost and turn figures.'
     $missing += ''
 }
 

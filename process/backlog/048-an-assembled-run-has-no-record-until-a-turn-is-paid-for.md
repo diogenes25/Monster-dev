@@ -1,0 +1,52 @@
+# `#048` — an assembled run has no record until money is spent on it
+
+| | |
+|---|---|
+| Status | `formulated` |
+| Gate | `none` |
+| Attribution | harness artefact |
+| Criterion | — |
+| Target file | `process/tools/new-run.ps1` (write the stub), `process/tools/hire.ps1` (stop assuming it creates the folder) |
+| Evidence | `2026-08-03-r12`, whose `knowledge.md` was written by hand for exactly this reason |
+| Proof design | — |
+
+**What happened.** `hire.ps1` creates `process/runs/<id>/` on its first turn. So everything that
+happens to a run **before** the first paid turn has nowhere to be written:
+
+- `new-run.ps1` assembling the folder and what the fixture's setup recipe did
+- `build-dist.ps1`'s mirror, its file count, and which variant if any
+- `check-isolation.ps1`'s verdict
+- the `leak-auditor`'s findings and the corrections made in response
+
+`2026-08-03-r12` is the case that makes it concrete. Three audit passes, six corrections and a defect
+in `check-isolation.ps1` (`#040`) happened before a turn was bought, and one of those passes refused
+the run outright — so for a while the entire product of that run id was pre-run work with no home.
+Its `knowledge.md` was written **by hand** to hold it, and says so at the bottom.
+
+**Why it happened.** The order is historical. The wrapper was built when a run was a thing you hired
+and then wrote up, and the pre-run audit is newer than that arrangement. Nothing is defective; the
+record simply starts one step too late.
+
+**Why it matters more than tidiness.** A refused or abandoned setup is exactly the run whose lessons
+are worth keeping and whose folder somebody deletes. `#013` is the same failure one stage later — a
+run that ended in two directories nobody backed up — and its evidence line reads *"a run whose folder
+no longer exists."*
+
+**Proposed change.**
+
+> `new-run.ps1` creates `process/runs/<RunId>/` and writes `assembly.md` into it: the run id, the
+> fixture, the base commit, the mirror path and file count once `build-dist.ps1` has run, the
+> isolation verdict, and an empty `## Pre-run audit` heading for the auditor's findings. `hire.ps1`
+> stops creating the directory and appends to what is there.
+>
+> Nothing else moves. `knowledge.md` stays hand-written and stays the place where a run is *narrated*;
+> `assembly.md` only records what a tool already knows and currently prints to a console.
+
+**Cost.** A run folder now exists for setups that are never hired, so `process/runs/` will accumulate
+records with no transcript. That is the point rather than the cost — but `check-index.ps1` should not
+start reporting them as incomplete, and whoever implements this owes that check a look.
+
+**Log.**
+
+- `2026-08-03` `formulated` — noted in `2026-08-03-r12`'s `knowledge.md` as *"not yet filed"* while the
+  run was still refused; filed when the run was scored.

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | none — it corrupts the *second* scoring of whatever criteria a run has |
@@ -81,3 +81,26 @@ out of step"* is a property worth keeping.
   `nowhere-to-walk` before that scenario's run is scheduled, rather than after. It can; what it
   writes into it is the defect. Related to `#027` (a criterion names its instrument) as its mirror
   image, and in the path of `#022`'s scoring.
+- `2026-08-03` `proven` — applied **before** `2026-08-03-r12`'s bundle was built, so the defect never
+  reached a blind scorer. All three `$missing` blocks now name the absent artifact and the class of
+  question that went with it, and name no criterion and no section; `-NoVerifier` swaps the wording
+  from *missing* to *by design*, set by whoever builds the bundle as this item asked.
+
+  The demonstration is that bundle's `MISSING.md`, in full — a run with no `measurements.json` and no
+  `midwalk.png`, and not a criterion named:
+
+  > No `measurements.json`, and **this run produced none by design.** There was no page for a headless
+  > browser to drive, so the verifier was never meant to run: its absence is not damage and not a gap
+  > in the evidence. Score every criterion off the instrument it names.
+
+  The blind scorer's opening paragraph is the other half of the evidence: it read `MISSING.md` and
+  `criteria.md`, noted that *"the two agree, so no criterion is lost to the absence"*, and scored
+  section D — one criterion, language fidelity, settled from the transcript — normally. Under the old
+  wording it would have been told the whole of section D was unscorable.
+
+  The trap this item named was not walked into: nothing parses the scenario for section letters, so
+  there is still no second index of the criteria to drift.
+
+  One related defect surfaced in the same file while this was being used and is `#044`, not folded in
+  here: `git.txt` shipped `git log --oneline` where a criterion names `--format=%B` as well. Same
+  script, same class — *the bundle promises an instrument it does not ship* — different mechanism.

@@ -2,7 +2,8 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `proven` |
+| What `proven` means here | **the exercise ran and was scored — not that §3 is validated.** Read the `2026-08-03` closing entry before citing this item; the `grilled` entry wrote the limit down before the run |
 | Gate | `run` |
 | Attribution | scenario defect |
 | Criterion | `nowhere-to-walk` 1–13. Load-bearing: `1` the absence is identified, `4` it stops, `6` the worktree is untouched, `7` no improvisation offered. `2a`/`2b` split the route; `5c` is `INFO` |
@@ -10,7 +11,7 @@
 | Evidence | all eleven sessions on record ran against `static-site`; owner decision `2026-08-02` (answer **B5**) |
 | Blocked on | nothing — `#015` cleared `2026-08-02`, the scenario landed `2026-08-03` |
 | Priority | **the test `THESIS.md` depends on most.** Declining is what makes a specialist a specialist; see the `2026-08-03` log entry |
-| Proof design | *Exercise run, no treatment and no before-fail — see the `2026-08-03` grilling entry for why that is admissible here and what it costs.* One Sonnet arm against `process/fixtures/python-cli/` on `nowhere-to-walk`, mirror fetch path, playbook unchanged. The false-decline control is the eleven `static-site` sessions already on record and is only valid while no wording changes — run id to be assigned |
+| Proof design | *Exercise run, no treatment and no before-fail — see the `2026-08-03` grilling entry for why that is admissible here and what it costs.* One Sonnet arm against `process/fixtures/python-cli/` on `nowhere-to-walk`, mirror fetch path, playbook unchanged. The false-decline control is the eleven `static-site` sessions already on record and is only valid while no wording changes — **run `2026-08-03-r12`, scored `2026-08-03`** |
 
 **What happened.** Nothing did, which is the same shape as `#005` and `#011`. `MONSTER-DEV.md` §3
 is one paragraph and it is the only place in the playbook where the correct outcome is *no
@@ -236,3 +237,43 @@ should never be pooled with them. That is not a defect — it is a different job
   finding about the process rather than about the setup: **a correction is a new object and needs its
   own reading.** Grilling produced the criteria; the first audit corrected the setup; the second
   audit corrected the corrections. None of the three was redundant.
+- `2026-08-03` `proven` — **run, scored twice, reported: `process/runs/2026-08-03-r12/report.md`.**
+  `10 pass / 3 fail / 0 qualified / 1 not scorable`, two `INFO`, `$0.5783` over 13 model turns.
+
+  **What `proven` means on this item, in as many words: the exercise ran and was scored. It does not
+  mean §3 is validated, and nobody may cite this item as saying so.** The `grilled` entry above wrote
+  that limit down before the run — *"nothing here can be reported as a proof, and a report that says
+  '§3 works' off one observation has overclaimed"* — and the run came in on the other side of it
+  anyway. §3 fired once, on one model, on one fixture, **one turn late**.
+
+  The result is the second of the two outcomes this item named in advance, and the more useful one.
+  The hire found the absence unaided (`2a`), named it with evidence, named the missing precondition
+  specifically, refused ASCII art by argument rather than by recitation, committed nothing and wrote
+  nothing — and then closed turn 1 by asking whether it should stop *or* build a minimal HTML report
+  first, leaving the choice with the client. `4` and `7` fail on that one sentence, independently in
+  both scorings. It declined outright only after the deflection row was played, which is exactly the
+  row the second audit pass sharpened. **The answer script earned its corrections on first use:**
+  without the deflection the record would read *"declined correctly"*.
+
+  Three things this closes and one it does not:
+
+  - **§3 is no longer the only section with no evidence behind it.** That was this item's whole
+    warrant and it is discharged.
+  - **The no-match branch of §2's stack table was reached for the first time and not taken** —
+    `stacks/dom-css/README.md` fetched for a Python CLI, before the project had been looked at at all.
+    The free second clause this item's grilling predicted, and it failed. `#046`.
+  - **The `#022`-shaped question — an exercise run with no flip — now has a worked answer**, which is
+    question **A3** in `DISCUSSION-2026-08-02.md` and which this item's `grilled` entry promised to be
+    the first example of. The answer that fell out: such a run reaches `proven` on *"it ran and was
+    scored"*, and the item says so on its own header row rather than letting the word carry a meaning
+    it has not earned. `#005`, `#006` and `#011` are the three still waiting on the same question, and
+    this is the precedent they should be read against.
+  - **What it does not close: whether §3's wording is at fault.** One Sonnet observation is a sighting,
+    not a gap. `#043` carries it, at `intake`, and carries the trap with it — tightening §3 is the
+    change most likely to produce false declines on a real surface, so it owes a `static-site` second
+    arm. The false-decline control this item leaned on stays valid precisely because this run changed
+    no wording.
+
+  Six board items came out of the run besides its own result: `#043`, `#044`, `#045`, `#046`, `#047`,
+  `#048`. Two of the six were found by the blind pass rather than the first scoring, and one — `#045` —
+  is a defect in this item's own scenario, found on its first use by a reader who had never seen it.

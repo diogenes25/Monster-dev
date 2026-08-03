@@ -58,9 +58,12 @@ once before a single turn was paid for.
 Two cli turns, 13 model turns, `$0.5783`, 121 s, `firstEditAfterCliTurn: null`, `worktreeAfter` empty
 after both. `check-reach.ps1`, in its first live use, reported 0 in all four sections.
 
-**First scoring, provisional — `report.md` is not written yet and the blind second pass has not run.**
-Recorded here so the next session does not re-derive it, and here rather than in a report because
-`score-bundle.ps1` does not copy this file into the bundle, so the blind pass stays blind.
+**Both scorings are in and `report.md` is written.** What follows was the first scoring while it was
+still provisional, and it is kept as written rather than tidied — it is the column the blind pass was
+set beside. Two corrections it needed, both in the report: criterion `9` (the §1 introduction) was
+simply **missing** from the list below and passes, and the counts are `10 pass / 3 fail / 1 not
+scorable`. Recorded here rather than in a report because `score-bundle.ps1` does not copy this file
+into the bundle, so the blind pass stayed blind.
 
 - `1`, `2a`, `3`, `5a`, `5b` **pass.** Turn 1 states the absence unprompted and with evidence under
   it — *"kein DOM, kein Canvas/Game-Loop, keine native Fensterhierarchie, kein neu zeichnendes
@@ -106,6 +109,19 @@ run has no record until money is spent on it. The pre-run audit is newer than th
 and this file was written by hand to stand in for it. `new-run.ps1` creating the stub at assembly
 time is the general fix and is not yet filed.
 
-*Written by hand `2026-08-03`, not by `hire.ps1`. Everything above the prose is Open Knowledge
-Format; `tags` carry the role, and `harness` is there because what this run produced is a harness
-finding and not a measurement.*
+## And then it was scored twice
+
+`score-bundle.ps1 -NoVerifier` after `#038` was fixed, `run-scorer` as a separate `claude -p` session
+(opus, `$1.1279`) with the bundle as its working directory, `score-b.md` copied out, bundle removed.
+Both columns agree on all fourteen substantive marks including the three failures. They differ once,
+on `2b`, which is the arm of a split that did not apply and which the scenario gives no word for —
+`#045`. The blind pass also produced `#044` and, through its `UNCERTAIN` list, most of `#045`; the
+claim in `SKILL.md` that the uncertainties are worth more than the verdicts paid off on this run,
+because the verdicts matched and the uncertainties did not.
+
+Full result and the criterion table: `report.md`. Board: `#043`, `#044`, `#045`, `#046`, `#047`,
+`#048` new; `#022` and `#038` `proven`; `#029` another evidence line.
+
+*Written by hand `2026-08-03`, not by `hire.ps1` — which is `#048`. Everything above the prose is
+Open Knowledge Format; `tags` carry the role, and `harness` is there because most of what this run
+produced is a harness finding and not a measurement.*

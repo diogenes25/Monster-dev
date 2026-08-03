@@ -145,3 +145,14 @@ push makes public, not about what a hire sees.
   is the real deliverable**, not the eight files: it should normalise machine-specific paths on
   the way in, so the count stops growing. Rewriting the eight on record is then optional tidying,
   and can wait for a pass that touches them anyway.
+- `2026-08-03` — another file in the same class, found while scoring `2026-08-03-r12`, and it is not
+  one of the eight: **`score-bundle.ps1` copies the CLI's own transcript out of
+  `~/.claude/projects/`, not the scrubbed capture in `process/runs/<id>/`.** So every blind-scoring
+  bundle carries unnormalised paths — 159,687 bytes against the capture's 146,904 for this run.
+
+  Untracked and deleted with the bundle, so it adds nothing to the count and no urgency. It belongs
+  here because it is the same root cause the entry above names as the real deliverable: one path
+  through the harness knows about the scrubber and the others do not. A bundle built from the
+  tracked capture would also be the *same* artifact the first scoring read, which is worth a little
+  on its own — `score-b.md`'s record numbers do not line up with the report's for exactly this
+  reason.
