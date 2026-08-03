@@ -134,3 +134,8 @@ four marks to save turns, which is the wrong trade at these prices.
   What is *not* cleared: this item is still `grilled` and not `in-proof`, `#034` is still in the
   capture path, and no run id is assigned. What changed is that arm B can now be built by a
   command instead of by hand-editing the playbook and remembering to revert it.
+
+  Filed as `#039`, which is about the part that is not this item's: the mechanism was described as
+  future work in two documents, blocked the only run-eligible item on the board for a day, and had
+  no item of its own — `board.ps1` validates item *state* and cannot see a blocker living in the
+  tooling.
