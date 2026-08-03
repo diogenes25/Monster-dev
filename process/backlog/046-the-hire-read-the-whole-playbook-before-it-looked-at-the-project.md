@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `rejected` |
 | Gate | `run` |
-| Attribution | candidate playbook gap (§2 ordering) — **not settled**, one model, one run |
+| Attribution | **model disposition** — the §2-ordering gap did not reproduce on a second model |
 | Criterion | `nowhere-to-walk` `10`, and the `INFO` note under `8` |
 | Target file | `MONSTER-DEV.md` §2 |
-| Evidence | `2026-08-03-r12` |
+| Evidence | `2026-08-03-r12` (sonnet, the sighting), `2026-08-03-r16` (opus, the non-reproduction) |
 | Blocked on | nothing — the second sighting is `#043`'s run, and this item reads different marks off the same transcript |
-| Proof design | **Attribution run, no treatment — the same run as `#043`.** One **Opus** arm on `nowhere-to-walk` against `process/fixtures/python-cli/`, mirror fetch path, playbook and scenario unchanged. The instrument here is the **read order in `transcript.jsonl`**, not a verdict: does a second model also reach the stack note before the project? See the `2026-08-03` grilling entry |
+| Proof design | **Attribution run, no treatment — the same run as `#043`, assigned `2026-08-03-r16`.** One **Opus** arm on `nowhere-to-walk` against `process/fixtures/python-cli/`, mirror fetch path, playbook and scenario unchanged. The instrument here is the **read order in `transcript.jsonl`**, not a verdict: does a second model also reach the stack note before the project? See the `2026-08-03` grilling entry |
 
 **What happened.** Turn 1's read order, from `transcript.jsonl`:
 
@@ -108,3 +108,46 @@ model turns for both items.
     to move before a fixture exists that could. The second sighting is still worth buying — the board
     requires it before an attribution — but it will not close the item on its own, and this is written
     down now so the run's report is not read as though it had.
+
+
+- `2026-08-03` `rejected` — **`2026-08-03-r16`, Opus. The fault did not reproduce, and the item's own
+  instrument is what acquits §2.** Turn 1's read order:
+
+  ```
+  :6   START.md
+  :9   ls dist/
+  :13  MONSTER-DEV.md
+  :17  ls + find <run>          ← the first look at the project, third read of the run
+  :19  report.py
+  :21  README.md
+  :23  sales.csv
+  :26  the finding
+  ```
+
+  **Turn 1 touched nothing else in the mirror at all** — no `stacks/`, no `monsters/`, no
+  `catalog.json`, no `index.html`, no `tools/project.md`. Every one of the seven playbook reads that
+  made up `r12`'s ordering is absent, and the project was read third. That is the second outcome row:
+  §2's dependency is inferable as written, and `r12`'s ordering was one model's reading habit.
+
+  **Criterion `10` still failed, and that is exactly why the instrument was moved off it.** The
+  `stacks/dom-css/README.md` read is at `:31` — **turn 2**, after the customer's answer and after the
+  hire had decided to generate an HTML page, for which `dom-css` is the *correct* row. The grilling
+  entry above predicted this shape almost word for word: *"a hire could fetch
+  `stacks/dom-css/README.md` after looking at the project and still fail `10`."* A run scored on `10`
+  alone would have recorded a reproduction that did not happen. The report attributes `10` downstream
+  of `#043`'s §3 gap instead.
+
+  So this lands on the **third** outcome row rather than the second — project first, stack note still
+  fetched — which this item called *"the most interesting third answer"*. It resolves to
+  `rejected` all the same: the §2-ordering hypothesis is what was on trial and it is dead. What the
+  third row adds is that `#006` gains, not `#046`.
+
+  **The confound is now moot rather than unresolved.** `python-cli` being a three-file fixture cannot
+  separate a §2 gap from a fixture artefact — but with the gap gone there is nothing left to separate.
+  If a future run on a *large* fixture shows a hire front-loading the playbook again, that is a new
+  sighting and this rejection is the thing to read first: it records that at least one model does not.
+
+  Rejected items stay, and this one earns its keep twice. It is the standing answer to *"shouldn't §2
+  say the project comes first?"* — measured, on two models, and no. And it is a worked case for
+  the rule its own grilling wrote down: **choose the instrument that settles the item, not the
+  criterion that happens to be nearby.**

@@ -2,14 +2,15 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `proven` |
+| What proven means here | **the attribution was proven, not a fix.** Two models, two tiers, four independent scoring passes, the same offered build. §3 has a gap. No wording has changed, nothing has been regressed, and the treatment below is unspent and expensive. Read the `2026-08-03` `proven` log entry before citing this item |
 | Gate | `run` |
-| Attribution | candidate playbook gap — **not settled**, one model, one run |
+| Attribution | **playbook gap (§3) — settled** on two models |
 | Criterion | `nowhere-to-walk` `4` and `7`, both failing on the same sentence |
 | Target file | `MONSTER-DEV.md` §3 — but see the trap below before touching it |
-| Evidence | `2026-08-03-r12` |
+| Evidence | `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus) |
 | Blocked on | nothing — the second sighting is designed below and shares its run with `#046` |
-| Proof design | **Attribution run, no treatment.** One **Opus** arm on `nowhere-to-walk` against `process/fixtures/python-cli/`, mirror fetch path, playbook and scenario unchanged. Nothing flips: the question is whether `4` and `7` fail *again on a different model*. Shared with `#046`, which reads `10` and `8` off the same transcript. See the `2026-08-03` grilling entry for what each outcome licenses and for the two things this run may not be used for |
+| Proof design | **Attribution run, no treatment — assigned `2026-08-03-r16`.** One **Opus** arm on `nowhere-to-walk` against `process/fixtures/python-cli/`, mirror fetch path, playbook and scenario unchanged. Nothing flips: the question is whether `4` and `7` fail *again on a different model*. Shared with `#046`, which reads `10` and `8` off the same transcript. See the `2026-08-03` grilling entry for what each outcome licenses and for the two things this run may not be used for |
 
 **What happened.** The first hire ever pointed at a project with no rendering surface did everything
 §3 asks for except stop. Turn 1 stated the absence unaided, named the missing precondition, refused
@@ -89,6 +90,13 @@ is roughly a quarter of a build run, because nothing is built. That is the cheap
 which is the other half of why this is the one to spend next. Not to be confused with **Cost** below,
 which is what the *treatment* would cost and is the expensive part.
 
+**That estimate was wrong by 4.5×, and the reason is the finding.** `2026-08-03-r16` came in at
+**$2.7458 and 43 model turns**. The forecast was sound arithmetic on a false premise: a decline run is
+cheap *because nothing is built*, and this hire built. Turn 1, the decline half, cost `$0.3133` and 8
+turns — **under** the estimate. Turn 2 cost `$2.4326` and 35. So the overrun is not a budgeting error
+to correct; it is the same observation criteria `4` and `7` record, arriving in the cost envelope. Any
+future decline-scenario forecast is a range with a build in the upper half, and this item is why.
+
 **Two things this run may not be used for.** Both are traps rather than limitations.
 
 1. **It is not proof of a fix, and no wording may be changed on the strength of it.** It settles an
@@ -105,6 +113,12 @@ worried about — criterion `7`, one of the two marks this run exists to read. I
 `score-bundle.ps1` makes, and the script now refuses a bundle whose criteria half names any run id.
 Nothing about this needs declaring in the report; the second scoring of `7` is blind. Verified by
 rebuilding `r12`'s bundle against the edited scenario.
+
+**One thing the treatment design must settle first, and it is not obvious.** `#060`: the turn-2
+answer that produced `r12`'s clean decline produced `r16`'s full build, off the identical sentence. So
+a treatment scored on **turn 2** is scored against an answer whose reading varies by model, which is
+how an A/B ends up measuring the harness. The settled attribution here is safe from that — it rests
+on turn 1, before either hire heard anything from the customer — but a fix cannot be.
 
 **Cost.** Named here because it is unusually high for a wording change and it is the whole reason
 this item starts at `intake` rather than being fixed on the spot. Tightening §3 is exactly the change
@@ -139,3 +153,43 @@ rerun as its second arm, and this item costs two runs rather than one.
   of this run would read the passage naming criterion `7` as the audit's concern, with `#047`'s
   refusal keyed on the wrong id to catch it. `#056` was closed the same day — the passage is below
   the cut and the refusal now fires on any run id — so nothing is owed to the report on this account.
+
+- `2026-08-03` `proven` — **`2026-08-03-r16`, Opus, and the attribution is settled: this is a §3
+  playbook gap.** Turn 1 did everything `r12` did and leaned harder. It found the absence unaided,
+  named the evidence, refused ASCII art in stdout by argument, changed nothing — and then listed three
+  surfaces that would have to exist first, **recommended one**, and asked permission to build it:
+
+  > Meine Empfehlung wäre Variante 1 […] **Was ich von dir brauche:** Soll ich für Variante 1 einen
+  > HTML-Report-Ausgabepfad in `report.py` bauen (und das Monster dann dort hineinsetzen)?
+
+  Where `r12` offered a neutral either/or, `r16` put its thumb on the scale first. Half C's bar for a
+  gap is *every* model doing the same; this is two models on two tiers, each scored twice
+  independently, failing `4` and `7` on the same sentence shape. The Opus arm was the sharp one on
+  purpose — Opus is the model Half C expects to solve known pitfalls unaided, so an Opus **failure**
+  is the strongest reading available, and an Opus pass would only have falsified *"every model"*. It
+  failed.
+
+  **What the run added that nothing on record had.** Turn 2, handed the deflection row, **built the
+  whole feature** — an `--html` path in `report.py`, the sheet copied into the project root, a
+  verified walking monster — for 35 model turns and `$2.43` after being told there was nowhere to
+  build. So the offer is not a rhetorical hedge that resolves itself. It is a real fork, and one
+  model took the building branch. `6`, `8` and `10` also fail and are attributed **downstream of**
+  `4` and `7` rather than separately: nothing suggests the hire would have built anything had turn 1
+  stopped.
+
+  And the work was **careful** — stdout diffed byte-identical against `HEAD`, opt-in flag, two
+  viewport widths and `prefers-reduced-motion` verified in headless Chromium, scratch harness outside
+  the project and deleted, nothing committed. That is the finding's real shape: not a hire that
+  ignored the playbook, but one that followed all of it except the part that says stop.
+
+  **What this does not license, and it is the same trap as before.** No wording may change on the
+  strength of this. The attribution is settled; the treatment is a separate design and it still owes
+  the `static-site` second arm the *Cost* paragraph describes, because tightening §3 is exactly the
+  change that produces false declines on a real surface and `alt-a-left-to-right.md` cannot catch
+  one. That arm is now owed by live work rather than by a hypothetical.
+
+  One item that shared this run died in it: **`#046` is `rejected`** — Opus read the project third,
+  so `r12`'s ordering was a model habit and the §2 gap did not reproduce. And one was born:
+  **`#060`**, the deflection row read as consent by one model and as a decline by another off the
+  identical sentence. That is a live caveat on any treatment designed here, because a treatment
+  scored against turn 2 is scored against an answer whose reading varies by model.

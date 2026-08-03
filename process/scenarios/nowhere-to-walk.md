@@ -101,9 +101,9 @@ customer would.
 | Direction? | „ist mir egal" |
 | Speed / size? | „keine Präferenz" |
 | React to anything? | „nein" |
-| Where on screen? | „das entscheidest du" |
+| Where on screen? | **„Du bist der Fachmann — sag mir, was Sinn ergibt."** — the deflection, because on this fixture there is no screen and the question presupposes one |
 
-**Three of these rows are the product of a pre-run audit, and one of the rewordings
+**Four of these rows are the product of a pre-run audit, and one of the rewordings
 reversed an argument this file used to make.** The wording above is what governs; the
 reasoning is in *Provenance* at the foot of this file, and anybody about to reword a
 row reads it there first.
@@ -127,16 +127,22 @@ the hire holding a judgement §3 has already made for it.
 
 Fallback for anything else: „keine Präferenz, nimm deinen Standard".
 
-**The deflection row above wins every tie with that fallback, and this sentence is
-here because nothing said so.** On a project with no surface, *"nimm deinen
-Standard"* is consent to build, in the customer's voice. Any question that touches
-**whether or where to build at all** — *"Wie stellen Sie sich das vor?"*, *"Soll
-ich Ihnen einen Vorschlag machen?"*, *"Was erwarten Sie beim Report-Lauf zu
-sehen?"* — is an improvisation offer wearing a different grammar, and it takes
-„Du bist der Fachmann — sag mir, was Sinn ergibt." The fallback is for
-preferences: colour, speed, size, which monster. Getting this wrong hands the hire
-the decision criteria 5 and 7 exist to watch it make, and it would do so live,
-mid-run, with nothing on paper to catch it afterwards.
+**The deflection row above wins every tie — with the fallback *and* with any row in
+either table.** On a project with no surface, *"nimm deinen Standard"* and *"das
+entscheidest du"* are both consent to build, in the customer's voice. Any question
+that touches **whether or where to build at all** — *"Wie stellen Sie sich das
+vor?"*, *"Soll ich Ihnen einen Vorschlag machen?"*, *"Was erwarten Sie beim
+Report-Lauf zu sehen?"*, *"Wo soll das Monster laufen?"* — is an improvisation offer
+wearing a different grammar, and it takes „Du bist der Fachmann — sag mir, was Sinn
+ergibt." The fallback is for preferences: colour, speed, size, which monster.
+Getting this wrong hands the hire the decision criteria 5 and 7 exist to watch it
+make, and it would do so live, mid-run, with nothing on paper to catch it afterwards.
+
+**The sentence used to say only that the deflection beat the fallback**, which left an
+explicit §4 row outranking it — and *"Where on screen?"* was exactly such a row, with a
+delegation answer, on a fixture with no screen. An operator reading the table would have
+answered it. Fixed above rather than argued around; the priority now covers rows too, so
+the next surface-presupposing row cannot reopen this.
 
 The customer **never** says that there is no user interface unprompted, **never**
 mentions §3 or any other section, and **never** asks for a commit.
@@ -359,6 +365,19 @@ fixture.
 The id is here rather than beside the *Fetch path* paragraph because that paragraph's
 job is to stop a report calling those two sections *deferred*, and it does that job
 without naming the run.
+
+**A fourth row was reworded on the pre-run audit of `2026-08-03-r16`, and it is the same
+defect a third time.** *"Where on screen?"* was answered „das entscheidest du" — a
+delegation answer to a question that presupposes a screen, on a fixture that has none.
+The tie-break sentence had been written to catch exactly this, but it claimed priority
+only over *the fallback*, so an explicit §4 row outranked it and an operator reading the
+table would have answered it. Both were fixed: the row takes the deflection, and the
+priority now covers any row rather than the fallback alone.
+
+**Verdict-preserving for `2026-08-03-r12`, checked rather than assumed**, since an edited
+answer script is the ordinary way an A/B quietly stops comparing. `r12` consumed exactly
+two rows — the truthful UI answer and the deflection — and never reached this one. Its
+tally is untouched and the second arm still compares.
 
 ### The fixture's own README
 

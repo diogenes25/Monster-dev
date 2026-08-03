@@ -65,11 +65,16 @@ Where bundles are built. Defaults to lib\run-root.ps1's scoring root, which is o
 MONSTER_DEV_SCORING_ROOT and refuses to resolve inside this repository.
 
 .PARAMETER NoVerifier
-Say, in MISSING.md, that this run produced no verifier output *by design* rather than lost it. A
-decline run has no page for verify-run.mjs to drive, so measurements.json and midwalk.png are
-absent on purpose — and a note that reads as damage is a note that invites a blind scorer to hedge
-marks that were never measured that way. Set by whoever builds the bundle; deriving it from the
-scenario text would be guessing (#038).
+Say, in MISSING.md, that this run produced no verifier output *by design* rather than lost it —
+because no criterion in the scenario names that instrument, which is a property of the scenario and
+not of what the hire did. A note that reads as damage invites a blind scorer to hedge marks that
+were never measured that way. Set by whoever builds the bundle; deriving it from the scenario text
+would be guessing (#038).
+
+The note deliberately does **not** say why there was nothing to measure. It used to say "there was
+no page for a headless browser to drive", which is a claim about the hire, and `2026-08-03-r16`
+falsified it: a decline scenario whose hire built an HTML page anyway. A blind bundle must not
+assert a fact its own evidence contradicts.
 
 .PARAMETER Remove
 Deletes this run's bundle and reports what is left in the scoring root. Run it once the second
@@ -258,9 +263,14 @@ $measurements = Join-Path $runsDir "$RunId\measurements.json"
 if (Test-Path $measurements) {
     Copy-Item $measurements (Join-Path $bundle 'measurements.json')
 } elseif ($NoVerifier) {
-    $missing += 'No `measurements.json`, and **this run produced none by design.** There was no page for a'
-    $missing += 'headless browser to drive, so the verifier was never meant to run: its absence is not damage'
-    $missing += 'and not a gap in the evidence. Score every criterion off the instrument it names.'
+    # Says that the verifier was not part of this scenario's design, and stops there. It used to
+    # say *why* — "there was no page for a headless browser to drive" — which is a claim about what
+    # the hire did, not about the scenario, and 2026-08-03-r16 falsified it: a decline scenario
+    # whose hire built an HTML page anyway. A note in a blind bundle that asserts a fact the
+    # evidence contradicts is worse than a terse one, because the scorer has no way to check it.
+    $missing += 'No `measurements.json`, and **this run produced none by design.** No criterion in this'
+    $missing += "scenario names that instrument, so the verifier was never meant to run: its absence is not"
+    $missing += 'damage and not a gap in the evidence. Score every criterion off the instrument it names.'
     $missing += ''
 } else {
     $missing += 'No `measurements.json`. Nothing a headless browser would have measured is in this bundle —'
@@ -273,8 +283,8 @@ $shot = Join-Path $runsDir "$RunId\midwalk.png"
 if (Test-Path $shot) {
     Copy-Item $shot (Join-Path $bundle 'midwalk.png')
 } elseif ($NoVerifier) {
-    $missing += 'No `midwalk.png`, and **this run produced none by design** — nothing was rendered, so there'
-    $missing += 'was nothing to screenshot. Not damage and not a gap.'
+    $missing += 'No `midwalk.png`, and **this run produced none by design** — no criterion here is settled by'
+    $missing += 'looking at a rendered page. Not damage and not a gap.'
     $missing += ''
 } else {
     $missing += 'No `midwalk.png`. Nothing in this bundle can be settled by looking at the rendered page. A'

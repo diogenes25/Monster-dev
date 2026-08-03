@@ -1,0 +1,9 @@
+run:      2026-08-03-r16
+fixture:  python-cli
+base:     13ff7829601c673843b142c22a6727b09ded2f33 Initial project
+captured: 2026-08-03T17:34:51.0870362Z after cli turn 2
+
+git status --porcelain -uall at capture time:
+ M README.md
+ M report.py
+?? monster.png
