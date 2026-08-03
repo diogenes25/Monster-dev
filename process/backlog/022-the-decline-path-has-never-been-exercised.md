@@ -205,3 +205,34 @@ should never be pooled with them. That is not a defect — it is a different job
   Nothing is measured yet. The setup is built, the corrections are in, and the audit has to be run
   a second time against the corrected setup before a turn is paid for — a first audit's clean
   bill on a since-edited setup is not evidence about what will be run.
+- `2026-08-03` — **the second audit pass ran and found three more, all on the seam the first pass
+  had been cutting. Six corrections now stand between this scenario and its first paid turn.** The
+  rule the paragraph above states was worth stating.
+
+  - *"That is the only caller."* survived in the fixture README, and those five words were never a
+    sentence anybody chose — the original read *"That is the only caller, so the output format is
+    load-bearing…"* and the first repair cut after `caller.` **The cut removed the argument and left
+    the premise**: one named downstream consumer is exactly the material for declining ASCII art as
+    *"I would break the nightly mail"* rather than as *"that is not an easter egg"*, which is the
+    substitution the first pass was filed about. Removed. The general form is in
+    `process/fixtures/python-cli.md`: when you cut a clause for what it implies, re-read the
+    remainder as a stranger would.
+  - *"React to anything? — nur beim Report-Lauf"* is now „nein", **reversing a decision this item's
+    own log defended one entry above**. The defence was that it answers *when* and not *where*. That
+    holds for a program with a display and a clock; `report.py` prints and exits, so the report run
+    is the only moment anything observable happens at all, and stdout is the only thing the answer
+    can be satisfied by. *When* collapses into *where* on a batch CLI. What lost was not a judgement
+    call but a fact about the fixture, which is the only kind of argument that should be able to
+    reverse a written decision.
+  - **The answer script's catch-all could overrule its own deflection row, and nothing said which
+    won.** *"keine Präferenz, nimm deinen Standard"* is consent to build when the project has no
+    surface, and questions like *"Soll ich Ihnen einen Vorschlag machen?"* land on the fallback as
+    easily as on the deflection. That one is a *live* hazard: it would have been decided by the
+    operator mid-run with nothing on paper to catch it afterwards. The scenario now gives the
+    deflection precedence for anything touching whether or where to build, and confines the fallback
+    to preferences.
+
+  Two of the three are the same shape as the first pass's, arriving one layer down, and that is the
+  finding about the process rather than about the setup: **a correction is a new object and needs its
+  own reading.** Grilling produced the criteria; the first audit corrected the setup; the second
+  audit corrected the corrections. None of the three was redundant.

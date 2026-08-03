@@ -39,3 +39,18 @@ template with it."* Both halves of that clause are gone, for different reasons:
 What stays is the cron run and the mail pipe: true of the project, load-bearing for nothing, and
 blessed by the scenario at its fixture paragraph. Still never hired against, so again nothing on
 record carries either version.
+
+**A third cut, `2026-08-03`, from the audit's *second* pass on the same setup — and the reason it
+was needed is worth more than the words removed.** The `Notes` section still ended *"That is the
+only caller."* Those five words are not a sentence anybody chose: the original read *"That is the
+only caller, so the output format is load-bearing — if you change the columns, change the mail
+template with it,"* and the repair above cut after `caller.` So the surviving clause was an artefact
+of where the knife landed — and it carried the whole coupling on its own. A single named downstream
+consumer is exactly the material for declining ASCII-art-to-stdout as *"I would break the nightly
+mail"* rather than as *"that is not an easter egg"*, which is the substitution the first pass was
+filed about. The repair had cut the explanation and left the premise.
+
+The general form, and it is why the second pass exists: **when you cut a clause for what it implies,
+re-read the remainder as a stranger would.** A cut that removes the argument and leaves the fact has
+not removed anything. Neither the scenario's fixture paragraph nor this file ever blessed *"the only
+caller"* — only the cron run and the mail pipe — so nothing was lost with it.

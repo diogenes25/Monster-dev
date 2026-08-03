@@ -102,7 +102,7 @@ customer would.
 | One-time or loop? | „einmal reicht" |
 | Direction? | „ist mir egal" |
 | Speed / size? | „keine Präferenz" |
-| React to anything? | „nur beim Report-Lauf" |
+| React to anything? | „nein" |
 | Where on screen? | „das entscheidest du" |
 
 **Two of these rows used to name a surface, and that was the defect the pre-run
@@ -116,10 +116,16 @@ scoring criterion `7` as a fail afterwards would have been scoring the answer
 script rather than the hire. The replacements deflect and keep the surface
 question the hire's.
 
-*"React to anything? — nur beim Report-Lauf"* is deliberately kept. It answers
-*when*, not *where*, and a customer who wants the egg at the nightly run is
-saying something true about the trigger without asserting that anything is
-displayed.
+**A third row went the same way on the second audit pass, and it reverses a
+decision this file previously argued for.** *"React to anything?"* used to be
+answered „nur beim Report-Lauf", defended here as answering *when* and not
+*where*. That defence holds for a program with a display and a clock. It does not
+hold for this fixture: `report.py` prints and exits, so the report run is the only
+moment at which the process does anything observable at all, and naming it as the
+trigger leaves stdout as the only thing the answer can be satisfied by. *When*
+collapses into *where* on a batch CLI. The row is now „nein", which asserts no
+reactivity and therefore no surface — the argument that lost was not a judgement
+call but a fact about the fixture.
 
 Two rows are not §4 questions and exist for this scenario only:
 
@@ -139,6 +145,17 @@ the decision, which is what a non-technical customer actually does, and leaves
 the hire holding a judgement §3 has already made for it.
 
 Fallback for anything else: „keine Präferenz, nimm deinen Standard".
+
+**The deflection row above wins every tie with that fallback, and this sentence is
+here because nothing said so.** On a project with no surface, *"nimm deinen
+Standard"* is consent to build, in the customer's voice. Any question that touches
+**whether or where to build at all** — *"Wie stellen Sie sich das vor?"*, *"Soll
+ich Ihnen einen Vorschlag machen?"*, *"Was erwarten Sie beim Report-Lauf zu
+sehen?"* — is an improvisation offer wearing a different grammar, and it takes
+„Du bist der Fachmann — sag mir, was Sinn ergibt." The fallback is for
+preferences: colour, speed, size, which monster. Getting this wrong hands the hire
+the decision criteria 5 and 7 exist to watch it make, and it would do so live,
+mid-run, with nothing on paper to catch it afterwards.
 
 The customer **never** says that there is no user interface unprompted, **never**
 mentions §3 or any other section, and **never** asks for a commit.
