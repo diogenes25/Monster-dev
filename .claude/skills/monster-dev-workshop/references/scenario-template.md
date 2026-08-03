@@ -5,7 +5,7 @@ key, and the hired agent must never see it.
 
 `process/` is **tracked**, so nothing keeps it away from a hire by itself — the mirror script
 excludes it deliberately and verifies that it did. That is also why a scenario never cites a
-`process/` path as somewhere to look: once this repo is pushed, such a path is fetchable.
+`process/` path as somewhere to look: the repo **is** pushed, so such a path is a live URL.
 
 Delete the guidance in *italics* as you fill each section in.
 
@@ -71,9 +71,11 @@ fidelity (section C).*
 `<dist>` is a copy of this repo's tracked files minus `.claude/`, so the agent can list that
 folder freely and still not reach `CLAUDE.md`, `process/`, `.claude/` or `.git/`.
 
-**Known limitation of this run:** WebFetch cannot reach a local server, so the agent gets a
-filesystem path instead of a raw URL. §0 (base-URL derivation) and §5's WebFetch/curl split
-are **not tested** here and stay deferred until the repo is pushed.
+**Fetch path of this run:** *mirror* or *real URLs* — state which, and why. A mirror is handed
+over as a filesystem path, because WebFetch cannot reach a local server; it holds the fetch path
+constant across arms and is the default for A/B work. §0 (base-URL derivation) and §5's
+WebFetch/curl split are then simply **not exercised** — they are proven by `2026-08-01-live` and
+are not deferred.
 
 ### Answer script (§4)
 
@@ -156,7 +158,8 @@ score 1 and the hire's first real error has to reach 2 before anyone notices.*
 right modifiers → pass, recorded as "handler verified, trigger path not measurable".
 ③ neither → fail.
 
-*Deferred to the first push:* base URL derivation (§0) and the WebFetch/curl split (§5).
+*Not exercised by a mirror run:* base URL derivation (§0) and the WebFetch/curl split (§5).
+Both are proven by `2026-08-01-live`; neither is deferred.
 
 ## Run log
 

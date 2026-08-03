@@ -8,7 +8,7 @@ This is **not a library**. It's the source for **Monster-Dev**, an AI-developer 
 
 This scope is deliberately narrow and closed: the AI-developer-persona packaging applies **only** to this one monster feature. Do not generalize it into a reusable multi-feature pattern, and do not repackage it as a locally-installed Claude Code Skill (`.claude/skills/...`) — both were explicitly considered and rejected in favor of the "nothing installed, always fetched live from `main`" model.
 
-Target publish location: `https://github.com/diogenes25/monster-dev` (not yet pushed as of this writing — repo is git-initialized locally with branch `main`).
+Target publish location: `https://github.com/diogenes25/monster-dev` (pushed; `main` is the published branch, and §0's base URL resolves against it).
 
 ## Two features, not one
 
@@ -16,6 +16,8 @@ Target publish location: `https://github.com/diogenes25/monster-dev` (not yet pu
 2. **The Monster-Dev developer** — the loop that produces those notes and that tooling and *proves* they help: test run → board item → fold in → rerun. Lives in the `monster-dev-workshop` skill and in `process/`.
 
 Three layers grow with every run — the playbook (general), stack notes (per surface), tooling (spares a hire derivation and measuring). None of them grows on a hunch; see "The proof gates" below.
+
+**`THESIS.md` says why feature 2 is worth the trouble**, and it is the only document here that argues rather than instructs: the monster is a *fixture*, and what is being tested is whether a narrow AI developer measurably improves — the premise of a roster of specialists that would be a company's real asset. Read it before any decision that trades measurement away for a better easter egg, because it says plainly that this is the wrong trade. It changes no rule in this file; in particular the narrow-scope lock above stays, and `THESIS.md` §4 argues *for* it. Like `README.md`, it is kept out of the mirror by hand.
 
 ## Repository layout — who fetches what
 
@@ -59,6 +61,21 @@ Each name is written by hand in **two** places in `build-dist.ps1` — the exclu
 **Two further mirror checks name no path at all**, because a path list only ever excludes the leaks somebody already found. Every `.md` in the assembled mirror is grepped for a short harness vocabulary (`acceptance criteria`, `test run`, `A/B`, …), and every file in it is checked for a reference to a sprite sheet under `monsters/` — the first catches prose that describes the experiment, the second catches a finished solution to the brief, which contains none of those words. A vocabulary term that fires on legitimate playbook prose is **removed from the list**, never accommodated by rewording the playbook; `harness` is out for exactly that reason, since §7 tells a hire to build a scratch one.
 
 Never hand-roll the mirror. `process/tools/build-dist.ps1` builds and verifies it in one step and deletes the mirror rather than return a leaking one. For the same reason, **nothing that encodes the acceptance criteria may live under `tools/`** — the run verifier belongs in `process/tools/`, which is excluded already.
+
+### The mirror is a blindfold, not a vault — and the difference decides every question about it
+
+**Nothing here is secret, and nothing here may become secret.** This is open source, and the thing it distributes is a *stranger's AI developer working inside your codebase*. That asks an unusual amount of trust, and the only currency it can be paid in is legibility: how the contractor works, what it is scored on, what has already been measured and what went wrong. A user who cannot read the acceptance criteria cannot judge whether the thing is any good. A contributor who cannot read them cannot do the thing this project wants contributors to do — clone it, pose their own requirement, and push back another test.
+
+So `process/`, `.claude/` and this file being world-readable on `main` is **the design**, not an exposure. Measured unauthenticated on `2026-08-02`, `process/scenarios/alt-a-left-to-right.md`, `process/backlog/README.md`, `.claude/agents/run-scorer.md` and this file all answer HTTP 200. That is correct and stays correct.
+
+What the mirror exists for is something else entirely: **a hire that reads its own acceptance criteria mid-run stops being a measurement.** Not because it learned a secret, but for the same reason a subject is not told what is being scored while it is being scored. The exclusions are a blindfold worn for the duration of an experiment, by one participant, and they say nothing about who else may look.
+
+Read every question about the mirror that way and it answers itself. Two immediate ones:
+
+- **`build-dist.ps1`'s exclusions cover exactly one run class.** A hire fetching over real `raw.githubusercontent.com` URLs reads `main` and never sees a mirror at all, so nothing blindfolds it. That is not a hole to plug by hiding things — it is a **validity condition of that run class**, and the way to hold it is to measure it: after a real-URL run, list every URL the hire fetched out of the captured transcript and check it against the playbook's own pointers. Say in the report that you did. `2026-08-01-live` fetched five, all of them pointed at, and never reached for this file. If a future one reaches further, that run is contaminated — the repository is not.
+- **The demos live on `gh-pages` and not on `main`** for the same reason and not for a secrecy one. Visitors and contributors *should* see ten finished results; a hire being measured on the identical brief should not be able to copy one. Off `main`, both hold at once.
+
+Do not reach for the sentence about `raw.githubusercontent.com` serving no directory index when reasoning about any of this. It is true of that one endpoint and of nothing else — `github.com/<owner>/<repo>/tree/main/process/scenarios` returns an HTML listing to the same `WebFetch` the playbook hands the hire, and one unauthenticated call to `api.github.com/repos/<owner>/<repo>/git/trees/main?recursive=1` returned **397 paths**, every file named, in one request. Nothing is hidden by obscurity here, and nothing should be built as though it were.
 
 ### One run, one parent
 

@@ -164,11 +164,11 @@ whole value of a second scoring, so it is enforced rather than requested.
 
 **`WebFetch` cannot reach a local server.** It rejects `localhost` outright and force-upgrades
 `http://127.0.0.1` to HTTPS, so a plain local HTTP server answers a TLS handshake with
-`WRONG_VERSION_NUMBER`. Until this repo is pushed, a run therefore hands the agent a
-**filesystem path** to `START.md`, and two things stay untested: §0 (base-URL derivation) and
-§5's WebFetch-for-text / shell-download-for-binary split. Say so in every report; re-test both
-after the first push. Do **not** tell the agent to substitute paths for URLs — how gracefully
-the playbook degrades is itself a finding.
+`WRONG_VERSION_NUMBER`. A mirror is therefore handed over as a **filesystem path** to `START.md`,
+never as a local URL. That is a property of the mirror, not a limitation of the project: the
+mirror is the default *because* it holds the fetch path constant across arms, and the real-URL
+run is the alternative rather than a future one. Do **not** tell the agent to substitute paths
+for URLs — how gracefully the playbook degrades is itself a finding.
 
 ## Procedure
 
@@ -232,8 +232,25 @@ on a 404 — landing in `num_turns`, which is one of the two numbers the tooling
 Every A/B arm built that way before carried that confound.
 
 File granularity is also the wrong size for the question usually being asked, which is about
-one entry or one fragment *inside* a file. Both are the variant-overlay mechanism's job; until
-that lands, an A/B below file level cannot be built honestly, and saying so beats faking it.
+one entry or one fragment *inside* a file. That is **`-Variant`'s** job, and it landed on
+`2026-08-03` — this paragraph used to end *"until that lands, an A/B below file level cannot be
+built honestly"*, which had been true for as long as `#002` had been the only item eligible to
+be run, and blocking it without saying so.
+
+A variant is a data file under `process/variants/<name>.psd1` naming a file, an anchor quoted
+out of it, and what to do there — `After` + `Insert`, or `Replace` + `With` (omit `With` to
+delete, which is the arm a fragment needs). The anchor must match **exactly once**; zero and two
+are both hard failures, and the mirror is deleted rather than handed back, because a half-applied
+treatment produces an arm that looks entirely normal.
+
+```powershell
+.\process\tools\build-dist.ps1 -RunId <run-id>-armA
+.\process\tools\build-dist.ps1 -RunId <run-id>-armB -Variant 002-arm-b
+```
+
+Build both arms and **diff the two mirrors before hiring against either**. One file should differ
+and it should differ by exactly the treatment; the returned object names the variant and every
+edit it made, so the report can state what the arms differed by without anybody retyping it.
 
 **Two of the three checks name no path**, and they are the ones that will stop a leak nobody has
 found yet. Every `.md` in the assembled mirror is grepped for a harness vocabulary, and every file
@@ -536,11 +553,39 @@ Corollary, learned the expensive way: before designing an A/B around a pitfall, 
 anybody actually falls into it. Both `dom-css` pitfalls from run `alt-a` were solved unprompted
 by every hire since, on both models, which left the planned A/B with no arms to separate.
 
-## Currently open, deferred to the first push
+## The fetch path is a choice, not a limitation
 
-`https://github.com/diogenes25/monster-dev` is not pushed yet. Until it is, §0 (base-URL
-derivation from the fetch URL) and §5 (WebFetch for text vs. shell download for the binary
-PNG) are untestable and must be listed as *deferred* — never as *passed* — in every report.
+§0 (base-URL derivation from the fetch URL) and §5 (WebFetch for text vs. shell download for the
+binary PNG) are **proven** by `2026-08-01-live`, which ran over real `raw.githubusercontent.com`
+URLs: §0 by reaching the playbook with no owner or repo named anywhere in the brief, §5 by a
+byte-identical 1.9 MB PNG — the one criterion a self-report cannot fake. A report that lists
+either as *deferred* is wrong.
+
+Which path a run uses is therefore a comparability decision, and it belongs in the report:
+
+- **The mirror is the default for A/B work.** It holds the fetch path constant, and every arm on
+  record used it. A `-Without` arm is only possible against a mirror.
+- **A real-URL run is how §0 and the §5 download wording get re-tested** after either is edited,
+  and it is the only arm in which a 404 or a WebFetched binary can appear at all. It reads `main`
+  and therefore **wears no blindfold**: `process/`, `.claude/` and `CLAUDE.md` are publicly
+  readable there, on purpose, because this is open source and nothing about how the contractor is
+  measured may be hidden from the people trusting it (`#031`). The mirror is not a vault, it is a
+  blindfold for one participant, and this run class does not have one on.
+
+That is a **validity condition of the run, not a risk to the repository** — and it is checked
+rather than assumed. **After a real-URL run, list every URL the hire fetched out of the captured
+transcript** and hold it against the playbook's own pointers. Say in the report that you did and
+what came back. A hire that reached past them was still measured; it just was not measured
+*blind*, and the arm says so instead of the number quietly meaning something else:
+
+```powershell
+Select-String -Path process\runs\<id>\transcript.jsonl -Pattern 'https://raw\.githubusercontent\.com[^"\\ ]+' -AllMatches |
+  ForEach-Object { $_.Matches.Value } | Sort-Object -Unique
+```
+
+`2026-08-01-live` returned five URLs, all of them pointed at by the playbook, and never reached
+for `CLAUDE.md`. That is evidence about **that run** and about nothing else: the next real-URL run
+needs the same check, and a hit invalidates the arm, not the repository.
 
 ---
 

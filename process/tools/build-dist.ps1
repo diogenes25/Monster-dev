@@ -17,6 +17,9 @@ now a policy rather than an exception:
               it costs a hire nothing, and it costs production nothing because in production
               there are no criteria to leak. Its own "Monster-Dev gets better by being tested"
               section reached eight of the first ten hires, all four Sonnet runs among them.
+  THESIS.md   why the monster exists at all: it is the fixture of an experiment about whether a
+              narrow AI developer measurably improves. A hire that read one paragraph of it would
+              know it is the subject rather than the contractor.
 
 The first two used to drop out on their own because they were untracked or gitignored. They are
 tracked now, so the exclusion has to be deliberate — and verified, not assumed. That is why
@@ -24,7 +27,7 @@ building and checking live in one script: a mirror built by hand is a mirror nob
 
 Three checks follow the copy, and only the first names a path.
 
-  1. the four exclusions above actually arrived nowhere, and START.md actually arrived
+  1. the five exclusions above actually arrived nowhere, and START.md actually arrived
   2. the mirror is internally consistent. §2 and §5 of the playbook are the only indexes a hire
      has, since raw.githubusercontent.com serves no directory listing, so the mirror is verified
      against the playbook's own prose: nothing listed may be missing, nothing present unlisted
@@ -50,7 +53,31 @@ purpose: §2 and §5 would still tell the hire to fetch it, so the arm would dif
 pair by the missing notes *plus* a turn burned on a 404 — and num_turns is one of the two
 numbers the tooling gate reads. Removing content at file granularity is also the wrong size
 for the question actually being asked, which is usually about one entry or one fragment
-inside a file. Both are solved by the variant-overlay mechanism, not here.
+inside a file. Both are -Variant's job, not this one's.
+
+.PARAMETER Variant
+Name of a variant under process\variants\<name>.psd1, applied to the mirror after the copy and
+before every check. This is the mechanism for an A/B arm that differs by a paragraph or a
+fragment *inside* a file — the size an arm usually is, and the one -Without cannot express.
+
+Each edit names a File, an anchor, and what to do with it. The anchor must match **exactly
+once**: zero matches and two matches are both hard failures, because an overlay that silently
+lands in the wrong place or silently does nothing still produces a mirror, a run and a number,
+and the number then means something nobody wrote down.
+
+    @{
+        Description = 'Arm B: bound the build to the announced change set (#002)'
+        Edits = @(
+            @{ File = 'MONSTER-DEV.md'; After = '<a sentence quoted from the file>'; Insert = "`n`n<the new paragraph>" }
+        )
+    }
+
+`After` + `Insert` puts text straight after the anchor. `Replace` + `With` substitutes it, and
+`With` omitted or empty deletes it — which is the arm a fragment needs, since CLAUDE.md's rule
+is that deleting a fragment must leave its entry true.
+
+The file is *data*: Import-PowerShellDataFile evaluates no code, so a variant cannot reach into
+the build. It lives under process\, which is excluded from the mirror already.
 
 .PARAMETER AllowHarnessProse
 Skips check 3's vocabulary grep. There is exactly one legitimate caller — the validation of the
@@ -68,6 +95,7 @@ instead.
 param(
     [Parameter(Mandatory)][string]$RunId,
     [string[]]$Without = @(),
+    [string]$Variant,
     [switch]$AllowHarnessProse
 )
 
@@ -83,19 +111,21 @@ New-Item -ItemType Directory -Force $dist | Out-Null
 
 # Never published to a hire. Keep this list and the verification below in step.
 #
-# CLAUDE.md and README.md are tracked, so these two lines are the only thing keeping them out of
-# the mirror — they are not the belt-and-braces entries they look like. That is exactly the trap
-# test/ (now process/) and .claude/ already fell into: an exclusion that worked by accident
+# CLAUDE.md, README.md and THESIS.md are tracked, so these three lines are the only thing keeping
+# them out of the mirror — they are not the belt-and-braces entries they look like. That is exactly
+# the trap test/ (now process/) and .claude/ already fell into: an exclusion that worked by accident
 # stopped working the day the file was committed. CLAUDE.md summarises the playbook, the sprite
 # geometry and the §8 rule; README.md explains that this repository improves itself by scoring
-# test hires. The check below stays as the backstop for all four.
+# test hires; THESIS.md says what the monster is a fixture *for*, which tells a reader in one
+# paragraph that it is the subject of an experiment. The check below stays as the backstop for all
+# five.
 #
 # The backstop only helps if it is kept in step. It hard-codes the same names as the line below,
 # which means a rename breaks *both* at once and in the same direction — the filter stops
 # matching, and the check hunts a file that is no longer there and reports clean. That happened
 # on 2026-08-02 (test/ -> process/). Change one, change the other, then build a mirror and look
 # inside it: this script passing is not on its own evidence that anything was excluded.
-$excluded = @('process/*', '.claude/*', 'CLAUDE.md', 'README.md') + $Without
+$excluded = @('process/*', '.claude/*', 'CLAUDE.md', 'README.md', 'THESIS.md') + $Without
 
 $copied = 0
 foreach ($file in (git ls-files)) {
@@ -104,6 +134,91 @@ foreach ($file in (git ls-files)) {
     New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
     Copy-Item $file $target
     $copied++
+}
+
+# --- the variant overlay, applied before every check below ---------------------------------------
+#
+# An A/B arm is normally one paragraph or one fragment inside a file. -Without works at file
+# granularity, so until this existed a sub-file A/B could not be built at all — SKILL.md said so
+# in as many words, and #002, the only item ever to reach `grilled`, was blocked on this sentence
+# without anybody having written that down.
+#
+# Anchored, not a patch. A patch keys on line numbers and surrounding context and rots the moment
+# either moves; an anchor is a sentence quoted out of the file, which is also how the arm is
+# described in the item that asks for it.
+#
+# The anchor must match EXACTLY ONCE, and both other counts are hard failures:
+#   0 — the anchor was edited or mistyped, and the arm would be built with no treatment in it
+#   2 — the arm would be built with the treatment in an arbitrary one of two places
+# Neither announces itself afterwards. The mirror still builds, the run still runs, and the two
+# arms differ by an amount nobody can state — which is worse than no A/B, because it still
+# produces a number that looks like an answer.
+#
+# Every throw below goes through the catch at the bottom, which deletes the mirror before
+# rethrowing. That is not tidiness. This script's stated promise is that it deletes a mirror
+# rather than hand back a broken one, and the checks further down keep it by collecting into
+# $failures — but a `throw` up here would jump straight past them, which is how the first draft
+# of this block behaved: all five failure modes left a mirror on disk. The multi-edit case is the
+# sharp one. Edit 1 applies, edit 2 fails, and what is left is a mirror carrying *half* a
+# treatment, which looks exactly like a correct arm and would silently become one.
+$variantEdits = @()
+if ($Variant) {
+  try {
+    $vPath = "process\variants\$Variant.psd1"
+    if (-not (Test-Path $vPath)) { throw "BROKEN: no variant '$Variant' — expected $vPath." }
+
+    $v = Import-PowerShellDataFile $vPath
+    if (-not $v.Edits) { throw "BROKEN: variant '$Variant' declares no Edits." }
+
+    foreach ($e in $v.Edits) {
+        if (-not $e.File) { throw "BROKEN: variant '$Variant' has an edit with no File." }
+        $t = Join-Path $dist $e.File
+        if (-not (Test-Path $t)) {
+            throw "BROKEN: variant '$Variant' edits '$($e.File)', which is not in the mirror — -Without may have dropped it."
+        }
+
+        $hasAfter   = $e.ContainsKey('After')
+        $hasReplace = $e.ContainsKey('Replace')
+        if ($hasAfter -eq $hasReplace) {
+            throw "BROKEN: edit on '$($e.File)' must declare exactly one of After or Replace."
+        }
+        $anchor = if ($hasAfter) { $e.After } else { $e.Replace }
+        if ([string]::IsNullOrWhiteSpace($anchor)) {
+            throw "BROKEN: edit on '$($e.File)' has an empty anchor."
+        }
+
+        # Escaped and counted as a literal. An anchor is a sentence out of the playbook and will
+        # contain '.', '(' and '?' sooner or later; treating it as a pattern would make the match
+        # count depend on punctuation nobody was thinking about.
+        $text = Get-Content $t -Raw
+        $n    = [regex]::Matches($text, [regex]::Escape($anchor)).Count
+        if ($n -ne 1) {
+            throw ("BROKEN: the anchor for '$($e.File)' matches $n time(s) in the mirror, and must match exactly 1." +
+                   "`n  anchor: $anchor")
+        }
+
+        if ($hasAfter) {
+            if (-not $e.ContainsKey('Insert')) { throw "BROKEN: edit on '$($e.File)' has After but no Insert." }
+            $new = $text.Replace($anchor, $anchor + $e.Insert)
+            $what = 'insert after'
+        } else {
+            # `With` absent or empty is a deletion, which is the arm a fragment needs.
+            $new  = $text.Replace($anchor, [string]$e.With)
+            $what = if ([string]::IsNullOrEmpty([string]$e.With)) { 'delete' } else { 'replace' }
+        }
+        if ($new -eq $text) { throw "BROKEN: edit on '$($e.File)' changed nothing." }
+
+        # Rewritten as UTF-8 without BOM, which is what the tracked files already are. Stated
+        # rather than assumed: this is the one place a mirrored file is written instead of copied.
+        Set-Content $t $new -Encoding utf8 -NoNewline
+
+        $short = if ($anchor.Length -gt 48) { $anchor.Substring(0, 45) + '...' } else { $anchor }
+        $variantEdits += "$($e.File): $what '$short'"
+    }
+  } catch {
+    Remove-Item -Recurse -Force $dist -ErrorAction SilentlyContinue
+    throw "$_`nMirror deleted so a half-applied variant cannot be used as an arm."
+  }
 }
 
 # --- check 1: the named exclusions, verified rather than assumed ---
@@ -118,6 +233,9 @@ foreach ($stray in (Get-ChildItem -Recurse -File -Filter 'CLAUDE.md' $dist)) {
 # a hire needs them; it is the repository's own front page that describes the experiment.
 if (Test-Path (Join-Path $dist 'README.md')) {
     $failures += "LEAK: README.md reached the mirror — it tells the hire it is in a scored test run"
+}
+if (Test-Path (Join-Path $dist 'THESIS.md')) {
+    $failures += "LEAK: THESIS.md reached the mirror — it says the monster is a fixture and the hire is the subject"
 }
 if (-not (Test-Path (Join-Path $dist 'START.md'))) {
     $failures += "BROKEN: START.md missing — a hire has no entry point"
@@ -274,4 +392,9 @@ if ($failures) {
     Stacks   = $listedStacks -join ', '
     Sheets   = $listedSheets -join ', '
     IndexOk  = $true
+    # Named in the returned object so the difference between two arms is on the record without
+    # anybody retyping it. `(none)` rather than blank: an arm built with no variant and an arm
+    # whose variant silently did nothing must not print the same thing.
+    Variant  = if ($Variant) { $Variant } else { '(none)' }
+    Edits    = if ($variantEdits) { $variantEdits -join '; ' } else { '(none)' }
 }

@@ -177,8 +177,11 @@ does not — that comparison is the one thing a copy cannot reproduce.
     Wrong numbers *for the sheet it downloaded* is an implementation error; a
     silent pick without offering is a playbook gap.
 
-*Deferred to the first push:* base URL derivation (§0) and the WebFetch/curl
-split (§5).
+*Not exercised by this run:* base URL derivation (§0) and the WebFetch/curl
+split (§5). This is a mirror run, so neither is reached. Both are **proven** by
+`2026-08-01-live` over real URLs and must not be reported as *deferred*. The
+label is all that changed on `2026-08-02` — no criterion moved, and every arm
+on record remains comparable.
 
 **Criteria changed on 2026-08-01**, when the roster replaced the single sheet:
 9, 10 and 13 stopped naming `monster-walk.png` and `steps(23)`, 14 is new, and the

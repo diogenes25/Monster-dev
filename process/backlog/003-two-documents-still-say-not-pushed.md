@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | — |
-| Target file | `CLAUDE.md`, `SKILL.md` (two places), `references/report-template.md` |
+| Target file | nine sites — see the `2026-08-02` log line; the four named here were not all of them |
 | Evidence | `2026-08-01-live`, `2026-08-01-plan-sonnet` |
 | Proof design | — |
 
@@ -72,3 +72,22 @@ by a run already on record.
   `README.md` that had been borrowed into the field that names the fault. The fault here is
   dev-side apparatus that has gone wrong — `references/report-template.md` instructs every report
   to record something untrue — which is what `harness artefact` means.
+- `2026-08-02` `proven` — applied. **This item named four sites and there were nine.** The five it
+  did not name: `references/scenario-template.md` in three places (the `process/`-path warning
+  phrased as a future condition, the *"Known limitation of this run"* block, and its own
+  `Deferred to the first push` line), `process/README.md`'s constraint 2, and
+  `process/scenarios/alt-a-left-to-right.md` — the live scenario, which is the copy an actual run
+  is scored against. The template and the scenario are the two that matter most, because every
+  future scenario is born from one and every arm on record was read against the other. Found by
+  grepping the tree rather than by working the item's target list, which is the same lesson
+  `CLAUDE.md` already records about the two hand-written lines in `build-dist.ps1`: a list of
+  sites is a list of the sites somebody found.
+- `2026-08-02` — the *"three things stay untested"* in `process/README.md` counted **stack
+  resolution** alongside §0 and §5. That one is not settled by the push and is not folded in here;
+  it stays `#006`'s, and the sentence now says so instead of carrying it silently.
+- `2026-08-02` — the deferred note in the live scenario is relabelled, not removed, and the edit
+  says in place that no criterion moved. §0 and §5 were never scored in a mirror run and still are
+  not; only the word *deferred* was wrong. **No comparability boundary** — recorded because every
+  other edit to that file this week did create one.
+- `2026-08-02` — this item turns out to carry `#029`, which is filed on the opposite premise. See
+  that item's log.

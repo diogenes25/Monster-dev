@@ -54,8 +54,8 @@ findings.*
 
 ## Deferred
 
-*Standing entry until the repo is pushed: §0 base-URL derivation, §5 WebFetch/curl split.
-Plus anything else this scenario could not reach.*
+*Anything this scenario could not reach. There is no standing entry — §0 and §5 were proven by
+`2026-08-01-live` and are not deferred; a mirror run simply does not exercise them.*
 
 ## Board
 

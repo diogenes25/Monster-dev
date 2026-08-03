@@ -88,9 +88,12 @@ push makes public, not about what a hire sees.
   folder it points into is gone for six of the ten runs. Recording that the brief *was* a path is
   the honest thing; reproducing it needs the run folder anyway.
 - **Redaction is not deletion.** These files are in git history and this rewrites the working tree
-  only. The repository has never been pushed, so the history is still local and still fixable — but
-  that is true today and not necessarily next week, and it is the reason this is not a
-  tidy-up-later item.
+  only. ~~The repository has never been pushed, so the history is still local and still fixable —
+  but that is true today and not necessarily next week, and it is the reason this is not a
+  tidy-up-later item.~~ **Struck `2026-08-02`: false, and false when written.** The repository has
+  been pushed since before `2026-08-01-live`; the branch holding these files went up the same day
+  this item was filed. There is no local-only window to spend. Working-tree redaction is cosmetic
+  on its own, and the real fork — rewrite and force-push, or accept — is in the log below.
 
 **Log.**
 
@@ -99,3 +102,46 @@ push makes public, not about what a hire sees.
 - `2026-08-02` `formulated` — counted rather than estimated: eight capture files, 23 occurrences,
   three path shapes, plus five citations in `#012` and `#013` that are not the same thing. The
   narrow sentence in `process/README.md` located as the reason the gap reads as covered.
+- `2026-08-02` — **the premise above is wrong, and it was wrong when it was written.** The cost
+  section reads *"the repository has never been pushed, so the history is still local and still
+  fixable — but that is true today and not necessarily next week."* The repository **is** pushed
+  and has been since before `2026-08-01-live`, which is on record precisely because it ran over
+  real `raw.githubusercontent.com` URLs. `origin` is `https://github.com/diogenes25/Monster-dev`,
+  and the branch carrying these eight files was pushed on `2026-08-02` at 23:36.
+
+  The window this item books as its reason for urgency never existed. That does not weaken the
+  item — it removes the part that made it feel optional. What remains is a live choice with no
+  free option in it: rewrite the history across `main` and `script-the-run-folder` and force-push,
+  or decide to accept 23 occurrences of the account name in a published history and stop adding
+  to them. **Redaction in the working tree alone is now cosmetic** and should not be described as
+  a fix.
+
+  Written down because the error is instructive rather than embarrassing: the item was drafted
+  against `CLAUDE.md`'s *"not yet pushed as of this writing"*, which `#003` was already filed
+  about and had been since `2026-08-01`. A stale sentence in the orientation file propagated into
+  the risk assessment of an unrelated item one day later. That is the cost `#003` was carrying
+  and the reason it stopped being a tidy-up.
+- `2026-08-02` — one scope correction from the same pass: the eight files are already **committed
+  and pushed**, so they are not something a future commit introduces. The `Target file` row lists
+  them as though the working tree were the object; the object is the history.
+- `2026-08-03` — **and the frame is wrong too, in the opposite direction from the last entry.**
+  This item reads as though something confidential had escaped. Nothing did, and nothing in this
+  repository is supposed to be confidential: it is open source, and the trust it asks for — a
+  stranger's AI developer inside your codebase — is paid for in being readable. `#031` carries
+  that argument.
+
+  So the account name is not a **secret**, it is **noise**. Every public commit already carries
+  the owner's name and two email addresses in its author metadata, deliberately and by ordinary
+  git practice. What twenty-three occurrences of `C:\Users\<user>\source\repos\priv\…` add is one
+  person's directory layout, in files that exist to record what a run did.
+
+  That does not make the item wrong, it makes it **cheap and non-urgent**, and it changes what it
+  is for. The reason to normalise those paths is that they are *irrelevant to the reader* — a
+  capture is evidence about a run, and which folder it happened in on one laptop tells nobody
+  anything. That reason survives whether or not the repo is public, which the old one did not.
+- `2026-08-03` — two consequences of that, so the item can be planned rather than dreaded. **No
+  history rewrite.** A force-push against a username that every commit publishes anyway is
+  theatre, and it would break every clone for the contributors this project wants. **The scrubber
+  is the real deliverable**, not the eight files: it should normalise machine-specific paths on
+  the way in, so the count stops growing. Rewriting the eight on record is then optional tidying,
+  and can wait for a pass that touches them anyway.
