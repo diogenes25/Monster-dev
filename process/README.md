@@ -223,10 +223,12 @@ always a **separate `claude` CLI session** whose working directory is the run fo
 **2. `WebFetch` cannot reach a local server.** It rejects the hostname `localhost` outright and
 force-upgrades `http://127.0.0.1` to HTTPS, so a plain local HTTP server answers a TLS handshake
 with `WRONG_VERSION_NUMBER`. Serving this repo locally cannot stand in for
-`raw.githubusercontent.com`. Until the repo is pushed, a run hands the agent a **filesystem
-path** to `START.md`, and three things stay untested: §0 (base-URL derivation), §5's
-WebFetch-for-text / shell-download-for-binary split, and stack resolution. Report them as
-*deferred*, never as *passed*.
+`raw.githubusercontent.com`, so a mirror is handed over as a **filesystem path** to `START.md`.
+That makes the fetch path a choice rather than a limitation: the mirror is the default because
+it holds the path constant across arms, and a real-URL run against `main` is the alternative.
+A mirror run does not exercise §0 (base-URL derivation) or §5's WebFetch-for-text /
+shell-download-for-binary split — but neither is *deferred*: `2026-08-01-live` proved both over
+real URLs. Stack resolution is a separate question and is still open; see `#006`.
 
 **3. Exclusion is now deliberate, and a path list only excludes what somebody already found.**
 `process/` and `.claude/` used to drop out of the mirror because git ignored them. They are

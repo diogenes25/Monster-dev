@@ -8,6 +8,7 @@
 | Criterion | cost envelope, not a numbered criterion |
 | Target file | `MONSTER-DEV.md` §4 / §6 |
 | Evidence | `2026-08-01-plan-sonnet`, `2026-08-01-index-sonnet` (against `2026-08-01-sonnet-base2`) |
+| Blocked on | `#034` only. The variant-overlay blocker **cleared `2026-08-03`** — `build-dist.ps1 -Variant` exists and `process/variants/002-arm-b.psd1` is arm B |
 | Proof design | A/B with cost, two Sonnet arms on `alt-a-left-to-right`, mirror both sides — run id to be assigned |
 
 **What happened.** Model turns on the bar model, before the plan step and after it:
@@ -92,3 +93,44 @@ four marks to save turns, which is the wrong trade at these prices.
   intention and `#004`'s. The two pull opposite ways: this one bounds what a hire does, `#004`
   widens what it discloses. `#004` is waiting on a second sighting and its sentence is drafted
   there so neither has to be written twice.
+- `2026-08-03` — **this item is the only one in `grilled` and it cannot be run.** Found while
+  picking it up as the next brief. Arm B adds a paragraph inside `MONSTER-DEV.md` §6;
+  `build-dist.ps1` takes `-Without` and nothing else, so it can drop a whole file and cannot
+  change one. The harness already knows this and says so in two places —
+  `build-dist.ps1:56` and `SKILL.md:235`, the latter in as many words: *"until that lands, an A/B
+  below file level cannot be built honestly, and saying so beats faking it."*
+
+  So the mechanism is a **named, documented, unbuilt dependency of the only runnable item on the
+  board**, and it had no item of its own. That is the finding, not the missing tool: `grilled`
+  means *eligible as a brief*, and this one has been eligible since `2026-08-02` while being
+  impossible to build. The state rule the board enforces does not reach a blocker that lives in
+  the tooling.
+
+  Not worked around. Hand-editing `MONSTER-DEV.md`, building arm B and reverting would produce
+  the right two mirrors and leave nothing saying what the difference was — which is the same
+  shape as the hand-rolled mirror `CLAUDE.md` forbids, and this item's whole value is that the
+  two arms differ by exactly one paragraph.
+- `2026-08-03` — a second precondition, cheaper and unrelated: `#034` sits in `hire.ps1`'s
+  per-turn capture block, so it is in the path of every turn of this run. A scrub failure would
+  take the worktree copy and `base.txt` with it, and the worktree is what criterion 18a–18d is
+  read against. Worth clearing before a paid two-arm run rather than after.
+- `2026-08-03` — **the overlay blocker is cleared.** `build-dist.ps1 -Variant <name>` applies
+  `process/variants/<name>.psd1` to the mirror after the copy and before every check, and
+  `002-arm-b.psd1` is this item's arm B: one anchored insertion into `MONSTER-DEV.md` §6, the
+  paragraph quoted verbatim out of *Proposed change* above so the arm and its rationale cannot
+  drift apart.
+
+  The anchor is **not** the sentence this item names. *"Match the surrounding code's naming,
+  formatting, and structure conventions"* continues — *"— this should look like it was written by
+  whoever else works on this codebase, not bolted on."* — so anchoring there would have inserted a
+  paragraph into the middle of a sentence. It anchors on the paragraph's end instead, which puts
+  the text where the item intends it. Verified by building the arm and reading §6 in the mirror:
+  the new paragraph sits between §6 and §7, one occurrence, 18 files, index OK.
+
+  An anchor must match **exactly once**; zero and two are both hard failures, because either one
+  still produces a mirror, a run and a number that nobody can state the meaning of. All four
+  failure paths have a fixture in `process/variants/` and were made to fire.
+
+  What is *not* cleared: this item is still `grilled` and not `in-proof`, `#034` is still in the
+  capture path, and no run id is assigned. What changed is that arm B can now be built by a
+  command instead of by hand-editing the playbook and remembering to revert it.
