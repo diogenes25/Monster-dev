@@ -100,3 +100,16 @@ commit, and the commit is where both edits land together.
   a few minutes between writing the report and appending the row. The trade held. What `proven` still
   means here is **applied**, not *shown to have helped*: part 1 had already repaired both historical
   misses, so this firing prevented a third rather than repairing one.
+
+- `2026-08-04` — **the discriminator this item chose has a blind spot, opened the same day by a new run
+  class.** `report.md` was verified to separate scenario runs from everything else, and it did — on the
+  tree as it then stood. `2026-08-04-p1`, `-p2` and `-p3` are **scenario-less probes**: one turn, no
+  criteria, nothing to score, so nothing to cite them from a run log. Giving them a `report.md` would
+  make `check-index.ps1` demand a run-log row that would be a lie, and the write-up went into `#050`'s
+  log instead, where a finding without criteria belongs.
+
+  So the rule the check enforces is still right and its proxy is now incomplete: *scored* runs must be
+  in a run log, and `report.md` no longer means *scored*. **Not fixed and deliberately not**: the three
+  probes carry `knowledge.md` and no report, so the check is green and the tree is honest. The moment a
+  probe series wants a narrative document of its own, this is the item that has to decide what the
+  discriminator becomes — `#003`'s warning applies to any allow-list written before then.

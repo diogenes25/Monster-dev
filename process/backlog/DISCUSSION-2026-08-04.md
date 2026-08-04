@@ -245,6 +245,51 @@ handoffs. `check-reach.ps1` section D plus the by-hand URL check are all that st
 was measured"* and *"the arm was measured blind"*, and a report silent about them has not checked
 (`#031`, `#041`).
 
+## And the probes ran, and the answer is the opposite of the question
+
+`2026-08-04-p1`, `-p2`, `-p3`. Sonnet, `static-site`, real URLs off `main`, turn 1 only, `$0.4701` for
+the set. **All three refused the entry point.**
+
+**The §0 hypothesis is dead**, which is what a one-sided test can establish and the reason the
+asymmetry was accepted in advance: §0 was satisfiable — every URL returns 200 — and it appears in none
+of the three objection lists. The continuation rule fired as written, so the full-run continuation was
+not bought and nothing was decided by looking at the numbers first.
+
+**But the rate inverted, and that is bigger than the item.** Sonnet refuses **3 of 3** on the real
+fetch path against **2 of 11** on the mirror — a 0.6 % event under the mirror rate. So both
+attributions `#050` ever carried were wrong in the same direction, because both assumed the mirror
+number was the product's number:
+
+> The mirror hands the hire a **local file**. The real path hands it a **URL into an unknown
+> third-party GitHub repo** — and that is the thing a security-conscious model refuses. `p2` names the
+> repo in its objection. There is nothing for that sentence to attach to when the playbook arrives as
+> `C:\…\dist\START.md`. **The blindfold was also an anaesthetic.**
+
+Three things came out of it that no design predicted:
+
+- **§5 is quoted verbatim by all three.** The instruction that exists because WebFetch mangles binary
+  bytes reads as *bypass the tool that would let anyone look at this* — which is what it says, minus the
+  reason.
+- **`START.md` L27 is an aggravating factor** (`p3`): *"fetched live, every time, from `main`"* is heard
+  as unpinned mutable third-party content. The same sentence is *false* on a mirror run, so it hurts in
+  both classes for opposite reasons, and it is the only branch reference in anything a hire fetches.
+- **`p1` cited the run folder name** — *„wirken wie ein gezielter Test"* — the first recorded instance
+  of a harness string inside a hire's stated reasoning (`#057`). `p2` and `p3` refused without it, so it
+  is an aggravator and not the cause.
+
+**Board consequences.** `#050` goes back to `formulated`: its attribution is settled as a **playbook
+gap** and its proof design is spent, but no treatment is chosen — candidate `A` is now pointless, since
+§0 was never the objection. It is also **cheap to prove from here**, which it never was: the before-fail
+reproduces 3 of 3 at the bar for `$0.157` a probe. `#083` is new and is the larger half — the mirror
+run class understates this, so eighteen sessions of *"entry point accepted"* measure a path no customer
+uses, **and every A/B on record used it.** Nothing is re-scored, because that contamination is uniform.
+
+**What to do next, and it is no longer `#064`.** Grill `#050` a second time and choose the treatment:
+at least two edits, probably three, in the file that has to stay short — and the `Cost` paragraph's
+warning stands, that a paragraph reassuring a hire about its own instructions is exactly what a
+malicious instruction file would also contain. Then one treated probe per candidate at `$0.157`.
+`#083` part 1 and 2 are prose and can go in the same sitting.
+
 ## One thing about this session's own method
 
 The seven items closed here were all written by the previous session, and **the two that mattered most

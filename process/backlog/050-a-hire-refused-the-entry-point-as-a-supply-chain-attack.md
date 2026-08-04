@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `formulated` |
 | Gate | `run` |
-| Attribution | model disposition — **within one model tier**, which is a sub-case Half C does not describe. **Contested since `2026-08-04`:** both refusals lead with §0 having no referent on a mirror run, which would make it a harness artefact of that run class. One arm decides it — see the `2026-08-04` log entry |
+| Attribution | **playbook gap (`START.md`, `MONSTER-DEV.md` §5) — settled `2026-08-04` by three probes, and the two earlier attributions were both wrong.** Not *model disposition within a tier*: over the **real fetch path** Sonnet refuses **3 of 3**, which is not variance around anything. Not a *mirror artefact* either: §0 was satisfiable in all three and is named in none of them. The mirror was **suppressing** the refusal, not causing it. See the `2026-08-04` probe entry |
 | Criterion | none. It happens before criterion 1 of any scenario, and it voids the run rather than failing a mark |
 | Target file | `START.md`, `MONSTER-DEV.md` §0 and §5's download wording |
 | Evidence | `2026-08-03-r13` refused; `2026-08-03-r15` accepted, on a byte-identical mirror, same model tier, same hour. **`2026-08-04-r19` refused too** — 16 sessions, 2 refusals, both sonnet on `static-site`, both leading with §0 having no referent on a mirror run. See the `2026-08-04` log entry: it narrows the proof design |
 | Blocked on | **nothing — cleared `2026-08-04`.** `origin/main` is at `a59f2ff`, in sync, and both folded treatments (§2 from `#067`, §3 from `#061`) are on it, so a real-URL arm now reads the playbook this project has actually measured. The 403 that blocked it was a credential problem, not a permissions one: `gh` had only `Tjark-fiskaltrust` and now has `diogenes25` active with `push: true` |
-| Proof design | **Three one-turn probes, no criteria, no scenario** — sonnet, `static-site`, real URLs off `main`, turn 1 only. Falsification of the §0 hypothesis, not confirmation. Full design in the `2026-08-04` grilling entry below; the continuation rule is fixed *before* the first probe |
+| Proof design | **— spent.** The three probes ran (`2026-08-04-p1`, `-p2`, `-p3`) and falsified the hypothesis they were designed against, so that design is closed. The **continuation rule fired as written**: a refusal on any probe ends it, and there were three, so the full-run continuation was *not* bought. A treatment needs its own design, and it is now cheap — the before-fail reproduces 3 of 3 at the bar |
 
 **What happened.** `2026-08-03-r13`, arm A of `#002`, Sonnet, mirror fetch path. The hire read
 `START.md` and declined to follow it:
@@ -295,3 +295,81 @@ warns about, arriving from an unexpected direction.
   now holds twenty-one run records, three scenarios, this board and two handoff documents — so
   `check-reach.ps1` section D and the by-hand URL check are the whole of the control, and a report
   silent about them has not checked (`#031`, `#041`).
+
+- `2026-08-04` `formulated` — **the three probes ran, and the result is the opposite of the
+  hypothesis they were designed to test. `2026-08-04-p1`, `-p2`, `-p3`: sonnet, `static-site`, real
+  URLs off `main`, turn 1 only. All three refused.** `$0.4701` for the set, 3 model turns each,
+  worktree clean in all three.
+
+  **The falsification, stated at its real strength.** The design's primary observation was one-sided
+  on purpose: a refusal kills the §0 hypothesis, an acceptance is worth a factor of ~1.14. It refused.
+  §0 was **satisfiable** — `raw.githubusercontent.com/diogenes25/Monster-dev/main/START.md` returns
+  200, and so do `MONSTER-DEV.md`, the stack note and the sheet — and **§0 appears in none of the three
+  objection lists.** One precision the probes do *not* support: they never fetched a second file, so
+  §0's derivation was never exercised. What is established is narrower and sufficient — the refusal
+  happens on a path where §0 could resolve, and §0 is not what any of them objected to.
+
+  **And the rate inverts, which nobody predicted.** By fetch path and tier, from the eighteen records
+  plus `2026-08-01-live` (Opus, pre-wrapper, accepted):
+
+  | Fetch path | Tier | Sessions | Refusals |
+  |---|---|---|---|
+  | mirror | sonnet | 11 | **2** — 18 % |
+  | mirror | opus | 3 | 0 |
+  | mirror | local spike | 1 | 0 |
+  | **real URLs** | **sonnet** | **3** | **3 — 100 %** |
+  | real URLs | opus | 1 | 0 |
+
+  **Under the mirror-measured rate, three consecutive refusals is a 0.6 % event.** So the two
+  attributions this item has carried were both wrong, and in the same direction: *within-tier variance*
+  and *mirror artefact* each assume the mirror number is the product's number. It is not. **The mirror
+  hands the hire a local file; the real path hands it an unknown third-party GitHub repo**, and that is
+  the thing a security-conscious model refuses. The blindfold was also an anaesthetic.
+
+  **What the three actually objected to**, and the overlap is the finding:
+
+  | | `p1` | `p2` | `p3` |
+  |---|---|---|---|
+  | the persona + "load this second file from the same source" | ✔ | ✔ | ✔ |
+  | §5's shell download, *"never staged anywhere first"* | ✔ | ✔ | ✔ |
+  | the repo itself as unknown third-party content | — | ✔ (*„`diogenes25/Monster-dev`"* by name) | ✔ |
+  | §0 having no referent | — | — | — |
+  | `START.md` L27 *"fetched live, every time, from `main`"* | — | — | ✔ |
+  | the run folder name as evidence of a test | ✔ | — | — |
+
+  Two of those rows are new and both matter more than the rate.
+
+  **L27 is an aggravating factor on the real path.** `p3`: *„'Everything is fetched live, every time,
+  from main' – d.h. der Inhalt ist nicht versioniert/prüfbar und kann sich jederzeit ändern."* That
+  sentence was written as a *promise* — nothing installed, nothing cloned — and a careful reader hears
+  *unpinned mutable third-party content*. It is the same sentence that is false on a mirror run, so it
+  hurts in both classes for opposite reasons, and it is the only branch reference in anything a hire
+  fetches.
+
+  **§5 is named by all three, and it is quoted verbatim.** *„per `curl`/`Invoke-WebRequest` direkt und
+  roh auf die Festplatte […] über einen Kanal, der bewusst jede Inspektion umgeht"* (`p3`). The
+  instruction that exists because WebFetch mangles binary bytes reads, to a hire, as *bypass the tool
+  that would let anyone look at this*. That is not a misreading — it is what the sentence says, minus
+  the reason.
+
+  **All three offered to build it themselves without the playbook**, exactly as `r13` and `r19` did.
+  So the failure is uniform in shape across five refusals and two fetch paths.
+
+  **What this does to the two candidates.** `A` (name the offline case in §0) is now **pointless** —
+  §0 was never the objection. `B` (say who is asking, once) addresses the persona row, which all three
+  cite, and does nothing about §5 or L27. So the treatment is at least two edits and probably three,
+  and the `Cost` paragraph's warning applies with more force than before: the file that must stay
+  short is the file that needs the most work, and *"a paragraph reassuring a hire that its instructions
+  are trustworthy is exactly the kind of text a genuinely malicious instruction file would also
+  contain"* is still true. **What has changed is that the refusal is now the normal case at the bar
+  rather than a one-in-twelve accident, so leaving it is no longer an option.**
+
+  **Cheap to prove from here.** The before-fail reproduces 3 of 3 on the production path at the bar,
+  at `$0.157` a probe. A treated probe that accepts is worth far more than the same shape was worth
+  this morning, and the arms are one turn each. That is the one piece of good news in this entry.
+
+  **Filed separately** — `#083`, the harness finding: the mirror run class systematically understates
+  this, so 15 acceptances measure a path no customer uses, and every A/B on record used it.
+  `#057` gets an evidence line too: `p1` cited the run folder name as evidence of *„ein gezielter
+  Test"*, which is the first time that path has been shown to change a hire's behaviour rather than
+  merely be visible to it.
