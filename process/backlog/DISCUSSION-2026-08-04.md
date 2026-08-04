@@ -214,9 +214,36 @@ treatment, designed against whatever they say.
   see prose *describing* the harness, never a pointer to it — `r17` read that file) and `#082`
   (criterion `4`'s carve-out permits a question and says nothing about the clause that follows it).
 
-**So the board is 15 open — 2 `intake`, 12 `formulated`, 1 `grilled` — and the one `grilled` item is
-`#050`, still waiting on the push.** `#064` is now the whole of the non-run work: the biggest product
-gap, its fixture and scenario its own to write, blocked on nothing.
+**So the board is 15 open — 2 `intake`, 12 `formulated`, 1 `grilled`.** `#064` is now the whole of the
+non-run desk work: the biggest product gap, its fixture and scenario its own to write, blocked on
+nothing.
+
+## And then the push went through, so nothing is blocked at all
+
+`origin/main` is at `a59f2ff`, in sync, with 28 commits of this day published — **both folded
+treatments included**, §3 from `#061` and §2 from `#067`. Every *"pushing is outward-facing and stays
+deliberate"* sentence above stands as the reasoning; the decision was taken and carried out.
+
+**The 403 diagnosed earlier was a credential problem, not a permissions one**, and getting that wrong
+would have cost a session. `gh` had a single account at the time of the attempt and now has
+`diogenes25` active with `admin` and `push`. Two things worth keeping for the next time this bites:
+
+- **`git config user.email` and the pushing account are independent.** Re-authoring 24 commits to
+  `tjark@onnen.de` did nothing for the push and was never going to; the author is metadata inside a
+  commit, the account is who GitHub lets write.
+- **Git Credential Manager cannot prompt in a non-interactive session** and fails on *"could not read
+  Username"* even with a stored credential present. `git -c credential.helper="!gh auth
+  git-credential" push` resolves it for one command without touching the configuration.
+
+**`#050`'s `Blocked on` is therefore cleared and its three probes are buyable** — ~`$1` for all three,
+reading the playbook this project has actually measured rather than one 24 commits stale. Its
+continuation rule is already fixed, which is the point of having fixed it in advance.
+
+The validity condition sharpens in the same move, and it is now the whole of the control: a real-URL
+run reads `main`, where `process/` holds twenty-one run records, three scenarios, this board and both
+handoffs. `check-reach.ps1` section D plus the by-hand URL check are all that stands between *"the arm
+was measured"* and *"the arm was measured blind"*, and a report silent about them has not checked
+(`#031`, `#041`).
 
 ## One thing about this session's own method
 

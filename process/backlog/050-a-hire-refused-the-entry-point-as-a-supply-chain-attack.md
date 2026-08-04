@@ -8,7 +8,7 @@
 | Criterion | none. It happens before criterion 1 of any scenario, and it voids the run rather than failing a mark |
 | Target file | `START.md`, `MONSTER-DEV.md` §0 and §5's download wording |
 | Evidence | `2026-08-03-r13` refused; `2026-08-03-r15` accepted, on a byte-identical mirror, same model tier, same hour. **`2026-08-04-r19` refused too** — 16 sessions, 2 refusals, both sonnet on `static-site`, both leading with §0 having no referent on a mirror run. See the `2026-08-04` log entry: it narrows the proof design |
-| Blocked on | **`main` pushed to `origin`.** The arm fetches over real URLs, so it reads what is published; `main` was 24 commits ahead on `2026-08-04` and a push was attempted and **refused 403** — the only authenticated identity is `Tjark-fiskaltrust` and the repo is `diogenes25`. Nothing else blocks it |
+| Blocked on | **nothing — cleared `2026-08-04`.** `origin/main` is at `a59f2ff`, in sync, and both folded treatments (§2 from `#067`, §3 from `#061`) are on it, so a real-URL arm now reads the playbook this project has actually measured. The 403 that blocked it was a credential problem, not a permissions one: `gh` had only `Tjark-fiskaltrust` and now has `diogenes25` active with `push: true` |
 | Proof design | **Three one-turn probes, no criteria, no scenario** — sonnet, `static-site`, real URLs off `main`, turn 1 only. Falsification of the §0 hypothesis, not confirmation. Full design in the `2026-08-04` grilling entry below; the continuation rule is fixed *before* the first probe |
 
 **What happened.** `2026-08-03-r13`, arm A of `#002`, Sonnet, mirror fetch path. The hire read
@@ -272,3 +272,26 @@ warns about, arriving from an unexpected direction.
   in either turn. **18 sessions, 2 refusals** — and both refusals remain sonnet on `static-site`, so
   the fixture half of the confound this item names has still never been broken: no refusal has ever
   come from `python-cli`, on either tier.
+
+- `2026-08-04` — **`Blocked on` is cleared: `main` is pushed.** `origin/main` sits at `a59f2ff`, in
+  sync, 28 commits of this day's work published — including §3's treatment (`#061`) and §2's
+  (`#067`), both folded. So the three probes can be bought, and what they will read is the playbook
+  this project has actually measured rather than one 24 commits stale.
+
+  **The 403 was a credential problem and not a permissions one**, which is worth recording because the
+  first diagnosis was wrong in a way that could have cost a session: `gh` had a single account
+  (`Tjark-fiskaltrust`, no rights on `diogenes25/Monster-dev`) at the time of the attempt and has
+  `diogenes25` active now, with `admin` and `push`. Setting `git config user.email` had nothing to do
+  with it — the commit author and the pushing account are independent, and conflating them is the easy
+  mistake here.
+
+  The push itself then needed one more thing: Git Credential Manager cannot prompt in a
+  non-interactive session, so it failed on *"could not read Username"* while a stored credential for
+  `diogenes25` existed. `git -c credential.helper="!gh auth git-credential" push` resolves it without
+  touching the configuration.
+
+  **Two things the push changes for this item, and they pull in opposite directions.** The arm becomes
+  buyable at all. And the validity condition sharpens: a real-URL run reads `main`, where `process/`
+  now holds twenty-one run records, three scenarios, this board and two handoff documents — so
+  `check-reach.ps1` section D and the by-hand URL check are the whole of the control, and a report
+  silent about them has not checked (`#031`, `#041`).
