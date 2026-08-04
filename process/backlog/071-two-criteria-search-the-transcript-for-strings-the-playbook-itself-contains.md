@@ -91,3 +91,33 @@ is `#066`, and it is a different defect in the same criterion.
   the same: the instrument returned the answer the reader expected. This pair is the exception that
   proves the rule about how they get caught — both were found by a reader who had *no* expectation,
   which is the whole case for the blind pass.
+
+- `2026-08-04` — **the repair above was wrong, in a worse direction than the defect, and it is the sixth
+  instance.** Both new patterns were written with a forward slash. **The captured transcript stores
+  Windows paths**, so the fetch of a mirrored note is a `Read` of `stacks\dom-css\README.md` and a
+  mirror-side sheet read is `monsters\<slug>.png`. Measured across the four runs on this scenario:
+
+  | Run | fetched the note? | `stacks/` in a tool input | `stacks\` in a tool input |
+  |---|---|---|---|
+  | `r12` | **yes** | **0** | 1 |
+  | `r16` | yes | 1 | 1 |
+  | `r17` | **yes** | **0** | 1 |
+  | `r18` | no | 0 | 0 |
+
+  So criterion `10` would have **passed two of the three runs it exists to fail.** Compare the two
+  failure modes, because the direction is the whole point: the original defect fired on a clean run —
+  wrong, but **loud**, and a reader looking at the hit sees immediately that it is §2's own table cell.
+  Mine passes a violating run — **silent**, and nobody re-reads a pass. A repair that moves a defect
+  from the loud direction to the silent one is worse than the defect.
+
+  Fixed: both criteria now say `monsters[\\/]<slug>.png` and `stacks[\\/]`, with the reason stated in
+  the criterion rather than left to whoever writes the next grep. The item stays `proven` — it is
+  applied, and this is the second application, recorded here rather than filed as a new item, which is
+  `#074`'s precedent for a check that was broken on its own first run.
+
+  **Found while grilling `#067`, whose entire evidence base is criterion `10`** — and found the ugly
+  way: the first grep I ran used a forward slash, returned one `tool_result` hit for `r17`, and I very
+  nearly wrote that `r17` had never fetched the note and that `#067`'s central observation was
+  fabricated. The behaviour is fine; three runs did fetch it, on the backslash form. **A wrong
+  instrument almost overturned a correct finding**, which is the mirror image of the five instances
+  above and the reason the count is worth keeping.

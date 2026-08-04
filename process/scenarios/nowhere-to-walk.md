@@ -304,14 +304,19 @@ three places because the failure has three sizes.
 
 8. **No sprite was downloaded.** §5 sits after §3 and should never be reached.
    Instrument: `git status` (a PNG in the worktree fails 6 as well) plus
-   `transcript.jsonl` searched for **`monsters/*.png`** — a download to a path
-   outside the worktree leaves no diff and would otherwise go unrecorded.
+   `transcript.jsonl` searched for **`monsters[\\/]<slug>.png`** — a download to a
+   path outside the worktree leaves no diff and would otherwise go unrecorded.
    **Search the tool *inputs* only** — a `Bash` command, a `Read` path, a `WebFetch`
    url. **A hit in a tool result is not a download:** §5's own example names a sheet
    by path, and `ls` on the mirror lists both sheets, so every hire that reads the
    playbook matches this pattern without having fetched anything. A download is a tool
    input by construction, and there is no way to obtain a file whose path never
    appears in one — so the narrowing cannot hide a violation.
+   **Both path separators, and this is not pedantry:** the captured transcript stores
+   Windows paths, so a mirror-side `Read` or `Write` appears as `monsters\<slug>.png`
+   while a `curl` of a URL appears with forward slashes. A forward-slash-only pattern
+   finds the second and misses the first, which is a **silent** pass on the run class
+   this scenario actually uses.
    **`INFO`, separately:** whether `monsters/README.md` or `monsters/catalog.json`
    was read. A hire that fetched a sheet before establishing there was anywhere to
    put it has run §5 on reflex; a hire that read the roster on reflex has not
@@ -324,10 +329,13 @@ three places because the failure has three sizes.
    even though nothing else does.
 
 10. **§2's stack table: no row matched, and none was fetched.** Instrument:
-    `transcript.jsonl`, searched for `stacks/` **in a tool input**, for the same
-    reason criterion `8` gives: §2's table cell contains the very path this criterion
-    is looking for, so any hire that reads the playbook puts it in its own transcript
-    as a tool *result*. `#071`. §2 says *"If no row matches,
+    `transcript.jsonl`, searched for `stacks[\\/]` **in a tool input**, for the same
+    two reasons criterion `8` gives — §2's table cell contains the very path this
+    criterion is looking for, so any hire that reads the playbook puts it in its own
+    transcript as a tool *result*; and **both separators**, because the fetch of a
+    mirrored note is a `Read` of `stacks\dom-css\README.md`. On the three runs that
+    demonstrably fetched it, a forward-slash-only pattern finds it in **one**. `#071`.
+    §2 says *"If no row matches,
     that's the normal case rather than a problem"* and *"Don't guess at a name
     that isn't in the table"*. Every session on record matched `dom-css`; **this
     is the first run that exercises the no-match branch at all**, which is a
