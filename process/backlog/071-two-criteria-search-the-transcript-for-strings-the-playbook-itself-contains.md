@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `nowhere-to-walk` `8` (no sprite downloaded) and `10` (§2's no-match branch) |
@@ -73,3 +73,21 @@ is `#066`, and it is a different defect in the same criterion.
   marks. Raised independently by that run's blind scoring, which had only the bundle and still asked
   *"whether criterion 10's search is for a fetch or for any occurrence."* Two readers, one of them with
   no access to the other, is the signal `#045`'s partial repair did not have.
+
+- `2026-08-04` `proven` — **applied to both criteria, in the wording above.** `8` and `10` now name the
+  tool *inputs* as the side of the transcript they search, with the reason stated in the criterion
+  rather than left to a reader: §5's own download example and §2's own table cell contain the two
+  patterns, so any hire that reads the playbook matches both as tool *results*. The narrowing cannot
+  hide a violation — a download or a fetch is a tool input by construction — which is why this needed
+  no arm.
+
+  `Gate: none`, so what `proven` means here is **applied, and shown to be done rather than to have
+  helped**. No verdict on record moves: both patterns fired on `2026-08-03-r18` and both readers passed
+  both marks anyway, by reading what the hits were rather than counting them. The next run on this
+  scenario is the first where the mechanical reading and the correct one agree.
+
+  **Fourth instrument in this project to measure something other than what it named** — `#009`, `#010`,
+  `#007` and the `-SimpleMatch` grep are the others, and `#074` made five. The pattern in all five is
+  the same: the instrument returned the answer the reader expected. This pair is the exception that
+  proves the rule about how they get caught — both were found by a reader who had *no* expectation,
+  which is the whole case for the blind pass.

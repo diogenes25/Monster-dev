@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | none directly. It degrades the **instrument** — the blind second scoring — on every criterion in both scenarios |
@@ -72,3 +72,35 @@ should not be reopened here.
 - `2026-08-03` `intake` — from `2026-08-03-r18`'s blind scoring, reported as a closing note. Found from
   the one seat that can see it: `criteria.md` is the only artifact in which the pointers dangle, and
   nobody reading the scenario in the repository would ever notice.
+
+- `2026-08-04` `proven` — **both halves applied: the pointers are gone and the check refuses them.**
+
+  **Twelve pointers, not four.** The count in this item was taken from `nowhere-to-walk.md`, where there
+  were four; `alt-a-left-to-right.md` had **eight**. Every one is rewritten to name no location, in the
+  shape this item proposed — the reason for a paragraph stays above the cut, the address of the
+  reasoning goes. One further pointer of the same class was found while doing it and is fixed too:
+  `nowhere-to-walk.md`'s opening said *"the run log at the bottom is its own series"*, which discloses a
+  run log below the cut without using any of the three patterns.
+
+  **`score-bundle.ps1` refuses a bundle whose criteria half contains `Provenance`, `at the foot of this
+  file` or `## Run log`** — one `-SimpleMatch` call per pattern, deliberately, since `-Pattern 'a|b'
+  -SimpleMatch` searches for the pipe literally and is the mistake that broke a `13b` check on
+  `2026-08-03`. Placed beside the run-id refusals it is a sibling of, and it reports every hit rather
+  than the first.
+
+  **Both paths exercised rather than asserted.** The failure path on a throwaway scenario carrying one
+  pointer: refused, both files named, bundle deleted. The pass path on the repaired
+  `alt-a-left-to-right.md` and `2026-08-04-r20`: 348 criteria lines, `(none)` for run ids, no dangling
+  pointer, bundle built and then removed with `-Remove`. The green run also cost nothing to get, which
+  is the honest bar for a check of this size.
+
+  `Gate: none`, so `proven` is **applied and shown to be done, never to have helped** — no scoring on
+  record is re-read, and the four verdicts `r18`'s scorer reached were correct with the pointers in
+  front of it.
+
+  **What it still does not catch, restated so nobody reads this as closed:** the same disclosure without
+  the words. *"Four of these rows are the product of a pre-run audit"* survives the check and still says
+  four rows were changed. And a pointer at a path that is real but not in the bundle —
+  `process/fixtures/static-site.md`, which the *Pre-answered* paragraph names on purpose for the
+  operator — is the same shape one step removed. Both are left as they are: narrowing further starts
+  costing the scorer information about what governs, which is the trade `#056` already made.

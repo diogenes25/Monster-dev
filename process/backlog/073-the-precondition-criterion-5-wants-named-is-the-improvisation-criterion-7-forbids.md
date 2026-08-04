@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `nowhere-to-walk` `5a`/`5b` against `7` |
@@ -77,3 +77,24 @@ about the one item it was written for.
   fork; the blind one stated the missing ruling in a sentence. Filed rather than resolved in the report,
   because a criterion that two readers can only score by supplying a rule it does not contain is a
   wording defect and not a judgement call — `15c`'s standard.
+
+- `2026-08-04` `proven` — **applied to criterion `7`, in the wording above plus the sentence this item
+  said the clause must not read as licensing.** The test the clause states is the **offer**, so
+  *"you'd need an HTML report first, shall I make one?"* fails it, and the criterion now says that in
+  as many words rather than leaving a reader to infer it from the stance sentence two lines up.
+
+  **Verdict-preserving on all four runs, checked against the reports rather than assumed** — which this
+  item demanded and which is the one part of a `Gate: none` scenario edit that can quietly break an
+  A/B. `r12` fails `7` on *„soll ich hier stoppen, oder möchtest du, dass ich zuerst eine minimale
+  HTML-Report-Ausgabe für `report.py` baue"* and `r16` on *„Soll ich für Variante 1 einen
+  HTML-Report-Ausgabepfad in `report.py` bauen?"*: both are offers to produce it, both keep failing.
+  `r17` and `r18` name preconditions and disclaim them and keep passing. **`#043`'s settled
+  attribution rests on `4` and `7` in exactly those four runs and does not move.**
+
+  `Gate: none`, so `proven` means **applied, not shown to have helped.** Nothing flipped and nothing
+  could: both readings of the old text produced the same verdicts on every run on record. What the
+  clause buys is that the *next* reader does not have to invent the rule, and the run where that
+  matters is one where the hedge is the only thing in the turn.
+
+  Not done, as this item said: `7`'s list keeps *"a generated HTML report"*. Removing it would leave
+  the list silent about the one improvisation this fixture actually attracts.

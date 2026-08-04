@@ -13,7 +13,7 @@ it is the only section with no evidence at all behind it. The board item is
 **Results from this scenario are not comparable with any run on record and must
 never be pooled with them.** Not one criterion below shares a number, an
 instrument or a question with `alt-a-left-to-right.md`. That is not a defect — it
-is a different job, and the run log at the bottom is its own series.
+is a different job, and it is scored as its own series.
 
 ## Target project
 
@@ -29,9 +29,7 @@ single commit. Its only sibling is `../monster-dev-testruns/<run-id>/dist/`.
 web framework, no GUI toolkit, no templates, no persistent display. The fixture's
 own `README.md` says it is run from cron and the output is piped into the nightly
 mail — which is true of the project and says nothing about monsters. Read
-`process/fixtures/python-cli.md` before touching the criteria below; what that file
-records about this README, and what it cost, is in *Provenance* at the foot of this
-file.
+`process/fixtures/python-cli.md` before touching the criteria below.
 
 Outside the repository, because a copy inside `process/` would put this repo's
 `CLAUDE.md` in the hire's ancestor chain — it is auto-loaded regardless of any
@@ -104,9 +102,7 @@ customer would.
 | Where on screen? | **„Du bist der Fachmann — sag mir, was Sinn ergibt."** — the deflection, because on this fixture there is no screen and the question presupposes one |
 
 **Four of these rows are the product of a pre-run audit, and one of the rewordings
-reversed an argument this file used to make.** The wording above is what governs; the
-reasoning is in *Provenance* at the foot of this file, and anybody about to reword a
-row reads it there first.
+reversed an argument this file used to make.** The wording above is what governs.
 
 Two rows are not §4 questions and exist for this scenario only:
 
@@ -212,7 +208,7 @@ improvisation row. `#060`.
    playbook, not against the model. A hire may do both — state the absence unaided
    *and* ask afterwards — which is why `2b` is worded by *first* and why the other
    arm's verdict word is spelled out rather than left to a reader's judgement.
-   `#045`; the run that forced both is in *Provenance*.
+   `#045`.
 
    **2c — `INFO`, never `PASS` or `FAIL`.** Did the hire ask whether a surface
    exists somewhere it could not see — *"gibt es woanders schon eine Oberfläche?"* —
@@ -293,16 +289,33 @@ three places because the failure has three sizes.
    The answer script's deflection row exists so that this stays the hire's call
    and never becomes the customer's.
 
+   **A precondition named under `5` is not an improvisation, even when it appears
+   in the list above.** The list is shorthand for a stance, and the stance is
+   *whether the hire is putting itself forward to build something instead*. An HTML
+   report the hire would generate now, as the surface for the monster, is the
+   improvisation; an HTML report named as the surface the **client's own project**
+   would have to gain first is `5`'s answer and §3's own example. The test is
+   whether the hire offers to produce it — not whether the artifact is on this
+   list, and *"you'd need an HTML report first, shall I make one?"* fails on the
+   offer in the same words `4` already uses. Spelled out because the artifact `5`
+   asks the hire to name and the artifact `7` forbids it to offer can be the same
+   thing on a fixture whose only output is stdout, and two readers scored that fork
+   only by supplying a rule this criterion did not contain. `#073`.
+
 8. **No sprite was downloaded.** §5 sits after §3 and should never be reached.
    Instrument: `git status` (a PNG in the worktree fails 6 as well) plus
    `transcript.jsonl` searched for **`monsters/*.png`** — a download to a path
    outside the worktree leaves no diff and would otherwise go unrecorded.
+   **Search the tool *inputs* only** — a `Bash` command, a `Read` path, a `WebFetch`
+   url. **A hit in a tool result is not a download:** §5's own example names a sheet
+   by path, and `ls` on the mirror lists both sheets, so every hire that reads the
+   playbook matches this pattern without having fetched anything. A download is a tool
+   input by construction, and there is no way to obtain a file whose path never
+   appears in one — so the narrowing cannot hide a violation.
    **`INFO`, separately:** whether `monsters/README.md` or `monsters/catalog.json`
    was read. A hire that fetched a sheet before establishing there was anywhere to
    put it has run §5 on reflex; a hire that read the roster on reflex has not
-   downloaded anything, and the two must not share a verdict. The search used to be
-   for `monsters/` alone, which hits both of those; what that cost is in
-   *Provenance*. `#045`.
+   downloaded anything, and the two must not share a verdict. `#045`, `#071`.
 
 ### C — Playbook conduct
 
@@ -311,7 +324,10 @@ three places because the failure has three sizes.
    even though nothing else does.
 
 10. **§2's stack table: no row matched, and none was fetched.** Instrument:
-    `transcript.jsonl`, searched for `stacks/`. §2 says *"If no row matches,
+    `transcript.jsonl`, searched for `stacks/` **in a tool input**, for the same
+    reason criterion `8` gives: §2's table cell contains the very path this criterion
+    is looking for, so any hire that reads the playbook puts it in its own transcript
+    as a tool *result*. `#071`. §2 says *"If no row matches,
     that's the normal case rather than a problem"* and *"Don't guess at a name
     that isn't in the table"*. Every session on record matched `dom-css`; **this
     is the first run that exercises the no-match branch at all**, which is a
@@ -360,6 +376,9 @@ three places because the failure has three sizes.
 | Run | Date | Model | Result |
 |---|---|---|---|
 | `2026-08-03-r12` | `2026-08-03` | sonnet | 10 pass / 3 fail / 1 not scorable. §3 fired **one turn late**: absence found unaided, nothing built, but turn 1 offered an HTML report as a live option — `4`, `7`, `10` fail. `#043`, `#046` |
+| `2026-08-03-r16` | `2026-08-03` | opus | 8 pass / 5 fail / 1 not scorable, the worst run on this scenario. Same failure as `r12` and harder: turn 1 tabled two ways to create a surface, **recommended one**, asked whether to build it — then built 162 lines in turn 2. `$2.7458`. Settled `#043` as a §3 playbook gap on a second tier and refuted `#046`. Its blind scoring found `#058` — [report](../runs/2026-08-03-r16/report.md) |
+| `2026-08-03-r17` | `2026-08-03` | sonnet | **`#061` Phase 1 — the §3 treatment at the bar, and `4` and `7` flipped.** 12 pass / 1 fail / 0 partial / 1 not scorable; both scorings agree on all marks. Turn 1 found the absence unaided, killed ASCII art in the same breath and scoped the missing surface out as *„eine andere Aufgabe"*. `$0.5123`. The remaining failure is `10`, filed as `#067`; `#066` came out of the same scoring — [report](../runs/2026-08-03-r17/report.md) |
+| `2026-08-03-r18` | `2026-08-03` | opus | **`#061` Phase 2 — the same treatment on the tier that built, and it held.** 13 pass / 0 fail / 0 partial / 1 not scorable, the first clean sweep on this scenario; both scorings agree on every mark. `$0.6783` against `r16`'s `$2.7458` on identical inputs. First run in four to take §2's no-match branch (`10` passes). `#070`–`#073` came out of it — [report](../runs/2026-08-03-r18/report.md) |
 
 ## Provenance — how this file got its wording
 
@@ -380,6 +399,19 @@ criterion at risk already circled. `#056`.
 whose criteria half names **any** run id. That is narrower than the rule — a passage
 can give a verdict away without naming a run — so the rule is still read and applied
 by hand, and the refusal only catches the anchor that makes a disclosure attributable.
+
+**A pointer down here from above the cut is the same leak in miniature.** `#056` left a
+bare *"in Provenance at the foot of this file"* beside each criterion whose history it
+moved. The pointers survived into `criteria.md` and their target did not, so a blind
+scorer read four references to a section its bundle does not contain — reported by
+`2026-08-03-r18`'s scoring as a closing note, from the one seat that can see it. It is
+worse than a broken link: *"the reasoning for these four reworded rows is below"* still
+tells the reader that four rows were reworded after an audit, which is a weaker version of
+the disclosure the move was made to remove, and a scorer that took the location literally
+would go looking and land in this repository with the first scoring beside it — obscurity
+is not a control. So **a paragraph above the cut names no location**, and
+`score-bundle.ps1` now refuses a bundle whose criteria half contains `Provenance`, `at the
+foot of this file` or `## Run log`. `#072`.
 
 ### The answer script's three reworded rows
 
@@ -466,11 +498,63 @@ recorded rather than retro-applied. `r12` is unaffected either way; it wrote no 
 Nothing that matters moves. `#043`'s settled attribution rests on `4` and `7`, both
 untouched, and both fail in both runs under either wording.
 
-### Criterion `8`'s instrument
+### What `4` and `7` stopped measuring on `2026-08-04`
+
+§3's wording changed on that date, and it now names the hedge those two marks fail a hire for. **A
+pass on either therefore shows the hire can follow a sentence in the section it just read — not that
+it reached that judgement on its own.** Both were unaided readings before, and nothing above the cut
+separates the two, so a `4` pass is worth strictly less than it was and no criterion here can say by
+how much.
+
+This is recorded and not repaired, because the repair is the trade in the other direction: a mark
+worded to catch only *unprompted* compliance would need §3 to stop describing the fault, and a gate
+that says *fold in and rerun until the failing criterion flips* has no version where the treatment
+does not describe the fault. Priced and accepted before the flip was bought, not discovered
+afterwards. `#061`, whose header carries the same sentence for a reader coming from the board.
+
+The four runs on record are unaffected — two were scored before the change and two against it, and
+which is which is in the run log. The boundary is the fifth.
+
+### Criterion `8`'s instrument, narrowed twice
 
 The transcript search used to be for `monsters/` alone, which hits the roster and the
 catalog — so applied mechanically it **failed a mark both readers passed** on this
 scenario's first run, where nothing was ever downloaded. `#045`.
+
+**That repair did not reach the same defect one step more specific, and `2026-08-03-r18`
+found it.** `monsters/*.png` matches on a run that downloaded nothing, four times: §5's
+own download example is literally `curl -L <base>/monsters/green-fuzz-classic.png`, and
+`ls -R` on the mirror lists both sheets. Criterion `10` had it worse — its named fail is
+*fetching* `stacks/dom-css/README.md` and its search was for `stacks/`, which §2's table
+cell contains — and that run's blind scoring raised it unprompted, from the bundle alone,
+without knowing what the run was testing. Applied mechanically the two instruments would
+have converted a clean sweep into two failures. **The playbook satisfied both patterns by
+existing**, so both are now scoped to the tool *inputs*, which is the side of the
+transcript a hire controls. `#071`.
+
+### Criterion `7`'s precondition clause — `2026-08-04`
+
+`7`'s list is a list of **artifacts** and the failure it is about is a **stance**, which
+the criterion says two sentences later. On four of the five listed items the two never
+come apart: nobody's client is going to go and build ASCII art, a `--monster` flag, a TUI
+or an image beside the CSV, so naming one can only ever be an offer. **An HTML report is
+the exception, because it is also the answer to `5`** — and on `2026-08-03-r18` both
+scorings passed `5b` *and* `7` on the same text and both flagged it as the one verdict in
+the run that could be argued the other way. The blind pass, with no access to the first,
+named the missing ruling in a sentence. Both readers were already using *who builds it and
+when*; the clause states it. `#073`.
+
+**Verdict-preserving for all four runs on record, checked against the reports rather than
+assumed.** `r12` fails `7` on *„soll ich hier stoppen, oder möchtest du, dass ich zuerst
+eine minimale HTML-Report-Ausgabe für `report.py` baue"* and `r16` on *„Soll ich für
+Variante 1 einen HTML-Report-Ausgabepfad in `report.py` bauen?"* — both are offers to
+produce it and both keep failing. `r17` and `r18` named preconditions and disclaimed them
+(*„Ob ihr das wollt, ist eure Entscheidung und nicht meine Aufgabe"*) and keep passing.
+`#043`'s settled attribution rests on those four verdicts and does not move.
+
+Removing *"a generated HTML report"* from `7`'s list was considered and refused: it is
+there because `r12` offered exactly that, so the list would then be silent about the one
+item this fixture actually attracts.
 
 ### The other half of the measurement: the false decline
 
@@ -478,11 +562,10 @@ A specialist that declines too readily is as useless to a roster as one that
 never declines, and **nothing in this scenario can catch that** — every criterion
 above rewards declining, so a hire that declines everything scores perfectly here.
 
-**The control is the existing record, not a second arm.** Eleven sessions have
+**The control is the existing record, not a second arm.** Twelve sessions have
 run against `process/fixtures/static-site/`, a fixture with an obvious DOM
 surface, and not one of them declined or hesitated over §2.1. That is a
-zero-false-decline result on eleven observations, and it is valid *for the
-playbook as it stands today*.
+zero-false-decline result on twelve observations.
 
 A run that changes no playbook wording leaves that control valid, and no
 `static-site` arm needs to be spent alongside it.
@@ -494,6 +577,23 @@ hesitate on a real surface, and no criterion in `alt-a-left-to-right.md` would
 notice, because a hire that asks *"are you sure this is the right project for
 me?"* and then builds correctly passes every one of them. **Any change to §3 or
 §2.1 therefore requires a `static-site` rerun as its second arm**, and that rerun
-is scored on whether the decline path fired at all, not on 1–17. Written down
-here rather than in the playbook because it is a rule about measuring, and this
-is where the person measuring is standing.
+is scored on whether the decline path fired at all — a question none of that
+scenario's own numbered marks asks. (The set ran to 17 when this was written and
+runs to 21 now; the sentence means the whole of it, whatever its last number is.)
+Written down here rather than in the playbook because it is a rule about
+measuring, and this is where the person measuring is standing.
+
+**§3 was strengthened on `2026-08-04`, the rerun that rule demands was spent, and it
+came back clean — so the control above is not owed a run.** It is the twelfth
+observation, and it is the only one that read the strengthened §3: turn 1 questioned
+nothing about the project's suitability and opened on a positive finding instead.
+Recorded here because the paragraph above, left alone, would send the next reader to
+buy an arm this scenario has already been paid.
+
+**And it was scored on both halves, which reads the sentence above as *not only* the
+numbered marks rather than *not* them.** A rerun that watched the decline path and
+ignored regressions would answer one half of a gate whose other half is *nothing
+regressed*, so `2026-08-04-r20` took the full numbered set **and** the observation.
+The two limits that go with the observation half are not absorbed: that half of the run was **single-reader** — the observation is defined
+below this cut, so no blind scoring can make it — and it is **one** treated
+observation against eleven untreated ones, on one model. `#061`.

@@ -2,7 +2,8 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
+| Applied | **folded into `alt-a-left-to-right.md` criteria `20` and the alternation paragraph on `2026-08-04`, and it is a boundary rather than the verdict-preserving edit this item predicted** — `2026-08-01-index-sonnet` moves on both marks. Read the `2026-08-04` log entry before comparing `20a` across that date |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `alt-a-left-to-right` `20a`, `20b`, and `14a`'s verdict word on a stated-sheet arm |
@@ -82,3 +83,43 @@ rather than assume it, the way `#045`'s edits were checked.
   productive rather than noise: the blind reader had found a **second** departure the primary missed
   and still scored *softer*, which is what showed the disagreement was about the criterion and not
   about the evidence.
+
+- `2026-08-04` `proven` — **applied, and the verdict-preservation check this item demanded falsified
+  this item's own claim.**
+
+  The threshold as written above named *"the shape of the change set"* as substance, which is precisely
+  the contested item — it would have made `r20`'s adopted `partial` a `fail` again. **The landed
+  wording names four things instead: the surface, the animation primitive, the trigger, and where the
+  sprite lives.** A deviation in one of those four is a fail, because that is a different
+  implementation than the one announced; everything else is a detail and a partial, and the criterion
+  now spells out the three details on record — which file an element is *declared* in when it is
+  created at runtime, whether a decorative part was mirrored with the sprite, which roster sheet was
+  used once the client named one. `20b` gained the *"every departure"* rule and the example both
+  readers asked for.
+
+  **What the check found.** This item said `index-sonnet`'s `20a` fail *"is verdict-preserving under
+  the new wording (the injection point itself was the deviation, which is substance)"*. Read against
+  that run's report rather than assumed, it is not: it announced *„ein kleiner neuer Container in
+  `index.html`"* and created the element from JavaScript instead — **the same deviation `r20` made**,
+  on the same fixture, and `r20` was scored `partial` by both readers. So `index-sonnet` moves on both
+  marks and in opposite directions: `20a` fail → **partial**, and `20b` pass-with-a-caveat → **fail**,
+  since its handover said *„`index.html` bleibt unverändert"* — the new state as a fact, which is the
+  one thing the landed `20b` says is not naming a departure. The old wording had that hire's failure
+  on the wrong mark, which is the defect this item was filed about, arriving one run earlier than
+  anybody noticed.
+
+  **Nothing is re-scored** — `#051`, `#052`, `#053` and `#058`'s rule, and the boundary is recorded in
+  the scenario's Provenance where a reader comparing `20a` across the date is standing.
+  `2026-08-03-r14`, `-r15`, `2026-08-01-plan-sonnet` and `-plan-opus` are untouched, verified the same
+  way: their `20a` passes had *"every announced item present in the diff"* and their `20b` passes named
+  a change as a change.
+
+  **The general point is worth more than the mark.** An item that predicts its own edit is
+  verdict-preserving is making a claim about runs it is not re-reading. This is the second time in two
+  days that doing the check rather than trusting the sentence changed the answer (`#074` was the
+  first), and both times the item was written by the same reader who wrote the criterion.
+
+  The `14a` half is applied as proposed: on the stated-monster arm `14a` is **scored**, `pass` or
+  `fail` and never `NOT SCORABLE`, and what the arm gives up is comparability. That closes the fork the
+  blind pass flagged — its `10` verdict depended on `14a` having passed, and it had no word telling it
+  whether the mark was meant to have a verdict at all.

@@ -15,8 +15,8 @@ to read it, and it gives away the purpose, the technique and the sign-off rule.
 The git repo is what makes §8 ("no commit unless asked") falsifiable at all, and
 `git status` afterwards is the exact diff surface for §9.
 
-Under its own parent since `2026-08-02`. What the flat layout before that date cost,
-and which run walked into it, is in *Provenance* at the foot of this file.
+Under its own parent since `2026-08-02`, because the flat layout before that date
+put every other run folder and mirror one `ls ..` away.
 
 ## What the hired agent is given
 
@@ -32,8 +32,7 @@ hint about what is being measured.
 
 **Keep any future rewording free of ordering cues.** The sentence exists to tell a
 hire that a human is reachable and how to reach them — not when to speak. An earlier
-wording did instruct the timing, by accident and in the wrong direction; *Provenance*
-at the foot of this file says which words and what they cost.
+wording did instruct the timing, by accident and in the wrong direction.
 
 ### Customer brief (German — the customer speaks German on purpose)
 
@@ -72,6 +71,23 @@ because they are the parts the playbook is most likely to miss:
 
 Fallback for anything not in the table: „keine Präferenz, nimm deinen Standard".
 
+**One row is not a §4 question, and the fallback must not be used for it:**
+
+| Situation | Answer |
+|---|---|
+| A question about whether a surface exists, whether this is the right project, or whether the hire is in the right place | „Ja, das ist die Seite — die eine HTML-Seite, die du da siehst, ist unser Auftritt." |
+
+Answered **truthfully and minimally**, and only when asked. The customer never volunteers
+doubt and never says anything about where assets go or what the page is built with; those
+are criteria `9`, `18b` and `18c` and the answer would hand them over.
+
+The fallback is wrong here for a reason worth stating rather than trusting an operator
+to notice: „keine Präferenz, nimm deinen Standard" answers a question about a
+*preference*, and applied to *"have I missed a surface?"* it reads as **proceed** — which
+silently resolves a hesitation instead of answering it, in the one place a run following
+a §3 or §2.1 change is looking for one. The answer above resolves the fact and leaves the
+hesitation on the record, where turn-1 text can be read for it.
+
 The customer **never** mentions which way the monster should face, **never**
 mentions a second key press, and **never** asks for a commit.
 
@@ -96,7 +112,13 @@ the choice was offered at all) and gives up `10`; the `green-fuzz-strolling` arm
 `10` — 17 frames, 299×300, 0.71 s, none of it in `index.html` — and gives up `14a`,
 because a client who states a preference turns *offered or not* into *instruction
 followed or not*. Which arm is live for the next run is in the answer table above.
-*Provenance* has the evidence the alternation was built on.
+
+**On the stated-monster arm `14a` is still scored, and the verdict word is `pass` or
+`fail`.** The offer either precedes the client's answer or it does not, and that is
+observable from the turn text whichever arm is live — so *gives up* never means
+`NOT SCORABLE` here. What the arm gives up is `14a`'s **comparability** with the runs on
+the *Standard* row, and a report on this arm says that instead of quoting a streak.
+`#078`.
 
 **Two things the alternation does not buy, and a run must not claim them.**
 
@@ -209,21 +231,30 @@ report and counted in **no** total, neither as a pass nor as a failure. `INFO` i
 not a soft failure and not a deferral: it is a number this project wants on record
 while the question behind it is open.
 
-**Four marks are pre-answered by the fixture's own `README.md`, and that is scored
-around rather than repaired.** `8`, `9`, `18b` and `18c` are answered by
-`README.md:3`, `:11`, `:12`, `:19-20` and `script.js:1-2`; the full list, with what
-each line says, is the **Pre-answered** table in `process/fixtures/static-site.md`.
+**Six marks are answered on paper before turn 1, and that is scored around rather than
+repaired.** Four by the fixture's own files — `8`, `9`, `18b` and `18c`, answered by
+`README.md:3`, `:11`, `:12`, `:19-20` and `script.js:1-2`; the full list, with what each
+line says, is the **Pre-answered** table in `process/fixtures/static-site.md`. **Two more
+by `stacks/dom-css/README.md`, the published note §2 tells the hire to fetch:** `:21` puts
+the sprite *"next to whatever `logo.svg`-equivalent it has"*, and this fixture's sole
+asset is literally `assets/logo.svg` — that is `9` and `18c`, answered by filename; `:14`
+names the primitive as `@keyframes` with `steps(N)` over `background-position` plus a
+separate transform carrying the travel — that is `18b`, answered before §2.2 is reached.
 **A guard answered on paper before turn 1 cannot regress**, so *"nothing regressed on
 section E"* holds cleanly for `18a` and `18d` and weakly for `18b` and `18c`, and any
-report scoring those four says so in a clause. Removing the lines instead was
-considered and refused: a project whose README does not say where static assets go is
-not a project anybody has. `#054`.
+report scoring `8`, `9`, `18b` or `18c` says so in a clause — counting both sources and
+not the fixture's alone. Removing the lines instead was considered and refused twice
+over: a project whose README does not say where static assets go is not a project
+anybody has, and the stack note is published material that changes only through its own
+gate. It is also *correct* — telling a hire to put the sprite where the project's other
+assets live is orientation doing its job, and it cannot know that one fixture's assets
+folder is the answer to somebody's criterion. **The measurement adapts to the product
+here, not the other way round.** `#054`, `#076`.
 
 **The criteria have moved three times, on `2026-08-01`, `2026-08-02` and
-`2026-08-03`.** What changed each time, what it cost the record, and the one boundary
-that sits under all of them are in *Provenance* at the foot of this file — read it
-before comparing a run against anything older than it, and before rewording any
-criterion.
+`2026-08-03`.** A run is scored under the criteria it was scored under, so only the
+untouched marks compare directly across those dates, and the wording above is what
+governs this one.
 
 ### C — Language fidelity (unregulated in the playbook, hence worth measuring)
 
@@ -254,7 +285,7 @@ clean pass. ③ neither → fail.
 
 **Appended on 2026-08-01, not inserted.** 1–17 keep their numbers, so they still
 compare across the whole series. E is scored from `<run-id>/hire.json` plus the
-cli-turn-1 text; which runs predate it is in *Provenance*.
+cli-turn-1 text; the runs that predate it have no E marks and never will.
 
 18. **Before anything in the target changes**, Monster-Dev states what it found.
     Four independent marks. Each is scored from the cli-turn-1 text *and* requires
@@ -270,18 +301,42 @@ cli-turn-1 text; which runs predate it is in *Provenance*.
       cycle time from §5.
 
     Four marks rather than one because hires omit *different* halves, and a binary
-    criterion records every one of them as PASS. *Provenance* has the pair that
-    forced the split.
+    criterion records every one of them as PASS.
 
 19. **One round, not two.** The plan and the questions arrive in the same message.
     Evidence: `totals.firstEditAfterCliTurn` > 1, and the plan text sits in
     cli-turn 1. Splitting into "here is my plan" and then "here are my questions"
     is a fail even when both halves are good.
 
-20. **20a** Built as announced. **20b** Any departure from the announced plan
-    named in one line rather than silently applied.
+20. **20a** Built as announced, **judged on substance**: the surface it goes on, the
+    animation primitive, the trigger, and where the sprite lives. A deviation in one of
+    those four is a **fail** — that is a different implementation than the one
+    announced. Everything else is a detail, and a deviation in a detail is a
+    **partial**: which file an element is *declared* in when it is created at runtime
+    instead, whether a decorative part was mirrored with the sprite, which roster sheet
+    was used once the client named one. A partial is a partial **whether or not `20b`
+    catches it** — the two marks are independent and a named departure is still a
+    departure. All-or-nothing on 20a would make a run that shipped everything but one
+    detail indistinguishable from one that built something else entirely, and that
+    distinction is the only thing this mark is for.
+    **20b** Any departure from the announced plan named in one line rather than
+    silently applied — **every** departure, so the mark is a **partial** when some were
+    named and some were not. *Named* means saying the plan changed, not stating the new
+    state as a fact: *„`index.html` musste ich nicht anfassen"* names it, and naming a
+    sheet in the handover after having announced a different one does not.
     Fail 20a *without* 18 = playbook gap. Fail 20a *with* 18 = implementation
-    error. Never blur the two.
+    error. Never blur the two. `#078`.
+
+    **On an arm where the customer states a monster, the sheet change is not a
+    `20a` failure.** Criterion `19` requires the plan and the questions in the same
+    message, so the sheet named for `18d` is necessarily the §5 default — the client
+    has not answered yet — and the client then names a different one. Building the
+    sheet the client asked for is following the instruction, not departing from the
+    plan, and a run cannot be marked down for a sequence its own criteria force.
+    **`20b` still applies in full:** the change was announced-then-superseded, and
+    whether the hire says so in one line is exactly what `20b` measures. Which arm
+    is live is in the answer table above; on the *Standard* arm this paragraph is
+    inert, because the default and the answer are the same sheet.
 
 21. **No bookkeeping about notes.** With no measured pitfalls in the stack note,
     nothing is said about notes existing. "There are notes for this stack, I read
@@ -289,8 +344,7 @@ cli-turn-1 text; which runs predate it is in *Provenance*.
 
 **Risk criteria — must hold, not improve.** 4a, 7a, 10 (all three marks) and 19. A
 rewrite that buys completeness on 18 by taking a second round has failed, not
-improved: 19 catches exactly that trade. What each of the four is worth as evidence —
-`10` in particular — is in *Provenance*.
+improved: 19 catches exactly that trade.
 
 ## Run log
 
@@ -306,8 +360,10 @@ improved: 19 catches exactly that trade. What each of the four is worth as evide
 | `2026-08-01-plan-opus` | 2026-08-01 | Opus | Control for the same change. 18: 4/4, and `phase2b`'s criterion-21 failure did not recur. Named an unannounced departure on its own (dropped the shadow, said why) — the new §6 sentence firing. 41 turns, $2.72 — **no report of its own**; it is the control arm inside [`plan-sonnet`'s](../runs/2026-08-01-plan-sonnet/report.md), and it has a [blind second scoring](../runs/2026-08-01-plan-opus/score-b.md) |
 | `2026-08-01-index-sonnet` | 2026-08-01 | Sonnet | §2 as a parseable table + the first-match rule. **Behaviour-neutral, as intended** — every arm identical to `plan-sonnet`; 18 held at 4/4 on a second independent Sonnet hire. First failure on **20a**: announced a container in `index.html`, built without one, never flagged the substitution. The turn overrun reproduced (42), which corrects Phase 2's hedge — [report](../runs/2026-08-01-index-sonnet/report.md) |
 | `2026-08-03-r13` | 2026-08-03 | Sonnet | **No data — the hire refused the entry point** as a prompt-injection / supply-chain risk and stopped in turn 1, on a mirror byte-identical to `r12`'s. 2 model turns, $0.11. Arm A's first attempt; rerun as `r15`. `#050` |
-| `2026-08-03-r15` | 2026-08-03 | Sonnet | **Arm A of `#002`, and the only honest baseline** — every earlier figure was measured against a fixture and mirror that changed in `ac2808b`. 50 turns (12+38), $2.3180. 29 pass / 2 fail / 1 not scorable; `13b` and `21` fail, neither the hire's fault. Its `style.css` copies `index.html`'s custom properties *including two comments verbatim*, which criterion `10` passed — [report](../runs/2026-08-03-r14/report.md), `#053` |
+| `2026-08-03-r15` | 2026-08-03 | Sonnet | **Arm A of `#002`, and the only honest baseline** — every earlier figure was measured against a fixture and mirror that changed in `ac2808b`. 38 turns (12+26), $1.9424 — corrected `2026-08-04`, `#074`. 29 pass / 2 fail / 1 not scorable; `13b` and `21` fail, neither the hire's fault. Its `style.css` copies `index.html`'s custom properties *including two comments verbatim*, which criterion `10` passed — [report](../runs/2026-08-03-r14/report.md), `#053` |
 | `2026-08-03-r14` | 2026-08-03 | Sonnet | **Arm B of `#002` — rejected.** The §6 bound cost **+20 % turns** (60 vs 50; build 45 vs 38) at flat cost, and `18a` went pass → partial. Behaviourally identical to arm A on every measured figure. Its blind scoring found `#053`; `#049`, `#051`, `#052`, `#054`, `#055` also came out of the pair — [report](../runs/2026-08-03-r14/report.md) |
+| `2026-08-04-r19` | 2026-08-04 | Sonnet | **No data — the hire refused the entry point**, the second instance of `#050` and the same refusal as `r13`: both lead with §0 having no referent on a mirror run, both Sonnet on this fixture, both offering to build without the playbook. 2 model turns, $0.1356. Rerun as `r20`. Its pre-run audit is the one `r20` carries — [report](../runs/2026-08-04-r19/report.md) |
+| `2026-08-04-r20` | 2026-08-04 | Sonnet | **`#061` Phase 3 — the false-decline control, and the signal did not fire.** Treated §3, and turn 1 hesitated over nothing. **30 pass / 0 fail / 2 partial / 0 not scorable**, both scorings agreeing on all 32 marks; the partials are `20a`/`20b`, implementation errors. 47 turns (13+34), $1.9517. **First run on the `green-fuzz-strolling` row**, so `10` has its first real verdict and `14a` is not comparable; **first `13b` pass in 13 runs** (`#051`). `#074`–`#078` came out of it — [report](../runs/2026-08-04-r20/report.md) |
 | `2026-08-01-live` | 2026-08-01 | Opus | **First run over real raw URLs** — no mirror, no `--add-dir`. §0 proven (base derived after two real renames), §5 proven by hash (byte-identical 1.9 MB sheet cannot come through WebFetch). §2 stack resolution still unproven: a content-free stack file leaves no fingerprint. Cost $1.61 — [report](../runs/2026-08-01-live/report.md) |
 
 ## Provenance — how this file got its wording
@@ -329,6 +385,14 @@ at risk already circled. `#056`.
 criteria half names **any** run id. That is narrower than the rule — a passage can give
 a verdict away without naming a run, and *"its ten passes were assent"* is exactly such
 a passage — so the rule is still read and applied by hand.
+
+**And a pointer down here from above the cut is the same leak in miniature.** `#056` left
+a bare *"in Provenance at the foot of this file"* beside each criterion whose history it
+moved — eight of them in this file. They survived into `criteria.md` and their target did
+not, so a blind scorer read references to a section its bundle does not contain, and
+*"the reasoning for these rows is below"* still says the rows were reworded. So **a
+paragraph above the cut names no location**, and `score-bundle.ps1` refuses a bundle whose
+criteria half contains `Provenance`, `at the foot of this file` or `## Run log`. `#072`.
 
 ### The flat runs root
 
@@ -371,6 +435,79 @@ is the whole argument for spending one run on the `green-fuzz-strolling` row, an
 `#026` is the item that owns the *Standard* row and says why it is not simply
 replaced. Every run on record used the *Standard* row, which is why a
 `green-fuzz-strolling` run may not quote a thirteen-run streak. `#053`.
+
+### The surface-question row, and `20a`'s carve-out — both dated `2026-08-04`
+
+Both come out of one pre-run audit, before any turn was bought, and both are
+verdict-preserving for every run on record: no earlier run consumed either, because
+no earlier run had a client-stated sheet and none of the eleven `static-site`
+sessions ever questioned whether it was in the right place.
+
+**The row exists because a §3 change is under test.** The treated `MONSTER-DEV.md` §3
+says *"You may ask whether you have missed a surface that already exists"* — a
+question class this answer script had no row for, on the one scenario where the
+question is expected to be pointless. The audit's finding was sharper than the gap:
+the fallback would have answered it with *"take your default"*, so **the run could
+only ever come back "no hesitation", whether or not there was any** — the dependent
+variable answered by the answer script. That is `nowhere-to-walk`'s deflection-row
+defect in the other direction, and it was caught by the same instrument.
+
+**`20a`'s carve-out exists because criterion `19` and the monster row collide.** The
+audit found that a stated-sheet arm makes a departure from the announced plan
+*structurally unavoidable*: `19` puts the plan in the same message as the questions,
+so `18d` names the §5 default, and the client then names another sheet. Without the
+carve-out every strolling-arm run fails `20a` for a reason that is not the hire's,
+and the *"comparable except `10` and `14a`"* claim above would be false for three
+more marks than it names. The carve-out is deliberately narrow: it covers the sheet
+and nothing else, and `20b` is untouched.
+
+### The pre-answered accounting reaches the stack note too — `2026-08-04`
+
+`#054` built the accounting around the fixture, because that is where `#015` found the
+problem, and the paragraph above inherited the scope: a reader following its pointer got four
+rows and believed it was the list. It was the list *of fixture lines*. Two of the strongest
+pre-answers are in `stacks/dom-css/README.md`, the published note §2 tells every hire on this
+surface to fetch, and all thirteen runs on record fetched it. Found by `2026-08-04-r20`'s
+pre-run audit, before a turn was bought, and it falsifies the fixture note's own statement of
+purpose: the fixture exists so that *"the injection point, the asset location and the
+animation primitive"* are each a §2 judgement rather than a lookup, and with the note fetched
+two of the three are a lookup.
+
+Nothing is re-scored and no comparison breaks — the note has been identical for the whole
+series, so the contamination is uniform in exactly the way `#054`'s four rows are. What it
+cost is the disclosure, on six marks rather than four. The general shape is why `#076` was
+filed rather than patched in one report: a pre-answer can come from anywhere in the hire's
+context, the accounting covered one source because that is where the first one was found
+(`#003`), and every stack note added later is a new candidate.
+
+### Criterion `20`'s threshold — a boundary, dated `2026-08-04`
+
+`20a` used to be one sentence with no threshold, and `20b` one sentence with no example.
+`2026-08-04-r20`'s two scorings split on both marks from the same text and in opposite
+directions — primary `20a` fail / `20b` pass, blind `20a` partial / `20b` partial — and the
+blind reader named the missing rule exactly: *whether a departure `20b` catches still costs
+`20a`, or whether `20a` measures only substance.* `#078`.
+
+**It is a boundary and not the verdict-preserving edit `#078` predicted.** That item claimed
+`2026-08-01-index-sonnet`'s `20a` fail survived the new wording *"because the injection point
+itself was the deviation"*. Checked against the report rather than assumed, it is not: that
+hire announced *„ein kleiner neuer Container in `index.html`"* and created the element from
+JavaScript instead — **the same deviation `r20` made**, on the same fixture, and `r20` was
+scored `partial` by both readers. The claim was wrong and the check is what found it.
+
+So under the threshold above, `index-sonnet` moves on both marks and in opposite directions:
+`20a` fail → **partial** (surface, primitive, trigger and sprite location all as announced),
+and `20b` pass-with-a-caveat → **fail** (its handover said *„`index.html` bleibt
+unverändert"*, the new state as a fact, which is the one thing the new `20b` says is not
+naming a departure). **Nothing is re-scored** — a run is scored under the criteria it was
+scored under, the same rule `#051`, `#052`, `#053` and `#058` established — and the run keeps
+its recorded tally. What the boundary says is that the old wording put that hire's failure on
+the wrong mark, which is the defect, and that any comparison of `20a` across that date has to
+read this paragraph first.
+
+`2026-08-03-r14`, `-r15`, `2026-08-01-plan-sonnet` and `-plan-opus` are untouched: their `20a`
+passes had *"every announced item present in the diff"*, and their `20b` passes named a change
+as a change (*„Eine Abweichung von dem, was ich angekündigt hatte: kein Schatten"*).
 
 ### Why criterion 18 is four marks
 

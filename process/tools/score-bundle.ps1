@@ -233,6 +233,49 @@ if ($residue) {
            "Bundle deleted rather than handed back. (#056)")
 }
 
+# --- and nothing above the cut may point at what is below it -------------------------------------
+#
+# #072, the sibling hole of the refusal above and closed in the same construction. #056 moved every
+# criterion's history below `## Run log` into a `## Provenance` section and left a bare "in
+# Provenance at the foot of this file" beside each criterion it moved. The pointer is above the cut
+# and its target is below it, so `criteria.md` shipped dangling references — four in
+# nowhere-to-walk.md, eight in alt-a-left-to-right.md — and 2026-08-03-r18's blind scoring reported
+# them as a closing note. It is the only seat from which they are visible: nobody reading the
+# scenario in the repository would ever notice.
+#
+# Three costs, in increasing order of seriousness. A wasted turn, following a pointer into a file
+# that ends before its target. A disclosure that history exists and was withheld — "the reasoning
+# for these four reworded rows is below" still says four rows were reworded after an audit, which is
+# a weaker version of the very disclosure #056 removed, delivered by the sentence that removed it.
+# And it invites the reach: process/ is tracked and the scenario is a real path, so a scorer that
+# took the location literally would land in this repository with the first scoring, the board and
+# CLAUDE.md beside it. Nothing stops that except the scorer choosing not to, and #031's rule is that
+# obscurity is not a control.
+#
+# One pattern per call and -SimpleMatch, for the reason the #047 check above records: `-Pattern
+# 'a|b' -SimpleMatch` searches for the pipe literally and can never match.
+#
+# What it does not catch: the same disclosure made without the words. "Four of these rows are the
+# product of a pre-run audit" survives this check and still says four rows were changed. Narrowing
+# that further starts costing the scorer information about what governs, which is the trade #056
+# already made and should not be reopened here.
+$dangling = @()
+foreach ($pointer in @('Provenance', 'at the foot of this file', '## Run log')) {
+    $dangling += @($kept | Select-String -Pattern $pointer -SimpleMatch |
+                   ForEach-Object { "  line $($_.LineNumber): $($_.Line.Trim())" })
+}
+if ($dangling) {
+    $where = ($dangling | Sort-Object -Unique) -join "`n"
+    Remove-Item -Recurse -Force $bundle
+    throw ("BROKEN: $Scenario points from above the '## Run log' cut at something below it, in the " +
+           "prose the scorer reads:`n$where`n" +
+           "The pointer survives into criteria.md and its target does not, so the bundle ships a " +
+           "dangling reference that also discloses that history exists and was withheld. Rewrite " +
+           "the sentence so it names no location — a reader who is *in* the scenario file does not " +
+           "need to be told where the foot of it is — and leave the reasoning where it is. Do not " +
+           "move the history back up. Bundle deleted rather than handed back. (#072)")
+}
+
 # --- the envelope, the measurements, the git surface ------------------------------------------
 
 $hireJson = Join-Path $runsDir "$RunId\hire.json"

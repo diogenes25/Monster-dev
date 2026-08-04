@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `alt-a-left-to-right` `9`, `18b`, `18c` — two of them section-E marks, which every `#002`-class A/B is required not to regress |
@@ -80,3 +80,21 @@ it.
   scenario and the fixture note together and noticed the note answers what the fixture note claims
   the fixture asks. Recorded rather than fixed before that run, because the note is uniform across
   the series and editing published material mid-arm would have added a variable to a control run.
+
+- `2026-08-04` `proven` — **the paragraph is widened, the stack note is untouched.** `alt-a`'s
+  *Pre-answered* paragraph now says **six** marks and names both sources with line numbers, and the
+  clause every report owes is stated as *counting both sources and not the fixture's alone*, so the
+  under-report this item found cannot be reproduced by following the instruction. The reasoning went
+  below the cut, where a criterion's history belongs (`#056`), and it carries the sentence that decides
+  every future case of this: **the measurement adapts to the product, not the other way round.**
+
+  `Gate: none`, so `proven` is **applied and shown to be done.** Nothing is re-scored and no comparison
+  breaks: the note has been byte-identical for all thirteen runs, so the contamination is uniform in
+  exactly the way `#054`'s four rows are. `2026-08-04-r20`'s report already carried the longer clause,
+  which is what a report does when the scenario has not caught up yet.
+
+  **It closes one source and names the shape rather than solving it.** A pre-answer can come from
+  anywhere in the hire's context; this accounting now covers the fixture and the one stack note that
+  matches it. Every note added under `#005` or `#006` is a new candidate against whichever fixture
+  happens to match, and no check can find them — the finding came from a reader comparing the mirror
+  against the criteria before a turn was bought, which is what the pre-run audit is for.
