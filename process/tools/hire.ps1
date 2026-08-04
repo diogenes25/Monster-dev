@@ -36,7 +36,24 @@ this script, and a path it computed for itself would be a path nobody looked at.
 
 .PARAMETER Dist
 The mirror from build-dist.ps1 — <runs root>\<RunId>\dist, the one directory beside the run folder
-a hire is meant to reach. Handed over with --add-dir. Turn 1 only.
+a hire is meant to reach. Handed over with --add-dir. Turn 1 only, and mutually exclusive with
+-EntryUrl: those two are the two fetch paths a run can have.
+
+.PARAMETER EntryUrl
+The real START.md URL for a run that fetches over raw.githubusercontent.com instead of from a mirror
+— the run class 2026-08-01-live used, which predates this wrapper and could not be launched through
+it at all until #050 needed one. No mirror is built, nothing is handed over with --add-dir, and the
+mirror manifest check has nothing to compare.
+
+Recorded as `fetchPath` rather than inferred from which parameter was passed. That is #063's lesson
+applied a second time: the local-model spike was indistinguishable on disk from a paid run, and the
+fix was one field a script can read instead of a human recognising a model name. A run class that
+identifies itself only by a *missing* argument poisons two fields that already mean three things —
+`totals.mirrorIntact` would have to conflate "not checked" with "nothing to check", and an empty
+section D in check-reach.ps1 would not say whether the hire fetched nothing or was never given a URL.
+
+The fourteen records written before 2026-08-04 carry no `fetchPath`; absence means `mirror`, because
+until #050's arm no other class could be launched.
 
 .PARAMETER Brief
 The customer brief from the scenario. Turn 1 only; mutually exclusive with -BriefFile.
@@ -77,6 +94,7 @@ param(
     [Parameter(Mandatory)][string]$RunId,
     [Parameter(Mandatory)][string]$Target,
     [string]$Dist,
+    [string]$EntryUrl,
     [string]$Brief,
     [string]$BriefFile,
     [string]$Answer,
@@ -150,15 +168,32 @@ if (Test-Path $recordPath) {
     $claudeArgs = @('-p', $prompt, '--resume', $sessionId, '--output-format', 'json')
 } else {
     if ($Answer)   { throw "BROKEN: $RunId has no turn 1 yet. Start it with -Brief or -BriefFile." }
-    if (-not $Dist) { throw "BROKEN: -Dist is required for turn 1 — the hire has no entry point without the mirror." }
     if ($Brief -and $BriefFile) { throw "BROKEN: pass either -Brief or -BriefFile, not both." }
+
+    # Exactly one fetch path, named rather than inferred. Neither is the old `-Dist is required`
+    # failure with a longer message; both is a run whose class nobody could state afterwards.
+    if ($Dist -and $EntryUrl) {
+        throw ("BROKEN: -Dist and -EntryUrl are the two fetch paths a run can have, and this one " +
+               "passed both. A mirror run hands over a directory; a real-URL run hands over a URL and " +
+               "builds no mirror. Pass one.")
+    }
+    if (-not $Dist -and -not $EntryUrl) {
+        throw ("BROKEN: turn 1 needs a fetch path — -Dist <mirror> for a mirror run, or -EntryUrl " +
+               "<START.md url> for a run over real raw.githubusercontent.com URLs. Without either the " +
+               "hire has no entry point.")
+    }
 
     $prompt = if ($BriefFile) { Get-Content $BriefFile -Raw } else { $Brief }
     if (-not $prompt) { throw "BROKEN: turn 1 needs -Brief or -BriefFile." }
 
-    $distPath = (Resolve-Path $Dist).Path
-    $kind     = 'brief'
-    $claudeArgs = @('-p', $prompt, '--output-format', 'json', '--add-dir', $distPath)
+    $fetchPath = if ($Dist) { 'mirror' } else { 'real-urls' }
+    $distPath  = if ($Dist) { (Resolve-Path $Dist).Path } else { $null }
+    $kind      = 'brief'
+
+    # --add-dir only for a mirror. A real-URL run reaches its instructions over the network, so
+    # widening the filesystem fence for it would hand it a directory the production path does not have.
+    $claudeArgs = @('-p', $prompt, '--output-format', 'json')
+    if ($distPath) { $claudeArgs += @('--add-dir', $distPath) }
 
     # Closes the assembly record: an assembly.md with no `hire.ps1` entry is a setup that was
     # built and never hired, which is precisely the case #048 exists for.
@@ -175,7 +210,11 @@ if (Test-Path $recordPath) {
     . (Join-Path $repoRoot 'process\tools\lib\assembly.ps1')
     $epMatch   = [regex]::Match($prompt, '\S*START\.md')
     $entry     = if ($epMatch.Success) { $epMatch.Value } else { '' }
-    $decodable = Test-MonsterDevEntryPointLeak -Prompt $prompt -DistPath $distPath -RepoRoot $repoRoot
+    # `''` rather than $null for a real-URL run: the parameter is Mandatory with AllowEmptyString, and
+    # the check still has work to do — the *prompt* is where #042's scratchpad slug appeared, and a
+    # brief carrying a URL can still carry a decodable path beside it.
+    $decodable = Test-MonsterDevEntryPointLeak -Prompt $prompt `
+                     -DistPath $(if ($distPath) { $distPath } else { '' }) -RepoRoot $repoRoot
 
     # Precomputed, not interpolated inline: a nested double-quoted string carrying backtick escapes
     # inside $() inside a double-quoted string does not survive PowerShell's tokenizer.
@@ -183,9 +222,12 @@ if (Test-Path $recordPath) {
     $noteEntry   = if ($entry) { "``$entry``" } else { 'no START.md path in the brief text' }
     $noteDecode  = if ($decodable) { 'FOUND — ' + ($decodable -join '; ') } else { 'none found' }
 
+    $noteHandover = if ($distPath) { "mirror handed over as: ``$distPath``" }
+                    else { "no mirror — entry point handed over as the URL ``$EntryUrl``" }
+
     Add-MonsterDevAssemblyNote -RunId $RunId -Step 'hire.ps1' -Detail @(
-        "model: ``$Model`` · fixture: $noteFixture"
-        "mirror handed over as: ``$distPath``"
+        "model: ``$Model`` · fixture: $noteFixture · fetch path: ``$fetchPath``"
+        $noteHandover
         "entry point in the brief: $noteEntry"
         "#042 — decodable references to this repository in turn 1's prompt and mirror path: $noteDecode"
     ) | Out-Null
@@ -202,7 +244,13 @@ if (Test-Path $recordPath) {
     $record = [pscustomobject]@{
         runId        = $RunId
         target       = $targetPath
+
+        # Which of the two fetch paths this run had, stated rather than inferred from whether `dist`
+        # is null. See the -EntryUrl help above: absence on the fourteen older records means `mirror`.
+        fetchPath    = $fetchPath
         dist         = $distPath
+        entryUrl     = $EntryUrl
+
         fixture      = $Fixture
         modelFlag    = $Model
 
@@ -231,6 +279,11 @@ if ($Model) { $claudeArgs += @('--model', $Model) }
 
 # The mirror this turn is being run against. From the parameter on turn 1 and from the record after
 # that, which is the same authority rule -Model follows: the mirror belongs to the run.
+#
+# Null on a real-URL run, and that has to be handled rather than passed on: Test-MonsterDevMirror's
+# -DistPath is Mandatory, so a null would fail the *binding* — after the turn was paid for and before
+# the record was written, which is the one place this script promises never to fail. Caught by reading
+# the code while designing #050's arm rather than by a run dying on it.
 $mirrorPath = if ($distPath) { $distPath } else { $record.dist }
 
 # --- run it --------------------------------------------------------------------------------
@@ -269,7 +322,15 @@ $envelope = ($raw -join "`n") | ConvertFrom-Json
 # is still usable. Which file changed and when decides the honest verdict, and that is a reader's
 # call — what must not happen is the reader never being told.
 . (Join-Path $repoRoot 'process\tools\lib\mirror-manifest.ps1')
-$mirror = Test-MonsterDevMirror -RunId $RunId -DistPath $mirrorPath
+$mirror = if ($mirrorPath) {
+              Test-MonsterDevMirror -RunId $RunId -DistPath $mirrorPath
+          } else {
+              # A real-URL run has no mirror to protect. `no-mirror-run` rather than `no-mirror`, which
+              # means *the manifest describes a mirror that is gone* — a fifth state would be one word
+              # doing two jobs, which is the defect mirrorIntact's three values exist to avoid.
+              [pscustomobject]@{ status = 'no-mirror-run'; missing = @(); modified = @(); added = @()
+                                 checkedAt = (Get-Date).ToUniversalTime().ToString('o') }
+          }
 
 if ($mirror.status -eq 'changed') {
     $detail = @(
@@ -282,6 +343,9 @@ if ($mirror.status -eq 'changed') {
                    "This is a validity finding for the report, not an automatic void: decide what the " +
                    "changed file was worth to this run, and say so. If MONSTER-DEV.md or START.md is in " +
                    "that list, the run measured something other than the playbook on record.")
+} elseif ($mirror.status -eq 'no-mirror-run') {
+    # Not a warning. There is no mirror by design on this run class, and a warning printed every turn
+    # of every real-URL run is a warning that gets ignored on the run where it means something.
 } elseif ($mirror.status -ne 'intact') {
     Write-Warning ("MIRROR NOT VERIFIED (#075): $($mirror.status) for $mirrorPath. Nothing is wrong with " +
                    "the turn; the mirror simply cannot be compared. Every mirror built before " +
@@ -380,6 +444,11 @@ $record.totals = [pscustomobject]@{
     # could not compare it, `true` only when every turn verified it. A boolean would have to call an
     # unverifiable mirror intact, which is the shape of defect this field exists to catch — and every
     # run before 2026-08-04 has no manifest, so `null` is the honest answer for all of them.
+    #
+    # A real-URL run is also `null`, and *why* it is null lives in `mirrorStatuses` beside it
+    # (`no-mirror-run`) rather than in a fourth value here: "nothing to check" and "not checked" are
+    # different facts, but they are the same *verdict* about the mirror, and one word per fact beats
+    # one word doing two jobs.
     mirrorIntact          = if ($mirrorStates -contains 'changed') { $false }
                             elseif ($mirrorStates | Where-Object { $_ -ne 'intact' }) { $null }
                             else { $true }

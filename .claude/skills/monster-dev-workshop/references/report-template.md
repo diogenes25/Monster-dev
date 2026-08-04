@@ -24,8 +24,9 @@ the board existed, and everything still open in them is on the board.
 | Run folder | `../monster-dev-testruns/<run-id>/target/` |
 | Playbook revision | `<git rev-parse --short HEAD>` |
 | Hire | `claude -p` session `<session_id>`, `<n>` turns |
-| Entry point | accepted without objection / **refused** — see `#050` |
-| Mirror | `intact` / **changed — `<what>`** / `no-manifest` — `hire.json` `totals.mirrorIntact`, see `#075` |
+| Fetch path | `mirror` / `real-urls` — `hire.json` `fetchPath`. A real-URL run reads what is **pushed**, and it is the one class no mirror exclusion covers |
+| Entry point | accepted without objection / **refused, first stated reason: `<§0 / supply chain / other>`** — see `#050` |
+| Mirror | `intact` / **changed — `<what>`** / `no-manifest` / `no-mirror-run` — `hire.json` `totals.mirrorIntact`, see `#075` |
 
 *The `Entry point` row is not bookkeeping. `2026-08-03-r13` refused `START.md` as a prompt-injection
 and supply-chain risk and produced no data, while `2026-08-03-r15` accepted it on a byte-identical
@@ -33,6 +34,12 @@ mirror in the same hour — so this is within-tier variance at a base rate of ro
 `#050`'s honest proof needs several arms per side and is the most expensive item on the board; one line
 per report accumulates the rate as a by-product instead. State it even when nothing happened, for the
 same reason the Reach section is stated when it found nothing.*
+
+***And on a refusal, name the reason the hire gave first.*** *The rate is the smaller half. Both
+refusals on record lead with §0 having no referent on a mirror run and only then reach the supply-chain
+argument — which is a claim about the **run class** rather than about `START.md`, and it is what turned
+`#050` from the most expensive item on the board into three cheap probes. A rate with no mechanism
+beside it cannot tell those two apart, and the mechanism costs one clause.*
 
 *The `Mirror` row is the same shape and has the same reason. `2026-08-04-r20` deleted a file inside the
 `<dist>` mirror in its cleanup phase and **only its own honesty caught it** — no check looked there,

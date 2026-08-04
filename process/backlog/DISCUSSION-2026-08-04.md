@@ -156,6 +156,41 @@ Against it: it taxes every wording fix, and most of them touch marks nothing has
 That is honest, and it means the field says nothing about the series until a run is scored under it. No
 action; recorded so nobody later reads fourteen `null`s as fourteen failures.
 
+## Added after the handoff was written — the session continued
+
+Everything above stands as written; this section says what happened next rather than editing the
+argument to look prescient. Four things changed, and one of them removes the sentence *"`grilled` is
+still empty"* from the top of this file.
+
+- **`#080` is `proven`** and `intake` is empty. Its own claim that the referent was a judgement was
+  refuted by the check it demanded of itself: four reports score a mark labelled `7a`, all reading
+  *"asked before building"*. Documented by use, not inferred.
+- **`#050` is `grilled`** — the first item in that state since `#002`. Six decisions, three of which
+  contradict what the item said when it was filed: the arm can only **refute** (an acceptance is worth a
+  factor of ~1.14), a branch push swaps one provenance contradiction for another *in the dimension the
+  arm measures*, and the discriminator is **three one-turn probes** rather than one scored run, because
+  both refusals on record happened in turn 1 for ~`$0.12`. The continuation rule is fixed before the
+  first probe. `#050`'s `Blocked on` is now the push.
+- **`hire.ps1` can launch a mirror-less run**, which it could not: `-Dist` was a hard requirement and
+  `2026-08-01-live` predates the wrapper. `-EntryUrl` plus a recorded `fetchPath` field — `#063`'s
+  lesson a second time, because a run class identified only by a *missing* argument would poison
+  `mirrorIntact` and section D. **It also surfaced a defect committed earlier the same day**: `#075`'s
+  per-turn check binds `-DistPath` as `Mandatory`, so a real-URL run would have died at parameter
+  binding after the paid turn and before the record was written. Guarded.
+- **The 24 unpushed commits are re-authored to `tjark@onnen.de`**, and `user.email` is set repo-locally.
+  19 of them carried the work account's noreply address. Tree hash identical before and after, author
+  dates preserved, `pre-reauthor-2026-08-04` left as the anchor.
+
+**And the push is blocked on something no decision here can fix.** It was attempted and **refused with
+403**: the only authenticated identity is `Tjark-fiskaltrust` and the repository is `diogenes25`. So
+*Proposed order* step 2 is spent, step 2's precondition is not, and `#050` sits in `grilled` waiting on
+an interactive `gh auth login` — the one thing in this whole sequence that has to happen outside a
+session.
+
+Order from here, unchanged apart from that: resolve the identity and push → the three probes → the
+treatment, designed against whatever they say. `#067` and `#064` are untouched and still the next two
+after it.
+
 ## One thing about this session's own method
 
 The seven items closed here were all written by the previous session, and **the two that mattered most

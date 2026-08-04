@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `grilled` |
 | Gate | `run` |
 | Attribution | model disposition — **within one model tier**, which is a sub-case Half C does not describe. **Contested since `2026-08-04`:** both refusals lead with §0 having no referent on a mirror run, which would make it a harness artefact of that run class. One arm decides it — see the `2026-08-04` log entry |
 | Criterion | none. It happens before criterion 1 of any scenario, and it voids the run rather than failing a mark |
 | Target file | `START.md`, `MONSTER-DEV.md` §0 and §5's download wording |
 | Evidence | `2026-08-03-r13` refused; `2026-08-03-r15` accepted, on a byte-identical mirror, same model tier, same hour. **`2026-08-04-r19` refused too** — 16 sessions, 2 refusals, both sonnet on `static-site`, both leading with §0 having no referent on a mirror run. See the `2026-08-04` log entry: it narrows the proof design |
-| Blocked on | nothing, but read the cost paragraph before designing the run — the rate is the hard part |
-| Proof design | — |
+| Blocked on | **`main` pushed to `origin`.** The arm fetches over real URLs, so it reads what is published; `main` was 24 commits ahead on `2026-08-04` and a push was attempted and **refused 403** — the only authenticated identity is `Tjark-fiskaltrust` and the repo is `diogenes25`. Nothing else blocks it |
+| Proof design | **Three one-turn probes, no criteria, no scenario** — sonnet, `static-site`, real URLs off `main`, turn 1 only. Falsification of the §0 hypothesis, not confirmation. Full design in the `2026-08-04` grilling entry below; the continuation rule is fixed *before* the first probe |
 
 **What happened.** `2026-08-03-r13`, arm A of `#002`, Sonnet, mirror fetch path. The hire read
 `START.md` and declined to follow it:
@@ -173,3 +173,96 @@ warns about, arriving from an unexpected direction.
   **17 sessions, 2 refusals.** That is `r13` → `r15` reproduced exactly: same fixture, same model,
   same mirror, refusal then acceptance, no change in between. Whatever drives it is not stable within
   a setup, which is what makes the §0 hypothesis in the entry above worth one arm rather than a fleet.
+
+- `2026-08-04` `grilled` — **grilled to six decisions, and three of them contradict what this item said
+  the day it was written.** No wording is chosen and none should be: the treatment is deliberately
+  deferred behind the attribution.
+
+  **1 — Diagnosis before treatment.** The attribution is contested inside this item, *model
+  disposition* in the header and *run-class artefact* in the entry above. That is not a nuance: if it is
+  the run class, Half C says *fix the harness, rerun, record nothing against the product*, and both
+  candidates `A` and `B` would then be product changes made to hide a condition only our rig produces —
+  the trade `CLAUDE.md` forbids when it says a check that rewords the product to stay quiet has stopped
+  being a check. So no wording is chosen until the probes have run.
+
+  **2 — The mirror contradicts three sentences, not one, and this item names only two of them.** Read
+  in full: §0's base-URL derivation, §5's *"never staged anywhere first"* — and **`START.md`'s own
+  point 1**, *"Everything is fetched live, every time, from `main`"*, which is false by construction for
+  a hire handed a filesystem path out of a local copy. It is also the **only** branch reference in
+  anything a hire fetches. That third sentence is what kills the cheap version of the arm.
+
+  **3 — A branch push does not work, so the arm needs `main`.** Pushing to `run-050` would make §0
+  resolvable and `START.md` point 1 *false in a new way*: the hire fetches from `<branch>` while the
+  file claims `main`. That swaps one provenance contradiction for another **in the exact dimension the
+  arm is about**, and both refusals on record are of precisely that kind — a hire checking a provenance
+  claim it cannot confirm. A refusal on a branch arm would be uninterpretable. Hence the `Blocked on`
+  row.
+
+  **4 — The arm can only refute, and this item claims otherwise.** *"The test is one arm, not
+  several"* is right about the cost and wrong about the logic. Worked through:
+
+  | Outcome | under *harness artefact* | under *within-tier variance* | Worth |
+  |---|---|---|---|
+  | refuses | ≈ 0 | ≈ 0.12 | **decisive** — the blamed condition is absent and it fired anyway |
+  | accepts | ≈ 1.0 | ≈ 0.88 (15 of 17) | **almost nothing** — a factor of ~1.14 |
+
+  So an acceptance is nearly uninformative, and proof by absence is unaffordable at this rate: eight
+  clean real-URL runs would still be 36 % likely under variance. The asymmetry is **accepted and
+  recorded** rather than designed away, and the arm gains a second, *positive* observation that is
+  measurable on one run: does §0 visibly resolve? `check-reach.ps1` section D lists every URL fetched,
+  so `…/START.md` followed by `…/MONSTER-DEV.md` and `…/stacks/dom-css/README.md` **measures** the
+  derivation instead of inferring it.
+
+  **5 — Three one-turn probes, not one run, and no criteria at all.** Both refusals on record happened
+  in **turn 1** — `r13` `$0.1143`, `r19` `$0.1356`, two model turns each — and everything the
+  discriminator needs is visible there. The 21 criteria measure *what was built*, which this arm does
+  not ask. At ~`$0.15`–`$0.35` a probe, refutation power becomes purchasable:
+
+  | Probes | chance of seeing a refusal *if* it is variance | cost |
+  |---|---|---|
+  | 1 | 12 % | ~`$0.35` |
+  | **3** | **32 %** | ~`$1.0` |
+  | 8 | 64 % | ~`$2.5` |
+
+  Three is the knee: it triples the only direction that speaks, for half the cost of one scored run.
+  Eight is a fleet again and 64 % is still not certainty, so that is where to stop rather than where to
+  go.
+
+  **The continuation rule is fixed now, before the first probe**, because a rule decided mid-run
+  depends on the numbers it is judging — which is what `#009`, `#010` and `#007` have in common:
+
+  - **Any probe refuses** → the §0 hypothesis is dead on one observation. `#050` keeps *model
+    disposition*, the treatment is designed against `START.md`'s provenance question, and the three
+    unsatisfiable sentences become a separate harness item.
+  - **All three accept** → the hypothesis survives unproven (~1.5). Then **exactly one** probe — the
+    third, so the decision does not depend on the first two — is continued into a full scored run,
+    which additionally buys the first sonnet observation over real URLs on all 21 marks and exercises
+    §0 and §5 for the first time since `2026-08-01-live`. ~`$2.5` total for three observations instead
+    of one.
+
+  **6 — The harness names the class rather than inferring it.** `hire.ps1` could not launch a
+  mirror-less run at all: `-Dist` was a hard requirement and `2026-08-01-live` predates the wrapper. It
+  now takes **`-EntryUrl`**, refuses both-or-neither, omits `--add-dir`, and records
+  **`fetchPath: 'mirror' | 'real-urls'`**. That field is `#063`'s lesson a second time — the local-model
+  spike was indistinguishable on disk from a paid run and the fix was one field a script can read. A
+  class identified only by a *missing* argument would poison two fields that already carry three values:
+  `totals.mirrorIntact` would conflate *not checked* with *nothing to check*, and an empty section D
+  would not say whether the hire fetched nothing or was never given a URL.
+
+  **And it surfaced a defect committed the same day.** `#075`'s per-turn mirror check binds
+  `-DistPath` as `Mandatory`; on a mirror-less run that is `$null`, so the turn would have died at
+  parameter binding — **after** the paid `claude` call and **before** the record was written, in the one
+  place this script promises never to fail. Found by reading the code while designing the arm, not by a
+  run dying on it. Guarded, with a fifth mirror state `no-mirror-run` that is silent by design: a
+  warning printed on every turn of a whole run class is a warning ignored on the run where it matters.
+  All three validation paths exercised against a throwaway target; the probe was removed.
+
+  **What reaches `grilled` and what does not.** The four questions `process/backlog/README.md` asks:
+  **which gate** — none of the three, because nothing is being proposed; this is the `#022` exercise
+  shape and it ends on `proven` plus a mandatory qualifying row. **Which criterion flips** — none, and
+  the before-observations are `r13` and `r19` rather than a before-fail. **Which model** — sonnet, both
+  refusals and the bar anyway; Opus has never refused in five sessions. **Which arms, held constant** —
+  fixture, model, brief text and dialogue protocol identical to the seventeen sessions, entry point
+  substituted, fetch path the only variable. The confound is named and not solved: model and fixture
+  are confounded with each other, since no sonnet hire has ever met a real URL and no other fixture has
+  produced a refusal.
