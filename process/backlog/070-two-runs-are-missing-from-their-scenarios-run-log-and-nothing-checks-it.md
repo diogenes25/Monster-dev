@@ -89,3 +89,14 @@ commit, and the commit is where both edits land together.
 - `2026-08-03` `intake` — from `2026-08-03-r18`. Filed while writing that run's report, because the
   first thing the report needed was `r16`'s row and there was none. Two consecutive misses, and the
   second is the run a `Gate: run` item's Phase 1 rests on.
+
+- `2026-08-04` — **the check fired, correctly, on its first real occasion, hours after landing.**
+  `2026-08-04-r21`'s `report.md` was written and `check-index.ps1` refused the tree: *"NOT IN ANY RUN
+  LOG: process/runs/2026-08-04-r21/ has a report.md but no run-log table in process/scenarios/ cites
+  it."* The row was then appended and the check went green.
+
+  That is the closing step this item exists for, caught in the ordinary workflow rather than two runs
+  later — and it is the red window the *Cost* paragraph above predicted, felt for the first time:
+  a few minutes between writing the report and appending the row. The trade held. What `proven` still
+  means here is **applied**, not *shown to have helped*: part 1 had already repaired both historical
+  misses, so this firing prevented a third rather than repairing one.

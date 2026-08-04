@@ -77,3 +77,10 @@ marks carry a cap nobody had written down.
   are all settled; what is open is A versus B, and the proof design is the cheap half of B.
   Recorded in that run's `assembly.md` under `## Pre-run audit`, and the run went ahead on the
   unchanged path.
+
+- `2026-08-04` — another evidence line: `2026-08-04-r21`'s turn-1 prompt again hands over
+  `…\priv\monster-dev-testruns\2026-08-04-r21\dist\START.md`, so the path says both
+  `monster-dev-testruns` and the run serial. Unchanged deliberately, per this item's own *What must
+  not be done* — `r21` is a mid-series regression arm and its comparability with `r17` depends on the
+  handed path having the same shape. `hire.ps1`'s `#042` check reported *none found* for decodable
+  references, which is the narrower thing it measures.

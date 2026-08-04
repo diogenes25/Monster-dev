@@ -188,8 +188,35 @@ an interactive `gh auth login` — the one thing in this whole sequence that has
 session.
 
 Order from here, unchanged apart from that: resolve the identity and push → the three probes → the
-treatment, designed against whatever they say. `#067` and `#064` are untouched and still the next two
-after it.
+treatment, designed against whatever they say.
+
+## And then `#067` was grilled, run and proven — same day
+
+`#067` did not wait behind the push, because its arm is a mirror run. It went `grilled` →
+`in-proof` → `proven` in one sitting, and `2026-08-04-r21` is on record.
+
+- **Candidate `C` was refuted by measurement, not by argument** — the item's own precondition for
+  advancing. The note fetch sits alone in its own assistant message in all three untreated runs, so
+  *"one wasted turn"* is 1 of `r17`'s 11 and not a figure of speech, and what the turn buys is a
+  restatement of the table cell the hire has already read.
+- **The attribution was re-settled without buying the fifth observation**, by applying this project's
+  own bar rule: Sonnet is 2 of 2 and the one run that takes the branch correctly is Opus, which is
+  the asymmetry `CLAUDE.md` names when it says the bar is Sonnet.
+- **Criterion `10` flipped**, 13/0/0/1, **both scorings agreeing on every mark** — the first clean
+  sweep on that scenario at the bar. `$0.5109` for the run plus `$1.0258` for the blind pass.
+- **The cost rationale did not materialise**, and the item's header now says so: 12 model turns
+  against `r17`'s 11. What the treatment bought was a **redirection** — zero tool calls into our tree
+  against `r17`'s two, six into the client's project against three.
+- **The instrument was wrong for the third time**, and the blind pass found it independently from the
+  bundle alone. It now names the note *file* rather than the `stacks` directory, and for the first
+  time reproduces every recorded verdict on the scenario.
+- Two new items: `#081` (a mirrored file names the dev-side skill, and the vocabulary check can only
+  see prose *describing* the harness, never a pointer to it — `r17` read that file) and `#082`
+  (criterion `4`'s carve-out permits a question and says nothing about the clause that follows it).
+
+**So the board is 15 open — 2 `intake`, 12 `formulated`, 1 `grilled` — and the one `grilled` item is
+`#050`, still waiting on the push.** `#064` is now the whole of the non-run work: the biggest product
+gap, its fixture and scenario its own to write, blocked on nothing.
 
 ## One thing about this session's own method
 

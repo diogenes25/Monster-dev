@@ -1,6 +1,16 @@
 # #067 candidate B — say which of the two applicability tests decides, so the note is not fetched to
 # make a decision §2's own table already made.
 #
+# LANDED 2026-08-04 — DO NOT APPLY THIS AS AN ARM AGAIN. Proven by `2026-08-04-r21` (criterion 10
+# flipped at the bar, 13/0/0/1, both scorings agreeing) and folded into MONSTER-DEV.md §2 the same
+# day, **verbatim** — unlike `061-s3-b`, whose fold-in carried one register edit and left main's
+# bytes differing from the three arms'. So the Insert below IS the sentence on `main`, and a report
+# citing this file cites what was measured.
+#
+# It fails safely, and by construction rather than by this banner: the Insert is now present in the
+# file, so #079's check refuses it before the anchor count is even consulted. A future run needing
+# the UNTREATED arm needs the opposite file — Replace these three sentences With '' — not this one.
+#
 # The gap: §2 tells a hire what to do when a row matches — "Take the first row that matches, and fetch
 # that one only" — and what to do when none does, but the second is *permissive prose* ("that's the
 # normal case rather than a problem") where the first is an imperative. A model reading the section as

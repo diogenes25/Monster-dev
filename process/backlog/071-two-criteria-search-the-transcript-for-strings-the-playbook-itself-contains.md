@@ -121,3 +121,30 @@ is `#066`, and it is a different defect in the same criterion.
   fabricated. The behaviour is fine; three runs did fetch it, on the backslash form. **A wrong
   instrument almost overturned a correct finding**, which is the mirror image of the five instances
   above and the reason the count is worth keeping.
+
+- `2026-08-04` — **third narrowing, bought by `2026-08-04-r21` and raised independently by its blind
+  pass.** The pattern from the fix above hits `ls -la "<dist>\monsters" "<dist>\sources"
+  "<dist>\stacks" "<dist>\tools"` — a **directory listing**, in a tool input, on a run that fetched no
+  note at all. Applied mechanically, criterion `10` would have **failed the first run ever to take
+  §2's no-match branch at the bar**, which is the run the whole treatment was proven on.
+
+  Three iterations on one criterion, and the direction alternated each time:
+
+  | Wording | What it hit | Direction |
+  |---|---|---|
+  | `stacks/` anywhere | §2's own table cell, in a tool *result* | false positive — loud |
+  | tool inputs, forward slash | nothing, on runs that did fetch | false **negative** — silent |
+  | tool inputs, both separators | a directory listing | false positive — loud |
+  | **tool inputs, both separators, the note *file*** | the fetch, and only the fetch | — |
+
+  The instrument now names the note file — `stacks[\\/]<name>[\\/]README.md` — and the criterion says
+  in one sentence what a fetch *is*: a `Read`, `WebFetch` or shell read whose target is a note file,
+  where enumerating the directory is not one. **Verdict-preserving across all five runs on this
+  scenario, and for the first time the pattern reproduces every recorded verdict**: `r12`, `r16`, `r17`
+  fetched and failed; `r18`, `r21` did not and passed.
+
+  **The blind pass found the same fork from the bundle alone**, without knowing what the run was
+  testing: *"Settled by whether 'fetched' means reading a note or merely enumerating the table's
+  directory."* Two readers, one with no access to the other, on an instrument that had already been
+  edited twice that day. That is the third time in two days that the second pass paid for itself on
+  this project's own instruments rather than on a hire.

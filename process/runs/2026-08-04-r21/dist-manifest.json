@@ -1,0 +1,26 @@
+{
+  "runId": "2026-08-04-r21",
+  "dist": "C:\\Users\\TjarkOnnen\\source\\repos\\priv\\monster-dev-testruns\\2026-08-04-r21\\dist",
+  "builtAt": "2026-08-04T13:05:03.5106816Z",
+  "fileCount": 18,
+  "files": {
+    ".gitignore": "b1bd5db344494bd7f619c0f53ca67cb4691049b3f31457bd40a3ff146d7b49d6",
+    ".vscode/launch.json": "eae30182899530fd5e9a2a18f78a49dd8b5ac2fcf8a7bcff15e67125ea7c3b75",
+    "index.html": "e01b67564af343e496eb61a4ebce03a09c1fd090900f20fac46997100c91f620",
+    "LICENSE": "279ac43248d25824070a73de6a439ef998f505f33864d954e4da936c3ba39df3",
+    "MONSTER-DEV.md": "72c200d7db1e9d13d317b9ef5dae767698d061abf1297820cf863031fe444b7d",
+    "monster.png": "9328b840e1d536fe594ce0b8117eb20e133475a49d223d9b53b133c68671062f",
+    "monsters/catalog.json": "153031b63f514da4dae1bf2d378a07baa2a823f11d87b48b6020157db938b13a",
+    "monsters/green-fuzz-classic.png": "789f5149a5369fd0fbdcb32bf2edc2c12a8955c47c908e6e3705c03c7f3b82a3",
+    "monsters/green-fuzz-strolling.png": "8f4fe6a6c0c282d282c4ae6194a00265149566db88d418d2efc3b137b5120075",
+    "monsters/README.md": "6c6e939ec789beea5437da1edbf0ae6e3fcea1c1394d8072764e05b5f54a02ad",
+    "sources/Monster_walking_infinity_loop_202608011643_V1.mp4": "634e8fe37ff14408aa7d54e0d90b6c8c8f79ffd6cf2049d9d9b7b090eebc7d64",
+    "sources/Monster_walking_infinity_loop_202608011658.mp4": "f2d16f07b703a1877c956a10387e227a79afa84230c76a1b72ab2984ccebfe41",
+    "stacks/dom-css/README.md": "4aa19e5a2029ab234f47fdc02866d6d5686b65310cbf5ffbd04e2008d632a500",
+    "START.md": "df233ca4305a4a9e814065ab4e6b76789032d3cbddb783e85a7b22da5940e88d",
+    "tools/project.md": "64b2372117782c939dcbae9790014098df787d2802cfe97ef74bf118db206998",
+    "tools/provenance/New-SpriteSheetFromImage.ps1": "1fa0f5a5b4eb48d5360e43086ab7426cf26e8a941ec1f77b3e5583a7809c8565",
+    "tools/provenance/New-SpriteSheetFromVideo.ps1": "674625490acb1b953d8fd78d6fb8cb4e0fdad0c0b65205b52089410dc1e22309",
+    "tools/provenance/Test-SheetLoop.ps1": "b6226746069814293b6cbd88644db9533dd2657199ab417ef56996347846c9a0"
+  }
+}

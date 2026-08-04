@@ -2,14 +2,16 @@
 
 | | |
 |---|---|
-| Status | `grilled` |
+| Status | `proven` |
+| Applied | **folded into `MONSTER-DEV.md` §2 on `2026-08-04`, verbatim** — unlike `#061`, whose fold-in carried a register edit and left `main`'s bytes differing from its arms'. So `process/variants/067-s2-b.psd1`'s `Insert` *is* the sentence on `main`, and a report citing that file cites what was measured. The variant now fails safely by construction (`#079`) |
+| What `proven` does not include | **the cost rationale.** `#067` predicted one saved turn per no-match project; `2026-08-04-r21` took **12** model turns against `r17`'s 11. The criterion flipped, which is this gate's whole bar — but the turn saving did not appear, and the `Cost of leaving it` paragraph below is not evidence for anything until a second run reproduces it |
 | Gate | `run` |
 | Attribution | **playbook gap (§2), settled at the bar** — re-settled `2026-08-04` by applying this project's own bar rule to the split rather than by new data: **Sonnet is 2 of 2**, and the single run that takes the branch correctly is Opus. `CLAUDE.md` says the bar is Sonnet because *"Opus solves the known pitfalls unaided, which leaves nothing to measure"*, so `r18` is an instance of that asymmetry and not a counterexample. See the `2026-08-04` grilling entry |
 | Criterion | `nowhere-to-walk` `10`. It costs a turn on every no-match project, which lands in `num_turns` |
 | Target file | `MONSTER-DEV.md` §2 — the paragraph after the stack table |
 | Evidence | `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus), `2026-08-03-r17` (sonnet) — three fetches, `r17` confound-free. **`2026-08-03-r18` (opus) does not fetch**, which is the observation that unsettles the row above |
 | Blocked on | nothing |
-| Proof design | **Regression, one Sonnet arm on `nowhere-to-walk`.** Criterion `10` must flip against a **2-of-2** Sonnet before-fail (`r12`, `r17`; `r17` clean). Treatment is candidate `B`, three sentences inserted before §2's stack table via `build-dist.ps1 -Variant`, anchor *"Two sets of notes give you two answers to the same question and nothing that says which wins."* — verified to match exactly once. No Opus arm: `r18` already takes the branch untreated, so a treated Opus run can only confirm it still does. Full design in the `2026-08-04` entry |
+| Proof design | **`2026-08-04-r21`** — regression, one Sonnet arm on `nowhere-to-walk`. Criterion `10` must flip against a **2-of-2** Sonnet before-fail (`r12`, `r17`; `r17` clean). Treatment is candidate `B`, three sentences inserted before §2's stack table via `build-dist.ps1 -Variant`, anchor *"Two sets of notes give you two answers to the same question and nothing that says which wins."* — verified to match exactly once. No Opus arm: `r18` already takes the branch untreated, so a treated Opus run can only confirm it still does. Full design in the `2026-08-04` entry |
 
 **What happens.** §2's stack table has one row. Every run against `python-cli` — a 34-line stdlib
 script with no DOM, no canvas and no window — has fetched `stacks/dom-css/README.md` anyway.
@@ -186,3 +188,43 @@ is a worse defect than the one this item describes.
   needs a gated pitfall in any note, and this treatment adds neither. What the reading does settle is
   that the second row would make `C` *worse* rather than better, which is the one direction this item
   was unsure about.
+
+- `2026-08-04` `proven` — **`2026-08-04-r21`, and criterion `10` flipped at the bar.** 13 pass / 0
+  fail / 0 partial / 1 not scorable, **both scorings agreeing on every mark** — the first clean sweep
+  on this scenario at the Sonnet tier, matching `r18` (Opus) mark for mark. No stack note fetched, no
+  row claimed, no invented slug, no 404. `$0.5109`, 12 model turns, reach clean in all four sections,
+  mirror verified intact.
+
+  **The before/after is 2-of-2 against 1-of-1 at the bar**, which is the whole reason a single treated
+  arm was enough here and was nearly worthless for `#050`: on Sonnet the untreated behaviour had no
+  counterexample.
+
+  **What the treatment actually changed, measured rather than asserted.** Every tool call of both
+  runs, by side of the fence:
+
+  | | `r17` (untreated) | `r21` (treated) |
+  |---|---|---|
+  | into **our** tree | **2** — the stack note, and `tools/project.md` | **0** |
+  | into the **client's project** | 3 | **6** — incl. `sales.csv`, the dotfiles, `Glob **/*` |
+  | model turns / cost | 11 / `$0.5123` | 12 / `$0.5109` |
+
+  So the effort was **redirected, not saved**: nothing on our side of the fence, twice as much on the
+  actual project, which is what §2 is for. The extra turn is real and the cost is flat to within
+  0.3 %.
+
+  **Two things this run may not be credited with**, both in the report. `r17` also read
+  `tools/project.md` and `r21` did not — that file is not a stack note, so the treatment does not
+  mention it, and this arm cannot separate *the sentence worked* from *this session was less curious*.
+  And the arms are **not byte-identical outside the treatment**: `r17` ran §3 as variant `061-s3-b`
+  while `r21` ran §3 as folded into `main`, which differ by one register edit. Neither can plausibly
+  reach a criterion about §2's table, and both arms passed §3's own marks either way — but *"held
+  constant except the treatment"* is false as written, and the report says so rather than this item
+  quietly not mentioning it.
+
+  **The run also bought the third narrowing of `10`'s own instrument** (`#071`): the pattern hit the
+  `ls` of the mirror's `stacks` directory, so applied mechanically it would have failed the very run
+  that took the branch correctly. Found by this run and independently by its blind pass. The verdict
+  stands on the criterion's named *fail condition*, which both readers applied identically.
+
+  `#066` is unblocked and unresolved: it asks whether `10` should be split, and `10` now passes, so
+  the bundling it describes is a question about a mark nothing currently fails.

@@ -98,3 +98,17 @@ about the one item it was written for.
 
   Not done, as this item said: `7`'s list keeps *"a generated HTML report"*. Removing it would leave
   the list silent about the one improvisation this fixture actually attracts.
+
+- `2026-08-04` — **first application, and the clause did the work it was written for.**
+  `2026-08-04-r21` named an HTML report as the surface the client's project would have to gain first
+  and never offered to build it, so criterion `7` passed: *„Falls ihr das später wollt, bräuchte es
+  vorher eine visuelle Fläche für den Report"*. Both scorings passed it, and the blind one cited this
+  item by number to justify the verdict — *"`#073`'s test is the offer, and there is none"* — which is
+  the clause being applied by a reader who had only the criteria half and no idea the clause was new.
+
+  It also produced the fork the clause does **not** settle, raised in that pass's `UNCERTAIN` list:
+  `:37`'s parenthesis *„(den könnte man sich als Anhang oder Link zur Mail dazu vorstellen)"* sketches
+  *how* the artifact would be delivered. Resolved `pass` in the report — impersonal, and about the
+  client's project — but the honest reading is that the clause tests grammatical agency and a
+  sufficiently concrete sketch could put an artifact on the table without any. One observation; not
+  filed. If a second run turns on it, that is the item.

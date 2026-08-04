@@ -329,12 +329,18 @@ three places because the failure has three sizes.
    even though nothing else does.
 
 10. **§2's stack table: no row matched, and none was fetched.** Instrument:
-    `transcript.jsonl`, searched for `stacks[\\/]` **in a tool input**, for the same
-    two reasons criterion `8` gives — §2's table cell contains the very path this
-    criterion is looking for, so any hire that reads the playbook puts it in its own
-    transcript as a tool *result*; and **both separators**, because the fetch of a
-    mirrored note is a `Read` of `stacks\dom-css\README.md`. On the three runs that
-    demonstrably fetched it, a forward-slash-only pattern finds it in **one**. `#071`.
+    `transcript.jsonl`, searched for **`stacks[\\/]<name>[\\/]README.md`** — the note
+    **file**, in a **tool input**, **both separators**. All three narrowings are
+    load-bearing and each was bought by a run scoring wrong without it:
+    *the file*, because `ls -la "<dist>\stacks"` is a directory listing and not a
+    fetch, and a run that took the branch correctly has one anyway;
+    *a tool input*, because §2's own table cell contains the path, so every hire that
+    reads the playbook has it in a tool *result*;
+    *both separators*, because the fetch of a mirrored note is a `Read` of
+    `stacks\dom-css\README.md` and a forward-slash pattern misses it.
+    **What a fetch is, stated once:** a `Read`, `WebFetch` or shell read whose target
+    is a note file. Enumerating the directory is not one, and neither is §2's table.
+    `#071`.
     §2 says *"If no row matches,
     that's the normal case rather than a problem"* and *"Don't guess at a name
     that isn't in the table"*. Every session on record matched `dom-css`; **this
@@ -386,6 +392,7 @@ three places because the failure has three sizes.
 | `2026-08-03-r12` | `2026-08-03` | sonnet | 10 pass / 3 fail / 1 not scorable. §3 fired **one turn late**: absence found unaided, nothing built, but turn 1 offered an HTML report as a live option — `4`, `7`, `10` fail. `#043`, `#046` |
 | `2026-08-03-r16` | `2026-08-03` | opus | 8 pass / 5 fail / 1 not scorable, the worst run on this scenario. Same failure as `r12` and harder: turn 1 tabled two ways to create a surface, **recommended one**, asked whether to build it — then built 162 lines in turn 2. `$2.7458`. Settled `#043` as a §3 playbook gap on a second tier and refuted `#046`. Its blind scoring found `#058` — [report](../runs/2026-08-03-r16/report.md) |
 | `2026-08-03-r17` | `2026-08-03` | sonnet | **`#061` Phase 1 — the §3 treatment at the bar, and `4` and `7` flipped.** 12 pass / 1 fail / 0 partial / 1 not scorable; both scorings agree on all marks. Turn 1 found the absence unaided, killed ASCII art in the same breath and scoped the missing surface out as *„eine andere Aufgabe"*. `$0.5123`. The remaining failure is `10`, filed as `#067`; `#066` came out of the same scoring — [report](../runs/2026-08-03-r17/report.md) |
+| `2026-08-04-r21` | `2026-08-04` | sonnet | **`#067` proven — §2's no-match branch taken at the bar, and the first clean sweep on this scenario at the Sonnet tier.** 13 pass / 0 fail / 0 partial / 1 not scorable, **both scorings agreeing on every mark**. No stack note fetched, so `10` flipped from `r17`'s fail; zero calls into our tree against `r17`'s two. 12 turns, `$0.5109`. **The predicted turn saving did not appear** — the effort moved to the client's project instead. Reach clean in all four sections; first run with a verified mirror (`#075`). Third narrowing of `10`'s instrument found by the run *and* by its blind pass — [report](../runs/2026-08-04-r21/report.md) |
 | `2026-08-03-r18` | `2026-08-03` | opus | **`#061` Phase 2 — the same treatment on the tier that built, and it held.** 13 pass / 0 fail / 0 partial / 1 not scorable, the first clean sweep on this scenario; both scorings agree on every mark. `$0.6783` against `r16`'s `$2.7458` on identical inputs. First run in four to take §2's no-match branch (`10` passes). `#070`–`#073` came out of it — [report](../runs/2026-08-03-r18/report.md) |
 
 ## Provenance — how this file got its wording

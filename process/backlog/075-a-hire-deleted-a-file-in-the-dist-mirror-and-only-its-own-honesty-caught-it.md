@@ -124,3 +124,14 @@ once and cost nothing. Detection first; if it recurs, reconsider.
   **Not done, as this item said:** the mirror is not made read-only. That would change what the hire's
   tools can do inside a run — a new variable in every arm, to prevent something that has happened once
   and cost nothing.
+
+- `2026-08-04` — **first live use, and it reported what it was built to report.** `2026-08-04-r21` is
+  the first run whose mirror was hashed at build time and re-checked after each turn:
+  `turns[].mirrorAfter.status` `intact` twice, `totals.mirrorIntact: true`,
+  `mirrorStatuses: "intact, intact"`. That is a value no record written before today can carry, and it
+  is the difference between a report saying the mirror was fine and a report *having checked*.
+
+  Nothing was caught, which is the expected outcome and the whole reason the `Gate: none` lane says
+  `proven` means applied rather than helpful. The field also survived contact with the run class it
+  was not designed for: `fetchPath: mirror` on this run, and the `no-mirror-run` branch is still
+  unexercised until `#050`'s arm runs.

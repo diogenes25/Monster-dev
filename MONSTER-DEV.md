@@ -33,6 +33,8 @@ Some surfaces have accumulated notes — things earlier jobs on that kind of sur
 
 These exist right now. **Take the first row that matches, and fetch that one only.** The rows are ordered most specific first, because a project can genuinely match more than one — a React app already using GSAP is both a tween-library project and a DOM project. Two sets of notes give you two answers to the same question and nothing that says which wins.
 
+**The `you're here if` column is what decides, and it is answerable from what step 2 already found — without opening anything.** A note tells you how earlier jobs on that surface went, not whether you are on it. So a note is what you read *after* a row matches; if none matches, there is nothing to open.
+
 | stack | you're here if | fetch |
 | --- | --- | --- |
 | `dom-css` | it renders to a DOM and its existing effects are CSS transitions or `@keyframes`, or it has no animation at all yet — and no tween library is already in use | `<base>/stacks/dom-css/README.md` |
