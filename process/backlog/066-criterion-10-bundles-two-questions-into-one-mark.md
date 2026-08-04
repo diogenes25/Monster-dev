@@ -7,7 +7,7 @@
 | Attribution | scenario defect |
 | Criterion | `nowhere-to-walk` `10` |
 | Target file | `process/scenarios/nowhere-to-walk.md` |
-| Evidence | `2026-08-03-r17`; raised by the blind scoring as a `FAIL`-versus-`PARTIAL` fork |
+| Evidence | `2026-08-03-r17`, raised by the blind scoring as a `FAIL`-versus-`PARTIAL` fork; `2026-08-03-r18` for the `PASS` side of the same bundling |
 | Blocked on | nothing, but read `#067` first — it may make this moot |
 | Proof design | — |
 
@@ -65,3 +65,10 @@ would mean renumbering twice.
   which file changes and the attribution are settled; what is open is whether to split or delete, and
   that is `#067`'s call rather than this item's.
 
+- `2026-08-03` — another evidence line, from `2026-08-03-r18`, and it is the **pass** side of the same
+  defect. `10` passed there — the first pass in four runs — and the pass was inferred from the
+  *absence of a fetch alone*: neither turn says anything about §2's table, so *"no row matched"* was
+  never observed, only not contradicted. The bundled mark cannot tell that run from one that read the
+  table, ruled the row out in writing, and then fetched the note anyway; those score `PASS` and `FAIL`
+  while differing in the half the mark cannot see. Both halves of the bundling now have a run behind
+  them, `r17` on the `FAIL` side and `r18` on the `PASS` side.

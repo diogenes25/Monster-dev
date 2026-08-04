@@ -137,6 +137,7 @@ something subtly wrong, which is the whole reason it exists.
 | `hire.ps1 -RunId <id> -Target <path> -Dist <path> -Model sonnet -BriefFile <file>`, then `-Answer '<text>'` | **The only way to hire.** Holds the cost/turn envelope and snapshots the target's worktree between turns |
 | `score-bundle.ps1 -RunId <id> -Scenario <file>`, later `-Remove` | Builds what the blind `run-scorer` sees, and takes it back off disk |
 | `check-reach.ps1 -RunId <id>` | What the hire walked to and every URL it fetched. For an **archived** run pass the path the run *used* — it matches strings, so today's location matches nothing and everything reads as a reach |
+| `check-hire-records.ps1 [-RunId <id>]` | Sweeps every `hire.json`: `totals` recomputed from `turns[].envelope`, and whether each report quotes its **own** recorded cost. Reports rather than throws — most of what it finds is history. Three defects had accumulated in the gap where nothing compared the two (`#074`, `#077`, `#063`) |
 | `publish-demos.ps1 [-WhatIf]` | Every `impl-NN/step-4-result/` onto an orphan `gh-pages` branch, with a banner stating what the customer asked for. Prints the README's *See it running* table rather than writing it, and neither pushes nor switches Pages on — both are outward-facing and stay deliberate |
 
 **And the rules around them, which no exit code enforces.** Each of these has already cost a run:

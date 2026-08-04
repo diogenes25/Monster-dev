@@ -1,0 +1,7 @@
+run:      2026-08-03-r18
+fixture:  python-cli
+base:     3d22857cd04836341515e200b8704a813bce6506 Initial project
+captured: 2026-08-03T22:00:14.8284653Z after cli turn 2
+
+git status --porcelain -uall at capture time:
+(clean)

@@ -24,13 +24,27 @@ four marks the plan step exists for.** `#002` is `rejected`.
 | | `sonnet-base2` | `plan-sonnet` | `index-sonnet` | **arm A** | **arm B** |
 |---|---|---|---|---|---|
 | turn 1, the plan | 12 | 11 | 14 | **12** | **15** |
-| turn 2, the build | 19 | 30 | 28 | **38** | **45** |
-| total | 31 | 41 | 42 | **50** | **60** |
-| cost | $1.66 | $1.84 | $2.32 | **$2.3180** | **$2.3359** |
+| turn 2, the build | 19 | 30 | 28 | **26** | **30** |
+| total | 31 | 41 | 42 | **38** | **45** |
+| cost | $1.66 | $1.84 | $2.32 | **$1.9424** | **$1.8983** |
 
-Arm B is **+20 % model turns** and **+0.8 % cost** — more turns, individually cheaper. The build turn
-rose 38 → 45. Nothing in the criteria moved in arm B's favour: the two arms are behaviourally
-identical on every measured quantity, and section E lost a half-mark.
+Arm B is **+18.4 % model turns** and **−2.3 % cost** — more turns, slightly cheaper overall. The
+build turn rose 26 → 30. Nothing in the criteria moved in arm B's favour: the two arms are
+behaviourally identical on every measured quantity, and section E lost a half-mark.
+
+> **Corrected `2026-08-04`, and the two arms' columns are the only ones that moved.** This table
+> originally read `38`/`45` as the build turns and `50`/`60`/`$2.3180`/`$2.3359` as the totals, taken
+> from what `hire.ps1` printed after each turn — which was the **run total** under a label reading as
+> *this turn*, so turn 1 was counted twice. Both deltas were exactly turn 1's own figures, which is
+> the arithmetic signature rather than a guess. The true figures above come from
+> `turns[].envelope` and match each run's own `hire.json` `totals`, which were right all along and
+> which nothing compared against this table. The other three columns were unaffected and are
+> unchanged. `#074`; the print is fixed and `check-hire-records.ps1` now makes the comparison.
+>
+> **`#002` stays `rejected` and this must not be read as reopening it.** The rejection rests on arm B
+> costing about a fifth more model turns, and `+18.4 %` says that as clearly as `+20 %` did. What
+> changes is the cost clause: *"individually cheaper"* / *"+0.8 %"* was a wrong sign on a magnitude
+> that is noise either way.
 
 That is outcome 2 of the two `#002` named in advance, quoted from the item because it was written
 before the run: *"Turns do not drop → the ten turns were verification of the announced set. Then the
@@ -137,7 +151,7 @@ Identical verdicts in both arms except the four rows above. `A`/`B` given where 
 | 20a | built as announced | pass | every announced item present in the diff, both arms | — |
 | 20b | departures named in one line | pass | A named both open assumptions; B named the reduced-motion addition in the handover | — |
 | 21 | no bookkeeping about notes | **A fail · B pass** | see above | — |
-| — | cost envelope (`#002`) | **arm B rejected** | 60 vs 50 turns, $2.3359 vs $2.3180 | — |
+| — | cost envelope (`#002`) | **arm B rejected** | 45 vs 38 turns, $1.8983 vs $1.9424 (corrected `2026-08-04`, `#074`) | — |
 
 ## The finding worth more than the run's own result
 

@@ -3,6 +3,7 @@
 | | |
 |---|---|
 | Status | `formulated` |
+| Part A | **applied `2026-08-04`** — `hire.json` records `baseUrl` and `local`. The item stays open on **part B**, which is a `CLAUDE.md` gate rewording and deliberately belongs to whatever item authorises a local-model A/B |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | none directly. It disables the **tooling gate**, which `CLAUDE.md` states as *"`total_cost_usd` / `num_turns` must drop measurably"* |
@@ -62,3 +63,29 @@ at Sonnet has to earn its tokens there.
   the reason the board exists: the spike is explicitly *not* a measurement and nothing depends on it,
   so a defect recorded only there is a defect nobody meets again until it has already corrupted an
   A/B. Sibling of `#062`, found in the same spike and independent of it.
+
+- `2026-08-04` — **part A applied**, in the sitting that fixed `#074` and `#077`; all three are
+  `hire.json` `totals`-adjacent defects and all three were found by a reader doing arithmetic the
+  tooling should have done. `hire.json` now records, at launch:
+
+  > ```powershell
+  > baseUrl = $env:ANTHROPIC_BASE_URL
+  > local   = [bool]($env:ANTHROPIC_BASE_URL -and $env:ANTHROPIC_BASE_URL -notmatch 'api\.anthropic\.com')
+  > ```
+
+  Two fields rather than one, because `baseUrl` alone still needs a reader who knows which hosts are
+  Anthropic's, and the point of the item is to make the distinction **checkable by a script**. A
+  paid run records `baseUrl: null`, `local: false` — the environment variable is simply unset, so the
+  normal case needs no special handling and is still positively stated rather than absent.
+
+  `check-hire-records.ps1`, written in the same sitting, prints `LOCAL` for such a record and
+  `(pre-#063 record)` for one written before this landed — which is all fourteen on disk, including
+  `2026-08-03-local-floor` itself. **That record cannot be backfilled honestly**: `#077`'s two
+  backfills were arithmetic over stored envelopes, and this would be a fact about an environment
+  nobody stored. It stays labelled by its model name and by this item.
+
+  **Part B is untouched and stays open**, on the item's own sequencing: *"do `A` now, and do `B` only
+  as part of whatever item authorises a local-model A/B."* Rewriting a gate for a run class the board
+  has not authorised is how a gate gets loosened for the wrong reason, and nothing in this sitting
+  changed that. The `Blocked on` row still says the true thing — this only bites once a local run is
+  authorised.

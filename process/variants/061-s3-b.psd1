@@ -1,5 +1,16 @@
 # #061 candidate B — define what "stop" means in §3.
 #
+# LANDED 2026-08-04 — DO NOT APPLY THIS AS AN ARM AGAIN. The treatment is in MONSTER-DEV.md §3 on
+# `main`, with one register edit made on fold-in ("Asking … is fine; asking … is not" for "You may
+# … you may not"), so the bytes below are the three arms' bytes and no longer the file's. The file
+# is kept because r17's, r18's and r20's reports cite it for the two wording repairs recorded at the
+# foot of this header, and because it is the record of which candidate was bought.
+#
+# It does not fail safely any more, which is the reason for this banner rather than a deletion: the
+# anchor 'say so plainly and stop.' still matches exactly once, so -Variant would insert a second
+# copy of the treatment and build a mirror that passes every check. A future run needing the
+# UNTREATED arm needs the opposite file — Replace the two folded-in sentences With '' — not this one.
+#
 # The gap #043 settled: §3 forbids *improvising* a workaround and says nothing about *offering* one.
 # Two models, two tiers, four independent scoring passes, the same failure — turn 1 named the missing
 # surface and then asked the client whether to build it.

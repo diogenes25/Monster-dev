@@ -4,10 +4,10 @@
 |---|---|
 | Status | `formulated` |
 | Gate | `run` |
-| Attribution | **playbook gap (§2) — settled** on two model tiers by three runs. The *treatment* is not designed |
+| Attribution | **playbook gap (§2) — no longer settled.** Three runs on two tiers fetch, one does not, and the two Opus runs disagree with each other — see the `2026-08-03` log entry for `r18`. The *treatment* is not designed either |
 | Criterion | `nowhere-to-walk` `10`. It costs a turn on every no-match project, which lands in `num_turns` |
 | Target file | `MONSTER-DEV.md` §2 — the paragraph after the stack table |
-| Evidence | `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus), `2026-08-03-r17` (sonnet). Three runs, three fetches, `r17` confound-free |
+| Evidence | `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus), `2026-08-03-r17` (sonnet) — three fetches, `r17` confound-free. **`2026-08-03-r18` (opus) does not fetch**, which is the observation that unsettles the row above |
 | Blocked on | nothing |
 | Proof design | — |
 
@@ -101,3 +101,22 @@ is a worse defect than the one this item describes.
   *order*, `r16` refuted it, and this one is about the fetch happening at all. Not `#006` either,
   which is about a stack note leaving no fingerprint in the result.
 
+- `2026-08-03` — **fourth observation, and it splits the set 3–1.** `2026-08-03-r18` (opus, `#061`
+  Phase 2) **took the branch correctly**: no stack note fetched, no row claimed, no invented slug. The
+  only `stacks/` strings in its transcript are an `ls -R` of the mirror at `:17` and §2's own table
+  inside `MONSTER-DEV.md` at `:21`.
+
+  **This weakens the attribution row above and does not settle a replacement.** Half C's bar for a
+  playbook gap is *every* model doing the same, and one hire in four now does not. It is also not
+  cleanly a model disposition: `r16` and `r18` are **both Opus** and disagree with each other, on the
+  same fixture, the same brief and mirrors differing only in §3. So the honest state is *three runs
+  fetch, one does not, and nothing on record predicts which* — which is `#050`'s shape (within-tier
+  variance) applied to a much cheaper behaviour.
+
+  What the item may not do is quietly keep *settled* in its attribution row on the strength of the
+  three runs that agreed. Either the row becomes a rate, or a fifth observation is bought — and the
+  cheapest fifth observation is a by-product of any future `nowhere-to-walk` run, since `10` is scored
+  on every one of them.
+
+  Note the direction of the difference: `r18` is the **cheapest and cleanest** run on this scenario
+  (13/0/0/1, `$0.6783`). Whatever made it skip the fetch did not cost it anything anywhere else.

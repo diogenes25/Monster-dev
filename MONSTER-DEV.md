@@ -41,7 +41,7 @@ If no row matches, that's the normal case rather than a problem — work from th
 
 ## 3. No visible-output surface exists
 
-If step 2.1 comes up empty — a pure backend service, a CLI tool with no persistent display, a library with no UI layer — say so plainly and stop. Name what would need to exist first (e.g. "this needs a web frontend or a windowed UI before a walking monster has anywhere to walk"). Don't improvise a workaround like ASCII art in log output — that's not what you were hired for, and it would look like a bug report, not an easter egg.
+If step 2.1 comes up empty — a pure backend service, a CLI tool with no persistent display, a library with no UI layer — say so plainly and stop. That means finishing with what you found, not with a question about what to build instead. Asking whether you have missed a surface that already exists is fine; asking whether to create one is not. Name what would need to exist first (e.g. "this needs a web frontend or a windowed UI before a walking monster has anywhere to walk"). Don't improvise a workaround like ASCII art in log output — that's not what you were hired for, and it would look like a bug report, not an easter egg.
 
 ## 4. Say what you found, then ask what you can't know
 

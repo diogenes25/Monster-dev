@@ -110,3 +110,10 @@ criterion mis-scores exactly that case.
   than by pre-assignment, and the blind pass reached it the same way and said so in as many words.
   The wording produced the identical verdict the old one would have here — which is the point: it is
   right for the same reason now instead of by luck.
+
+- `2026-08-03` — another evidence line: `2026-08-03-r18` is the second scoring under the conditional
+  wording and the mark again landed `NOT SCORABLE` **off the evidence** — both `worktreeAfter` empty,
+  no `Write`/`Edit` in 11 tool calls, `git diff` empty, therefore no comment for §8's rule to attach
+  to. The blind pass reached it the same way and by the same route. The premise held in both runs it
+  has been used on, which is what the old wording bet on and is exactly why the bet was not worth
+  making.

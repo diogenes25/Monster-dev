@@ -1,7 +1,7 @@
 ---
 type: run
 title: Run 2026-08-03-r14
-description: Arm B of #002 — the §6 bound on the build. It cost 20% more model turns than arm A and lost half a mark on 18a, so #002 is rejected. Its blind scoring found that criterion 10 passes a verbatim copy of the reference.
+description: Arm B of #002 — the §6 bound on the build. It cost 18% more model turns than arm A and lost half a mark on 18a, so #002 is rejected. Its blind scoring found that criterion 10 passes a verbatim copy of the reference.
 resource: 2026-08-03-r14
 tags: [ab-arm, proof-arm, sonnet, plan-step, dom-css]
 timestamp: 2026-08-03
@@ -12,7 +12,9 @@ timestamp: 2026-08-03
 Arm B of `#002`: `MONSTER-DEV.md` with one paragraph added at the end of §6, bounding the build to the
 change set announced in step 4. Arm A is [[2026-08-03-r15]]; the report for both is `report.md` here.
 
-**60 model turns (15 + 45), `$2.3359`** against arm A's **50 (12 + 38), `$2.3180`**. The treatment made
+**45 model turns (15 + 30), `$1.8983`** against arm A's **38 (12 + 26), `$1.9424`** — corrected
+`2026-08-04`, `#074`; both arms were quoted with turn 1 counted twice, and `+18.4 %` turns at
+`−2.3 %` cost is what the record actually says. The treatment made
 the build turn longer, not shorter — the direction `#002` needed it not to go — and section E went
 backwards on `18a` (pass → partial, both readings blind and independent). Every other criterion is
 identical across the arms, including every figure `verify-run.mjs` produced.

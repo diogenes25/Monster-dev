@@ -1,0 +1,161 @@
+{
+  "url": "http://127.0.0.1:8080/index.html",
+  "trigger": "alt+KeyA",
+  "fixtureConsoleErrors": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "onLoad": 0,
+  "afterIdle": 0,
+  "afterBareKey": 0,
+  "afterTrigger": 1,
+  "keyPath": "real browser key event (ladder step 1)",
+  "spriteUrl": "http://127.0.0.1:8080/assets/monster.png",
+  "spriteHttpStatus": 200,
+  "spriteNaturalSize": "5083x300",
+  "spriteSlug": "green-fuzz-strolling (17 frames of 299x300, cycle 0.708s)",
+  "implementation": {
+    "viewportWidth": 1184,
+    "viewportHeight": 705,
+    "cell": {
+      "width": 200,
+      "height": 201,
+      "aspect": 0.995
+    },
+    "backgroundSize": "3400px 201px",
+    "animations": [
+      {
+        "on": "div.monster-walker__sprite",
+        "name": "monster-walk-cycle",
+        "durationS": 0.71,
+        "timing": "steps(17)"
+      },
+      {
+        "on": "div.monster-walker",
+        "name": "monster-cross",
+        "durationS": 7.1,
+        "timing": "linear"
+      }
+    ],
+    "steps": 17,
+    "cycleSeconds": 0.71,
+    "travelSeconds": 7.1,
+    "travelAnimation": "monster-cross",
+    "customProperties": {
+      "--cycle": "0.71s",
+      "--sheet-w": "calc(200px * 17)",
+      "--crossing": "7.10s",
+      "--frame-h": "201px",
+      "--frame-w": "200px",
+      "--stride": "140px"
+    }
+  },
+  "sheetMatch": {
+    "slug": "green-fuzz-strolling",
+    "frames": {
+      "sheet": 17,
+      "implementation": 17,
+      "agree": true
+    },
+    "cycleSeconds": {
+      "sheet": 0.708,
+      "implementation": 0.71,
+      "deltaPct": 0.28
+    },
+    "cellAspect": {
+      "sheet": 0.9967,
+      "implementation": 0.995,
+      "deltaPct": -0.17
+    },
+    "cellPx": {
+      "sheet": "299x300",
+      "implementation": "200x201",
+      "scale": 0.6689
+    }
+  },
+  "derivation": {
+    "viewportWidth": 1184,
+    "frameWidth": 200,
+    "distancePx": 1384,
+    "travelSeconds": 7.1,
+    "cycleSeconds": 0.71,
+    "cycles": 10,
+    "cyclesIsWhole": true,
+    "impliedStridePx": 138
+  },
+  "samples": [
+    {
+      "t": 0,
+      "x": -36,
+      "y": 504,
+      "mirrored": true,
+      "bg": "-600px 0px"
+    },
+    {
+      "t": 2,
+      "x": 357,
+      "y": 504,
+      "mirrored": true,
+      "bg": "0px 0px"
+    },
+    {
+      "t": 4,
+      "x": 770,
+      "y": 504,
+      "mirrored": true,
+      "bg": "0px 0px"
+    },
+    {
+      "t": 6,
+      "x": 1161,
+      "y": 504,
+      "mirrored": true,
+      "bg": "-2800px 0px"
+    },
+    {
+      "t": 8
+    }
+  ],
+  "afterCrossing": 0,
+  "afterSecondTrigger": 1,
+  "secondTriggerGeometry": {
+    "x": -41,
+    "y": 504,
+    "mirrored": true,
+    "bg": "-400px 0px"
+  },
+  "navLinks": 3,
+  "scroll": {
+    "before": 0,
+    "after": 199
+  },
+  "durationVsViewport": {
+    "wide": {
+      "viewportWidth": 1184,
+      "travelSeconds": 7.1
+    },
+    "narrow": {
+      "viewportWidth": 760,
+      "travelSeconds": 4.97
+    },
+    "changesWithViewport": true
+  },
+  "reducedMotion": {
+    "onLoad": 0,
+    "x": {
+      "first": 474,
+      "last": 474,
+      "min": 474,
+      "max": 474
+    },
+    "travelledPx": 0,
+    "samplesTaken": 28,
+    "disappearedAfterMs": 3008,
+    "afterTrigger": 1,
+    "stillOnScreenAfterCrossing": 0,
+    "waitedSeconds": 10
+  },
+  "consoleErrorsAll": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "consoleErrors": []
+}

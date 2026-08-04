@@ -523,6 +523,27 @@ which no item had predicted: turn 1's entry-point path ran through a session scr
 scratchpad segment is a CLI slug spelling out this repository's absolute path. So check what turn 1
 *says*, not only where it runs — a path handed to a hire is part of the mirror surface.
 
+### 7c. Reconcile the report against the record, before quoting a number in it
+
+```powershell
+.\process\tools\check-hire-records.ps1 -RunId <run-id>
+```
+
+**Quote figures from `hire.json`, never from what the console printed.** Section A recomputes `totals`
+from `turns[].envelope`; section B asks whether the report quotes the run's own recorded cost at all.
+It reports rather than throws, since most of what it finds across the record is history.
+
+The step exists because the retyping the wrapper was built to end came back one layer up. `hire.ps1`
+kept the numbers and the reports were still written from the console — and three defects accumulated
+where nothing compared the two: a per-turn label printing the run total, so two `#002` arms
+double-counted turn 1 in every document that quoted them (`#074`); `permissionDenials` casting an
+array to `[int]`, so it read `0` for fourteen runs while two of them had a denial (`#077`); and a cost
+priced at Anthropic rates for a local endpoint the record did not name (`#063`). All three were found
+by a reader doing the arithmetic by hand, twice, months apart.
+
+**Run it for the run you are writing up, and again bare after any change to `hire.ps1`'s totals or
+summary block.** A record nobody reads is not better than no record.
+
 ### 8. Score it twice, the second time blind
 
 You designed the run, wrote the item it came from, and know which criterion was supposed to flip.

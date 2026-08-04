@@ -184,7 +184,10 @@
     "cliTurns": 2,
     "duration_ms": 576304.0,
     "anyError": false,
-    "permissionDenials": 0.0,
-    "firstEditAfterCliTurn": 2
+    "permissionDenials": 1.0,
+    "firstEditAfterCliTurn": 2,
+    "permissionDenialTools": [
+      "PowerShell"
+    ]
   }
 }

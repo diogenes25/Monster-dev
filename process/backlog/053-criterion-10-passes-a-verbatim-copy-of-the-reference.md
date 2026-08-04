@@ -116,3 +116,36 @@ which is a smaller improvement than the change table claims, and the change tabl
   What this item's `proven` does **not** mean: that `10` has been measured. It means the next run can
   measure it. The `2026-08-02` change table now says so of itself — its `10` row carries the sentence
   that it overclaims — which is the correction this item asked for.
+
+- `2026-08-04` — **a correction to this item's `proven` claim, from the arm it authorised.**
+  `2026-08-04-r20` is the first run on the „nimm `green-fuzz-strolling`" row. Two things came out of
+  it, and the first was found by a pre-run audit before the turn was bought:
+
+  **The mechanical discriminator this item promised does not exist.** The log above argues the
+  alternation *"needs no new instrument at all"* because *"a hire that copies `index.html` onto a
+  `green-fuzz-strolling` run writes `steps(23)` against a 17-frame sheet and `frames.agree` goes
+  false."* But `stacks/dom-css/README.md:32` — the published note every hire on this surface fetches
+  — says:
+
+  > It is built on one specific sheet (`green-fuzz-classic`, hence `steps(23)`), so its frame count,
+  > cell size and cycle time are that sheet's and not the technique's. **Substitute the figures for
+  > whichever sheet the client picked in §5.**
+
+  That is the exact three-number repair. A hire that copies the reference **and follows the note** is
+  handed `10b` and `14b`. The claim should have been checked against the note before the arm was
+  authorised; the arm is not wasted, but it buys less than this item said.
+
+  **What it does still buy, and it delivered.** The residual tell is the one the scenario's own
+  Provenance already named — *"`--stride: 130px` and the `--crossing: 16s` fallback are the proof
+  rather than the tell: §5 derives neither"* — and the note supplies neither. `r20` wrote
+  `--stride: 140px` and a `--crossing` fallback of `12s`, derived `--frame-h: 201px` from the
+  strolling aspect, copied no comment, and renamed both animations. **On the free parameters it is
+  not a copy**, which is the first real verdict criterion `10` has produced in fourteen runs.
+
+  One residual tell *does* fire and is recorded rather than adjudicated: the reduced-motion parking
+  position is `translateX(40vw)`, byte-identical to `index.html:97` and derived from nothing in §5.
+  It is a more plausible independent choice than `130px` would have been, so it is weaker evidence
+  than the other two are in the opposite direction.
+
+  **What is still untested** is the case this item was actually worried about: a hire that copies
+  *and* follows the note. `r20` is not that hire, and no run on record is.

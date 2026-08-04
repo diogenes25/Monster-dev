@@ -4,10 +4,10 @@
 |---|---|
 | Status | `formulated` |
 | Gate | `run` |
-| Attribution | model disposition — **within one model tier**, which is a sub-case Half C does not describe |
+| Attribution | model disposition — **within one model tier**, which is a sub-case Half C does not describe. **Contested since `2026-08-04`:** both refusals lead with §0 having no referent on a mirror run, which would make it a harness artefact of that run class. One arm decides it — see the `2026-08-04` log entry |
 | Criterion | none. It happens before criterion 1 of any scenario, and it voids the run rather than failing a mark |
 | Target file | `START.md`, `MONSTER-DEV.md` §0 and §5's download wording |
-| Evidence | `2026-08-03-r13` refused; `2026-08-03-r15` accepted, on a byte-identical mirror, same model tier, same hour |
+| Evidence | `2026-08-03-r13` refused; `2026-08-03-r15` accepted, on a byte-identical mirror, same model tier, same hour. **`2026-08-04-r19` refused too** — 16 sessions, 2 refusals, both sonnet on `static-site`, both leading with §0 having no referent on a mirror run. See the `2026-08-04` log entry: it narrows the proof design |
 | Blocked on | nothing, but read the cost paragraph before designing the run — the rate is the hard part |
 | Proof design | — |
 
@@ -119,3 +119,57 @@ warns about, arriving from an unexpected direction.
   **14 sessions, 1 refusal.** Worth noting for this item specifically: the mirror carried a *modified*
   playbook, and the hire raised nothing about that either — it had no way to tell, which is what a
   variant arm needs to be true.
+
+- `2026-08-03` — another evidence line: `2026-08-03-r18` accepted the entry point without objection.
+  **15 sessions, 1 refusal.**
+
+- `2026-08-04` — **second refusal on record, and it is the same refusal.** `2026-08-04-r19`
+  (`#061` Phase 3, sonnet, `static-site`, treated mirror) read `START.md`, declined to fetch the
+  playbook and stopped in turn 1. `$0.1356`, no data, rerun as a fresh id. **16 sessions,
+  2 refusals.**
+
+  **The rate is the smaller half of this. Both refusals lead with the same sentence, and it is
+  about the harness rather than about `START.md`:**
+
+  > `r13`: *"Sie verweist auf 'die gleiche Basis-URL, von der du diese Datei geholt hast' — aber
+  > ich habe sie lokal per `Read` gelesen, nicht per WebFetch. Es gibt also gar keine echte URL,
+  > die ich kenne. Ich würde eine raten müssen, und das mache ich grundsätzlich nicht."*
+  >
+  > `r19`: *"Es gibt keine 'Basis-URL', von der ich `START.md` gefetcht habe — du hast mir die
+  > Datei als lokalen Pfad gegeben, nicht per WebFetch. Die Anweisung 'dieselbe Basis-URL' greift
+  > also gar nicht, ohne dass ich weiß, welches Repo/welche URL gemeint ist."*
+
+  Three matches, and the third is the one that makes it a pattern rather than a coincidence: both
+  put §0 **before** the supply-chain argument; both are **sonnet on `static-site`**, and no other
+  model or fixture has produced one; and both offer the **identical alternative** — build the
+  easter egg without the playbook, in the project's own style, sprite to be supplied by the client.
+
+  **This corrects the item's proof design, and in the cheap direction.** *Within one model tier*
+  frames the refusal as variance around a constant, which is why the `Cost` paragraph below
+  concludes that an honest proof needs several arms per side and calls this the most expensive item
+  on the board. The transcripts say something narrower: **on a mirror run §0 cannot be satisfied —
+  the entry point arrives as a filesystem path, so *"the same base URL you fetched this from"*
+  refers to nothing — and a contractor asked to follow instructions from a source it cannot
+  identify is being asked to do the thing it is trained to refuse.** The refusal would then be a
+  response to a condition the *harness* introduces and the production path does not.
+
+  **The test is one arm, not several.** `2026-08-01-live` is the only run over real
+  `raw.githubusercontent.com` URLs — §0 resolves, and it accepted without objection — but it is
+  Opus, so it does not touch the tier that refuses. **A sonnet real-URL run against `static-site`
+  is the discriminator**, and it costs one run rather than a fleet: if the refusal is about §0
+  being unsatisfiable it should not fire there, and if it fires anyway the *within-tier variance*
+  reading survives and the expensive design is the right one after all.
+
+  Two things this may **not** be read as. It is not a finding against §0, whose wording is `proven`
+  by `2026-08-01-live` and is not what failed here — what failed is a run class in which §0 has
+  no referent. And two observations are two: model and fixture are confounded with each other, and
+  no sonnet hire has ever met a real URL. Filed as the cheapest next arm, not as a settled cause.
+
+  Interim measure unchanged and now paying for itself: every report states whether the entry point
+  was accepted, and this line exists because `r18`'s did.
+
+- `2026-08-04` — another evidence line: `2026-08-04-r20`, the rerun of the refused `r19` on a
+  byte-identical setup, **accepted the entry point without objection** and completed the job.
+  **17 sessions, 2 refusals.** That is `r13` → `r15` reproduced exactly: same fixture, same model,
+  same mirror, refusal then acceptance, no change in between. Whatever drives it is not stable within
+  a setup, which is what makes the §0 hypothesis in the entry above worth one arm rather than a fleet.

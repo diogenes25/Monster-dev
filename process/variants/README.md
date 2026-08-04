@@ -39,13 +39,26 @@ Neither announces itself afterwards: the mirror still builds, the run still runs
 differ by an amount nobody can state — which is worse than no A/B, because it still produces a
 number that looks like an answer.
 
+**And the edit must change something.** A `Replace` that yields the input it was given throws, and
+so does an `Insert` whose text is **already in the file** — the shape an arm takes once its
+treatment has been folded into the playbook. That second case is the reason this rule is stated
+separately from the one above rather than folded into it: the match count cannot reach it. Folding a
+treatment in leaves the anchor it was inserted *after* untouched by construction, so the count stays
+1, the insert applies, and the mirror carries the treatment **twice** while passing the vocabulary
+grep, the frontmatter check and `check-index.ps1` — none of which look for duplicated playbook
+prose. Found on `#061`'s own arm the day after it landed; `#079`.
+
+A file whose treatment has landed is therefore wrong rather than merely stale, and no check can say
+which direction the operator meant. `061-s3-b.psd1` is kept because three reports cite it and
+carries a `LANDED — DO NOT APPLY` header; the throw is the second defence, not the only one.
+
 The build prints `Variant` and `Edits` in its returned object for the same reason. `(none)` rather
 than blank, so an arm built without a variant and an arm whose variant did nothing cannot print
 the same thing.
 
 ## The `zz-` files are negative tests, not arms
 
-Four fixtures, one per hard failure, kept so the failure paths stay re-runnable rather than
+Five fixtures, one per hard failure, kept so the failure paths stay re-runnable rather than
 demonstrated once in a commit message. Each must throw:
 
 | | fails on |
@@ -54,10 +67,14 @@ demonstrated once in a commit message. Each must throw:
 | `zz-nomatch` | anchor that is not in the playbook — 0 matches |
 | `zz-twice` | anchor `the` — many matches |
 | `zz-noop` | replaces a sentence with itself, so the edit changes nothing |
+| `zz-landed` | inserts a sentence the playbook already contains, with a valid anchor — the folded-in arm |
 
 ```powershell
-.\process\tools\build-dist.ps1 -RunId zz-check -Variant zz-nomatch   # must throw
+foreach ($v in 'zz-nofile','zz-nomatch','zz-twice','zz-noop','zz-landed') {
+    try { .\process\tools\build-dist.ps1 -RunId zz-check -Variant $v | Out-Null; "!! $v DID NOT THROW" }
+    catch { "ok  $v" }
+}
 ```
 
-A run that does *not* throw is the finding. Delete the scratch mirror afterwards; the build only
-deletes one it built and then rejected.
+A run that does *not* throw is the finding. The build deletes the mirror it built and then rejected,
+so what is left afterwards is the empty run parent — delete that.

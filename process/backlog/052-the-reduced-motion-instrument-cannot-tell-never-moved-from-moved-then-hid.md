@@ -96,3 +96,23 @@ the verifier runs *after* the hire and outside the envelope, so it costs nothing
   `reducedMotion.afterTrigger` is now derived from the poll's samples instead of probed once at
   0.8 s. Same question, and it can no longer miss an appearance shorter than the probe delay — but a
   reader comparing this field across the boundary is comparing two instruments.
+
+- `2026-08-04` — **the same instrument, the sibling conflation, one level up.** This item fixed
+  `travelledPx` so *never moved* and *moved, then hid* stopped reading alike. `2026-08-04-r20` shows
+  that **`stillOnScreenAfterCrossing` now has the same problem**: it read `0` with
+  `disappearedAfterMs: 3008`, which says *the hire chose to hide it under reduced motion* — and the
+  hire did not. `style.css:115` parks it (`transform: translateX(40vw)`, animation none), exactly
+  like `index.html` and `impl-01`; the disappearance is `script.js:35`,
+  `setTimeout(() => walker.remove(), 3000)`, the **generic per-walker cleanup** that runs whether or
+  not reduced motion is on.
+
+  So the number conflates *hid it deliberately* with *the ordinary cleanup timer fired inside the
+  observation window*. `11b` is `INFO` precisely so it can accumulate evidence for a future §5
+  decision, and a number that mixes two behaviours accumulates nothing — the record is **3 park,
+  0 hide**, not 2 park 1 hide as the raw figure suggests.
+
+  **The primary scoring got this wrong off the number alone and the blind pass caught it** by reading
+  the stylesheet and the timeout. Not filed as a new item: same instrument, same family, and whoever
+  next opens `verify-run.mjs`'s reduced-motion path needs both halves in one place. What would fix
+  it is a field saying **why** it left — animation end, explicit removal, or still there when the
+  window closed.

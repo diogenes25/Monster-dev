@@ -68,6 +68,12 @@ once**: zero matches and two matches are both hard failures, because an overlay 
 lands in the wrong place or silently does nothing still produces a mirror, a run and a number,
 and the number then means something nobody wrote down.
 
+An edit that changes nothing is the same failure and also throws — for `Replace` because the
+result equals the input, and for `Insert` because its text is already in the file. That second
+case is the one an anchor count cannot reach: once a treatment is folded into the playbook, the
+anchor it was inserted after is by construction the one sentence still matching exactly once,
+so the arm would quietly land a second copy of itself (#079).
+
     @{
         Description = 'Arm B: bound the build to the announced change set (#002)'
         Edits = @(
@@ -203,6 +209,22 @@ if ($Variant) {
 
         if ($hasAfter) {
             if (-not $e.ContainsKey('Insert')) { throw "BROKEN: edit on '$($e.File)' has After but no Insert." }
+
+            # An Insert whose text is already in the file is the `changed nothing` defect wearing
+            # the other keyword, and the anchor count cannot see it: folding a treatment in leaves
+            # the anchor it was inserted *after* untouched by construction, so the count stays 1,
+            # the insert applies, and what is on disk is a mirror carrying the treatment twice —
+            # which passes the vocabulary grep, the frontmatter check and check-index.ps1, because
+            # duplicated playbook prose is none of the things those look for. #079, verified on
+            # #061's own arm the day after it was folded in.
+            $ins = ([string]$e.Insert).Trim()
+            if ($ins -and $text.Contains($ins)) {
+                $insShort = if ($ins.Length -gt 48) { $ins.Substring(0, 45) + '...' } else { $ins }
+                throw ("BROKEN: the Insert for '$($e.File)' is already present in the mirror, so this edit would" +
+                       " land a second copy. Has this treatment been folded in?" +
+                       "`n  insert: $insShort")
+            }
+
             $new = $text.Replace($anchor, $anchor + $e.Insert)
             $what = 'insert after'
         } else {

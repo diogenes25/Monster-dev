@@ -205,6 +205,19 @@ if (Test-Path $recordPath) {
         dist         = $distPath
         fixture      = $Fixture
         modelFlag    = $Model
+
+        # Where the turns actually went. `modelFlag` records what was asked for and envelope.modelUsage
+        # what the CLI billed, but neither says which endpoint billed it: the local-model spike ran
+        # `gemma4:e2b` through Ollama on `ANTHROPIC_BASE_URL` and Claude Code priced local tokens at
+        # Anthropic rates — `total_cost_usd: 0.2586` for a turn that cost electricity. On disk that run
+        # was indistinguishable from a paid one, and the tooling gate is stated first in dollars. One
+        # field, so the distinction is checkable by a script instead of by recognising a model name.
+        # #063 part A; part B — whether the gate should be stated in units that survive — belongs to
+        # whatever item authorises a local A/B, because loosening a gate for a run class nobody has
+        # authorised yet is how a gate gets loosened for the wrong reason.
+        baseUrl      = $env:ANTHROPIC_BASE_URL
+        local        = [bool]($env:ANTHROPIC_BASE_URL -and $env:ANTHROPIC_BASE_URL -notmatch 'api\.anthropic\.com')
+
         allowedTools = $AllowedTools
         cliVersion   = (claude --version)
         sessionId    = $null
@@ -303,7 +316,17 @@ $record.totals = [pscustomobject]@{
     cliTurns              = $record.turns.Count
     duration_ms           = ( $record.turns | Measure-Object -Property { $_.envelope.duration_ms } -Sum ).Sum
     anyError              = [bool](@($record.turns | Where-Object { $_.envelope.is_error }).Count)
-    permissionDenials     = ( $record.turns | Measure-Object -Property { [int]$_.envelope.permission_denials } -Sum ).Sum
+
+    # permission_denials is an ARRAY OF OBJECTS, not a number. The `[int]` cast this line used to
+    # carry yielded 0 for every run whatever happened, so the field read `0.0` on two runs that had
+    # a denial each and one report wrote "no permission denials" off it. The siblings around it are
+    # right because they cast scalars. #077.
+    permissionDenials     = ( $record.turns | Measure-Object -Property { @($_.envelope.permission_denials).Count } -Sum ).Sum
+
+    # Which tool was fenced out is what actually decides whether the fence was too tight, and the
+    # count alone cannot say. From data already stored, so it costs nothing to keep.
+    permissionDenialTools = @( $record.turns | ForEach-Object { $_.envelope.permission_denials } |
+                               ForEach-Object { $_.tool_name } | Select-Object -Unique )
     firstEditAfterCliTurn = $firstEdit
 }
 
@@ -433,17 +456,41 @@ if ($strays) {
     throw "LEAK: harness artefacts reached the target:`n" + ($strays -join "`n")
 }
 
-[pscustomobject]@{
+# Both figures, both labelled, because this block is where a person reads these numbers under time
+# pressure and it should not need a docstring. `Cost` and `ModelTurns` used to print the RUN totals
+# after every turn under labels that read as *this turn*, so a report written by adding up what each
+# turn printed counted turn 1 twice — which is what happened to both #002 arms, in every document
+# that quoted them. Printing only the per-turn figure would fix that and create the opposite error,
+# a report quoting the last turn as the run. #074.
+#
+# Rounded and formatted with InvariantCulture, and both halves of that are load-bearing for the same
+# reason the labels are. The raw envelope figure is a full double — `1.6049393999999997` — and on a
+# de-DE host PowerShell renders the decimal as a comma, so the unformatted print handed the next
+# report `1,6049393999999997` to copy. A block that exists to be read into a report has to print the
+# number a report would quote; `totals` is already rounded to 4 on the way to disk, so this matches it.
+$asCost = { param($v) ([math]::Round([double]$v, 4)).ToString('0.0000', [cultureinfo]::InvariantCulture) }
+
+$summary = [ordered]@{
     Turn        = $turn.index
     Kind        = $kind
     Session     = $record.sessionId
-    Cost        = $record.totals.total_cost_usd
-    ModelTurns  = $record.totals.num_turns
+    Cost        = '{0} (turn) / {1} (run)' -f (& $asCost $envelope.total_cost_usd), (& $asCost $record.totals.total_cost_usd)
+    ModelTurns  = '{0} (turn) / {1} (run)' -f $envelope.num_turns, $record.totals.num_turns
     CliTurns    = $record.totals.cliTurns
     Worktree    = if ($after) { $after -join '; ' } else { '(clean)' }
     Record      = $recordPath
     Capture     = if ($captureError) { "FAILED — $captureError" } else { $runDir }
 }
+
+# Only when there is one. A `0` printed every turn is a `0` nobody reads, which is how the broken
+# total went unquestioned for two runs — and a denial is a *stop rule*, not a measurement: widen the
+# fence and rerun, never record it as a finding. #077.
+if ($record.totals.permissionDenials -gt 0) {
+    $summary['PermissionDenials'] = '{0} — {1}' -f $record.totals.permissionDenials,
+                                                  ($record.totals.permissionDenialTools -join ', ')
+}
+
+[pscustomobject]$summary
 
 "`n--- hire said ---`n"
 $envelope.result

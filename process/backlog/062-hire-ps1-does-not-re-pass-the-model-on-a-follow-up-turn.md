@@ -122,3 +122,9 @@ every run and be deleted for being noisy.
   `claude-haiku-4-5` the CLI used internally). Before the fix turn 2 would have billed
   `claude-opus-5[1m]` while `modelFlag` read `sonnet`. No tier-mismatch warning fired, which is the
   other half working: the check is quiet when the flag took.
+
+- `2026-08-03` — another evidence line, and it is the arm the first one could not be: `2026-08-03-r18`
+  is **Opus**, so the flag and this working copy's unflagged default coincide. Per-turn
+  `envelope.modelUsage`: turn 1 `claude-opus-5`, turn 2 `claude-opus-5`, no tier-mismatch warning. The
+  Sonnet arm (`r17`) showed the re-pass preventing an *upgrade* on turn 2; this one shows it does not
+  disturb the case where nothing needed preventing.

@@ -82,3 +82,13 @@ and the report attributes it here rather than to either hire.
   shown to be done rather than to have helped.** There was nothing to flip — the criterion's first
   meaningful verdict will be the next run's, and if that run passes `13b` it will be the first thing
   ever to do so.
+
+- `2026-08-04` — **first pass, and the fix is what produced it.** `2026-08-04-r20` scored `13b`
+  `PASS`: the case-insensitive search over the handed-back worktree returns exactly one hit,
+  `script.js:12` `// Monster-Dev`, which is §8's signature comment and `INFO` rather than a hit under
+  the repaired wording. No occurrence as a dependency, import, path or configuration value.
+
+  **`13b` had failed 12 of 12 before this**, every time on a hire doing what §8 tells it to do. Both
+  scorings reached the pass independently and both recorded the signature as `INFO`. Thirteen
+  implementations have now signed their work and nobody has yet decided whether that is wanted, which
+  is what the `INFO` is for.

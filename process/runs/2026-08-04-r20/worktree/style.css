@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  color: #2b2b2b;
+  background: #fdfaf3;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5ddc8;
+}
+
+.logo {
+  height: 32px;
+}
+
+nav a {
+  margin-left: 1.5rem;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #eef3ea;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+main section {
+  padding: 3rem 2rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+main h2 {
+  margin-bottom: 1rem;
+}
+
+.product-list li {
+  margin-bottom: 0.5rem;
+}
+
+footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: #7a7266;
+  font-size: 0.9rem;
+}
+
+/* Alt+A easter egg — walking monster. Sprite: assets/monster.png, one gait
+   cycle of 17 frames at 299 x 300px each, cut from 24fps footage. The bob is
+   already in the frames — nothing added here does vertical motion. */
+.monster-walker {
+  --frame-w: 200px;
+  --frame-h: 201px;
+  --sheet-w: calc(var(--frame-w) * 17);
+  --cycle: 0.71s;
+  --stride: 140px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: var(--frame-w);
+  height: var(--frame-h);
+  pointer-events: none;
+  z-index: 999;
+  animation: monster-cross var(--crossing, 12s) linear 1 forwards;
+}
+
+.monster-walker__shadow {
+  position: absolute;
+  left: 30%;
+  width: 32%;
+  bottom: 6px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+.monster-walker__sprite {
+  position: absolute;
+  inset: 0;
+  background-image: url("assets/monster.png");
+  background-repeat: no-repeat;
+  background-size: var(--sheet-w) var(--frame-h);
+  transform: scaleX(-1); /* sheet faces left; mirrored to walk left to right */
+  animation: monster-walk-cycle var(--cycle) steps(17) infinite;
+}
+
+@keyframes monster-walk-cycle {
+  from { background-position: 0 0; }
+  to   { background-position: calc(-1 * var(--sheet-w)) 0; }
+}
+
+@keyframes monster-cross {
+  from { transform: translateX(calc(-1 * var(--frame-w))); }
+  to   { transform: translateX(100vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .monster-walker { animation: none; transform: translateX(40vw); }
+  .monster-walker__sprite { animation: none; }
+}

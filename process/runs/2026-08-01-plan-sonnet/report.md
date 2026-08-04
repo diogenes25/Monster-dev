@@ -177,7 +177,17 @@ have produced a perfect, meaningless "no difference" result.
 favicon and no reference to one. It appears identically in all three arms and belongs on the
 allowlist Phase 4 plans (`preexistingConsoleErrors`).
 
-No permission denials, no errored turns, no harness artefacts in any target.
+No errored turns, no harness artefacts in any target.
+
+> **Corrected `2026-08-04`: this sentence used to begin *"No permission denials"*, and the Opus arm
+> had one.** `2026-08-01-plan-opus` `turns[1].envelope.permission_denials` holds a blocked
+> `Remove-Item` — *"Remove-Item on system path '\','\\' is blocked. This path is protected from
+> removal."* — during cleanup. The clause was written off `totals.permissionDenials`, which read `0`
+> for every run ever recorded because the field cast an array to `[int]` (`#077`, fixed
+> `2026-08-04`). **The fence was not too tight**, so the stop rule that field exists for does not
+> fire here: the block came from the CLI's own path protection, not from this harness's allowlist,
+> and it was in the cleanup phase after every measurement. What is corrected is the claim, not the
+> verdict — nothing in this report's scoring moves.
 
 ## Not exercised by this run
 

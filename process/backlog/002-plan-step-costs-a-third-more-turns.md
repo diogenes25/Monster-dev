@@ -161,6 +161,11 @@ four marks to save turns, which is the wrong trade at these prices.
   | total | 31 | 41 | 42 | **50** | **60** |
   | cost | $1.66 | $1.84 | $2.32 | **$2.3180** | **$2.3359** |
 
+  > **The four bold arm figures here are the double-counted ones — `#074`, and the true values are in
+  > the `2026-08-04` entry at the foot of this item.** Kept as written on purpose: they are what the
+  > rejection was argued from, and a table silently corrected under an argument is a table nobody can
+  > audit. The three left-hand columns were never affected.
+
   **+20 % model turns, +0.8 % cost** — more turns, individually cheaper. The build turn went 38 → 45,
   the direction this item needed it not to go. And section E, the mark set the whole plan step exists
   for, went *backwards*: `18a` pass → partial, both readings independent and blind. Every other
@@ -208,3 +213,20 @@ four marks to save turns, which is the wrong trade at these prices.
   reduced-motion instrument), `#053` (**criterion `10` passes a verbatim copy of the reference** — found
   by arm B's blind pass, and worth more than this item's own result), `#054`/`#055` (fixture and
   documentation). `#026` and `#048` each gained an evidence line.
+
+- `2026-08-04` — **this item's cost figures are wrong and the rejection still stands.** `#074` found
+  that `hire.ps1` prints the run total after every turn under a per-turn label, so both arms' reports
+  double-counted turn 1. From the envelopes:
+
+  | | arm A `r15` | arm B `r14` | quoted |
+  |---|---|---|---|
+  | turns | **38** (12+26) | **45** (15+30) | 50 / 60 |
+  | cost | **`$1.9424`** | **`$1.8983`** | `$2.3180` / `$2.3359` |
+
+  **Turns: `+18.4 %`, not `+20 %`** — the finding the rejection rests on survives unchanged. **Cost:
+  arm B was `2.3 %` cheaper, not flat** — that clause is wrong and is corrected here rather than in
+  the tables above, which stay as the record of what was believed.
+
+  **This does not reopen the item.** The handoff's *"Do not redraft `#002`'s sentence"* is unaffected:
+  the rejection is about turns, the turns figure moves by 1.6 points, and `18a` going pass → partial
+  is untouched by any of this.

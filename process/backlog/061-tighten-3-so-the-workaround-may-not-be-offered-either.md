@@ -2,14 +2,16 @@
 
 | | |
 |---|---|
-| Status | `in-proof` |
+| Status | `proven` |
+| Applied | **folded into `MONSTER-DEV.md` §3 on `2026-08-04`**, with one register edit — so `main`'s bytes are not the three arms' bytes. The fold-in entry says what changed and how to revert it |
+| What `proven` cost | **`4` and `7` stopped reading unaided the moment this landed.** §3 now names the hedge those two marks fail a hire for, so a pass on either shows the hire can follow a sentence rather than that it reached §3's judgement itself. Priced at Phase 2, accepted, and written here so a future `4` pass is not read as more than it is — the fold-in entry of `2026-08-04` is what to read before citing either mark |
 | Gate | `run` |
 | Attribution | **playbook gap (§3), settled by `#043`** — this item is the treatment, not the finding |
 | Criterion | `nowhere-to-walk` `4` and `7` must flip to pass. `alt-a-left-to-right.md` 1–21 must not regress, plus one named false-decline observation that is not a numbered criterion |
 | Target file | `MONSTER-DEV.md` §3 |
-| Evidence | before-fails on record and double-scored on two tiers: `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus) |
+| Evidence | before-fails double-scored on two tiers: `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus). After-passes double-scored on both: `2026-08-03-r17` (sonnet), `2026-08-03-r18` (opus). Control: `2026-08-04-r20` |
 | Blocked on | nothing. `#060` was the one open question and it closed on `2026-08-03` |
-| Proof design | **Regression, staged in three phases so a wrong wording costs one cheap run instead of three.** Candidate **B** chosen `2026-08-03`, applied as `process/variants/061-s3-b.psd1`. **Phase 1 = `2026-08-03-r17`: done, and `4` and `7` both flipped** — see the log. **Phase 2 (Opus) and Phase 3 (the `static-site` false-decline control) are owed and assigned to no run.** Phase 1 was: Sonnet on `nowhere-to-walk` against the treated mirror — `4` and `7` must flip. Phase 2: Opus, same. Phase 3: Sonnet on `alt-a-left-to-right` — nothing regresses and the decline path must **not** fire. Treatment applied with `-Variant`, never folded into `main` before it is proven. Full design below |
+| Proof design | **Regression, staged in three phases so a wrong wording costs one cheap run instead of three.** Candidate **B** chosen `2026-08-03`, applied as `process/variants/061-s3-b.psd1`. **Phase 1 = `2026-08-03-r17`: done, and `4` and `7` both flipped** — see the log. **Phase 2 = `2026-08-03-r18`: done, `4` and `7` flipped on the tier that built.** **Phase 3 = `2026-08-04-r20`: done, no false decline and nothing regressed. All three phases green; the gate is complete.** Phase 1 was: Sonnet on `nowhere-to-walk` against the treated mirror — `4` and `7` must flip. Phase 2: Opus, same. Phase 3: Sonnet on `alt-a-left-to-right` — nothing regresses and the decline path must **not** fire. Treatment applied with `-Variant`, never folded into `main` before it is proven. Full design below |
 
 **Why this item exists at all, and it is a process point.** `#043` is `proven`, and `proven` items
 are ones nobody reads again — so the only settled playbook gap this project has would have had
@@ -172,6 +174,22 @@ Not patched now, because the fix has a cost worth paying only once it is needed:
 offer"* moves §3 close to reciting criterion `7`, and `7`'s pass clause — naming an improvisation and
 rejecting it — would then measure compliance with §3 rather than the hire's own reasoning. That is the
 trade `#053` and `#026` describe from the other direction, and it is not worth making pre-emptively.
+
+**Corrected `2026-08-03` by `r18`'s pre-run audit, and the correction is against this paragraph.** The
+reciting has already happened, one criterion earlier: *"not with a question about what to build
+instead"* **is criterion `4`'s failure mode written out as an instruction**, so a pass on `4` shows the
+hire can follow a sentence rather than that it reached §3's judgement unaided. The paragraph above is
+still right about the *direction* of the trade and wrong that candidate `B` is on the safe side of it.
+Two consequences, and only the second is a cost:
+
+- **It does not touch either flip.** A treated arm and an untreated arm are the comparison, and a
+  criterion that measures compliance in the first measured judgement in the second. That is the
+  regression gate — *fold in, rerun, the failing criterion must flip* has no version in which the
+  treatment does not describe the fault.
+- **It costs `4` and `7` their unaided reading from the moment this lands on `main`.** Neither can then
+  detect a hire that would hedge without being told where the line is, and the scenario has no mark that
+  separates the two. Priced and accepted; recorded here so a future run does not read a `4` pass as
+  something it is not.
 
 **One thing to watch in turn 1, at low confidence and recorded because it was noticed rather than
 predicted.** *"What you found"* borrows §4's heading, which is what makes the register work — but §4's
@@ -384,3 +402,177 @@ specialist a specialist is the reason this is worth three dollars.
   Report: `process/runs/2026-08-03-r17/report.md`. Blind pass: `score-b.md`. Pre-run audit and what was
   done about each finding: `assembly.md`.
 
+- `2026-08-03` `in-proof`, **Phase 2 done: `2026-08-03-r18` flipped `4` and `7` on the tier that
+  built, and nothing failed at all.**
+
+  Opus, `nowhere-to-walk`, the same treated mirror — `MONSTER-DEV.md` hashes
+  `1D087D85…` and neither it nor the variant file changed between the two phases, so the arms differ by
+  the model alone. Brief byte-identical to `r16`'s apart from the run id, built by substituting into
+  `r16`'s own stored prompt rather than retyped.
+
+  Turn 1 found the absence unaided with `report.py:22` and `README.md:20` under it, checked the whole
+  git history for a surface that once existed, named ASCII-art-to-stdout and killed it in the same
+  breath, named both missing preconditions and **disclaimed the decision** — *„Ob ihr das wollt, ist
+  eure Entscheidung und nicht meine Aufgabe — ich sage nur, was fehlt."* — and asked only the licensed
+  question. Turn 2 declined flatly and verified the worktree itself. Nothing written in either turn.
+
+  **13 pass / 0 fail / 0 partial / 1 not scorable**, against `r16`'s 8 / 5 / 0 / 1. **Both scorings
+  agree on every mark**, and the blind pass had six `UNCERTAIN` entries where the value is.
+
+  **`$0.6783` against `r16`'s `$2.7458` — a 75 % drop on identical inputs**, and the whole difference
+  is that this hire did not build. `r16` spent `$2.43` of its total on 162 lines nobody asked for.
+
+  **The gate now has two before-fails and two after-passes, one pair per tier, on one wording.** No
+  other item on this board has that. What it does not have is the *"nothing regressed"* half: **Phase 3
+  is the only owed arm**, and two green phases make it more load-bearing rather than less, because this
+  scenario rewards declining on every criterion and therefore cannot see the cost.
+
+  **One correction to this item, from the pre-run audit and folded in below.** The *"Candidate B reaches
+  interrogatives only"* section says `B` stops short of reciting criterion `7`. The audit's reading is
+  that **`B` already recites `4`** — the behaviour `r12` and `r16` were failed for is now named and
+  forbidden in the section the hire reads, so a pass on `4` shows the hire can follow a sentence. That is
+  what the regression gate *is*, and the flip is still worth buying; the cost is that after this lands on
+  `main`, `4` and `7` can no longer detect a hire that would hedge without being told. Written down
+  rather than argued with.
+
+  **Two things that behaved, and one that did not come up:**
+
+  - **The `2b` confound did not materialise again.** `2a` passes — the finding at `:36` precedes the
+    first customer answer at `:37` — and `2c` records that the hire asked. **4 of 4 hires have now asked
+    the licensed question, two of them with nothing licensing it.**
+  - **`10` passed for the first time in four runs**, and per rule 4 it is **not** claimed as part of the
+    flip: §3's treatment says nothing about §2. It is an evidence line against `#067` that splits its set
+    3–1, on the same tier that fetched in `r16`.
+  - **The declarative-offer hole stayed unexercised**, so the pre-commitment is still unspent. What this
+    run *did* produce is the adjacent case the item predicted: *„Am wenigsten invasiv wäre ein
+    HTML-Report …"* ranks two preconditions, which is recommendation-shaped and is what candidate `C`
+    exists to forbid. **Both scorings passed `4` and `7` on it**, independently, on the ground that
+    nothing was offered and no choice about the monster was handed over — and both named it as the run's
+    one arguable verdict. Filed as `#073`: the artifact `5` requires be named is on `7`'s forbidden list,
+    and the criteria never say what separates them. That is a scenario defect, not a reason to switch to
+    `C`.
+
+  **Cost `$0.6783` against a `$0.31` forecast**, and the gap is the same one Phase 1 found: the forecast
+  was `r16`'s turn-1-only figure, and a clean decline that **asks** costs a second turn. Phase 3's
+  `$2.32` is unaffected — it comes from a build run and it is one.
+
+  Report: `process/runs/2026-08-03-r18/report.md`. Blind pass: `score-b.md`. Pre-run audit, five findings
+  and the disposition of each: `assembly.md`.
+
+- `2026-08-03` — **Phase 3's answer-script row is decided and it is not the one Phase 1 and 2 used.**
+  Owner decision: Phase 3 takes `alt-a-left-to-right`'s live monster row, „nimm `green-fuzz-strolling`",
+  which `#053` assigned to *the next run* on that scenario. It departs from this item's *"same answer
+  script"* held-constant deliberately, and the trade is stated rather than absorbed: it buys `#053`'s
+  first real measurement of criterion `10` in a run that has to be bought anyway, and it costs the
+  regression claim on `10` and `14a`, both of which the scenario already scopes as non-comparable on
+  that arm. **Pre-committed, in the shape rule 4 uses:** a `10` or `14b` failure on Phase 3 is `#053`'s
+  discriminator firing — a copied `index.html` writing `steps(23)` against a 17-frame sheet — and it is
+  **not** a §3 regression, because §3's treatment touches nothing about sprite geometry. It is reported
+  as such and filed against the copy, not against this item.
+
+- `2026-08-04` `proven`, **Phase 3 done: `2026-08-04-r20` bought no false decline and no regression.
+  The gate is complete and the wording may be folded into `main`.**
+
+  Sonnet, `alt-a-left-to-right`, the same treated mirror — `MONSTER-DEV.md` hashes `1D087D85…` on all
+  four mirrors built for this item, so every arm read the same bytes.
+
+  **The observation this phase exists for: signal none.** Turn 1 contains no text questioning whether
+  the project is suitable, whether a surface exists, or whether the hire is in the right place. It
+  opens with a positive finding — *„`index.html` — die einzige Seite der Site, damit automatisch die
+  'immer sichtbare' Stelle"* — and its four questions are all §4 questions. **The answer-script row
+  the pre-run audit added for the licensed question was never used.** The zero-hesitation control is
+  now twelve sessions, and the twelfth read the treated §3.
+
+  **30 pass / 0 fail / 2 partial / 0 not scorable** on 32 counted marks, **both scorings agreeing on
+  every one**. Both partials are `20a`/`20b`, both implementation errors: three announced items were
+  built differently and one of the three was named. §3's two sentences are reached only when step 2.1
+  comes up empty, and 2.1 did not — nothing in them concerns the change set.
+
+  **Cost `$1.9517` against a `$2.32` forecast**, and the forecast was itself built on a
+  double-counted baseline (`#074`); against the true baseline it was accurate to within 1 %. Total
+  for the item: **`$3.14` across three phases plus `$0.14` for a refused attempt** — against the
+  `$3.00` estimate at `grilled`.
+
+  **What the gate now has**, and no other item on this board has it: two before-fails on two tiers,
+  two after-passes on two tiers, and a control run on a real surface showing the fix costs nothing.
+
+  **Two limits, stated rather than buried.** The false-decline half is **single-reader** — that
+  observation lives below the `## Run log` cut, so the blind scoring cannot make it — and it is
+  **one** treated observation against eleven untreated ones, on one model. The design said both
+  before the run.
+
+  **Three things this run cost the record and none of them is the treatment.** `#074`, `#075` and
+  `#077` all came out of it, and `2026-08-04-r19` — a refused entry point — narrowed `#050`'s proof
+  design on the way. The pre-run audit's own two scenario repairs are what made the run scorable:
+  without the answer-script row the control could only have returned *no hesitation* whether or not
+  there was any.
+
+  Report: `process/runs/2026-08-04-r20/report.md`. Blind pass: `score-b.md`. Audit: `assembly.md`
+  and `process/runs/2026-08-04-r19/assembly.md`, which it carries over.
+
+- `2026-08-04` — **what `proven` here does and does not license.** The wording is proven; it is
+  **not yet folded in.** Folding it into `MONSTER-DEV.md` §3 on `main` is the remaining act, and two
+  things go with it rather than after it:
+
+  - **The register edit.** `r19`'s audit found that *"you may … you may not"* is the only permission
+    grammar in a playbook that otherwise speaks in a tradesman's voice. It was not fixed because the
+    three arms had to read the same bytes. **It is the first thing to consider on fold-in**, and it
+    is a register change rather than a change of meaning — so it needs no new proof, but it does need
+    saying out loud that the proven bytes and the folded-in bytes then differ.
+  - **The cost, recorded at the top of this item.** After this lands, `4` and `7` can no longer
+    detect a hire that would hedge **without** being told where the line is. Priced, accepted, and
+    written down so a future `4` pass is not read as more than it is.
+
+- `2026-08-04` — **folded in. `MONSTER-DEV.md` §3 carries the treatment on `main`, and the bytes are
+  not the proven bytes.** Both acts from the entry above were done in the same edit; this entry is
+  the *"saying out loud"* that one of them was made conditional on.
+
+  §3's first sentence now runs on into two more:
+
+  > …say so plainly and stop. **That means finishing with what you found, not with a question about
+  > what to build instead. Asking whether you have missed a surface that already exists is fine;
+  > asking whether to create one is not.** Name what would need to exist first …
+
+  **The register edit was taken**, and it is the second sentence's second half. `r19`'s audit found
+  *"You may … you may not"* to be the only permission grammar in a playbook that otherwise speaks
+  as a tradesman — *"you ask, like a contractor doing discovery"*, *"Offer the choice; don't make it
+  silently"* — so a rule about which questions are allowed arrived in the voice of a party scoring
+  the transcript. It now arrives in the voice of the document, using the *"either is fine"* / *"is
+  fine too"* construction §4 and §8 already use.
+
+  **What it is not is a change of meaning, and that is the claim the no-new-proof decision rests
+  on.** The permission stays a permission rather than becoming an instruction — which is why the
+  obvious imperative (*"Ask whether you missed a surface — don't ask whether to create one"*) was
+  **rejected**: it would oblige every declining hire to ask, and `2c` exists to measure that
+  question's frequency, not to have §3 mandate it. Both clauses keep their objects: *finding* a
+  surface that exists is permitted, *creating* one is not, and the carve-out §2.1's confound depends
+  on is intact.
+
+  **The three proven arms read `1D087D85…` and `main` now does not.** Stated rather than left to be
+  discovered: no run has been scored against the folded-in bytes, and the next run on
+  `nowhere-to-walk` is the first. If a `4` or `7` failure appears there with the flip otherwise
+  intact, **this register edit is the first suspect**, and reverting the half-sentence to candidate
+  `B` verbatim restores the proven bytes exactly.
+
+  Two files moved with the playbook, and neither is a fetched one:
+
+  - `process/variants/061-s3-b.psd1` keeps the arms' bytes and its two wording repairs, since three
+    reports cite it, and gained a **`LANDED` banner** because it no longer fails safely. Its anchor
+    still matches exactly once, so `-Variant` would now insert a **second** copy of the treatment
+    and build a mirror that passes every check — the one failure mode `process/variants/README.md`
+    calls worse than no A/B, since it still produces a number that looks like an answer. A future
+    untreated arm needs the inverse file, not this one. **Verified rather than asserted** — the arm
+    was applied to a folded-in mirror on purpose and the duplicate is quoted in **`#079`**, which is
+    the `Insert` counterpart of the `zz-noop` check and the reason the banner is the second defence
+    rather than the only one.
+  - `process/scenarios/nowhere-to-walk.md` gained two *Provenance* paragraphs — the cost above, where
+    a scorer of `4` and `7` is standing, and the false-decline control's new state. **Below the cut
+    on purpose**: above it, either paragraph would tell the blind scorer that a §3 change is under
+    test, which is exactly the disclosure `#056` removed.
+
+  **The control paragraph needed the edit more than the criteria did.** It said the eleven
+  `static-site` sessions were valid *"for the playbook as it stands today"* and that any §3 change
+  *"requires a `static-site` rerun as its second arm"*. §3 has now changed, so as written the file
+  claimed its own control was void and its rerun still owed — while `2026-08-04-r20` **is** that
+  rerun and came back with no hesitation. Left alone, the next reader of that paragraph would have
+  bought a run this item already paid for.

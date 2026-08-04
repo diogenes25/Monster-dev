@@ -1,7 +1,7 @@
 ---
 type: run
 title: Run 2026-08-03-r15
-description: Arm A of #002 and the honest baseline under today's mirror — the playbook as it stands. 50 model turns, 29 pass, and the first run whose implementation was shown to have copied the reference verbatim.
+description: Arm A of #002 and the honest baseline under today's mirror — the playbook as it stands. 38 model turns, 29 pass, and the first run whose implementation was shown to have copied the reference verbatim.
 resource: 2026-08-03-r15
 tags: [ab-arm, baseline, sonnet, plan-step, dom-css]
 timestamp: 2026-08-03
@@ -13,7 +13,9 @@ Arm A of `#002`: `MONSTER-DEV.md` exactly as it stands, `alt-a-left-to-right`, `
 Sonnet. Arm B is [[2026-08-03-r14]] and holds the report for both. This run's first attempt was
 [[2026-08-03-r13]], which refused the entry point and produced no data.
 
-**50 model turns (12 + 38), `$2.3180`. 29 pass / 2 fail / 1 not scorable**, plus `11b` `INFO`.
+**38 model turns (12 + 26), `$1.9424`. 29 pass / 2 fail / 1 not scorable**, plus `11b` `INFO`.
+Figures corrected `2026-08-04` — this run was quoted as `50 / $2.3180` everywhere, which counted
+turn 1 twice; the `hire.json` `totals` were right all along. `#074`.
 
 ## Why this run matters more than "the control arm"
 
