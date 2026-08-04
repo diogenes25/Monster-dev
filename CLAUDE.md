@@ -130,11 +130,11 @@ something subtly wrong, which is the whole reason it exists.
 | Command | What it does |
 |---|---|
 | `new-run.ps1 -RunId <id> -Fixture <name>` | Creates the run folder from a fixture **and opens the run's record** (`process/runs/<id>/assembly.md`, so an assembled-then-refused setup still leaves something behind — `#048`) |
-| `build-dist.ps1 -RunId <id>` | Assembles the mirror **and verifies it**. `-Without <path>` builds an A/B arm; a whole stack fails by design, because §2 would still point at a file that is gone |
+| `build-dist.ps1 -RunId <id>` | Assembles the mirror, **verifies it, and fingerprints it** — a manifest under `process/runs/<id>/` so that a hire writing into the mirror afterwards is a finding rather than luck (`#075`). `-Without <path>` builds an A/B arm; a whole stack fails by design, because §2 would still point at a file that is gone |
 | `check-isolation.ps1 -Target <path>` | Standalone; `new-run.ps1` has already run it. Up **and two levels sideways**, and refuses to start a hire while any scoring bundle is on disk |
 | `check-index.ps1` | §2 and §5 against the working tree *and* the mirror — `catalog.json` row by row, the 40-line orientation cap, sheet-shaped PNGs outside `monsters/`. Run it after touching §2, §5, a stack note or the catalog |
 | `backlog/board.ps1 -Open -Full` | The board, read from the item files so no index can drift, with the state rules enforced |
-| `hire.ps1 -RunId <id> -Target <path> -Dist <path> -Model sonnet -BriefFile <file>`, then `-Answer '<text>'` | **The only way to hire.** Holds the cost/turn envelope and snapshots the target's worktree between turns |
+| `hire.ps1 -RunId <id> -Target <path> -Dist <path> -Model sonnet -BriefFile <file>`, then `-Answer '<text>'` | **The only way to hire.** Holds the cost/turn envelope, snapshots the target's worktree between turns, and re-checks the mirror against its manifest — a write inside the mirror is not a reach, so nothing else can see it |
 | `score-bundle.ps1 -RunId <id> -Scenario <file>`, later `-Remove` | Builds what the blind `run-scorer` sees, and takes it back off disk |
 | `check-reach.ps1 -RunId <id>` | What the hire walked to and every URL it fetched. For an **archived** run pass the path the run *used* — it matches strings, so today's location matches nothing and everything reads as a reach |
 | `check-hire-records.ps1 [-RunId <id>]` | Sweeps every `hire.json`: `totals` recomputed from `turns[].envelope`, and whether each report quotes its **own** recorded cost. Reports rather than throws — most of what it finds is history. Three defects had accumulated in the gap where nothing compared the two (`#074`, `#077`, `#063`) |

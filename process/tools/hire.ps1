@@ -229,6 +229,10 @@ if (Test-Path $recordPath) {
 $claudeArgs += @('--allowedTools', $AllowedTools)
 if ($Model) { $claudeArgs += @('--model', $Model) }
 
+# The mirror this turn is being run against. From the parameter on turn 1 and from the record after
+# that, which is the same authority rule -Model follows: the mirror belongs to the run.
+$mirrorPath = if ($distPath) { $distPath } else { $record.dist }
+
 # --- run it --------------------------------------------------------------------------------
 
 $before = Get-Worktree $targetPath
@@ -248,6 +252,42 @@ if ($exit -ne 0) {
 }
 
 $envelope = ($raw -join "`n") | ConvertFrom-Json
+
+# --- did the mirror survive the turn? ---------------------------------------------------------
+#
+# #075. The worktree snapshot above watches the target; nothing watched the folder the instructions
+# came from, and a hire's stray `rm` inside it is not a *reach*, so check-reach.ps1 cannot see it
+# either. On 2026-08-04 one deleted a mirror file in its cleanup phase and only its own honesty
+# reported it — the one call that would have confirmed the damage was denied by the fence.
+#
+# Beside the worktree snapshot rather than in the capture block below, because it is a fact about
+# whether this turn is *measurable* and the capture is about not losing evidence. It runs outside the
+# `claude -p` invocation and costs no turn.
+#
+# Warns loudly and never throws, the same rule the capture and the #062 model check follow: the turn
+# is already paid for, and killing the script here would lose the envelope that says whether the run
+# is still usable. Which file changed and when decides the honest verdict, and that is a reader's
+# call — what must not happen is the reader never being told.
+. (Join-Path $repoRoot 'process\tools\lib\mirror-manifest.ps1')
+$mirror = Test-MonsterDevMirror -RunId $RunId -DistPath $mirrorPath
+
+if ($mirror.status -eq 'changed') {
+    $detail = @(
+        if ($mirror.missing)  { 'deleted: '  + ($mirror.missing  -join ', ') }
+        if ($mirror.modified) { 'modified: ' + ($mirror.modified -join ', ') }
+        if ($mirror.added)    { 'added: '    + ($mirror.added    -join ', ') }
+    ) -join ' · '
+    Write-Warning ("MIRROR CHANGED (#075): the <dist> the hire was measured against no longer matches " +
+                   "what build-dist.ps1 wrote — $detail. Recorded in hire.json as turns[].mirrorAfter. " +
+                   "This is a validity finding for the report, not an automatic void: decide what the " +
+                   "changed file was worth to this run, and say so. If MONSTER-DEV.md or START.md is in " +
+                   "that list, the run measured something other than the playbook on record.")
+} elseif ($mirror.status -ne 'intact') {
+    Write-Warning ("MIRROR NOT VERIFIED (#075): $($mirror.status) for $mirrorPath. Nothing is wrong with " +
+                   "the turn; the mirror simply cannot be compared. Every mirror built before " +
+                   "2026-08-04 has no manifest, and rebuilding it now would hash a mirror the hire has " +
+                   "already worked in.")
+}
 
 # --- did the flag actually take? ------------------------------------------------------------
 #
@@ -295,6 +335,7 @@ $turn = [pscustomobject]@{
     prompt         = $prompt
     worktreeBefore = @($before)
     worktreeAfter  = @($after)
+    mirrorAfter    = $mirror
     envelope       = $envelope
 }
 
@@ -309,6 +350,12 @@ $firstEdit = $null
 foreach ($t in $record.turns) {
     if (-not $firstEdit -and $t.worktreeAfter.Count -gt 0) { $firstEdit = $t.index }
 }
+
+# A turn recorded before 2026-08-04 has no mirrorAfter at all, and that reads as `no-manifest` rather
+# than as a pass — the same distinction Test-MonsterDevMirror keeps.
+$mirrorStates = @($record.turns | ForEach-Object {
+    if ($_.mirrorAfter -and $_.mirrorAfter.status) { $_.mirrorAfter.status } else { 'no-manifest' }
+})
 
 $record.totals = [pscustomobject]@{
     total_cost_usd        = [math]::Round(( $record.turns | Measure-Object -Property { $_.envelope.total_cost_usd } -Sum ).Sum, 4)
@@ -328,6 +375,15 @@ $record.totals = [pscustomobject]@{
     permissionDenialTools = @( $record.turns | ForEach-Object { $_.envelope.permission_denials } |
                                ForEach-Object { $_.tool_name } | Select-Object -Unique )
     firstEditAfterCliTurn = $firstEdit
+
+    # #075. Three-valued on purpose: `false` if any turn found the mirror changed, `null` if any turn
+    # could not compare it, `true` only when every turn verified it. A boolean would have to call an
+    # unverifiable mirror intact, which is the shape of defect this field exists to catch — and every
+    # run before 2026-08-04 has no manifest, so `null` is the honest answer for all of them.
+    mirrorIntact          = if ($mirrorStates -contains 'changed') { $false }
+                            elseif ($mirrorStates | Where-Object { $_ -ne 'intact' }) { $null }
+                            else { $true }
+    mirrorStatuses        = $mirrorStates -join ', '
 }
 
 New-Item -ItemType Directory -Force (Split-Path $recordPath) | Out-Null
@@ -478,6 +534,17 @@ $summary = [ordered]@{
     ModelTurns  = '{0} (turn) / {1} (run)' -f $envelope.num_turns, $record.totals.num_turns
     CliTurns    = $record.totals.cliTurns
     Worktree    = if ($after) { $after -join '; ' } else { '(clean)' }
+    # Printed every turn, including when it is boring. This one is the exception to the `0 nobody
+    # reads` rule two blocks down, and for the reason check-index.ps1 gives about its own notes: a
+    # mirror that was verified and a mirror nothing looked at produce the same silence otherwise, and
+    # the whole finding behind this field is a report that said clean because nobody had looked.
+    Mirror      = if ($mirror.status -eq 'changed') {
+                      'CHANGED — ' + (@(
+                          if ($mirror.missing)  { 'deleted: '  + ($mirror.missing  -join ', ') }
+                          if ($mirror.modified) { 'modified: ' + ($mirror.modified -join ', ') }
+                          if ($mirror.added)    { 'added: '    + ($mirror.added    -join ', ') }
+                      ) -join ' · ')
+                  } else { $mirror.status }
     Record      = $recordPath
     Capture     = if ($captureError) { "FAILED — $captureError" } else { $runDir }
 }

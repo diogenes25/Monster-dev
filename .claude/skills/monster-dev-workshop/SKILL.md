@@ -435,6 +435,17 @@ That last snapshot is the point. **K7a ("asked before building") is the criterio
 has misattributed three times**, and its evidence was always a hand-typed sentence. An empty
 `worktreeAfter` on turn 1 is the same claim as a machine fact.
 
+**It also re-checks the mirror after every turn, against the manifest `build-dist.ps1` wrote.**
+`2026-08-04-r20` deleted `<dist>/monsters/README.md` in its cleanup phase and **nothing in the
+harness would have reported it** — a write *inside* the mirror is not a reach, so `check-reach.ps1`
+cannot see it, and the one call the hire made to confirm the damage was denied by the fence. Only its
+own honesty caught it. Had the file been `MONSTER-DEV.md` the run would have been unmeasurable and
+the report would have said clean. So `hire.json` now carries `turns[].mirrorAfter` and
+`totals.mirrorIntact`, the printed summary carries a `Mirror` line every turn, and the report
+template has a row for it. **A `changed` mirror warns and does not throw**: the turn is paid for, and
+what the changed file was worth to the run is a reader's call — but an A/B arm whose mirror changed
+differs from its pair by the treatment *plus* that file. `#075`.
+
 **After every turn the wrapper also brings the run home** — the scrubbed transcript, the worktree
 without `.git`, and a `base.txt` saying what the run started from, all into
 `process/runs/<run-id>/`. There is nothing to remember and nothing to do at the end, which is the

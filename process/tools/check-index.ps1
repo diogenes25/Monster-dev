@@ -223,6 +223,59 @@ foreach ($id in $orphans) {
 }
 if (-not $orphans) { $notes += "$($cited.Count) cited run id(s), every one with a folder in process/runs/" }
 
+# --- and the other direction: a scored run nothing points at ---------------------------------------
+#
+# #070. The scan above checks the direction that cannot silently rot — a citation whose folder is
+# missing is loud. The reverse is the direction a forgotten closing step fails in, and it is silent: a
+# run folder with a report, an envelope and a blind scoring can sit there with nothing pointing at it
+# from the scenario it was scored against. The workshop skill's step 8b — *"append the run to the
+# scenario file's run-log table"* — is the last line of the procedure, and it was skipped twice in a
+# row. `2026-08-03-r17`, the run `#061` Phase 1 rests on, appeared in no scenario file at all.
+#
+# The cost is smaller and slower than a dead pointer's, which is why nothing caught it: the run log is
+# what a future reader uses to decide whether a criterion's history compares, and #061 Phase 3 was
+# scored against a series whose log was two runs short.
+#
+# The citation has to be in the run-log *table*, not anywhere in the file. A run mentioned in a
+# Provenance paragraph is not logged — that is exactly the half-presence r16 had.
+#
+# `report.md` is the discriminator, and it was checked before an allow-list was considered (#003: a
+# list of exceptions is a list of the exceptions somebody remembered). Two folders on disk are not
+# scenario runs — `ph0-smoke` and `2026-08-03-local-floor` — and neither has a report, so *has a
+# report* separates them with nothing hardcoded. The reverse mismatch is deliberately not checked:
+# `r13`, `r15`, `plan-opus` and `sonnet-base2` are logged rows whose results live inside another run's
+# report, which is a real shape and not a defect.
+#
+# Cost, stated because it is felt in the ordinary workflow: a run whose report is written but whose row
+# is not yet appended fails this check between those two edits. That is the same trade §2 and §5 already
+# make — it is meant to gate a commit, and the commit is where both edits land together.
+
+$logged = @{}
+foreach ($s in (Get-ChildItem 'process/scenarios' -Filter '*.md' -ErrorAction SilentlyContinue)) {
+    $inLog = $false
+    foreach ($line in @(Get-Content -LiteralPath $s.FullName)) {
+        if ($line -match '^##\s+Run log\s*$') { $inLog = $true; continue }
+        if ($inLog -and $line -match '^##\s')  { $inLog = $false }
+        if (-not $inLog -or $line -notmatch '^\s*\|') { continue }
+        foreach ($m in [regex]::Matches($line, $RUN_ID)) {
+            $id = $m.Groups[1].Value
+            if (-not $logged.ContainsKey($id)) { $logged[$id] = @() }
+            if ($logged[$id] -notcontains $s.Name) { $logged[$id] += $s.Name }
+        }
+    }
+}
+
+$scored = @(Get-ChildItem 'process/runs' -Directory -ErrorAction SilentlyContinue |
+    Where-Object { Test-Path (Join-Path $_.FullName 'report.md') } | ForEach-Object Name | Sort-Object)
+$unlogged = @($scored | Where-Object { -not $logged.ContainsKey($_) })
+
+foreach ($id in $unlogged) {
+    $failures += ("NOT IN ANY RUN LOG: process/runs/$id/ has a report.md but no run-log table in " +
+                  "process/scenarios/ cites it — the run is scored and invisible to the next reader " +
+                  "deciding whether a criterion's history compares (#070)")
+}
+if (-not $unlogged) { $notes += "$($scored.Count) scored run(s), every one in a scenario's run-log table" }
+
 # --- the record tree: frontmatter, tags, wikilinks -------------------------------------------------
 #
 # Two conventions live under process/, and the boundary between them is a directory name — which is

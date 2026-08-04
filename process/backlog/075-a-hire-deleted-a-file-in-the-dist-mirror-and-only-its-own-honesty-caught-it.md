@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | none, and that is the finding. `13a` scores the **target**; no criterion and no check looks at the mirror after a run |
@@ -80,3 +80,47 @@ once and cost nothing. Detection first; if it recurs, reconsider.
   confirmed it was denied by the fence, and the run's own report would have said the mirror was the
   one `build-dist.ps1` verified. Its blind scoring raised the same thing independently, under
   *"Out-of-target damage (no criterion)"*, from the transcript rather than from the handover.
+
+- `2026-08-04` `proven` — **detection is in, at all three points, and one part of the proposal was
+  overruled.**
+
+  `process/tools/lib/mirror-manifest.ps1` holds the hashing and the comparison, so both callers use
+  one function — two hashers agreeing by convention are two hashers that disagree after the next edit.
+  `build-dist.ps1` writes the manifest past its failure gate, so a manifest only ever describes a
+  mirror that exists and passed every check. `hire.ps1` compares after every turn, beside the worktree
+  snapshot, and records `turns[].mirrorAfter` plus `totals.mirrorIntact`. The report template has a
+  `Mirror` row and `SKILL.md` step 5 says what a `changed` mirror means; `CLAUDE.md`'s harness table
+  names both halves.
+
+  **Overruled: the manifest does not go beside the mirror.** This item said *"beside the mirror, not
+  inside it — a file inside `dist/` is a file the hire can read"*. The first half does not follow from
+  the second: `<runs root>\<id>\` is one `ls ..` from the hire's working directory, and
+  `check-isolation.ps1` ignores *files* there by design, so a `dist-manifest.json` next to `dist/`
+  would be visible to a hire that has already called that folder *„Testrig-Scaffolding"* and would
+  tell it the instructions it was handed are a verified copy of something. That is `#018`'s class of
+  leak arriving by a new road for the sake of a convenience. It goes in `process/runs/<id>/` instead —
+  excluded from the mirror, beside every other captured artefact, committed with the run.
+
+  **`mirrorIntact` is three-valued, not a boolean.** `false` if any turn found a change, `null` if any
+  turn could not compare, `true` only when every turn verified it. A boolean would have to call an
+  unverifiable mirror intact, which is the exact shape of defect this field exists to catch — and
+  every run before today has no manifest, so `null` is the honest answer for all fourteen.
+
+  **Warns, never throws**, and **a mismatch is a validity finding rather than an automatic void** —
+  both as proposed. The three difference classes are reported separately: a deleted `MONSTER-DEV.md`
+  and an added scratch file are not the same finding and must not share a word.
+
+  **All four states exercised on a throwaway mirror before this was committed**: `intact` on a fresh
+  build (18 files hashed); `changed` with `monsters/README.md` deleted, `MONSTER-DEV.md` modified and
+  a scratch file added, each landing in its own list; `no-manifest` against a run that has none; and
+  `no-mirror` against a manifest whose mirror is gone. The `totals.mirrorIntact` rollup was run
+  against all seven combinations of turn states. The probe mirror and its run folder were then
+  removed.
+
+  `Gate: none`, so `proven` is **applied and shown to be done, never to have helped** — the same
+  sentence `#079` carries. It has caught exactly one thing, which is the case it was written from, and
+  that one is already on the record.
+
+  **Not done, as this item said:** the mirror is not made read-only. That would change what the hire's
+  tools can do inside a run — a new variable in every arm, to prevent something that has happened once
+  and cost nothing.

@@ -411,6 +411,14 @@ if ($failures) {
     throw ($failures -join "`n") + "`nMirror deleted so it cannot be used by accident."
 }
 
+# The mirror's fingerprint, so that a hire writing into it afterwards is a finding instead of a
+# footnote (#075). Written here for the same reason as the assembly note below — past the failure
+# gate, so a manifest only ever describes a mirror that exists and passed every check — and read back
+# by hire.ps1 after every turn. It lands in process/runs/<RunId>/, not beside the mirror: see the
+# reasoning in lib\mirror-manifest.ps1, which is also why both scripts hash through one function.
+. (Join-Path $PSScriptRoot 'lib\mirror-manifest.ps1')
+$manifest = New-MonsterDevMirrorManifest -RunId $RunId -DistPath $dist
+
 # The mirror half of the pre-turn record (#048). Written only past the failure gate above, which
 # deletes a leaking mirror rather than hand it back — so a line here always describes a mirror that
 # exists and passed every check, and the arms of an A/B can be compared out of two run folders
@@ -430,11 +438,13 @@ Add-MonsterDevAssemblyNote -RunId $RunId -Step 'build-dist.ps1' -Detail @(
     "variant edits: $noteEdits"
     "-Without: $noteWithout"
     'checks: four exclusions verified, indexes agree, harness vocabulary clean, no sprite reference, no frontmatter, no wikilinks'
+    "manifest: ``process/runs/$RunId/dist-manifest.json`` — $($manifest.fileCount) file(s) hashed, re-checked after every turn (#075)"
 ) | Out-Null
 
 [pscustomobject]@{
     Dist     = $dist
     Files    = $copied
+    Manifest = "$($manifest.fileCount) file(s) hashed"
     Excluded = $excluded -join ', '
     Stacks   = $listedStacks -join ', '
     Sheets   = $listedSheets -join ', '

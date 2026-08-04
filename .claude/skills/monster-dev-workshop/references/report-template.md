@@ -25,6 +25,7 @@ the board existed, and everything still open in them is on the board.
 | Playbook revision | `<git rev-parse --short HEAD>` |
 | Hire | `claude -p` session `<session_id>`, `<n>` turns |
 | Entry point | accepted without objection / **refused** — see `#050` |
+| Mirror | `intact` / **changed — `<what>`** / `no-manifest` — `hire.json` `totals.mirrorIntact`, see `#075` |
 
 *The `Entry point` row is not bookkeeping. `2026-08-03-r13` refused `START.md` as a prompt-injection
 and supply-chain risk and produced no data, while `2026-08-03-r15` accepted it on a byte-identical
@@ -32,6 +33,14 @@ mirror in the same hour — so this is within-tier variance at a base rate of ro
 `#050`'s honest proof needs several arms per side and is the most expensive item on the board; one line
 per report accumulates the rate as a by-product instead. State it even when nothing happened, for the
 same reason the Reach section is stated when it found nothing.*
+
+*The `Mirror` row is the same shape and has the same reason. `2026-08-04-r20` deleted a file inside the
+`<dist>` mirror in its cleanup phase and **only its own honesty caught it** — no check looked there,
+and the report would otherwise have described the mirror `build-dist.ps1` verified rather than the one
+the hire left behind. `hire.ps1` now re-checks the manifest after every turn. A `changed` mirror is a
+**validity finding, not an automatic void**: say which file, when in the run, and what it was worth —
+and if `MONSTER-DEV.md` or `START.md` is in the list, the run measured something other than the
+playbook on record. Every run before `2026-08-04` reads `no-manifest`, which is not a pass.*
 
 ## Verdict
 

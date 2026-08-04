@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | harness artefact |
 | Criterion | none. It costs the *series*, not a mark: the run log is where a reader learns which runs a criterion has been scored under |
@@ -60,6 +60,30 @@ those two edits, which is a few minutes of red in the ordinary workflow. That is
 commit, and the commit is where both edits land together.
 
 **Log.**
+
+- `2026-08-04` `proven` — **part 2 is in, and no allow-list was needed.** `check-index.ps1` now walks
+  `process/runs/` and fails any folder holding a `report.md` that no `process/scenarios/*.md`
+  **run-log table** cites. The citation has to be in the table: a run named in a Provenance paragraph
+  is not logged, which is exactly the half-presence `r16` had.
+
+  **`report.md` is a sufficient discriminator, checked before an allow-list was considered** — `#003`'s
+  rule that a list of exceptions is a list of the exceptions somebody remembered. The two folders on
+  disk that are not scenario runs, `ph0-smoke` and `2026-08-03-local-floor`, have no report between
+  them, so nothing is hardcoded. Fifteen scored runs, fifteen logged.
+
+  **The reverse mismatch is deliberately not checked.** Four logged rows have no `report.md` of their
+  own — `r13`, `r15`, `plan-opus`, `sonnet-base2` — because their results live inside another run's
+  report. That is a real shape, and failing it would push a report into existence for the sake of a
+  check.
+
+  **Both directions exercised.** Green on the tree as it stands; with `r17`'s row removed it fails
+  once, naming that run, and the file was restored to a byte-identical state afterwards. That negative
+  test is the point — this project has four instruments on record that confirmed an expectation while
+  measuring nothing.
+
+  `Gate: none`, so `proven` is **applied and shown to be done, never to have helped**: the closing step
+  it protects has been skipped twice and this check has caught it zero times, because part 1 already
+  repaired both misses.
 
 - `2026-08-04` — **part 1 of the proposed change is done, part 2 is not.** Every missing row is appended: `r16`, `r17` and `r18` to `nowhere-to-walk.md`, and `r19` and `r20` to `alt-a-left-to-right.md`. The `check-index.ps1` half — *every run folder holding a `report.md` must be cited by some scenario’s run log* — is still owed, and it is the half that stops this recurring. Both `2026-08-04` runs were appended by hand in the same sitting they were written, which is exactly the discipline that failed twice before.
 - `2026-08-03` `intake` — from `2026-08-03-r18`. Filed while writing that run's report, because the
