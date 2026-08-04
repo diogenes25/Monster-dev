@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | `formulated` |
+| Status | `grilled` |
 | Gate | `run` |
-| Attribution | **playbook gap (§2) — no longer settled.** Three runs on two tiers fetch, one does not, and the two Opus runs disagree with each other — see the `2026-08-03` log entry for `r18`. The *treatment* is not designed either |
+| Attribution | **playbook gap (§2), settled at the bar** — re-settled `2026-08-04` by applying this project's own bar rule to the split rather than by new data: **Sonnet is 2 of 2**, and the single run that takes the branch correctly is Opus. `CLAUDE.md` says the bar is Sonnet because *"Opus solves the known pitfalls unaided, which leaves nothing to measure"*, so `r18` is an instance of that asymmetry and not a counterexample. See the `2026-08-04` grilling entry |
 | Criterion | `nowhere-to-walk` `10`. It costs a turn on every no-match project, which lands in `num_turns` |
 | Target file | `MONSTER-DEV.md` §2 — the paragraph after the stack table |
 | Evidence | `2026-08-03-r12` (sonnet), `2026-08-03-r16` (opus), `2026-08-03-r17` (sonnet) — three fetches, `r17` confound-free. **`2026-08-03-r18` (opus) does not fetch**, which is the observation that unsettles the row above |
 | Blocked on | nothing |
-| Proof design | — |
+| Proof design | **Regression, one Sonnet arm on `nowhere-to-walk`.** Criterion `10` must flip against a **2-of-2** Sonnet before-fail (`r12`, `r17`; `r17` clean). Treatment is candidate `B`, three sentences inserted before §2's stack table via `build-dist.ps1 -Variant`, anchor *"Two sets of notes give you two answers to the same question and nothing that says which wins."* — verified to match exactly once. No Opus arm: `r18` already takes the branch untreated, so a treated Opus run can only confirm it still does. Full design in the `2026-08-04` entry |
 
 **What happens.** §2's stack table has one row. Every run against `python-cli` — a 34-line stdlib
 script with no DOM, no canvas and no window — has fetched `stacks/dom-css/README.md` anyway.
@@ -120,3 +120,69 @@ is a worse defect than the one this item describes.
 
   Note the direction of the difference: `r18` is the **cheapest and cleanest** run on this scenario
   (13/0/0/1, `$0.6783`). Whatever made it skip the fetch did not cost it anything anywhere else.
+
+- `2026-08-04` `grilled` — **candidate `B`, one Sonnet arm, and `C` is refuted by measurement rather
+  than by argument.** Four decisions, and two of them come from numbers this item did not have.
+
+  **`C` is dead: the fetch is a full model turn and it buys nothing.** *"Reading the one available note
+  is cheap diligence"* was the reading that had to be refuted, and the transcripts refute it twice
+  over. The `Read` of `stacks/dom-css/README.md` sits **alone in its own assistant message** in all
+  three runs — one `tool_use` block, nothing batched with it — so *"one wasted turn"* is measured and
+  not asserted: 1 turn of `r17`'s 11, about 9 % of a decline run, in the one run class whose whole
+  point is being cheap. And the turn buys nothing, because the note's decision-relevant content is a
+  **restatement of the table cell the hire has already read**: *"You are here if the project renders to
+  a DOM … You are not here if the project already uses GSAP."* Everything else in those 35 lines —
+  primitive, asset location, the `index.html` pointer — presupposes that the row matched. `C` also
+  does not survive `#005`: with a second row it is two wasted turns rather than one.
+
+  **The attribution is re-settled without buying the fifth observation, by applying this project's own
+  bar rule.** Split by tier rather than counted: **Sonnet 2 of 2 fetch** (`r12`, `r17`), Opus 1 of 2.
+  So the observation that unsettled this row is *Opus-only* — and `CLAUDE.md` says the bar is a
+  Sonnet-class hire precisely because *"Opus solves the known pitfalls unaided, which leaves nothing to
+  measure"*. `r18` is that asymmetry, not a contradiction of it. The row goes back to **playbook gap
+  (§2), settled at the bar**, and the fifth observation this item asked for is no longer owed: it would
+  only have refined a rate that the bar rule says is measured on the wrong tier.
+
+  **Candidate `B`, and the reason is structural rather than aesthetic.** `A` (*"if no row matches,
+  don't fetch any of them"*) is symmetric and cheap and names only the symptom. The cause is that the
+  **applicability test exists twice in the product** — in §2's `you're here if` column and again as the
+  note's opening paragraph — and that duplication is *required*, not accidental: `CLAUDE.md`'s
+  gate-free orientation exemption exists so a note can answer *"am I in the right stack"*. A hire
+  facing two sources for one question opens the fuller one. `B` says which of the two decides and
+  leaves the note untouched, so the exemption is not disturbed.
+
+  The wording, three sentences, inserted **before** the table because putting the decision before the
+  fetch is the whole of `B`:
+
+  > **The `you're here if` column is what decides, and it is answerable from what step 2 already
+  > found — without opening anything.** A note tells you how earlier jobs on that surface went, not
+  > whether you are on it. So a note is what you read *after* a row matches; if none matches, there is
+  > nothing to open.
+
+  The last clause folds `A`'s imperative in as a *consequence* of the rule instead of a prohibition,
+  which is what keeps §2 — a section every hire reads on every job — out of the distrust register.
+
+  **Proof design: regression, one arm.** `CLAUDE.md`'s first gate — *fold in, rerun the same scenario,
+  the failing criterion must flip*. Criterion `10` on `nowhere-to-walk`, before-fail on record and
+  **2 of 2 at the bar** with no Sonnet counterexample, which is what makes a single treated pass worth
+  something here where the same shape was nearly worthless for `#050`: there the untreated rate was
+  88 % acceptance, here it is 0 % correct-branch on Sonnet. Held constant: fixture, answer script,
+  dialogue protocol, and §3's treatment as folded into `main` — `r17` ran against that same §3, so the
+  arms compare. Varied: the three sentences, via `-Variant`, anchor verified to match exactly once.
+  **No Opus arm**, because `r18` already takes the branch untreated and a treated Opus run can only
+  confirm that it still does.
+
+  What a failure would mean, decided in advance: if criterion `10` still fails on the treated arm, the
+  fault is not the no-match branch's *register* but its position — and the next candidate is `A`
+  applied to the sentence order rather than a further clause. Not the criterion; `C` is refuted and
+  stays refuted.
+
+  **`#066` is unblocked by this and not resolved by it.** That item waits on whether `10` should be
+  split, and its own note says to read this one first. Nothing here splits it: this arm scores `10` as
+  it stands, and if it flips, the bundling `#066` describes is a question about a mark that now passes.
+
+  **`#005` and `#006` read in the same sitting, as this item requires.** Neither is closer to
+  unblocked and neither changes the design: `#005` needs a second published stack note and `#006`
+  needs a gated pitfall in any note, and this treatment adds neither. What the reading does settle is
+  that the second row would make `C` *worse* rather than better, which is the one direction this item
+  was unsure about.
