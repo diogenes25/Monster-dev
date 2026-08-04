@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | `intake` |
+| Status | `proven` |
 | Gate | `none` |
 | Attribution | scenario defect |
 | Criterion | `alt-a-left-to-right` — the *Risk criteria* line, which governs `4a`, `7a`, `10` and `19` |
@@ -61,3 +61,26 @@ since the alternative is a permanent dangling reference in the criteria half.
   Filed rather than fixed in the same sitting on purpose: it is a reference into the criteria and the
   fix is a judgement about what the reference meant, which is exactly the kind of edit this board
   exists to make visible. The cost of filing has to stay below the cost of forgetting.
+
+- `2026-08-04` `proven` — **part 1 applied, and it was not a judgement after all.** The entry above
+  called the referent one, and the check that this item demanded of itself refuted that within a
+  minute: **four reports score a mark labelled `7a`** — `2026-08-01-live`, `-phase2`, `-phase2b` and
+  `-plan-sonnet`, all four reading *"asked before building"*, which is criterion `7` under the current
+  numbering. The referent is documented by use. `4a, 7a, 10 and 19` is now `4a, 7, 10 and 19`, and the
+  numbering history is recorded below that scenario's cut so the four early reports do not read as
+  scoring something that no longer exists.
+
+  Verdict-preserving, and the claim is narrower than the one this item made. *No report quotes the risk
+  **line** by mark*, so nothing was ever scored against the broken reference — but four reports do use
+  the label, which is the naming history rather than the risk set. Those four keep their label: a run is
+  scored under the criteria it was scored under.
+
+  **Part 2 is deliberately not done and is not owed.** A mechanical check that every criterion
+  reference in a criteria half resolves to a mark that file defines would have caught this, and it would
+  have to distinguish a reference from the bare numbers criteria prose is full of — `§5`, *"12 of 12"*,
+  *"within one percent"*. That context rule is how it becomes the next instrument here to measure
+  something other than what it names. One instance is not the signal (Half C); if a second stale
+  reference turns up, this is the item it goes on.
+
+  `Gate: none`, so `proven` is **applied and shown to be done, never to have helped.** What it buys is
+  one mark a blind scorer can now find in `criteria.md`, on a line that was in every bundle.

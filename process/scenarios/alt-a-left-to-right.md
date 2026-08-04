@@ -342,7 +342,7 @@ cli-turn-1 text; the runs that predate it have no E marks and never will.
     nothing is said about notes existing. "There are notes for this stack, I read
     them" is a fact from our side of the fence and tells the client nothing.
 
-**Risk criteria — must hold, not improve.** 4a, 7a, 10 (all three marks) and 19. A
+**Risk criteria — must hold, not improve.** 4a, 7, 10 (all three marks) and 19. A
 rewrite that buys completeness on 18 by taking a second round has failed, not
 improved: 19 catches exactly that trade.
 
@@ -515,6 +515,19 @@ The archive shows hires omitting *different* halves of the plan: `2026-08-01-pha
 scored 4/4 and `2026-08-01-live` 1/4 on the same model and the same brief. A binary
 criterion records both as PASS and destroys the measurement — see
 [`plan-retro.md`](../runs/plan-retro.md).
+
+### The risk line named a mark that does not exist — `2026-08-04`
+
+It read *"4a, 7a, 10 and 19"* until that date, and criterion `7` is one unsplit mark. `7a` is the
+pre-`2026-08-01` numbering, when criteria carried a `K` prefix: the line kept the letter and dropped
+the prefix. **The referent is documented by use rather than inferred** — `2026-08-01-live`, `-phase2`,
+`-phase2b` and `-plan-sonnet` each score a mark labelled `7a`, *"asked before building"*, which is
+criterion `7` under the current numbering. Those four keep their label, because a run is scored under
+the criteria it was scored under.
+
+Verdict-preserving: no report on record quotes the risk line by mark, so nothing was ever scored
+against the broken reference. What it cost was a mark a blind scorer could not find in `criteria.md` —
+and the line sits above the cut, so it was in every bundle. `#080`.
 
 ### What the risk criteria are worth as evidence
 
